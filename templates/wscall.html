@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block content %}
+    <button type="submit" id="inicio">Inicio</button>
+{% endblock %}
+
+{% block extrajs %}
+
+    <script type="text/javascript" src="{% static 'js/jquery.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/ws4redis.js' %}"></script>
+    <script type="application/javascript">
+        var ws = new WebSocket('ws://localhost:8000/ws/foobar?subscribe-broadcast&publish-broadcast&echo');
+        ws.onopen = function () {
+            console.log("websocket connected");
+        };
+        ws.onmessage = function (e) {
+            console.log("Received: " + e.data);
+        };
+        ws.onerror = function (e) {
+            console.error(e);
+        };
+        ws.onclose = function (e) {
+            console.log("connection closed");
+        };
+        function send_message(msg) {
+            ws.send(msg);
+        };
+        jQuery(document).ready(function ($) {
+            var ws4redis = WS4Redis({
+                uri: '{{ WEBSOCKET_URI }}foobar?subscribe-broadcast&publish-broadcast&echo',
+                connecting: on_connecting,
+                connected: on_connected,
+                receive_message: receiveMessage,
+                disconnected: on_disconnected,
+                heartbeat_msg: {{ WS4REDIS_HEARTBEAT }}
+            });
+
+            // attach this function to an event handler on your site
+            function sendMessage() {
+                ws4redis.send_message('A message');
+            }
+
+            function on_connecting() {
+                alert('Websocket is connecting...');
+            }
+
+            function on_connected() {
+                ws4redis.send_message('Hello');
+            }
+
+            function on_disconnected(evt) {
+                alert('Websocket was disconnected: ' + JSON.stringify(evt));
+            }
+
+            // receive a message though the websocket from the server
+            function receiveMessage(msg) {
+                var jso=JSON.parse(msg);
+                console.log(jso);
+                console.log('Message from Websocket: ' + msg);
+            }
+
+        });
+    </script>
+{% endblock %}
