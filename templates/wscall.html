@@ -3,13 +3,245 @@
 
 {% block content %}
     <button type="submit" id="inicio">Inicio</button>
+
+    <div id="arduino_charts">
+      <canvas id="arduino_chart_1" width="400" height="400"></canvas>
+    </div>
+
+    <div id="arduinoData">
+      <div id="arduinos"></div>
+      <div id="arduinos_2"></div>
+      <div id="sensores"></div>
+    </div>
+
 {% endblock %}
 
 {% block extrajs %}
-
     <script type="text/javascript" src="{% static 'js/jquery.js' %}"></script>
+
+    <script src="{% static 'js/chartsjs/Chart.min.js' %}"></script>
+
     <script type="text/javascript" src="{% static 'js/ws4redis.js' %}"></script>
+
+
     <script type="application/javascript">
+    var arduinoAPI = "http://192.168.15.53:8000/api/arduinos/1/";
+    var arduinoAPI_URL = "http://192.168.15.53:8000/api/";
+
+    var tokenCode = 'Token 913ac3cc5ae3a881e238b1cd9fbfa70a75bc1237';
+
+
+    var _arduino;
+    var _sensors;
+    var _sensors_data;
+
+    var data_chart = {
+        labels: ["0","5","10","15","20","25","30","35"],
+        datasets: [
+            {
+                label: "My First dataset",
+                fillColor: "rgba(220,220,220,0.2)",
+                strokeColor: "rgba(220,220,220,1)",
+                pointColor: "rgba(220,220,220,1)",
+                pointStrokeColor: "#fff",
+                pointHighlightFill: "#fff",
+                pointHighlightStroke: "rgba(220,220,220,1)",
+                data: []
+            },
+            {
+                label: "My daa dataset",
+                fillColor: "rgba(220,220,220,0.2)",
+                strokeColor: "rgba(220,220,220,1)",
+                pointColor: "rgba(220,220,220,1)",
+                pointStrokeColor: "#fff",
+                pointHighlightFill: "#fff",
+                pointHighlightStroke: "rgba(220,220,220,1)",
+                data: ["0","5","10","15","20","25","30","35"]
+            }
+        ]
+    };
+
+
+    jQuery(document).ready(function ($) {
+
+      //getDataFromAPI('ArduinoList','','',arduino_list_Callback);
+      getDataFromAPI('Data','1','4',arduino_data_Callback);
+
+
+      //Grafica lineal
+
+          /*
+          //Tipos de consultas posibles
+          Arduinos (Lista o uno en especifico) Ya traen sus sensores
+          Arduino -> Sensors -> IDs -> Data del Sensor
+          */
+          function getDataFromAPI(APIDataType, arduinoID, SensorID, dataCallBack){
+              console.log('Se consultara: ' +  APIDataType);
+              switch (APIDataType) {
+                case 'ArduinoList':
+                  arduinoAPI_URL += "arduinos/";
+                  break;
+                case 'Arduino':
+                  arduinoAPI_URL += "arduinos/" + arduinoID + "/";
+                  break;
+                case 'Sensores':
+                  arduinoAPI_URL += "arduinos/"+arduinoID+"/sensors/"+SensorID+"/";
+                  break;
+                case 'Data':
+                  arduinoAPI_URL += "arduinos/"+arduinoID+"/sensors/"+SensorID+"/data/";
+                  break;
+
+                default:
+                  break;
+            }
+
+            //Peticion AJAX de los datos
+            $.ajax({
+                url: arduinoAPI_URL,
+                type: 'GET',
+                contentType: 'json/application',
+                dataType: 'json',
+                processData: false,
+                xhrFields: {
+                   // The 'xhrFields' property sets additional fields on the XMLHttpRequest.
+                   // This can be used to set the 'withCredentials' property.
+                   // Set the value to 'true' if you'd like to pass cookies to the server.
+                   // If this is enabled, your server must respond with the header
+                   // 'Access-Control-Allow-Credentials: true'.
+                   withCredentials: false
+                 },
+                 headers : {
+                   'Authorization' : tokenCode
+                 },
+                success: function(data) {
+                  console.log('AJAX API SUCCESS!');
+                  //Se hara un return con el JSON obtenido en la API
+                  dataCallBack(data);
+                 },
+                error: function() {
+                   console.log('boo!');
+                }
+              });
+          }
+
+function arduino_list_Callback(jsonData){
+  _arduino = jsonData;
+  console.log(jsonData);
+
+  $('#arduinos').html('');
+  $('#arduinos').append('Arduino Token: ' + _arduino['arduino_token'] + '<br/>');
+  $('#arduinos').append('Arduino ID: ' + _arduino['id']+ '<br/>');
+  $('#arduinos').append('Arduino Nombre: ' + _arduino['name']+ '<br/>');
+  $('#arduinos').append('<hr/>');
+}
+
+function arduino_data_Callback(jsonData){
+  _sensors_data = jsonData;
+  console.log(_sensors_data);
+  var sensor_data_chart = [];
+  for (var i =0; i < _sensors_data.length; i++ ){
+    sensor_data_chart.push(_sensors_data[i]['data'])
+  }
+
+  data_chart['datasets'][0]['data'] = sensor_data_chart;
+  console.log(data_chart);
+
+  //Init para las graficas :
+  var ctx = $("#arduino_chart_1").get(0).getContext("2d");
+  // This will get the first returned node in the jQuery collection.
+
+  var myLineChart = new Chart(ctx).Line(data_chart, {
+      bezierCurve: false
+  });
+
+
+  /*
+  var myLineChart = new Chart(ctx).Line(data, {
+      bezierCurve: false
+  });
+
+      var data_chart = {
+          labels: [],
+          datasets: [
+              {
+                  label: "My First dataset",
+                  fillColor: "rgba(220,220,220,0.2)",
+                  strokeColor: "rgba(220,220,220,1)",
+                  pointColor: "rgba(220,220,220,1)",
+                  pointStrokeColor: "#fff",
+                  pointHighlightFill: "#fff",
+                  pointHighlightStroke: "rgba(220,220,220,1)",
+                  data: []
+              }
+  */
+
+}
+
+/*
+  (function() {
+
+  $.ajaxSetup({
+    headers : {
+      'Authorization' : 'Token 913ac3cc5ae3a881e238b1cd9fbfa70a75bc1237'
+    }
+  });
+  $.getJSON( arduinoAPI, {
+    //tagmode: "any",
+    //format: "json"
+  })
+    .done(function( data ) {
+      $("#arduinoData").html(data);
+      /*
+      $.each( data.items, function( i, item ) { });
+
+    });
+})();
+
+*/
+
+
+
+      var ws4redis = WS4Redis({
+          uri: 'ws://192.168.15.53:8000/ws/foobar?subscribe-broadcast&publish-broadcast&echo',
+          connecting: on_connecting,
+          connected: on_connected,
+          receive_message: receiveMessage,
+          disconnected: on_disconnected,
+          heartbeat_msg: {{ WS4REDIS_HEARTBEAT }}
+      });
+
+      // attach this function to an event handler on your site
+      function sendMessage() {
+          ws4redis.send_message('A message');
+      }
+
+      function on_connecting() {
+          alert('Websocket is connecting...');
+      }
+
+      function on_connected() {
+          ws4redis.send_message('Hello');
+      }
+
+      function on_disconnected(evt) {
+          alert('Websocket was disconnected: ' + JSON.stringify(evt));
+      }
+
+      // receive a message though the websocket from the server
+      function receiveMessage(msg) {
+          var jso=JSON.parse(msg);
+          //console.log(jso);
+          //console.log('Message from Websocket: ' + msg);
+
+      }
+
+      });
+
+
+
+
+        /*
+
         var ws = new WebSocket('ws://localhost:8000/ws/foobar?subscribe-broadcast&publish-broadcast&echo');
         ws.onopen = function () {
             console.log("websocket connected");
@@ -26,40 +258,7 @@
         function send_message(msg) {
             ws.send(msg);
         };
-        jQuery(document).ready(function ($) {
-            var ws4redis = WS4Redis({
-                uri: '{{ WEBSOCKET_URI }}foobar?subscribe-broadcast&publish-broadcast&echo',
-                connecting: on_connecting,
-                connected: on_connected,
-                receive_message: receiveMessage,
-                disconnected: on_disconnected,
-                heartbeat_msg: {{ WS4REDIS_HEARTBEAT }}
-            });
+        */
 
-            // attach this function to an event handler on your site
-            function sendMessage() {
-                ws4redis.send_message('A message');
-            }
-
-            function on_connecting() {
-                alert('Websocket is connecting...');
-            }
-
-            function on_connected() {
-                ws4redis.send_message('Hello');
-            }
-
-            function on_disconnected(evt) {
-                alert('Websocket was disconnected: ' + JSON.stringify(evt));
-            }
-
-            // receive a message though the websocket from the server
-            function receiveMessage(msg) {
-                var jso=JSON.parse(msg);
-                console.log(jso);
-                console.log('Message from Websocket: ' + msg);
-            }
-
-        });
     </script>
 {% endblock %}
