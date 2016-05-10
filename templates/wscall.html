@@ -1,5 +1,6 @@
-{% extends 'base.html' %}
+{% extends 'main_content_wrapper.html' %}
 {% load staticfiles %}
+
 
 {% block content %}
     <button type="submit" id="inicio">Inicio</button>
@@ -14,22 +15,66 @@
       <div id="sensores"></div>
     </div>
 
+    <br/><br/><br/>
+    <div class="ct-chart ct-perfect-fourth"></div>
+
+    <br/><br/><br/>
+    <div id="graphdiv"></div>
+
 {% endblock %}
+
+
+
 
 {% block extrajs %}
     <script type="text/javascript" src="{% static 'js/jquery.js' %}"></script>
 
     <script src="{% static 'js/chartsjs/Chart.min.js' %}"></script>
+    <script src="{% static 'js/chartistjs/chartist.min.js' %}"></script>
+
+    <script src="{% static 'js/dygraphs/dygraph-combined.js' %}"></script>
 
     <script type="text/javascript" src="{% static 'js/ws4redis.js' %}"></script>
 
 
     <script type="application/javascript">
-    var arduinoAPI = "http://192.168.15.53:8000/api/arduinos/1/";
-    var arduinoAPI_URL = "http://192.168.15.53:8000/api/";
+    var localIP = 'http://192.168.15.17:8000';
+    var chart_labels = [];
+    var chart_series = [] ;
 
-    var tokenCode = 'Token 913ac3cc5ae3a881e238b1cd9fbfa70a75bc1237';
+    var chart_Data = {
+      // A labels array that can contain any sort of values
+      // Our series array that contains series objects or in this case series data arrays
+        labels: chart_labels,
+        series: []
+    };
 
+    console.log(chart_Data);
+
+    var options = {
+      high: 250,
+      low: 0,
+      fullWidth: true,
+      low: 0,
+      showArea: true,
+      showLine: true,
+      showPoint: true,
+      // As this is axis specific we need to tell Chartist to use whole numbers only on the concerned axis
+      axisY: {
+        onlyInteger: true,
+        showLabel: true,
+        showGrid: true
+      }
+    };
+
+    var arduinoAPI = localIP +"/api/arduinos/1/";
+    var arduinoAPI_URL = localIP + "/api/";
+
+    var tokenCode = 'Token 6b4f2e70ae0d435bf512897355947fe0a564972a';
+
+
+//TOKEN EQUIPO DE JOSE ANGEL
+// 913ac3cc5ae3a881e238b1cd9fbfa70a75bc1237
 
     var _arduino;
     var _sensors;
@@ -135,16 +180,80 @@ function arduino_list_Callback(jsonData){
   $('#arduinos').append('<hr/>');
 }
 
+function completeTimeFormat(hours, minutes, seconds){
+  if (hours   < 10) {hours   = "0"+hours;}
+  if (minutes < 10) {minutes = "0"+minutes;}
+  if (seconds < 10) {seconds = "0"+seconds;}
+
+  return  hours+':'+minutes+':'+seconds;
+}
+
+
 function arduino_data_Callback(jsonData){
+
   _sensors_data = jsonData;
   console.log(_sensors_data);
+
+
   var sensor_data_chart = [];
+  var sensor_date_chart = [];
+
+
+  var dygraphs_data = [];
+
   for (var i =0; i < _sensors_data.length; i++ ){
-    sensor_data_chart.push(_sensors_data[i]['data'])
+    sensor_data_chart.push(_sensors_data[i]['data']);
+
+
+    var d = new Date(_sensors_data[i]['created_at']);
+    var d_days = d.getDate()+"/"+d.getMonth()+"/"+d.getFullYear();
+    var d_time = completeTimeFormat(d.getHours(), d.getMinutes(), d.getSeconds());
+    sensor_date_chart.push(d_time);
+
+    dygraphs_data.push([ d ,_sensors_data[i]['data'], "100" , "250" ]);
+
   }
 
+  console.log("LABELS");
+  console.log(sensor_date_chart);
+
+  console.log("SERIES");
+  console.log(sensor_data_chart);
+
+  //console.log(sensor_data_chart);
   data_chart['datasets'][0]['data'] = sensor_data_chart;
-  console.log(data_chart);
+
+  chart_labels.push(sensor_date_chart);
+
+  chart_Data['series'].push(sensor_data_chart);
+  chart_Data['series'].push(["24","24"]);
+
+
+  console.log("a verssss");
+  console.log(dygraphs_data);
+
+  //new Chartist.Line('.ct-chart',chart_Data,options);
+
+  g = new Dygraph(
+    document.getElementById("graphdiv"),
+      dygraphs_data,
+    {
+      drawPoints: true,
+      showRoller: true,
+      valueRange: [0, 300],
+      height:600,
+      width:800,
+      animatedZooms:true,
+      highlightSeriesBackgroundAlpha:0.8,
+      fillGraph:true,
+      includeZero:true,
+      strokeWidth: 3,
+      labels: ['Tiempo','Temperatura','Min', 'Max'],
+    }
+  );
+
+
+
 
   //Init para las graficas :
   var ctx = $("#arduino_chart_1").get(0).getContext("2d");
@@ -202,7 +311,7 @@ function arduino_data_Callback(jsonData){
 
 
       var ws4redis = WS4Redis({
-          uri: 'ws://192.168.15.53:8000/ws/foobar?subscribe-broadcast&publish-broadcast&echo',
+          uri: 'ws://192.168.15.14:8000/ws/foobar?subscribe-broadcast&publish-broadcast&echo',
           connecting: on_connecting,
           connected: on_connected,
           receive_message: receiveMessage,
@@ -231,34 +340,11 @@ function arduino_data_Callback(jsonData){
       function receiveMessage(msg) {
           var jso=JSON.parse(msg);
           //console.log(jso);
-          //console.log('Message from Websocket: ' + msg);
+          console.log('Message from Websocket: ' + msg);
 
       }
 
       });
-
-
-
-
-        /*
-
-        var ws = new WebSocket('ws://localhost:8000/ws/foobar?subscribe-broadcast&publish-broadcast&echo');
-        ws.onopen = function () {
-            console.log("websocket connected");
-        };
-        ws.onmessage = function (e) {
-            console.log("Received: " + e.data);
-        };
-        ws.onerror = function (e) {
-            console.error(e);
-        };
-        ws.onclose = function (e) {
-            console.log("connection closed");
-        };
-        function send_message(msg) {
-            ws.send(msg);
-        };
-        */
 
     </script>
 {% endblock %}

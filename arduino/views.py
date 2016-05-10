@@ -19,7 +19,7 @@ class ArduinoViewSet(mixins.CreateModelMixin,
                      mixins.RetrieveModelMixin,
                      viewsets.GenericViewSet):
     serializer_class = ArduinoSerializer
-    permission_classes = (IsAuthenticated, DjangoModelPermissions)
+    permission_classes = (IsAuthenticated, )
     queryset = serializer_class.Meta.model.objects.all()
 
 
@@ -62,12 +62,66 @@ class ArduinoSensorViewSet(mixins.CreateModelMixin,
         return queryset
 
 
+class ArduinoDataViewSet(mixins.ListModelMixin,
+                        mixins.RetrieveModelMixin,
+                        viewsets.GenericViewSet):
+    serializer_class = SensorDataSerializer
+    permission_classes = (IsAuthenticated, )
+    queryset = serializer_class.Meta.model.objects.all()
+
+    def list(self, request, arduino_pk, *args, **kwargs):
+        arduino = Arduino.objects.get(pk=arduino_pk)
+        sensors = arduino.arduino_sensors.all()
+        ret = []
+        for sensor in sensors:
+            queryset = self.filter_queryset(self.get_queryset(sensor.pk))
+
+            serializer = self.get_serializer(queryset, many=True)
+            ret.append({'sensor': sensor.id, 'data': serializer.data})
+        return Response(ret)
+
+    def get_queryset(self, sensor_pk=None):
+        queryset = self.queryset
+        if isinstance(queryset, QuerySet):
+            # Ensure queryset is re-evaluated on each request.
+            queryset = queryset.filter(arduino_sensor__pk=sensor_pk)
+        min_time = self.request.query_params.get('min_time', None)
+        if min_time is not None:
+            queryset = queryset.filter(created_at__gt=min_time)
+        return queryset
+
+
 class SensorDataViewSet(mixins.ListModelMixin,
                         mixins.RetrieveModelMixin,
                         viewsets.GenericViewSet):
     serializer_class = SensorDataSerializer
     permission_classes = (IsAuthenticated, )
     queryset = serializer_class.Meta.model.objects.all()
+
+    def list(self, request, arduino_pk, sensor_pk,  *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset(sensor_pk))
+
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
+
+    def get_queryset(self, sensor_pk=None):
+        queryset = self.queryset
+        if isinstance(queryset, QuerySet):
+            # Ensure queryset is re-evaluated on each request.
+            queryset = queryset.filter(arduino_sensor__pk=sensor_pk)
+        min_time = self.request.query_params.get('min_time', None)
+        if min_time is not None:
+            queryset = queryset.filter(created_at__gt=min_time)
+        return queryset
+
+
+    def paginate_queryset(self, queryset):
+        return super(SensorDataViewSet, self).paginate_queryset(queryset)
 
 
 class DataViewSet(mixins.CreateModelMixin,
@@ -85,21 +139,21 @@ class DataViewSet(mixins.CreateModelMixin,
             pass
         return request
 
-
-
     def create(self, request, *args, **kwargs):
         redis_publisher = RedisPublisher(facility='foobar', broadcast=True)
         sensors = request.arduino.arduino_sensors.all()
+        ret = []
         for k in request.data:
             a_sensor = sensors.filter(data_key=k)
             data = {'arduino_sensor': a_sensor, 'data': request.data[k]}
             serializer = self.get_serializer(data=data)
             serializer.is_valid(raise_exception=True)
             self.perform_create(serializer)
+            ret.append(serializer.data)
 
-            message = RedisMessage(json.dumps(serializer.data))
-            # and somewhere else
-            redis_publisher.publish_message(message)
+        message = RedisMessage(json.dumps(ret))
+        # and somewhere else
+        redis_publisher.publish_message(message)
 
         return Response({'message': 'data created'}, status=status.HTTP_201_CREATED)
 
