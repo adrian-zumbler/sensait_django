@@ -21,5 +21,11 @@ from django.views.generic import TemplateView
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^', include('arduino.urls', namespace='arduino', app_name='arduino')),
-    url(r'^home/', TemplateView.as_view(template_name='wscall.html'))
+    url(r'^dash/main', TemplateView.as_view(template_name='client/user_dashboard.html')),
+    url(r'^dash/projects', TemplateView.as_view(template_name='client/user_projects.html')),
+    url(r'^dash/project', TemplateView.as_view(template_name='client/user_selected_project.html')),
+    url(r'^dash/iots', TemplateView.as_view(template_name='client/user_iots.html')),
+    url(r'^dash/sensor', TemplateView.as_view(template_name='client/user_selected_sensor.html')),
+    url(r'^dash/admin/clients', TemplateView.as_view(template_name='admin/admin_clients.html')),
+    url(r'^dash/admin/add', TemplateView.as_view(template_name='admin/admin_clients_add.html'))
 ] + staticfiles_urlpatterns()

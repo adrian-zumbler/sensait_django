@@ -1,18 +1,48 @@
+
 <!DOCTYPE html>
 <html>
 <head lang="en">
-    <meta charset="UTF-8">
-    <title>Arduino</title>
-    {% block header %}
-    {% endblock %}
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>IoT Dashboard</title>
+  <!-- Tell the browser to be responsive to screen width -->
+  <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+
+  {% block main_css %}
+  {% endblock  %}
+
+  {% block extra_header_css %}
+  {% endblock  %}
+
+  {% block extra_header_js %}
+  {% endblock  %}
+
 </head>
-<body>
-{% block content %}
-{% endblock %}
+<body class="hold-transition skin-blue sidebar-mini">
+  <div class="wrapper">
 
+    {% block main_header %}
+    {% endblock main_header%}
 
+    {% block main_left_menu %}
+    {% endblock main_left_menu %}
 
-{% block extrajs %}
-{% endblock %}
+    {% block main_content_wrapper %}
+    {% endblock main_content_wrapper %}
+
+    {% block main_footer %}
+    {% endblock main_footer %}
+
+    {% block main_rigth_menu %}
+    {% endblock main_rigth_menu %}
+
+  </div><!-- ./wrapper -->
+
+  {% block main_js %}
+  {% endblock main_js %}
+
+  {% block content_js %}
+  {% endblock content_js %}
+
 </body>
 </html>
