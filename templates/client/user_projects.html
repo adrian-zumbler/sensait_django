@@ -1,7 +1,12 @@
 {% extends 'main_header.html' %}
 {% load staticfiles %}
 
+
+
+
 {% block main_content_wrapper %}
+
+
 
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
@@ -23,6 +28,15 @@
 
     <!-- Main content -->
     <section class="content">
+
+      {{ project_list }}
+      <div class="row">
+      {% for project in project_list %}
+        <h3>{{project}}</h3>
+        <h2>{{project.arduinos.count}}</h2>
+        <h4>{{project.id}}</h4>
+      {% endfor %}
+      </div>
 
 
 

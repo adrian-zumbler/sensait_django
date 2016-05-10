@@ -31,7 +31,7 @@ class Sensor(models.Model):
 
 
 class Arduino(models.Model):
-    project = models.ForeignKey(Project)
+    project = models.ForeignKey(Project, related_name="arduinos")
     name = models.CharField(max_length=255)
     arduino_token = models.CharField(max_length=20, unique=True)
     location = models.CharField(max_length=255)

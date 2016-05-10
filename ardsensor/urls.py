@@ -16,14 +16,30 @@ Including another URLconf
 from django.conf.urls import url, include
 from django.contrib import admin
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, ListView, DetailView
+from arduino.models import Project
+
+
+class ProjectsListView(ListView):
+    template_name='client/user_projects.html'
+    queryset = Project.objects.all()
+
+    def get_queryset(self):
+        queryset = Project.objects.filter(user=self.request.user)
+        return queryset
+
+
+class ProjectDetailView(DetailView):
+    template_name='client/user_selected_project.html'
+    queryset = Project.objects.all()
+
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^', include('arduino.urls', namespace='arduino', app_name='arduino')),
     url(r'^dash/main', TemplateView.as_view(template_name='client/user_dashboard.html')),
-    url(r'^dash/projects', TemplateView.as_view(template_name='client/user_projects.html')),
-    url(r'^dash/project', TemplateView.as_view(template_name='client/user_selected_project.html')),
+    url(r'^dash/projects/$', ProjectsListView.as_view()),
+    url(r'^dash/projects/(?P<pk>\d+)/$', ProjectDetailView.as_view()),
     url(r'^dash/iots', TemplateView.as_view(template_name='client/user_iots.html')),
     url(r'^dash/sensor', TemplateView.as_view(template_name='client/user_selected_sensor.html')),
     url(r'^dash/admin/clients', TemplateView.as_view(template_name='admin/admin_clients.html')),

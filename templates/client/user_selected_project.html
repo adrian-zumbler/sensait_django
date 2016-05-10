@@ -24,8 +24,19 @@
     <!-- Main content -->
     <section class="content">
 
+    {{ project.arduinos.all}}
+      {{ project.arduinos.count}}
+      {%for arduino in project.arduinos.all %}
+        <br/>
+        {{ arduino.name }} ----
+        {{ arduino.id}}
 
+      {%for sensor in arduino.arduino_sensors.all %}
+      <br/>
+      <h2>   {{sensor.arduino_sensor.name }} </h2>
 
+      {% endfor %}
+      {% endfor %}
     <div class="row">
 
       <div class="col-md-6">
