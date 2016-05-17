@@ -29,17 +29,6 @@
     <!-- Main content -->
     <section class="content">
 
-      {{ project_list }}
-      <div class="row">
-      {% for project in project_list %}
-        <h3>{{project}}</h3>
-        <h2>{{project.arduinos.count}}</h2>
-        <h4>{{project.id}}</h4>
-      {% endfor %}
-      </div>
-
-
-
       <div class="row">
         <div class="col-xs-12">
           <!-- TABLE: LATEST ORDERS -->
@@ -70,49 +59,24 @@
                     </tr>
                   </thead>
                   <tbody>
+
+                    {% for project in project_list %}
                     <tr>
                       <td>
-                        <a href="/dash/iots">P010101</a>
+                        <a href="/dash/projects/{{project.id}}">Proyecto - {{project.id}}</a>
                       </td>
-                      <td>Puerta trasera</td>
-                      <td>12</td>
+                      <td>{{project}}</td>
+                      <td>{{project.arduinos.count}}</td>
                       <td>
                         <span class="label label-success">Correcto</span>
                       </td>
                     </tr>
+
+                    {% endfor %}
+
                     <tr>
                       <td>
-                        <a href="/dash/iots">P010101</a>
-                      </td>
-                      <td>Puerta trasera</td>
-                      <td>12</td>
-                      <td>
-                        <span class="label label-success">Correcto</span>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <a href="/dash/iots">P010101</a>
-                      </td>
-                      <td>Puerta trasera</td>
-                      <td>12</td>
-                      <td>
-                        <span class="label label-success">Correcto</span>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <a href="/dash/iots">P010101</a>
-                      </td>
-                      <td>Puerta trasera</td>
-                      <td>12</td>
-                      <td>
-                        <span class="label label-success">Correcto</span>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <a href="/dash/iots">P010101</a>
+                        <a href="/dash/iots">Proyecto - 7</a>
                       </td>
                       <td>Puerta trasera</td>
                       <td>12</td>
@@ -122,7 +86,7 @@
                     </tr>
                     <tr>
                       <td>
-                        <a href="/dash/iots">P010101</a>
+                        <a href="/dash/iots">Proyecto - 8</a>
                       </td>
                       <td>Puerta trasera</td>
                       <td>12</td>
@@ -132,7 +96,7 @@
                     </tr>
                     <tr>
                       <td>
-                        <a href="/dash/iots">P010101</a>
+                        <a href="/dash/iots">Proyecto - 9</a>
                       </td>
                       <td>Puerta trasera</td>
                       <td>12</td>

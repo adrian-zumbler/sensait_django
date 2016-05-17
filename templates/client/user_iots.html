@@ -3,6 +3,20 @@
 
 {% block main_content_wrapper %}
 
+  {{ arduino.name }}
+
+{% comment %}
+  {%for arduino in project.arduinos.all %}
+    <br/>
+    {{ arduino.name }} ----
+    {{ arduino.id}}
+    {%for sensor in arduino.arduino_sensors.all %}
+      <br/>
+      <h2>   {{sensor.arduino_sensor.name }} </h2>
+    {% endfor %}
+  {% endfor %}
+{% endcomment %}
+
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->

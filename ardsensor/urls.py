@@ -28,7 +28,6 @@ class ProjectsListView(ListView):
         queryset = Project.objects.filter(user=self.request.user)
         return queryset
 
-
 class ProjectDetailView(DetailView):
     template_name='client/user_selected_project.html'
     queryset = Project.objects.all()
