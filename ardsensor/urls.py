@@ -56,7 +56,7 @@ urlpatterns = [
     url(r'^dash/main', TemplateView.as_view(template_name='client/user_dashboard.html')),
     url(r'^dash/projects/$', ProjectsListView.as_view()),
     url(r'^dash/projects/(?P<pk>\d+)/$', ProjectDetailView.as_view()),
-    url(r'^dash/iots/(?P<pk>\d+)/$', ArduinoDetailView.as_view()),
+    url(r'^dash/iot/(?P<pk>\d+)/$', ArduinoDetailView.as_view()),
     url(r'^dash/sensor/(?P<pk>\d+)/$', ArduinoSensorDetailView.as_view()),
     url(r'^dash/admin/clients', TemplateView.as_view(template_name='admin/admin_clients.html')),
     url(r'^dash/admin/add', TemplateView.as_view(template_name='admin/admin_clients_add.html'))

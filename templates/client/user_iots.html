@@ -47,13 +47,12 @@
                 </div><!-- /.box-header -->
                 <div class="box-body">
                   <dl class="dl-horizontal">
-                      <h1>  {{ arduino }} algo</h1>
                     <dt>Nombre del IoT </dt>
-                    <dd>IoT 2 </dd>
+                    <dd>{{ arduino.name }} </dd>
                     <dt>Ubicación</dt>
-                    <dd>Refrigerador 2</dd>
+                    <dd>{{ arduino.location }} </dd>
                     <dt>ID del IoT </dt>
-                    <dd>IOT00121 </dd>
+                    <dd> {{ arduino.id }} </dd>
                   </dl>
                 </div><!-- /.box-body -->
               </div><!-- /.box -->
@@ -68,7 +67,7 @@
                 <div class="box-body">
                   <dl class="dl-horizontal">
                     <dt>Tipos de Sensores</dt>
-                    <dd>2</dd>
+                    <dd>{{ arduino.sensors.count }} </dd>
                     <dt>Estatus</dt>
                     <dd><span class="label label-success">Correcto</span></dd>
                     <dt>Configuración de Alertas</dt>
@@ -110,89 +109,25 @@
                     <tr>
                       <th>Sensor ID</th>
                       <th>Tipo de Sensor</th>
+                      <th>Ubicación</th>
                       <th>Ultimo Fecha</th>
                       <th>Ultimo Valor</th>
-                      <th>Estatus</th>
+                      <th>Estatus </th>
                     </tr>
                   </thead>
                   <tbody>
-                    <tr>
-                      <td>
-                        <a href="/dash/iots">SENS0001</a>
-                      </td>
-                      <td>Temperatura</td>
-                      <td>12/01/1988 12:00 pm</td>
-                      <td>25.55</td>
-                      <td>
-                        <span class="label label-success">En rango</span>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <a href="pages/examples/invoice.html">SENS0001</a>
-                      </td>
-                      <td>Temperatura</td>
-                      <td>12/01/1988 12:00 pm</td>
-                      <td>25.55</td>
-                      <td>
-                        <span class="label label-success">En rango</span>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <a href="pages/examples/invoice.html">SENS0001</a>
-                      </td>
-                      <td>Temperatura</td>
-                      <td>12/01/1988 12:00 pm</td>
-                      <td>25.55</td>
-                      <td>
-                        <span class="label label-success">En rango</span>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <a href="pages/examples/invoice.html">SENS0001</a>
-                      </td>
-                      <td>Temperatura</td>
-                      <td>12/01/1988 12:00 pm</td>
-                      <td>25.55</td>
-                      <td>
-                        <span class="label label-danger">Alerta Enviada</span>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <a href="pages/examples/invoice.html">SENS0001</a>
-                      </td>
-                      <td>Puerta trasera</td>
-                      <td>12/01/1988 12:00 pm</td>
-                      <td>25.55</td>
-                      <td>
-                        <span class="label label-warning">Fuera de Rango</span>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <a href="pages/examples/invoice.html">SENS0001</a>
-                      </td>
-                      <td>Temperatura</td>
-                      <td>12/01/1988 12:00 pm</td>
-                      <td>25.55</td>
-                      <td>
-                        <span class="label label-success">En rango</span>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <a href="pages/examples/invoice.html">SENS0001</a>
-                      </td>
-                      <td>Temperatura</td>
-                      <td>12/01/1988 12:00 pm</td>
-                      <td>25.55</td>
-                      <td>
-                        <span class="label label-success">En rango</span>
-                      </td>
-                    </tr>
+
+                    {% for sensor in arduino.arduino_sensors.all %}
+                      <tr>
+                        <td> <a href="/dash/sensor/{{sensor.id}}">SENSOR-{{sensor.index}}</a> </td>
+                        <td>{{ sensor.arduino_sensor.name }}</td>
+                        <td>{{ sensor.description }}</td>
+                        <td>{{ sensor.sensor_data.last.created_at }}</td>
+                        <td>{{ sensor.sensor_data.last.data }}</td>
+                        <td> <span class="badge bg-green">En rango</span> </td>
+                      </tr>
+                    {% endfor %}
+                    
                   </tbody>
                 </table>
               </div>
