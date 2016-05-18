@@ -37,10 +37,16 @@
             </div><!-- /.box-header -->
             <div class="box-body">
               <dl class="dl-horizontal">
+                  {{ arduinosensor }}
                 <dt>Proyecto</dt>
                 <dd>Nombre del Proyecto</dd>
                 <dt>Tipo de Sensor</dt>
                 <dd>Temperatura</dd>
+                <h1>arduinos/{{ arduinosensor.arduino.id }}/sensors/{{ arduinosensor.id }}</h1>
+                  {% for data in arduinosensor.sensor_data.all %}
+                    <h2>{{ data.data  }}</h2>
+                    <h2>{{ data.created_at }}</h2>
+                  {% endfor %}
                 <dt># del Sensor en el IoT</dt>
                 <dd>2</dd>
               </dl>

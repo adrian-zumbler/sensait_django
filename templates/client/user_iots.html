@@ -3,7 +3,7 @@
 
 {% block main_content_wrapper %}
 
-  {{ arduino.name }}
+
 
 {% comment %}
   {%for arduino in project.arduinos.all %}
@@ -47,6 +47,7 @@
                 </div><!-- /.box-header -->
                 <div class="box-body">
                   <dl class="dl-horizontal">
+                      <h1>  {{ arduino }} algo</h1>
                     <dt>Nombre del IoT </dt>
                     <dd>IoT 2 </dd>
                     <dt>Ubicación</dt>
