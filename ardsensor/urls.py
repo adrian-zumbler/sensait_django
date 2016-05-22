@@ -15,10 +15,15 @@ Including another URLconf
 """
 from django.conf.urls import url, include
 from django.contrib import admin
+from django.core.urlresolvers import reverse_lazy
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
-from django.views.generic import TemplateView, ListView, DetailView
+from django import forms
+from django.views.generic import TemplateView, ListView, DetailView, CreateView, UpdateView, DeleteView
 from arduino.models import Project, Arduino, ArduinoSensor
 
+
+#       CLASES PARA USUARIO/CLIENTE
+#_____________________________________________#
 
 class ProjectsListView(ListView):
     template_name='client/user_projects.html'
@@ -28,10 +33,10 @@ class ProjectsListView(ListView):
         queryset = Project.objects.filter(user=self.request.user)
         return queryset
 
+
 class ProjectDetailView(DetailView):
     template_name='client/user_selected_project.html'
     queryset = Project.objects.all()
-
 
 
 class ArduinoDetailView(DetailView):
@@ -50,6 +55,57 @@ class ArduinoSensorDetailView(DetailView):
         return queryset
 
 
+
+#       CLASES PARA ADMIN
+#_____________________________________________#
+
+
+class AdminProjectsListView(ListView):
+    template_name='admin/admin_projects.html'
+    queryset = Project.objects.all()
+
+
+class AdminProjectsDetailView(DetailView):
+    template_name='admin/admin_projects_detail.html'
+    queryset = Project.objects.all()
+
+    #def get_queryset(self):
+    #    print self.kwargs
+    #    queryset = Project.objects.filter(project__user=self.request.user)
+        #queryset = Project.objects.filter(project_id=self.kwargs['pk'])
+#        print queryset
+#        return queryset
+
+
+class AdminProjectCreateForm(forms.ModelForm):
+    name = forms.RegexField(r'[A-Za-z]+')
+
+    class Meta:
+        model = Project
+        fields = '__all__'
+
+
+class AdminProjectCreateView(CreateView):
+    form_class = AdminProjectCreateForm
+    template_name = 'admin/admin_projects_create.html'
+    success_url = reverse_lazy('adminListProjects')
+
+
+class AdminProjectsEditView(UpdateView):
+    form_class = AdminProjectCreateForm
+    template_name = 'admin/admin_projects_create.html'
+    success_url = reverse_lazy('adminListProjects')
+    queryset = Project.objects.all()
+
+
+class AdminProjectsDeleteView(DeleteView):
+    template_name = 'admin/admin_projects_delete.html'
+    success_url = reverse_lazy('adminListProjects')
+    queryset = Project.objects.all()
+
+#       URLS
+#_____________________________________________#
+
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^', include('arduino.urls', namespace='arduino', app_name='arduino')),
@@ -58,6 +114,10 @@ urlpatterns = [
     url(r'^dash/projects/(?P<pk>\d+)/$', ProjectDetailView.as_view()),
     url(r'^dash/iot/(?P<pk>\d+)/$', ArduinoDetailView.as_view()),
     url(r'^dash/sensor/(?P<pk>\d+)/$', ArduinoSensorDetailView.as_view()),
-    url(r'^dash/admin/clients', TemplateView.as_view(template_name='admin/admin_clients.html')),
-    url(r'^dash/admin/add', TemplateView.as_view(template_name='admin/admin_clients_add.html'))
+    url(r'^dash/admin/clients/$', TemplateView.as_view(template_name='admin/admin_clients.html')),
+    url(r'^dash/admin/projects/$', AdminProjectsListView.as_view(), name='adminListProjects'),
+    url(r'^dash/admin/projects/detail/(?P<pk>\d+)/$', AdminProjectsDetailView.as_view(), name='adminDetailProjects'),
+    url(r'^dash/admin/projects/new/$', AdminProjectCreateView.as_view(), name='adminCreateProjects'),
+    url(r'^dash/admin/projects/edit/(?P<pk>\d+)/$', AdminProjectsEditView.as_view(), name='adminEditProjects'),
+    url(r'^dash/admin/projects/delete/(?P<pk>\d+)/$', AdminProjectsDeleteView.as_view(), name='adminDeleteProjects'),
 ] + staticfiles_urlpatterns()

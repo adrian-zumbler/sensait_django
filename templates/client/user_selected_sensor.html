@@ -35,7 +35,17 @@
             <div class="box-body">
               <dl class="dl-horizontal">
                 <dt>Proyecto</dt>
-                <dd>{{ arduinosensor.arduino.project.name }}</dd>
+                <dd>
+                  <a href="/dash/projects/{{arduinosensor.arduino.project.id }}" target="_self">
+                    {{arduinosensor.arduino.project.name }}
+                  </a>
+                </dd>
+                <dt>IoT</dt>
+                <dd>
+                  <a href="/dash/iot/{{arduinosensor.arduino.id }}" target="_self">
+                    {{arduinosensor.arduino.name}}
+                  </a>
+                </dd>
                 <dt>Tipo de Sensor</dt>
                 <dd>{{ arduinosensor.arduino_sensor.name }}</dd>
                 <dt># del Sensor en el IoT</dt>
@@ -333,7 +343,7 @@
       fillGraph: true,
       includeZero: true,
       strokeWidth: 3,
-      showRangeSelector: true,
+      //showRangeSelector: true,
       labels: ['Tiempo', 'Temperatura', 'Min', 'Max']
     });
 
