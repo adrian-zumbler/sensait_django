@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.conf.urls import url, include
 from django.contrib import admin
-from django.core.urlresolvers import reverse_lazy
+from django.core.urlresolvers import reverse_lazy, reverse
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django import forms
 from django.views.generic import TemplateView, ListView, DetailView, CreateView, UpdateView, DeleteView
@@ -115,21 +115,24 @@ class AdminArduinoCreateForm(forms.ModelForm):
 
     class Meta:
         model   = Arduino
-        fields  = ['name', 'location']
+        fields  = ['name', 'location', 'project']
 
 
 class AdminArduinoCreateView(CreateView):
     form_class = AdminArduinoCreateForm
     template_name = 'admin/admin_arduinos_create.html'
-    success_url = reverse_lazy('adminListProjects')
 
-    def post(self, request, *args, **kwargs):
-        #return super(AdminArduinoCreateView, self).post(request, *args, **kwargs)
-        form = self.get_form()
-        if form.is_valid():
-            return self.form_valid(form)
-        else:
-            return self.form_invalid(form)
+    def get_success_url(self):
+        return reverse('adminDetailProjects', kwargs={'pk': self.kwargs['project_pk']})
+
+    def get_initial(self):
+        """
+        Returns the initial data to use for forms on this view.
+        """
+        initial = self.initial.copy()
+        initial['project'] = self.kwargs['project_pk']
+        return initial
+
 
 
 #       URLS
@@ -149,5 +152,5 @@ urlpatterns = [
     url(r'^dash/admin/projects/new/$', AdminProjectCreateView.as_view(), name='adminCreateProjects'),
     url(r'^dash/admin/projects/edit/(?P<pk>\d+)/$', AdminProjectsEditView.as_view(), name='adminEditProjects'),
     url(r'^dash/admin/projects/delete/(?P<pk>\d+)/$', AdminProjectsDeleteView.as_view(), name='adminDeleteProjects'),
-    url(r'^dash/admin/iot/new/$', AdminArduinoCreateView.as_view(), name='adminCreateArduinos'),
+    url(r'^dash/admin/projects/(?P<project_pk>\d+)/iot/new/$', AdminArduinoCreateView.as_view(), name='adminCreateArduinos'),
 ] + staticfiles_urlpatterns()
