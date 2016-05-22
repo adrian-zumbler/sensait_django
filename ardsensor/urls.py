@@ -60,6 +60,8 @@ class ArduinoSensorDetailView(DetailView):
 #_____________________________________________#
 
 
+#       ADMIN - PROYECTOS
+#_____________________________________________#
 class AdminProjectsListView(ListView):
     template_name='admin/admin_projects.html'
     queryset = Project.objects.all()
@@ -103,6 +105,33 @@ class AdminProjectsDeleteView(DeleteView):
     success_url = reverse_lazy('adminListProjects')
     queryset = Project.objects.all()
 
+
+#       ADMIN - ARDUINOS
+#_____________________________________________#
+
+
+class AdminArduinoCreateForm(forms.ModelForm):
+    name = forms.RegexField(r'[A-Za-z]+')
+
+    class Meta:
+        model   = Arduino
+        fields  = ['name', 'location']
+
+
+class AdminArduinoCreateView(CreateView):
+    form_class = AdminArduinoCreateForm
+    template_name = 'admin/admin_arduinos_create.html'
+    success_url = reverse_lazy('adminListProjects')
+
+    def post(self, request, *args, **kwargs):
+        #return super(AdminArduinoCreateView, self).post(request, *args, **kwargs)
+        form = self.get_form()
+        if form.is_valid():
+            return self.form_valid(form)
+        else:
+            return self.form_invalid(form)
+
+
 #       URLS
 #_____________________________________________#
 
@@ -120,4 +149,5 @@ urlpatterns = [
     url(r'^dash/admin/projects/new/$', AdminProjectCreateView.as_view(), name='adminCreateProjects'),
     url(r'^dash/admin/projects/edit/(?P<pk>\d+)/$', AdminProjectsEditView.as_view(), name='adminEditProjects'),
     url(r'^dash/admin/projects/delete/(?P<pk>\d+)/$', AdminProjectsDeleteView.as_view(), name='adminDeleteProjects'),
+    url(r'^dash/admin/iot/new/$', AdminArduinoCreateView.as_view(), name='adminCreateArduinos'),
 ] + staticfiles_urlpatterns()

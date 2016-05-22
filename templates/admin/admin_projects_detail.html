@@ -31,7 +31,7 @@
       <div class="box box-solid">
         <div class="box-header with-border">
           <i class="fa fa-adjust"></i>
-          <h3 class="box-title">Información del Sensor</h3>
+          <h3 class="box-title">Información del Proyecto:  {{project.name }}</h3>
         </div><!-- /.box-header -->
         <div class="box-body">
           <dl class="dl-horizontal">
@@ -54,11 +54,90 @@
           </dl>
         </div><!-- /.box-body -->
       </div><!-- /.box -->
+    </div>
+  </div><!-- /.row -->
 
+
+<!-- /.CRUD PARA LOS ARDUINOS DEL PROYECTO -->
+
+<div class="row">
+  <div class="col-xs-12">
+    <div class="box">
+      <div class="box-header">
+        <h3 class="box-title">Lista de ARDUINOS ACTIVOS</h3>
+      </div><!-- /.box-header -->
+      <div class="box-body">
+        <table id="table_arduinos" class="table table-bordered table-striped">
+          <thead>
+            <tr>
+              <th>Accion</th>
+              <th>ID IoT</th>
+              <th>Nombre IoT </th>
+              <th>Ubicación</th>
+              <th>Fecha Creación</th>
+              <th>Estatus</th>
+            </tr>
+          </thead>
+          <tbody>
+
+            {% for arduino in project.arduinos.all %}
+            <tr>
+              <td>
+                <div class="btn-group">
+                  <a href="/dash/admin/iot/detail/{{project.id}}" target="_self">
+                    <button  type="button" class="btn btn-success">Ver</button>
+                  </a>
+                  <a href="/dash/admin/iot/edit/{{project.id}}" target="_self">
+                    <button  type="button" class="btn btn-info">Editar</button>
+                  </a>
+                  <a href="/dash/admin/iot/delete/{{project.id}}" target="_self">
+                    <button type="button" class="btn btn-danger">Borrar</button>
+                  </a>
+                </div>
+              </td>
+
+              <td>00000</td>
+              <td>Cliente nombre</td>
+              <td>{{arduino.id}} - {{arduino.name}}</td>
+              <td>00000</td>
+
+              {% if  project.id|isEven == 0%}
+                <td> <span class="label label-danger">Pendiente Success</span> </td>
+              {% else %}
+                <td> <span class="label label-success">Estatus Correcto</span> </td>
+              {% endif %}
+
+            </tr>
+            {% endfor %}
+
+          </tbody>
+          <tfoot>
+            <tr>
+              <th>ID Cliente</th>
+              <th>Nombre Cliente</th>
+              <th>Proyectos</th>
+              <th>Iots Instalados</th>
+              <th>Estatus</th>
+            </tr>
+          </tfoot>
+        </table>
+      </div><!-- /.box-body -->
+    </div><!-- /.box -->
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-xs-12">
+    <div class="box">
+      <a href="/dash/admin/iot/new/">
+        <button class="btn btn-block btn-info btn-lg">Agregar Arduino</button>
+      </a>
     </div>
   </div>
+</div>
 
-    </section>
+<!-- /.END PARA LOS ARDUINOS DEL PROYECTO -->
+  </section>
     <!-- /.content -->
   </div>
   <!-- /.content-wrapper -->
@@ -66,9 +145,21 @@
 {% endblock main_content_wrapper %}
 
 {% block content_js %}
+  <script src="{% static 'plugins/datatables/jquery.dataTables.min.js' %}"></script>
+  <script src="{% static 'plugins/datatables/dataTables.bootstrap.min.js' %}"></script>
   <!-- page script -->
 <script type="application/javascript">
 
+  $(function () {
+    $('#table_projects').DataTable({
+      "paging": true,
+      "lengthChange": false,
+      "searching": true,
+      "ordering": true,
+      "info": true,
+      "autoWidth": false
+    });
+  });
 
 </script>
 
