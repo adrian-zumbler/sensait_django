@@ -72,8 +72,13 @@
               <dd> {{ ticket.followup.last.date}} </dd>
 
             </dl>
-              {{ form }}
+              <form action="followup/" method="post">
+
+                  {% csrf_token %}
+                  {{ form }}
+
             <button type="submit" class="btn btn-primary">Agregar Comentario?</button>
+                  </form>
           </div><!-- /.box-body -->
         </div><!-- /.box -->
       </div><!-- ./col -->

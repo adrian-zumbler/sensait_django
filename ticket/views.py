@@ -1,6 +1,8 @@
 from django.shortcuts import render
 from django.views.generic import ListView, CreateView, UpdateView, DetailView
+from django.views.generic.edit import BaseCreateView
 from django.core.urlresolvers import reverse_lazy
+from django.contrib import messages
 
 from ticket.forms import TicketForm, FollowUpForm
 from helpdesk.models import Ticket
@@ -35,12 +37,25 @@ class TicketDetailView(DetailView):
         return context
 
 
-class FollowUpCreateView(CreateView):
+class FollowUpCreateView(BaseCreateView):
     form_class = FollowUpForm
+
+    def form_valid(self, form):
+        """
+        If the form is valid, save the associated model.
+        """
+        self.object = form.save(commit=False)
+        self.object.ticket = Ticket.objects.get(id=self.kwargs['pk'])
+        return super(FollowUpCreateView, self).form_valid(form)
+
+    def form_invalid(self, form):
+        messages.add_message(self.request, messages.INFO, 'Tu comentario es invalido.')
+        return self.form_valid(form)
+
 
     def get_success_url(self):
         return reverse_lazy(
-            'tikect:ticket-detail',
-            kwargs={'pk': self.form.cleaned_data.ticket.id}
+            'ticket:ticket-detail',
+            kwargs={'pk': self.kwargs['pk']}
         )
 

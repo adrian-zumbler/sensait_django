@@ -5,9 +5,24 @@ from ticket.views import TicketListView, TicketCreateView, \
 
 
 urlpatterns = [
-    url(r'dash/tickets/$', TicketListView.as_view(), name='ticket-list'),
-    url(r'dash/tickets/add/$', TicketCreateView.as_view(), name='ticket-add'),
-    url(r'dash/tickets/edit/(?P<pk>\d+)/$', TicketUpdateView.as_view(), name='ticket-edit'),
-    url(r'dash/tickets/view/(?P<pk>\d+)/$', TicketDetailView.as_view(), name='ticket-detail'),
-    url(r'dash/tickets/view/(?P<pk>\d+)/followup/$', TicketDetailView.as_view(), name='ticket-detail'),
+    url(
+        r'dash/tickets/$',
+        TicketListView.as_view(),
+        name='ticket-list'),
+    url(
+        r'dash/tickets/add/$',
+        TicketCreateView.as_view(),
+        name='ticket-add'),
+    url(
+        r'dash/tickets/edit/(?P<pk>\d+)/$',
+        TicketUpdateView.as_view(),
+        name='ticket-edit'),
+    url(
+        r'dash/tickets/view/(?P<pk>\d+)/$',
+        TicketDetailView.as_view(),
+        name='ticket-detail'),
+    url(
+        r'dash/tickets/view/(?P<pk>\d+)/followup/$',
+        FollowUpCreateView.as_view(),
+        name='ticket-followup-create'),
 ]
