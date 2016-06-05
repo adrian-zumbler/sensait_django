@@ -86,7 +86,7 @@
                   <div class="form-group">
                       <label for="inputEmail3" class="col-sm-2 control-label">Fecha Creación </label>
                       <div class="col-sm-10">
-                        {% render_field form.created class="form-control" type="date" %}
+                        {% render_field form.created class="form-control" type="datetime" %}
                       </div>
                   </div>
 
@@ -94,7 +94,7 @@
                       {{form.due_date.errors}}
                       <label for="inputEmail3" class="col-sm-2 control-label">Fecha Vencimiento </label>
                       <div class="col-sm-10">
-                        {% render_field form.due_date class="form-control" type="date" %}
+                        {% render_field form.due_date class="form-control" type="datetime" %}
                       </div>
                   </div>
               </div>
