@@ -325,11 +325,11 @@ class Ticket(models.Model):
     DUPLICATE_STATUS = 5
 
     STATUS_CHOICES = (
-        (OPEN_STATUS, _('Open')),
-        (REOPENED_STATUS, _('Reopened')),
-        (RESOLVED_STATUS, _('Resolved')),
-        (CLOSED_STATUS, _('Closed')),
-        (DUPLICATE_STATUS, _('Duplicate')),
+        (OPEN_STATUS, _('Abierto')),
+        (REOPENED_STATUS, _('Reabierto')),
+        (RESOLVED_STATUS, _('Resuelto')),
+        (CLOSED_STATUS, _('Cerrado')),
+        (DUPLICATE_STATUS, _('Duplicado')),
     )
 
     PRIORITY_CHOICES = (
