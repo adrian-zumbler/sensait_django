@@ -73,7 +73,7 @@
                           <a href="/dash/tickets/view/{{ticket.id}}" target="_self">
                             <button  type="button" class="btn btn-success">Ver</button>
                           </a>
-                          <a href="/dash/tickets/edit/{{ticket.id}}" target="_self">
+                          <a href="{% url 'ticket:ticket-edit' pk=ticket.id %}" target="_self">
                             <button  type="button" class="btn btn-info">Editar</button>
                           </a>
                           <a href="/dash/tickets/delete/{{ticket.id}}" target="_self">
@@ -106,7 +106,7 @@
     <div class="row">
       <div class="col-xs-12">
         <div class="box">
-          <a href="{% url ticket:ticket-add %}">
+          <a href="{% url 'ticket:ticket-add' %}">
             <button class="btn btn-block btn-info btn-lg">Crear Ticket</button>
           </a>
         </div>

@@ -13,10 +13,13 @@ class TicketListView(ListView):
 
 
 class TicketCreateView(CreateView):
-    template_name = 'ticket/ticket_create.html'
+    template_name = 'ticket/ticket_edit.html'
     form_class = TicketForm
     success_url = reverse_lazy('ticket:ticket-list')
 
 
 class TicketUpdateView(UpdateView):
     template_name = 'ticket/ticket_edit.html'
+    form_class = TicketForm
+    success_url = reverse_lazy('ticket:ticket-list')
+    queryset = Ticket.objects.all()
