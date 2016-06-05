@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.views.generic import ListView, CreateView, UpdateView
+from django.views.generic import ListView, CreateView, UpdateView, DetailView
 from django.core.urlresolvers import reverse_lazy
 
 from ticket.forms import TicketForm
@@ -22,4 +22,9 @@ class TicketUpdateView(UpdateView):
     template_name = 'ticket/ticket_edit.html'
     form_class = TicketForm
     success_url = reverse_lazy('ticket:ticket-list')
+    queryset = Ticket.objects.all()
+
+
+class TicketDetailView(DetailView):
+    template_name = 'ticket/ticket_detail.html'
     queryset = Ticket.objects.all()
