@@ -37,9 +37,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.humanize',
+    'django.contrib.sites',
     'rest_framework',
     'rest_framework.authtoken',
     'corsheaders',
+    'bootstrapform',
+    'markdown_deux',
+    'helpdesk',
     'arduino',
     'widget_tweaks',
     'ws4redis',
@@ -92,6 +97,8 @@ TEMPLATES = [
 
 #WSGI_APPLICATION = 'ardsensor.wsgi.application'
 
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 # Database
 # https://docs.djangoproject.com/en/1.9/ref/settings/#databases

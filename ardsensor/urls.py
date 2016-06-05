@@ -114,8 +114,8 @@ class AdminArduinoCreateForm(forms.ModelForm):
     name = forms.RegexField(r'[A-Za-z]+')
 
     class Meta:
-        model   = Arduino
-        fields  = ['name', 'location', 'project']
+        model = Arduino
+        fields = ['name', 'location', 'project']
 
 
 class AdminArduinoCreateView(CreateView):
@@ -141,6 +141,7 @@ class AdminArduinoCreateView(CreateView):
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^', include('arduino.urls', namespace='arduino', app_name='arduino')),
+    url(r'^', include('helpdesk.urls')),
     url(r'^dash/main', TemplateView.as_view(template_name='client/user_dashboard.html')),
     url(r'^dash/projects/$', ProjectsListView.as_view()),
     url(r'^dash/projects/(?P<pk>\d+)/$', ProjectDetailView.as_view()),
