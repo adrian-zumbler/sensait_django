@@ -142,7 +142,7 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^', include('arduino.urls', namespace='arduino', app_name='arduino')),
     url(r'^', include('helpdesk.urls')),
-    url(r'^', include('ticket.urls', namespace='ticket', app_name='ticket')),
+    url(r'^', include('ticket.urls', namespace='ticket')),
     url(r'^dash/main', TemplateView.as_view(template_name='client/user_dashboard.html')),
     url(r'^dash/projects/$', ProjectsListView.as_view()),
     url(r'^dash/projects/(?P<pk>\d+)/$', ProjectDetailView.as_view()),

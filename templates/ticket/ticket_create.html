@@ -1,0 +1,13 @@
+{% extends 'main_header.html' %}
+{% load staticfiles %}
+{% block main_content_wrapper %}
+<div class="content-wrapper">
+    <h1>Add ticket</h1>
+
+    <form action="." method="post">
+        {% csrf_token %}
+        {{ form }}
+        <button type="submit"> Crear </button>
+    </form>
+</div>
+{% endblock main_content_wrapper %}
