@@ -1,6 +1,7 @@
 from django.conf.urls import url, include
 
-from ticket.views import TicketListView, TicketCreateView, TicketUpdateView, TicketDetailView
+from ticket.views import TicketListView, TicketCreateView, \
+    TicketUpdateView, TicketDetailView, FollowUpCreateView
 
 
 urlpatterns = [
@@ -8,4 +9,5 @@ urlpatterns = [
     url(r'dash/tickets/add/$', TicketCreateView.as_view(), name='ticket-add'),
     url(r'dash/tickets/edit/(?P<pk>\d+)/$', TicketUpdateView.as_view(), name='ticket-edit'),
     url(r'dash/tickets/view/(?P<pk>\d+)/$', TicketDetailView.as_view(), name='ticket-detail'),
+    url(r'dash/tickets/view/(?P<pk>\d+)/followup/$', TicketDetailView.as_view(), name='ticket-detail'),
 ]

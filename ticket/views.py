@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.views.generic import ListView, CreateView, UpdateView, DetailView
 from django.core.urlresolvers import reverse_lazy
 
-from ticket.forms import TicketForm
+from ticket.forms import TicketForm, FollowUpForm
 from helpdesk.models import Ticket
 
 
@@ -28,3 +28,19 @@ class TicketUpdateView(UpdateView):
 class TicketDetailView(DetailView):
     template_name = 'ticket/ticket_detail.html'
     queryset = Ticket.objects.all()
+
+    def get_context_data(self, **kwargs):
+        context = super(TicketDetailView, self).get_context_data(**kwargs)
+        context['form'] = FollowUpForm
+        return context
+
+
+class FollowUpCreateView(CreateView):
+    form_class = FollowUpForm
+
+    def get_success_url(self):
+        return reverse_lazy(
+            'tikect:ticket-detail',
+            kwargs={'pk': self.form.cleaned_data.ticket.id}
+        )
+
