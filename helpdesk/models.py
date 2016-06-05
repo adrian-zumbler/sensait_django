@@ -580,6 +580,7 @@ class FollowUp(models.Model):
     ticket = models.ForeignKey(
         Ticket,
         verbose_name=_('Ticket'),
+        related_name='followups',
         )
 
     date = models.DateTimeField(
