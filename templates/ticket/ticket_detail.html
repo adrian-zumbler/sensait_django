@@ -1,5 +1,7 @@
 {% extends 'main_header.html' %}
 {% load staticfiles %}
+{% load widget_tweaks %}
+
 
 {% block main_content_wrapper %}
 
@@ -26,8 +28,7 @@
   <section class="content">
 
     <div class="row">
-
-      <div class="col-md-6">
+      <div class="col-md-4">
         <div class="box box-solid">
           <div class="box-header with-border">
             <i class="fa fa-adjust"></i>
@@ -44,7 +45,7 @@
               <dt>Responsable </dt>
               <dd> {{ ticket.assigned_to }} </dd>
               <dt>Estatus </dt>
-              <dd> {{ ticket.status }} </dd>
+              <dd> {{ ticket.get_status_display }} </dd>
               <dt>Prihoridad </dt>
               <dd> {{ ticket.priority }} </dd>
               <dt>Fecha de Creación </dt>
@@ -53,28 +54,22 @@
               <dd> {{ ticket.due_date }} </dd>
               <dt>Descripción</dt>
               <dd> {{ ticket.description }} </dd>
+              <dt>Comentarios</dt>
+              <dd> {{ ticket.follow_up.all.count }} </dd>
             </dl>
           </div><!-- /.box-body -->
         </div><!-- /.box -->
       </div><!-- ./col -->
 
-      <div class="col-md-6">
+      <div class="col-md-8">
         <div class="box box-solid">
           <div class="box-header with-border">
             <i class="fa fa-adjust"></i>
             <h3 class="box-title">Agregar Comentario</h3>
           </div><!-- /.box-header -->
           <div class="box-body">
-            <dl class="dl-horizontal">
-              <dt>Total de Comentarios  </dt>
-              <dd> {{ ticket.followup.all.count}} </dd>
-              <dt>Ultimo Comentario</dt>
-              <dd> {{ ticket.followup.last.date}} </dd>
-
-            </dl>
-              {{ form }}
-            <button type="submit" class="btn btn-primary">Agregar Comentario?</button>
-          </div><!-- /.box-body -->
+            <button id="createComment" type="submit" class="btn btn-primary" data-toggle="modal" data-target="#myModal">Agregar Comentario?</button>
+          </div><!-- /.box -->
         </div><!-- /.box -->
       </div><!-- ./col -->
 
@@ -107,7 +102,6 @@
                 <div id="collapseOne" class="panel-collapse collapse in" aria-expanded="true">
                   <div class="box-body">
                     Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3
-
                   </div>
                 </div>
               </div>
@@ -149,5 +143,101 @@
 
 </div>
 
+<div class="modal fade modal-primary" id="myModal">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">×</span></button>
+        <h4 class="modal-title">Agregar Ticket</h4>
+      </div>
+      <div class="modal-body">
+          <form class="form-horizontal" role="form" action="." method="post">
+            {% csrf_token %}
+          <div class="row">
+            <div class="col-md-12">
 
+              <div class="form-group">
+                  <label for="inputEmail3" class="col-sm-2 control-label">Ticket</label>
+                  <div class="col-sm-6">
+                     {% render_field form.ticket class="form-control" %}
+                  </div>
+                  <div class="col-sm-offset-2 col-sm-8">
+                     {{form.title.errors}}
+                  </div>
+              </div>
+              <div class="form-group">
+                  <label for="inputEmail3" class="col-sm-2 control-label">Responsable</label>
+                  <div class="col-sm-6">
+                     {% render_field form.user class="form-control" %}
+                  </div>
+                  <div class="col-sm-offset-2 col-sm-8">
+                     {{form.title.errors}}
+                  </div>
+              </div>
+
+              <div class="form-group">
+                  <label for="inputEmail3" class="col-sm-2 control-label">Estatus Nuevo</label>
+                  <div class="col-sm-6">
+                     {% render_field form.new_status class="form-control" %}
+                  </div>
+                  <div class="col-sm-offset-2 col-sm-8">
+                     {{form.title.errors}}
+                  </div>
+              </div>
+
+
+              <div class="form-group">
+                  <label for="inputEmail3" class="col-sm-2 control-label">Fecha</label>
+                  <div class="col-sm-6">
+                     {% render_field form.date class="form-control" %}
+                  </div>
+                  <div class="col-sm-offset-2 col-sm-8">
+                     {{form.title.errors}}
+                  </div>
+              </div>
+
+              <div class="form-group">
+                  <label for="inputEmail3" class="col-sm-2 control-label">Titulo</label>
+                  <div class="col-sm-6">
+                     {% render_field form.title class="form-control" %}
+                  </div>
+                  <div class="col-sm-offset-2 col-sm-8">
+                     {{form.title.errors}}
+                  </div>
+              </div>
+
+              <div class="form-group">
+                  <label for="inputEmail3" class="col-sm-2 control-label">Comentario</label>
+                  <div class="col-sm-6">
+                     {% render_field form.comment class="form-control" %}
+                  </div>
+                  <div class="col-sm-offset-2 col-sm-8">
+                     {{form.title.errors}}
+                  </div>
+              </div>
+
+            </div> <!-- DIV DE LA MITAD DEL FORM -->
+          </div>
+        </form>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-outline">Crear Ticket</button>
+      </div>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
 {% endblock main_content_wrapper %}
+
+
+{% block content_js %}
+
+$('#createComment').on('shown.bs.modal', function () {
+  $('#myInput').focus()
+})
+
+{% endblock content_js %}
