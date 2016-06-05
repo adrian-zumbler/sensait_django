@@ -70,7 +70,7 @@
 
                       <td>
                         <div class="btn-group">
-                          <a href="/dash/tickets/view/{{ticket.id}}" target="_self">
+                          <a href="{% url 'ticket:ticket-detail' pk=ticket.id %}" target="_self">
                             <button  type="button" class="btn btn-success">Ver</button>
                           </a>
                           <a href="{% url 'ticket:ticket-edit' pk=ticket.id %}" target="_self">
