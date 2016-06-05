@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'markdown_deux',
     'helpdesk',
     'arduino',
+    'ticket',
     'widget_tweaks',
     'ws4redis',
 ]
