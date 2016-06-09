@@ -2,6 +2,7 @@ from __future__ import unicode_literals
 
 from django.db import models
 from django.contrib.auth.models import User
+from client.models import Client
 import uuid
 
 
@@ -12,6 +13,7 @@ import uuid
 
 class Project(models.Model):
     user = models.ForeignKey(User)
+    client = models.ForeignKey(Client, related_name='projects', blank=True, null=True)
     name = models.CharField(max_length=255)
 
     created_at = models.DateTimeField(auto_now_add=True)

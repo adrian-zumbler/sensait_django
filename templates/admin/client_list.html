@@ -1,0 +1,78 @@
+{% extends 'main_header.html' %}
+{% load staticfiles %}
+
+
+
+{% block main_content_wrapper %}
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <h1>
+        Clientes
+        <small>Listado de Clientes</small>
+      </h1>
+      <ol class="breadcrumb">
+        <li>
+          <a href="#">
+            <i class="fa fa-dashboard"></i>
+            Home</a>
+        </li>
+        <li class="active">Clientes</li>
+      </ol>
+    </section>
+
+
+    <section class="content">
+      <div class="row">
+        <div class="col-xs-12">
+          <div class="box">
+            <div class="box-header">
+              <h3 class="box-title">Lista de Clientes</h3>
+            </div><!-- /.box-header -->
+            <div class="box-body">
+              {{ client_list }}
+            </div><!-- /.box-body -->
+          </div><!-- /.box -->
+
+        </div>
+      </div>
+
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="box">
+          <a href="{% url 'enterprise-client:client-add' %}">
+            <button class="btn btn-block btn-info btn-lg">Agregar Empresa</button>
+          </a>
+        </div>
+      </div>
+    </div>
+
+
+  </section>
+  <!-- /.content -->
+</div>
+<!-- /.content-wrapper -->
+{% endblock main_content_wrapper %}
+
+
+{% block content_js %}
+  <script src="{% static 'plugins/datatables/jquery.dataTables.min.js' %}"></script>
+  <script src="{% static 'plugins/datatables/dataTables.bootstrap.min.js' %}"></script>
+  <!-- page script -->
+<script type="application/javascript">
+
+  $(function () {
+    $('#table_projects').DataTable({
+      "paging": true,
+      "lengthChange": false,
+      "searching": true,
+      "ordering": true,
+      "info": true,
+      "autoWidth": true
+    });
+  });
+
+</script>
+
+{% endblock content_js %}
