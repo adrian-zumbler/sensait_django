@@ -9,22 +9,27 @@ from .forms import EnterpriseForm, ClientCreationForm
 
 
 class EnterpriseListView(ListView):
-    template_name = 'admin/enterprise_list.html'
+    template_name = 'admin/admin_enterprise_list.html'
     queryset = Enterprise.objects.all()
 
 
 class EnterpriseCreateView(CreateView):
-    template_name = 'admin/enterprise_edit.html'
+    template_name = 'admin/admin_enterprise_edit.html'
     form_class = EnterpriseForm
     success_url = reverse_lazy('enterprise-client:enterprise-list')
 
 
+class EnterpriseDetailView(DetailView):
+    template_name = 'admin/admin_enterprise_detail.html'
+    queryset = Enterprise.objects.all()
+
+
 class ClientListView(ListView):
-    template_name = 'admin/client_list.html'
+    template_name = 'admin/admin_clients_list.html'
     queryset = Client.objects.all()
 
 
 class ClientCreateView(CreateView):
-    template_name = 'admin/client_edit.html'
+    template_name = 'admin/admin_client_edit.html'
     form_class = ClientCreationForm
     success_url = reverse_lazy('enterprise-client:client-list')

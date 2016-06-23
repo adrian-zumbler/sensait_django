@@ -17,5 +17,3 @@ class SensorAdmin(admin.ModelAdmin):
 admin.site.register(Project)
 admin.site.register(Arduino)
 admin.site.register(Sensor)
-
-

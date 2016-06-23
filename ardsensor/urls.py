@@ -23,10 +23,10 @@ from arduino.models import Project, Arduino, ArduinoSensor
 
 
 #       CLASES PARA USUARIO/CLIENTE
-#_____________________________________________#
+# _____________________________________________#
 
 class ProjectsListView(ListView):
-    template_name='client/user_projects.html'
+    template_name = 'client/user_projects.html'
     queryset = Project.objects.all()
 
     def get_queryset(self):
@@ -35,12 +35,12 @@ class ProjectsListView(ListView):
 
 
 class ProjectDetailView(DetailView):
-    template_name='client/user_selected_project.html'
+    template_name = 'client/user_selected_project.html'
     queryset = Project.objects.all()
 
 
 class ArduinoDetailView(DetailView):
-    template_name='client/user_iots.html'
+    template_name = 'client/user_iots.html'
 
     def get_queryset(self):
         queryset = Arduino.objects.filter(project__user=self.request.user)
@@ -48,35 +48,43 @@ class ArduinoDetailView(DetailView):
 
 
 class ArduinoSensorDetailView(DetailView):
-    template_name='client/user_selected_sensor.html'
+    template_name = 'client/user_selected_sensor.html'
 
     def get_queryset(self):
         queryset = ArduinoSensor.objects.filter(arduino__project__user=self.request.user)
         return queryset
 
 
+class DashMainListView(ListView):
+    template_name = 'client/user_dashboard.html'
+    queryset = Project.objects.all()
+
+    def get_queryset(self):
+        queryset = Project.objects.filter(user=self.request.user)
+        return queryset
+
 
 #       CLASES PARA ADMIN
-#_____________________________________________#
+# _____________________________________________#
 
 
 #       ADMIN - PROYECTOS
-#_____________________________________________#
+# _____________________________________________#
 class AdminProjectsListView(ListView):
-    template_name='admin/admin_projects.html'
+    template_name = 'admin/admin_projects_list.html'
     queryset = Project.objects.all()
 
 
 class AdminProjectsDetailView(DetailView):
-    template_name='admin/admin_projects_detail.html'
+    template_name = 'admin/admin_projects_detail.html'
     queryset = Project.objects.all()
 
-    #def get_queryset(self):
-    #    print self.kwargs
-    #    queryset = Project.objects.filter(project__user=self.request.user)
-        #queryset = Project.objects.filter(project_id=self.kwargs['pk'])
-#        print queryset
-#        return queryset
+# def get_queryset(self):
+#    print self.kwargs
+#    queryset = Project.objects.filter(project__user=self.request.user)
+#        queryset = Project.objects.filter(project_id=self.kwargs['pk'])
+#           print queryset
+#           return queryset
 
 
 class AdminProjectCreateForm(forms.ModelForm):
@@ -107,7 +115,7 @@ class AdminProjectsDeleteView(DeleteView):
 
 
 #       ADMIN - ARDUINOS
-#_____________________________________________#
+# _____________________________________________#
 
 
 class AdminArduinoCreateForm(forms.ModelForm):
@@ -134,17 +142,18 @@ class AdminArduinoCreateView(CreateView):
         return initial
 
 
-
 #       URLS
-#_____________________________________________#
+# _____________________________________________#
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^', include('arduino.urls', namespace='arduino', app_name='arduino')),
     url(r'^', include('helpdesk.urls')),
     url(r'^', include('ticket.urls', namespace='ticket')),
+
     url(r'^dash/', include('client.urls', namespace='enterprise-client')),
-    url(r'^dash/main', TemplateView.as_view(template_name='client/user_dashboard.html')),
+
+    url(r'^dash/main/$', DashMainListView.as_view(), name="dashMain"),
     url(r'^dash/projects/$', ProjectsListView.as_view()),
     url(r'^dash/projects/(?P<pk>\d+)/$', ProjectDetailView.as_view()),
     url(r'^dash/iot/(?P<pk>\d+)/$', ArduinoDetailView.as_view()),

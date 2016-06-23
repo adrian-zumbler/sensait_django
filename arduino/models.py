@@ -6,7 +6,7 @@ from client.models import Client
 import uuid
 
 
-#class ArduinoManager(models.Manager):
+# class ArduinoManager(models.Manager):
 #    def create(self):
 #        pass
 
@@ -43,7 +43,7 @@ class Arduino(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    #objects = ArduinoManager()
+    # objects = ArduinoManager()
 
     def __unicode__(self):
         return 'ID Arduino: ' + self.arduino_token
@@ -51,7 +51,7 @@ class Arduino(models.Model):
     def save(self, force_insert=False, force_update=False, using=None,
              update_fields=None):
         self.arduino_token = str(uuid.uuid4().hex)
-        #self.objects.filter(arduino_id=self.arduino_id)
+        # self.objects.filter(arduino_id=self.arduino_id)
         super(Arduino, self).save(force_insert, force_update, using, update_fields)
 
 
@@ -79,6 +79,7 @@ class ArduinoSensor(models.Model):
             self.arduino_sensor.prefix,
             self.description
         )
+
 
 class SensorData(models.Model):
     arduino_sensor = models.ForeignKey(
