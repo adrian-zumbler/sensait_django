@@ -15,5 +15,5 @@ class SensorAdmin(admin.ModelAdmin):
     pass
 
 admin.site.register(Project)
-admin.site.register(Arduino)
+admin.site.register(Arduino, ArduinoAdmin)
 admin.site.register(Sensor)

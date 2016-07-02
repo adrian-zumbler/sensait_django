@@ -2,6 +2,8 @@ from __future__ import unicode_literals
 
 from django.db import models
 from django.contrib.auth.models import User
+from django.db.models.signals import post_delete
+from django.dispatch import receiver
 
 
 class Enterprise(models.Model):
@@ -19,3 +21,9 @@ class Client(models.Model):
 
     def __unicode__(self):
         return self.user.username
+
+
+@receiver(post_delete, sender=Client)
+def post_delete_user(sender, instance, *args, **kwargs):
+    if instance.user: # just in case user is not specified
+        instance.user.delete()

@@ -16,7 +16,7 @@ class EnterpriseForm(forms.ModelForm):
 class ClientCreationForm(UserCreationForm):
 
     error_messages = {
-        'password_mismatch': "The two password fields didn't match.",
+        'password_mismatch': "Las dos contraseñas no coinciden.",
     }
     password1 = forms.CharField(
         label="Contraseña",
@@ -38,9 +38,14 @@ class ClientCreationForm(UserCreationForm):
 
     def save(self, commit=True):
         user = super(ClientCreationForm, self).save(commit=True)
-        client = Client.objects.create(
-            user=user,
-            enterprise=self.cleaned_data['enterprise'])
+        if not self.initial:
+            client = Client.objects.create(
+                user=user,
+                enterprise=self.cleaned_data['enterprise'])
+        else:
+            client = Client.objects.get(user=user)
+            client.enterprise = self.cleaned_data['enterprise']
+            client.save()
         return client
 
 

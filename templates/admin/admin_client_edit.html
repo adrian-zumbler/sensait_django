@@ -8,7 +8,7 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-        Clientes - AGREGAR
+        Clientes - {% if form.initial %}Actualizar {% else %}AGREGAR {% endif %}
         <small>Control de Clientes</small>
       </h1>
       <ol class="breadcrumb">
@@ -28,7 +28,7 @@
         <div class="col-xs-10">
           <div class="box box-info">
             <div class="box-header with-border">
-              <h3 class="box-title">Crear Cliente</h3>
+              <h3 class="box-title">{% if form.initial %}Actualizar {% else %}Crear {% endif %} Cliente</h3>
             </div>
             <!-- /.box-header -->
             <!-- form start -->
@@ -49,8 +49,8 @@
               </div>
               <!-- /.box-body -->
               <div class="box-footer">
-                <button type="reset" class="btn btn-default">Reset</button>
-                <button type="submit" class="btn btn-primary">Agregar Cliente</button>
+                <a href="{% url 'enterprise-client:client-list' %}" class="btn btn-default">Regresar</a>
+                <button type="submit" class="btn btn-primary">{% if form.initial %}Actualizar {% else %}AGREGAR {% endif %} Cliente</button>
               </div>
               <!-- /.box-footer -->
             </form>
