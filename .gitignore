@@ -5,3 +5,6 @@
 .idea/
 *.pyc
 db.*
+
+
+static/

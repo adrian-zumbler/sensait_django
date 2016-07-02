@@ -15,8 +15,10 @@ Including another URLconf
 """
 from django.conf.urls import url, include
 from django.contrib import admin
+from django.conf import settings
 from django.core.urlresolvers import reverse_lazy, reverse
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+from django.contrib.staticfiles.urls import static
 from django import forms
 from django.views.generic import TemplateView, ListView, DetailView, CreateView, UpdateView, DeleteView
 from arduino.models import Project, Arduino, ArduinoSensor
@@ -165,4 +167,4 @@ urlpatterns = [
     url(r'^dash/admin/projects/edit/(?P<pk>\d+)/$', AdminProjectsEditView.as_view(), name='adminEditProjects'),
     url(r'^dash/admin/projects/delete/(?P<pk>\d+)/$', AdminProjectsDeleteView.as_view(), name='adminDeleteProjects'),
     url(r'^dash/admin/projects/(?P<project_pk>\d+)/iot/new/$', AdminArduinoCreateView.as_view(), name='adminCreateArduinos'),
-] + staticfiles_urlpatterns()
+] + staticfiles_urlpatterns() + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

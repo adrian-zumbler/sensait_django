@@ -624,6 +624,13 @@ class FollowUp(models.Model):
         help_text=_('If the status was changed, what was it changed to?'),
         )
 
+    # sensit custom
+    image = models.ImageField(
+        'Imagen',
+        upload_to='followup/',
+        default=''
+    )
+
     objects = FollowUpManager()
 
     class Meta:

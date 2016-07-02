@@ -40,6 +40,10 @@ class TicketDetailView(DetailView):
 class FollowUpCreateView(BaseCreateView):
     form_class = FollowUpForm
 
+    def post(self, request, *args, **kwargs):
+        self.object = None
+        return super(BaseCreateView, self).post(request, *args, **kwargs)
+
     def form_valid(self, form):
         """
         If the form is valid, save the associated model.
