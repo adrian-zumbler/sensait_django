@@ -12,5 +12,5 @@ class TicketForm(forms.ModelForm):
 class FollowUpForm(forms.ModelForm):
     class Meta:
         model = FollowUp
-        fields = '__all__'
+        exclude = ('ticket', )
 

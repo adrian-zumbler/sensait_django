@@ -40,9 +40,8 @@ class TicketDetailView(DetailView):
 class FollowUpCreateView(BaseCreateView):
     form_class = FollowUpForm
 
-    def post(self, request, *args, **kwargs):
-        self.object = None
-        return super(BaseCreateView, self).post(request, *args, **kwargs)
+    def get(self, request, *args, **kwargs):
+        return self.get_success_url()
 
     def form_valid(self, form):
         """
@@ -55,7 +54,6 @@ class FollowUpCreateView(BaseCreateView):
     def form_invalid(self, form):
         messages.add_message(self.request, messages.INFO, 'Tu comentario es invalido.')
         return self.form_valid(form)
-
 
     def get_success_url(self):
         return reverse_lazy(
