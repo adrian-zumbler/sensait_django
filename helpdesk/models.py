@@ -630,6 +630,57 @@ class FollowUp(models.Model):
         upload_to='followup/',
         default=''
     )
+    file1 = models.FileField(
+        'Documento 1',
+        upload_to='followup/',
+        default=''
+    )
+    file2 = models.FileField(
+        'Documento 2',
+        upload_to='followup/',
+        default=''
+    )
+    file3 = models.FileField(
+        'Documento 3',
+        upload_to='followup/',
+        default=''
+    )
+    file4 = models.FileField(
+        'Documento 4',
+        upload_to='followup/',
+        default=''
+    )
+    file5 = models.FileField(
+        'Documento 5',
+        upload_to='followup/',
+        default=''
+    )
+    file6 = models.FileField(
+        'Documento 6',
+        upload_to='followup/',
+        default=''
+    )
+    file7 = models.FileField(
+        'Documento 7',
+        upload_to='followup/',
+        default=''
+    )
+    file8 = models.FileField(
+        'Documento 8',
+        upload_to='followup/',
+        default=''
+    )
+    file9 = models.FileField(
+        'Documento 9',
+        upload_to='followup/',
+        default=''
+    )
+    file10 = models.FileField(
+        'Documento 10',
+        upload_to='followup/',
+        default=''
+    )
+
 
     objects = FollowUpManager()
 
