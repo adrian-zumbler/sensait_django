@@ -24,84 +24,14 @@
     <!-- Main content -->
     <section class="content">
 
-      <!-- Small boxes (Stat box) -->
-      <div class="row">
-        <div class="col-lg-3 col-xs-6">
-          <!-- small box -->
-          <div class="small-box bg-aqua">
-            <div class="inner">
-              <h3>2</h3>
-              <p>Proyectos</p>
-            </div>
-            <div class="icon">
-              <i class="ion ion-bag"></i>
-            </div>
-            <a href="#" class="small-box-footer">More info
-              <i class="fa fa-arrow-circle-right"></i>
-            </a>
-          </div>
-        </div>
-        <!-- ./col -->
-        <div class="col-lg-3 col-xs-6">
-          <!-- small box -->
-          <div class="small-box bg-green">
-            <div class="inner">
-              <h3>98<sup style="font-size: 20px">%</sup>
-              </h3>
-              <p>Actividad del sistemna</p>
-            </div>
-            <div class="icon">
-              <i class="ion ion-stats-bars"></i>
-            </div>
-            <a href="#" class="small-box-footer">More info
-              <i class="fa fa-arrow-circle-right"></i>
-            </a>
-          </div>
-        </div>
-        <!-- ./col -->
-        <div class="col-lg-3 col-xs-6">
-          <!-- small box -->
-          <div class="small-box bg-yellow">
-            <div class="inner">
-              <h3>12</h3>
-              <p>IoTs Instalados</p>
-            </div>
-            <div class="icon">
-              <i class="ion ion-person-add"></i>
-            </div>
-            <a href="#" class="small-box-footer">More info
-              <i class="fa fa-arrow-circle-right"></i>
-            </a>
-          </div>
-        </div>
-        <!-- ./col -->
-        <div class="col-lg-3 col-xs-6">
-          <!-- small box -->
-          <div class="small-box bg-red">
-            <div class="inner">
-              <h3>1</h3>
-              <p>Alertas Enviadas</p>
-            </div>
-            <div class="icon">
-              <i class="ion ion-pie-graph"></i>
-            </div>
-            <a href="#" class="small-box-footer">More info
-              <i class="fa fa-arrow-circle-right"></i>
-            </a>
-          </div>
-        </div>
-        <!-- ./col -->
-      </div>
-      <!-- /.row -->
-
       <div class="row">
 
-        <div class="col-xs-6">
+        <div class="col-md-8">
           <!-- TABLE: LATEST ORDERS -->
           <div class="box box-info">
             <div class="box-header with-border">
               <h3 class="box-title">
-                Projecto - IOT - Test 1
+                PROYECTOS ACTUALES
               </h3>
               <div class="box-tools pull-right">
                 <button class="btn btn-box-tool" data-widget="collapse">
@@ -113,236 +43,209 @@
               </div>
             </div>
             <!-- /.box-header -->
+
             <div class="box-body">
-              <div class="table-responsive">
-                <table class="table no-margin">
+              <div id ="my_projects" class="table">
+                <table id="table_projects"  class="table no-margin">
                   <thead>
                     <tr>
-                      <th>Sistema ID</th>
-                      <th>Sensor</th>
-                      <th>Ultimo Fecha</th>
-                      <th>Ultimo Valor</th>
+                      <th>ID Proyecto</th>
+                      <th>Nombre</th>
+                      <th>No. de IoTs</th>
                       <th>Estatus</th>
                     </tr>
                   </thead>
                   <tbody>
-                    <tr>
+
+                    {% for project in project_list %}
+                    <tr id="proy_{{project.id}}" >
                       <td>
-                        <a href="/dash/iots">AR010101</a>
+                        {{project.name}}
                       </td>
-                      <td>Puerta trasera</td>
-                      <td>12/01/1988 12:00 pm</td>
-                      <td>25.55</td>
+                      <td>{{project}}</td>
+                      <td>{{project.arduinos.count}}</td>
                       <td>
-                        <span class="label label-success">En rango</span>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <a href="pages/examples/invoice.html">AR010101</a>
-                      </td>
-                      <td>Puerta trasera</td>
-                      <td>12/01/1988 12:00 pm</td>
-                      <td>25.55</td>
-                      <td>
-                        <span class="label label-success">En rango</span>
+                        {% for arduino in project.arduinos.all %}
+                          {{ arduino.id }} ,
+                          {% for sensor in arduino.arduino_sensors.all %}
+                              {{ sensor.description }} ,
+                          {% endfor %}
+                        {% endfor %}
                       </td>
                     </tr>
-                    <tr>
-                      <td>
-                        <a href="pages/examples/invoice.html">AR010101</a>
-                      </td>
-                      <td>Puerta trasera</td>
-                      <td>12/01/1988 12:00 pm</td>
-                      <td>25.55</td>
-                      <td>
-                        <span class="label label-success">En rango</span>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <a href="pages/examples/invoice.html">AR010101</a>
-                      </td>
-                      <td>Puerta trasera</td>
-                      <td>12/01/1988 12:00 pm</td>
-                      <td>25.55</td>
-                      <td>
-                        <span class="label label-danger">Alerta Enviada</span>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <a href="pages/examples/invoice.html">AR010101</a>
-                      </td>
-                      <td>Puerta trasera</td>
-                      <td>12/01/1988 12:00 pm</td>
-                      <td>25.55</td>
-                      <td>
-                        <span class="label label-warning">Fuera de Rango</span>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <a href="pages/examples/invoice.html">AR010101</a>
-                      </td>
-                      <td>Puerta trasera</td>
-                      <td>12/01/1988 12:00 pm</td>
-                      <td>25.55</td>
-                      <td>
-                        <span class="label label-success">En rango</span>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <a href="pages/examples/invoice.html">AR010101</a>
-                      </td>
-                      <td>Puerta trasera</td>
-                      <td>12/01/1988 12:00 pm</td>
-                      <td>25.55</td>
-                      <td>
-                        <span class="label label-success">En rango</span>
-                      </td>
-                    </tr>
+                    {% endfor %}
+
                   </tbody>
                 </table>
               </div>
-              <!-- /.table-responsive -->
+              <!-- /.table-responsive      <span class="label label-success">Activo</span>  -->
             </div>
+
+
             <!-- /.box-body -->
-            <div class="box-footer clearfix">
-              <a href="/dash/project/" class="btn btn-sm btn-default btn-flat pull-right">
-                Ver detalle del Proyecto
-              </a>
-            </div>
             <!-- /.box-footer -->
           </div>
           <!-- /.box -->
         </div>
 
-        <div class="col-xs-6">
+        <div class="col-md-4">
+          <!-- TABLE: LATEST ORDERS -->
+
+          <div class="row">
+
+            <div class="col-lg-6 col-xs-6">
+              <!-- small box -->
+              <div class="small-box bg-aqua">
+                <div class="inner">
+                  <h3>2</h3>
+                  <p>Proyectos</p>
+                </div>
+                <div class="icon">
+                  <i class="ion ion-bag"></i>
+                </div>
+                <a href="#" class="small-box-footer">More info
+                  <i class="fa fa-arrow-circle-right"></i>
+                </a>
+              </div>
+            </div>
+
+            <div class="col-lg-6 col-xs-6">
+              <div class="small-box bg-yellow">
+                <div class="inner">
+                  <h3>12</h3>
+                  <p>Sistemas Instalados</p>
+                </div>
+                <div class="icon">
+                  <i class="ion ion-person-add"></i>
+                </div>
+                <a href="#" class="small-box-footer">More info
+                  <i class="fa fa-arrow-circle-right"></i>
+                </a>
+              </div>
+            </div>
+
+
+            <div class="col-lg-6 col-xs-6">
+              <div class="small-box bg-red">
+                <div class="inner">
+                  <h3>1</h3>
+                  <p>Alertas Enviadas</p>
+                </div>
+                <div class="icon">
+                  <i class="ion ion-pie-graph"></i>
+                </div>
+                <a href="#" class="small-box-footer">More info
+                  <i class="fa fa-arrow-circle-right"></i>
+                </a>
+              </div>
+            </div>
+
+            <div class="col-lg-6 col-xs-6">
+              <div class="small-box bg-green">
+                <div class="inner">
+                  <h3>98<sup style="font-size: 20px">%</sup>
+                  </h3>
+                  <p>Actividad del sistemna</p>
+                </div>
+                <div class="icon">
+                  <i class="ion ion-stats-bars"></i>
+                </div>
+                <a href="#" class="small-box-footer">More info
+                  <i class="fa fa-arrow-circle-right"></i>
+                </a>
+              </div>
+            </div>
+
+
+
+
+          </div>
+
+          <!-- /.box -->
+        </div>
+
+        <div class="col-md-8">
           <!-- TABLE: LATEST ORDERS -->
           <div class="box box-info">
             <div class="box-header with-border">
               <h3 class="box-title">
-                Projecto - Sistema - Test 2
+                SENSORES DEL PROYECTO SELECCIONADO
               </h3>
-              <div class="box-tools pull-right">
-                <button class="btn btn-box-tool" data-widget="collapse">
-                  <i class="fa fa-minus"></i>
-                </button>
-                <button class="btn btn-box-tool" data-widget="remove">
-                  <i class="fa fa-times"></i>
-                </button>
-              </div>
             </div>
-            <!-- /.box-header -->
             <div class="box-body">
-              <div class="table-responsive">
-                <table class="table no-margin">
-                  <thead>
-                    <tr>
-                      <th>Sistema ID</th>
-                      <th>Sensor</th>
-                      <th>Ultimo Fecha</th>
-                      <th>Ultimo Valor</th>
-                      <th>Estatus</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>
-                        <a href="pages/examples/invoice.html">AR010101</a>
-                      </td>
-                      <td>Puerta trasera</td>
-                      <td>12/01/1988 12:00 pm</td>
-                      <td>25.55</td>
-                      <td>
-                        <span class="label label-success">En rango</span>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <a href="pages/examples/invoice.html">AR010101</a>
-                      </td>
-                      <td>Puerta trasera</td>
-                      <td>12/01/1988 12:00 pm</td>
-                      <td>25.55</td>
-                      <td>
-                        <span class="label label-success">En rango</span>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <a href="pages/examples/invoice.html">AR010101</a>
-                      </td>
-                      <td>Puerta trasera</td>
-                      <td>12/01/1988 12:00 pm</td>
-                      <td>25.55</td>
-                      <td>
-                        <span class="label label-success">En rango</span>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <a href="pages/examples/invoice.html">AR010101</a>
-                      </td>
-                      <td>Puerta trasera</td>
-                      <td>12/01/1988 12:00 pm</td>
-                      <td>25.55</td>
-                      <td>
-                        <span class="label label-danger">Alerta Enviada</span>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <a href="pages/examples/invoice.html">AR010101</a>
-                      </td>
-                      <td>Puerta trasera</td>
-                      <td>12/01/1988 12:00 pm</td>
-                      <td>25.55</td>
-                      <td>
-                        <span class="label label-warning">Fuera de Rango</span>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <a href="pages/examples/invoice.html">AR010101</a>
-                      </td>
-                      <td>Puerta trasera</td>
-                      <td>12/01/1988 12:00 pm</td>
-                      <td>25.55</td>
-                      <td>
-                        <span class="label label-success">En rango</span>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <a href="pages/examples/invoice.html">AR010101</a>
-                      </td>
-                      <td>Puerta trasera</td>
-                      <td>12/01/1988 12:00 pm</td>
-                      <td>25.55</td>
-                      <td>
-                        <span class="label label-success">En rango</span>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-              <!-- /.table-responsive -->
-            </div>
-            <!-- /.box-body -->
-            <div class="box-footer clearfix">
-              <a href="/dash/project/" class="btn btn-sm btn-default btn-flat pull-right">
-                Ver detalle del Proyecto
-              </a>
-            </div>
-            <!-- /.box-footer -->
-          </div>
-          <!-- /.box -->
-        </div>
+              <div class="nav-tabs-custom">
+              <ul class="nav nav-tabs">
 
+                {% for project in project_list %}
+                    {% for arduino in project.arduinos.all %}
+                      {% for sensor in arduino.arduino_sensors.all %}
+
+                      {% if forloop.counter0 == 0 %}
+                        <li class="active"><a href="#tab_{{sensor.id}}" data-toggle="tab">
+                          {{sensor.description }}
+                        </a></li>
+                      {% else %}
+                        <li><a href="#tab_{{sensor.id}}" data-toggle="tab">
+                          {{sensor.description }}
+                        </a></li>
+                      {% endif %}
+
+                      {% endfor %}
+                    {% endfor %}
+                {% endfor %}
+              </ul>
+
+              <div class="tab-content">
+
+                {% for project in project_list %}
+                    {% for arduino in project.arduinos.all %}
+                      {% for sensor in arduino.arduino_sensors.all %}
+
+                      {% if forloop.counter0 == 0 %}
+                        <div class="tab-pane active" id="tab_{{sensor.id}}"></div>
+                      {% else %}
+                        <div class="tab-pane" id="tab_{{sensor.id}}"></div>
+                      {% endif %}
+
+                      {% endfor %}
+                    {% endfor %}
+                {% endfor %}
+                <!-- /.tab-pane -->
+              </div>
+              <!-- /.tab-content -->
+            </div>
+            </div>
+          </div>
       </div>
+
+      <div class="col-md-4">
+        <div class="box box-info">
+          <div class="box-header with-border">
+            <h3 class="box-title">
+              ARDUINOS DEL PROYECTO SELECCIONADO
+            </h3>
+            <div class="box-tools pull-right">
+              <button class="btn btn-box-tool" data-widget="collapse">
+                <i class="fa fa-minus"></i>
+              </button>
+              <button class="btn btn-box-tool" data-widget="remove">
+                <i class="fa fa-times"></i>
+              </button>
+            </div>
+          </div>
+          <!-- /.box-header -->
+
+          <div class="box-body">
+            <div id="my_arduinos">
+              <div id="my_arduinos_data"></div>
+            </div>
+          </div>
+
+          <!-- /.box-body -->
+          <!-- /.box-footer -->
+        </div>
+      </div>
+
 
     </section>
     <!-- /.content -->
@@ -350,3 +253,190 @@
   <!-- /.content-wrapper -->
 
 {% endblock main_content_wrapper %}
+
+
+{% block content_js %}
+  <script src="{% static 'plugins/dygraphs/dygraph-combined.js' %}"></script>
+  <script src="{% static 'plugins/datatables/jquery.dataTables.min.js' %}"></script>
+  <script src="{% static 'plugins/datatables/dataTables.bootstrap.min.js' %}"></script>
+  <!-- page script -->
+
+  <script type="application/javascript">
+
+  $('#table_projects').DataTable({
+    "paging": true,
+    "lengthChange": false,
+    "searching": false,
+    "ordering": true,
+    "info":true,
+  });
+
+  var tokenCode = 'Token 6b4f2e70ae0d435bf512897355947fe0a564972a';
+  var allData;
+  var urlApiBase  = 'http://127.0.0.1:8000/api/';
+
+  var projectsApi = 'projects/{{ project_list.first.arduinos.first.id }}/';
+  var arduinosApi = 'arduinos/{{ project_list.first.arduinos.first.id }}/';
+  var sensorsApi  = 'sensors/idsensor/data/';
+
+  var _sensors_data;
+  var g;  //variable para crear la grafica.
+  //sensors/{{ arduinosensor.id }}/data/
+
+  $(document).ready(function(){
+    //console.log("HOLO");
+    getArduinosFromAPI( {{ project_list.first.id }} );
+  });
+
+  $("[id^=proy_]").click(function(){
+    //console.log( $(this)[0].id );
+    var project_selected_ID =  $(this)[0].id;
+    project_selected_ID     = project_selected_ID.replace("proy_","");
+    //console.log( project_selected_ID );
+    //console.log( urlApiBase + arduinosApi  );
+    getArduinosFromAPI(project_selected_ID);
+  });
+
+
+  function getArduinosFromAPI(project_ID){
+    //Peticion AJAX de los datos
+    $.ajax({
+      url: urlApiBase + arduinosApi ,
+      type: 'GET',
+      contentType: 'json/application',
+      dataType: 'json',
+      processData: false,
+      xhrFields: {
+        withCredentials: false
+      },
+      headers: {
+        'Authorization': tokenCode
+      },
+      success: function(data) {
+        console.log('AJAX API SUCCESS - PROYECTO SELECCIONADO ' +  project_ID);
+        //Se hara un return con el JSON obtenido en la API
+        //console.log(data);
+        dataArduinosCallBack(data);
+      },
+      error: function() {
+        console.log('Hubo un problema, solucionalo...!');
+      }
+    });
+  }
+
+
+  function dataArduinosCallBack( data ){
+    //console.log("Llego la información ARDUINO");
+    console.log(data);
+    $('#my_arduinos').html(" ");
+    $('#my_arduinos').append(data.id + '<br/>');
+    $('#my_arduinos').append(data.location + '<br/>');
+    $('#my_arduinos').append(data.name + '<br/>');
+    $('#my_arduinos').append('<hr/>');
+    for(var i=0 ; i < data.sensors.length; i++){
+      //$('#my_arduinos').append(data.sensors[i] + '<br/>');
+      //$('#my_arduinos').append('<div id=ard_'+data.id+ '_sens_'+ i + '></div>');
+      //$('#my_arduinos').append('----------------------------<br/>' );
+      getSensorsFromAPI(data.sensors[i], data.id, i);
+    }
+  }
+
+    function getSensorsFromAPI(sensor_ID, arduinoID, sensID){
+      var passData_arduinoID  = arduinoID;
+      var passData_sensID     = sensor_ID;
+
+      //Peticion AJAX de los datos
+      var allData;
+      $.ajax({
+        url: urlApiBase + arduinosApi +'sensors/'+ sensor_ID + '/data/' ,
+        type: 'GET',
+        contentType: 'json/application',
+        dataType: 'json',
+        processData: false,
+        xhrFields: {
+          withCredentials: false
+        },
+        headers: {
+          'Authorization': tokenCode
+        },
+        success: function(data) {
+          console.log('AJAX API SUCCESS! SENSORS');
+          //Se hara un return con el JSON obtenido en la API
+          //console.log(data);
+          dataSensorsCallBack(data,passData_arduinoID,passData_sensID);
+        },
+        error: function() {
+          console.log('Hubo un problema, solucionalo...!');
+        }
+      });
+    }
+
+
+    function dataSensorsCallBack( data, arduinoID, sensID ){
+      //$('#ard_'+arduinoID+'_sens_'+sensID).append('holo');
+
+      var passData_arduinoID  = arduinoID;
+      var passData_sensID     = sensID;
+
+      //console.log("Llego la información sensorrrrr" + passData_sensID );
+      //console.log(data);
+
+      createGraph(data,passData_arduinoID,passData_sensID);
+    }
+
+    function createGraph(data, arduinoID, sensID){
+      _sensors_data = data;
+
+      var sensor_data_chart = [];
+      var sensor_date_chart = [];
+
+      var dygraphs_data = [];
+
+      for (var i = 0; i < _sensors_data.length; i++) {
+        sensor_data_chart.push(_sensors_data[i]['data']);
+
+        var d = new Date(_sensors_data[i]['created_at']);
+        var d_days = d.getDate() + "/" + d.getMonth() + "/" + d.getFullYear();
+        var d_time = completeTimeFormat(d.getHours(), d.getMinutes(), d.getSeconds());
+        sensor_date_chart.push(d_time);
+        dygraphs_data.push([d, _sensors_data[i]['data'], "100", "250"]);
+      }
+
+      //var graph_id = 'tab_'+arduinoID+'_sens_'+sensID;
+      var graph_id = 'tab_'+sensID;
+      //console.log(graph_id);
+      //console.log(g);
+
+      g = new Dygraph(document.getElementById(graph_id), dygraphs_data, {
+        drawPoints: true,
+        showRoller: true,
+        valueRange: [ 0, 300 ],
+        height: 400,
+        width: 900,
+        highlightSeriesBackgroundAlpha: 0.8,
+        fillGraph: true,
+        includeZero: true,
+        strokeWidth: 3,
+        //showRangeSelector: true,
+        labels: ['Tiempo', 'Temperatura', 'Min', 'Max']
+      });
+
+    }
+
+
+    function completeTimeFormat(hours, minutes, seconds) {
+      if (hours < 10) {
+        hours = "0" + hours;
+      }
+      if (minutes < 10) {
+        minutes = "0" + minutes;
+      }
+      if (seconds < 10) {
+        seconds = "0" + seconds;
+      }
+      return hours + ':' + minutes + ':' + seconds;
+    }
+
+  </script>
+
+{% endblock content_js %}
