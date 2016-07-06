@@ -563,6 +563,12 @@ class FollowUpManager(models.Manager):
         return self.filter(public=True)
 
 
+def followup_files_name(instance, filename):
+    today = timezone.now()
+    today_path = today.strftime('%Y/%m/%d')
+    return '/'.join(['followup', today_path, 'ticket_' + str(instance.ticket.id), filename])
+
+
 @python_2_unicode_compatible
 class FollowUp(models.Model):
     """
@@ -627,28 +633,28 @@ class FollowUp(models.Model):
     # sensit custom
     image = models.ImageField(
         'Imagen',
-        upload_to='followup/',
+        upload_to=followup_files_name,
         blank=True,
         null=True,
         default=''
     )
     file1 = models.FileField(
         'Documento 1',
-        upload_to='followup/',
+        upload_to=followup_files_name,
         blank=True,
         null=True,
         default=''
     )
     file2 = models.FileField(
         'Documento 2',
-        upload_to='followup/',
+        upload_to=followup_files_name,
         blank=True,
         null=True,
         default=''
     )
     file3 = models.FileField(
         'Documento 3',
-        upload_to='followup/',
+        upload_to=followup_files_name,
         blank=True,
         null=True,
         default=''
@@ -662,42 +668,42 @@ class FollowUp(models.Model):
     )
     file5 = models.FileField(
         'Documento 5',
-        upload_to='followup/',
+        upload_to=followup_files_name,
         blank=True,
         null=True,
         default=''
     )
     file6 = models.FileField(
         'Documento 6',
-        upload_to='followup/',
+        upload_to=followup_files_name,
         blank=True,
         null=True,
         default=''
     )
     file7 = models.FileField(
         'Documento 7',
-        upload_to='followup/',
+        upload_to=followup_files_name,
         blank=True,
         null=True,
         default=''
     )
     file8 = models.FileField(
         'Documento 8',
-        upload_to='followup/',
+        upload_to=followup_files_name,
         blank=True,
         null=True,
         default=''
     )
     file9 = models.FileField(
         'Documento 9',
-        upload_to='followup/',
+        upload_to=followup_files_name,
         blank=True,
         null=True,
         default=''
     )
     file10 = models.FileField(
         'Documento 10',
-        upload_to='followup/',
+        upload_to=followup_files_name,
         blank=True,
         null=True,
         default=''
