@@ -132,6 +132,13 @@
                                 <div class="box-body">
                                     <span>{{ comment.user }} - {{ comment.get_new_status_display }}</span><br/>
                                     <span>{{ comment.comment }}</span>
+                                    <div>
+
+                                      <a target="_blank" href="{{MEDIA_URL}}{{comment.file1 }}"> {{ comment.file1 }} </a><br/>
+                                      <a target="_blank" href="{{MEDIA_URL}}{{comment.file2 }}"> {{ comment.file2 }} </a><br/>
+
+                                    </div>
+
                                     {% if comment.image %}
                                         <img src="{{ MEDIA_URL }}{{ comment.image }}" alt=""/>
                                     {% endif %}
@@ -228,7 +235,29 @@
                                     <label for="inputEmail3" class="col-sm-2 control-label">Comentario</label>
 
                                     <div class="col-sm-6">
-                                        {% render_field form.image class="form-control" %}
+                                        {% render_field form.file1 class="form-control" %}
+                                    </div>
+                                    <div class="col-sm-offset-2 col-sm-8">
+                                        {{ form.image.errors }}
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="inputEmail3" class="col-sm-2 control-label">Comentario</label>
+
+                                    <div class="col-sm-6">
+                                        {% render_field form.file2 class="form-control" %}
+                                    </div>
+                                    <div class="col-sm-offset-2 col-sm-8">
+                                        {{ form.image.errors }}
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="inputEmail3" class="col-sm-2 control-label">Comentario</label>
+
+                                    <div class="col-sm-6">
+                                        {% render_field form.file3 class="form-control" %}
                                     </div>
                                     <div class="col-sm-offset-2 col-sm-8">
                                         {{ form.image.errors }}
