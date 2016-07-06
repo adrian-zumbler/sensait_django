@@ -153,8 +153,10 @@ urlpatterns = [
     url(r'^', include('helpdesk.urls')),
     url(r'^', include('ticket.urls', namespace='ticket')),
 
-    url(r'^dash/', include('client.urls', namespace='enterprise-client')),
+    url(r'^logins/$', TemplateView.as_view(template_name='system/login/login.html')),
+    url(r'^error/$', TemplateView.as_view(template_name='system/errors/error.html')),
 
+    url(r'^dash/', include('client.urls', namespace='enterprise-client')),
     url(r'^dash/main/$', DashMainListView.as_view(), name="dashMain"),
     url(r'^dash/projects/$', ProjectsListView.as_view()),
     url(r'^dash/projects/(?P<pk>\d+)/$', ProjectDetailView.as_view()),
