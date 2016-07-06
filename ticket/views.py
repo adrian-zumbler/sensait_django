@@ -43,6 +43,10 @@ class FollowUpCreateView(BaseCreateView):
     def get(self, request, *args, **kwargs):
         return self.get_success_url()
 
+    def post(self, request, *args, **kwargs):
+        self.object = None
+        return super(FollowUpCreateView, self).post(request, *args, **kwargs)
+
     def form_valid(self, form):
         """
         If the form is valid, save the associated model.
