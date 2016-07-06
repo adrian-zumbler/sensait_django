@@ -162,5 +162,5 @@ STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
 
 
-STATIC_ROOT = '/home/jose/dev/corpbit/ardsensor/static'
-MEDIA_ROOT = '/home/jose/dev/corpbit/ardsensor/static/media'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')#'/home/jose/dev/corpbit/ardsensor/static'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'static/media')#'/home/jose/dev/corpbit/ardsensor/static/media'
