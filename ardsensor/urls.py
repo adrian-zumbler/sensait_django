@@ -23,6 +23,26 @@ from django import forms
 from django.views.generic import TemplateView, ListView, DetailView, CreateView, UpdateView, DeleteView
 from arduino.models import Project, Arduino, ArduinoSensor
 
+from django.http import *
+from django.shortcuts import render_to_response,redirect
+from django.template import RequestContext
+
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import authenticate, login, logout
+
+
+def login_user(request):
+    logout(request)
+    if request.POST:
+        username = request.POST['username']
+        password = request.POST['password']
+
+        user = authenticate(username=username, password=password)
+        if user is not None:
+            if user.is_active:
+                login(request, user)
+                return HttpResponseRedirect('/dash/main')
+    return render_to_response('system/login/login.html', context_instance=RequestContext(request))
 
 #       CLASES PARA USUARIO/CLIENTE
 # _____________________________________________#
@@ -153,7 +173,7 @@ urlpatterns = [
     url(r'^', include('helpdesk.urls')),
     url(r'^', include('ticket.urls', namespace='ticket')),
 
-    url(r'^logins/$', TemplateView.as_view(template_name='system/login/login.html')),
+    url(r'^logins/$', login_user),
     url(r'^error/$', TemplateView.as_view(template_name='system/errors/error.html')),
 
     url(r'^dash/', include('client.urls', namespace='enterprise-client')),
