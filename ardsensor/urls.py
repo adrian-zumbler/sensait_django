@@ -166,27 +166,26 @@ class AdminArduinoCreateView(CreateView):
 
 #       URLS
 # _____________________________________________#
-
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^', include('arduino.urls', namespace='arduino', app_name='arduino')),
-    url(r'^', include('helpdesk.urls')),
     url(r'^', include('ticket.urls', namespace='ticket')),
+    url(r'^dash/', include('client.urls', namespace='enterprise-client')),
 
     url(r'^logins/$', login_user),
     url(r'^error/$', TemplateView.as_view(template_name='system/errors/error.html')),
 
-    url(r'^dash/', include('client.urls', namespace='enterprise-client')),
-    url(r'^dash/main/$', DashMainListView.as_view(), name="dashMain"),
-    url(r'^dash/projects/$', ProjectsListView.as_view()),
-    url(r'^dash/projects/(?P<pk>\d+)/$', ProjectDetailView.as_view()),
-    url(r'^dash/iot/(?P<pk>\d+)/$', ArduinoDetailView.as_view()),
-    url(r'^dash/sensor/(?P<pk>\d+)/$', ArduinoSensorDetailView.as_view()),
-    url(r'^dash/admin/clients/$', TemplateView.as_view(template_name='admin/admin_clients.html')),
-    url(r'^dash/admin/projects/$', AdminProjectsListView.as_view(), name='adminListProjects'),
-    url(r'^dash/admin/projects/detail/(?P<pk>\d+)/$', AdminProjectsDetailView.as_view(), name='adminDetailProjects'),
-    url(r'^dash/admin/projects/new/$', AdminProjectCreateView.as_view(), name='adminCreateProjects'),
-    url(r'^dash/admin/projects/edit/(?P<pk>\d+)/$', AdminProjectsEditView.as_view(), name='adminEditProjects'),
-    url(r'^dash/admin/projects/delete/(?P<pk>\d+)/$', AdminProjectsDeleteView.as_view(), name='adminDeleteProjects'),
-    url(r'^dash/admin/projects/(?P<project_pk>\d+)/iot/new/$', AdminArduinoCreateView.as_view(), name='adminCreateArduinos'),
+    url(r'^dash/main/$', DashMainListView.as_view(), name="main"),
+    url(r'^dash/projects/$', ProjectsListView.as_view(), name="projects"),
+    url(r'^dash/projects/(?P<pk>\d+)/$', ProjectDetailView.as_view(), name="projectDetail"),
+    url(r'^dash/iot/(?P<pk>\d+)/$', ArduinoDetailView.as_view(), name="arduinoDetail"),
+    url(r'^dash/sensor/(?P<pk>\d+)/$', ArduinoSensorDetailView.as_view(), name="sensorDetail"),
+
+    url(r'^dash/admin/clients/$', TemplateView.as_view(template_name='admin/admin_clients.html'), name="clientsList"),
+    url(r'^dash/admin/projects/$', AdminProjectsListView.as_view(), name="projectsList"),
+    url(r'^dash/admin/projects/detail/(?P<pk>\d+)/$', AdminProjectsDetailView.as_view(), name="projectsDetail"),
+    url(r'^dash/admin/projects/new/$', AdminProjectCreateView.as_view(), name="projectsNew"),
+    url(r'^dash/admin/projects/edit/(?P<pk>\d+)/$', AdminProjectsEditView.as_view(), name="projectsEdit"),
+    url(r'^dash/admin/projects/delete/(?P<pk>\d+)/$', AdminProjectsDeleteView.as_view(), name="projectsDeletet"),
+    url(r'^dash/admin/projects/(?P<project_pk>\d+)/iot/new/$', AdminArduinoCreateView.as_view(), name="newArduino"),
 ] + staticfiles_urlpatterns() + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

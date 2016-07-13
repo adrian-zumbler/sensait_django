@@ -268,7 +268,7 @@
         <img src=" {% static 'adminlte/img/user2-160x160.jpg' %}" class="img-circle" alt="User Image">
       </div>
       <div class="pull-left info">
-        <p>USUARIO</p>
+        <p>{{request.user}}</p>
         <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
       </div>
     </div>
@@ -284,30 +284,59 @@
     <!-- /.search form -->
     <!-- sidebar menu: : style can be found in sidebar.less -->
     <ul class="sidebar-menu">
-      <li class="header">CLIENTES</li>
 
-      <li><a href="{% url 'dashMain' %}"><i class="fa fa-book"></i> <span>Principal</span></a></li>
+      {% if not request.user.client %}
 
-      <li><a href="documentation/index.html"><i class="fa fa-laptop"></i> <span>Proyectos</span></a></li>
+        <li class="header">ADMIN</li>
 
-      <li><a href="documentation/index.html"><i class="fa fa-laptop"></i> <span>Sistemas</span></a></li>
+        <li class="treeview">
+          <a href="#">
+            <i class="fa fa-laptop"></i>
+            <span>EMPRESAS & CLIENTES</span>
+            <i class="fa fa-angle-left pull-right"></i>
+          </a>
+          <ul class="treeview-menu" style="display: none;">
+            <li><a href="{% url 'enterprise-client:enterprise-list' %}"><i class="fa fa-laptop"></i> <span>Lista de Clientes</span></a></li>
+            <li><a href="{% url 'enterprise-client:client-list' %}"><i class="fa fa-laptop"></i> <span>Lista de Empresas</span></a></li>
+            <li><a href="{% url 'enterprise-client:client-add' %}"><i class="fa fa-laptop"></i> <span>Agregar Cliente</span></a></li>
+            <li><a href="{% url 'enterprise-client:enterprise-add' %}"><i class="fa fa-laptop"></i> <span>Agregar Empresa</span></a></li>
+          </ul>
+        </li>
 
-      <li><a href="documentation/index.html"><i class="fa fa-laptop"></i> <span>Sensores</span></a></li>
 
-      <li class="header">ADMIN</li>
+        <li class="treeview">
+          <a href="#">
+            <i class="fa fa-laptop"></i>
+            <span>PROYECTOS</span>
+            <i class="fa fa-angle-left pull-right"></i>
+          </a>
+          <ul class="treeview-menu" style="display: none;">
+            <li><a href="{% url 'projectsList' %}"><i class="fa fa-laptop"></i> <span>Lista de proyectos</span></a></li>
+            <li><a href="{% url 'projectsNew' %}"><i class="fa fa-laptop"></i> <span>Nuevo Proyecto</span></a></li>
+          </ul>
+        </li>
 
-      <li><a href="documentation/index.html"><i class="fa fa-laptop"></i> <span>Empresas / Clientes</span></a></li>
+        <li class="header">Soporte</li>
+        <li class="treeview">
+          <a href="#">
+            <i class="fa fa-laptop"></i>
+            <span>TICKETS</span>
+            <i class="fa fa-angle-left pull-right"></i>
+          </a>
+          <ul class="treeview-menu" style="display: none;">
+            <li><a href="{% url 'ticket:ticket-list' %}"><i class="fa fa-laptop"></i> <span>Lista de tickets</span></a></li>
+            <li><a href="{% url 'ticket:ticket-add' %}"><i class="fa fa-laptop"></i> <span>Nuevo Ticket</span></a></li>
+          </ul>
+        </li>
 
-      <li><a href="documentation/index.html"><i class="fa fa-laptop"></i> <span>Proyectos</span></a></li>
+      {% else %}
+        <li class="header">CLIENTES</li>
 
-      <li><a href="documentation/index.html"><i class="fa fa-laptop"></i> <span>Sistemas</span></a></li>
+        <li><a href="{% url 'main' %}"><i class="fa fa-book"></i> <span>Principal</span></a></li>
 
-      <li><a href="documentation/index.html"><i class="fa fa-laptop"></i> <span>Sensores</span></a></li>
+        <li><a href="{% url 'projects' %}"><i class="fa fa-laptop"></i> <span>Proyectos</span></a></li>
 
-      <li class="header">Soporte</li>
-
-      <li><a href="{% url 'ticket:ticket-list' %}"><i class="fa fa-laptop"></i> <span>Tickets</span></a></li>
-
+      {% endif %}
     </ul>
   </section>
   <!-- /.sidebar -->
@@ -325,11 +354,6 @@
   </footer>
 
 {% endblock %}
-
-
-
-
-
 
 
 
