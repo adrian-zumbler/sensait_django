@@ -153,7 +153,7 @@ class AdminArduinoCreateView(CreateView):
     template_name = 'admin/admin_arduinos_create.html'
 
     def get_success_url(self):
-        return reverse('adminDetailProjects', kwargs={'pk': self.kwargs['project_pk']})
+        return reverse('projectsDetail', kwargs={'pk': self.kwargs['project_pk']})
 
     def get_initial(self):
         """
@@ -186,6 +186,6 @@ urlpatterns = [
     url(r'^dash/admin/projects/detail/(?P<pk>\d+)/$', AdminProjectsDetailView.as_view(), name="projectsDetail"),
     url(r'^dash/admin/projects/new/$', AdminProjectCreateView.as_view(), name="projectsNew"),
     url(r'^dash/admin/projects/edit/(?P<pk>\d+)/$', AdminProjectsEditView.as_view(), name="projectsEdit"),
-    url(r'^dash/admin/projects/delete/(?P<pk>\d+)/$', AdminProjectsDeleteView.as_view(), name="projectsDeletet"),
+    url(r'^dash/admin/projects/delete/(?P<pk>\d+)/$', AdminProjectsDeleteView.as_view(), name="projectsDelete"),
     url(r'^dash/admin/projects/(?P<project_pk>\d+)/iot/new/$', AdminArduinoCreateView.as_view(), name="newArduino"),
 ] + staticfiles_urlpatterns() + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
