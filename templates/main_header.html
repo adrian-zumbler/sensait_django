@@ -285,10 +285,24 @@
     <!-- sidebar menu: : style can be found in sidebar.less -->
     <ul class="sidebar-menu">
 
+      <li><a href="{% url 'main' %}"><i class="fa fa-book"></i> <span>Principal</span></a></li>
+
       {% if not request.user.client %}
 
-        <li class="header">ADMIN</li>
+      <li class="header">PROYECTOS</li>
+      <li class="treeview">
+        <a href="#">
+          <i class="fa fa-laptop"></i>
+          <span>Proyectos</span>
+          <i class="fa fa-angle-left pull-right"></i>
+        </a>
+        <ul class="treeview-menu" style="display: none;">
+          <li><a href="{% url 'projects' %}"><i class="fa fa-laptop"></i> <span>Lista de Proyectos</span></a></li>
+        </ul>
+      </li>
 
+
+        <li class="header">ADMIN</li>
         <li class="treeview">
           <a href="#">
             <i class="fa fa-laptop"></i>
@@ -331,11 +345,7 @@
 
       {% else %}
         <li class="header">CLIENTES</li>
-
-        <li><a href="{% url 'main' %}"><i class="fa fa-book"></i> <span>Principal</span></a></li>
-
         <li><a href="{% url 'projects' %}"><i class="fa fa-laptop"></i> <span>Proyectos</span></a></li>
-
       {% endif %}
     </ul>
   </section>
