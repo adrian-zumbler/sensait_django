@@ -23,6 +23,18 @@ class Client(models.Model):
         return self.user.username
 
 
+class Project(models.Model):
+    enterprise = models.ForeignKey(Enterprise)
+    clients = models.ManyToManyField(Client, related_name='projects', blank=True) # ForeignKey(Client, related_name='projects', blank=True, null=True)
+    name = models.CharField(max_length=255)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __unicode__(self):
+        return self.name
+
+
 @receiver(post_delete, sender=Client)
 def post_delete_user(sender, instance, *args, **kwargs):
     if instance.user: # just in case user is not specified

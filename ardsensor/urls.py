@@ -20,8 +20,10 @@ from django.core.urlresolvers import reverse_lazy, reverse
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.contrib.staticfiles.urls import static
 from django import forms
+from django.forms.utils import ErrorList
 from django.views.generic import TemplateView, ListView, DetailView, CreateView, UpdateView, DeleteView
-from arduino.models import Project, Arduino, ArduinoSensor
+from arduino.models import Arduino, ArduinoSensor
+from client.models import Project, Client
 
 from django.http import *
 from django.shortcuts import render_to_response,redirect
@@ -101,16 +103,31 @@ class AdminProjectsDetailView(DetailView):
     template_name = 'admin/admin_projects_detail.html'
     queryset = Project.objects.all()
 
-# def get_queryset(self):
-#    print self.kwargs
-#    queryset = Project.objects.filter(project__user=self.request.user)
-#        queryset = Project.objects.filter(project_id=self.kwargs['pk'])
-#           print queryset
-#           return queryset
 
 
 class AdminProjectCreateForm(forms.ModelForm):
     name = forms.RegexField(r'[A-Za-z]+')
+
+    class Meta:
+        model = Project
+        exclude = ('clients', )
+
+class AdminProjectUpdateForm(forms.ModelForm):
+    name = forms.RegexField(r'[A-Za-z]+')
+
+    def __init__(self, data=None, files=None, auto_id='id_%s', prefix=None,
+                 initial=None, error_class=ErrorList, label_suffix=None,
+                 empty_permitted=False, instance=None):
+        super(AdminProjectUpdateForm, self).__init__(
+            data, files, auto_id, prefix, initial, error_class,
+            label_suffix, empty_permitted, instance)
+        queryset = Client.objects.filter(enterprise=instance.enterprise)
+        self.fields['clients'] = forms.ModelChoiceField(
+            queryset=queryset
+        )
+        clients = self.fields
+
+
 
     class Meta:
         model = Project
@@ -120,19 +137,19 @@ class AdminProjectCreateForm(forms.ModelForm):
 class AdminProjectCreateView(CreateView):
     form_class = AdminProjectCreateForm
     template_name = 'admin/admin_projects_create.html'
-    success_url = reverse_lazy('adminListProjects')
+    success_url = reverse_lazy('projectsList')
 
 
 class AdminProjectsEditView(UpdateView):
-    form_class = AdminProjectCreateForm
+    form_class = AdminProjectUpdateForm
     template_name = 'admin/admin_projects_create.html'
-    success_url = reverse_lazy('adminListProjects')
+    success_url = reverse_lazy('projectsList')
     queryset = Project.objects.all()
 
 
 class AdminProjectsDeleteView(DeleteView):
     template_name = 'admin/admin_projects_delete.html'
-    success_url = reverse_lazy('adminListProjects')
+    success_url = reverse_lazy('projectsList')
     queryset = Project.objects.all()
 
 

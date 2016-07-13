@@ -13,7 +13,7 @@ import uuid
 
 class Project(models.Model):
     user = models.ForeignKey(User)
-    client = models.ForeignKey(Client, related_name='projects', blank=True, null=True)
+    client = models.ForeignKey(Client, related_name='projectos', blank=True, null=True)
     name = models.CharField(max_length=255)
 
     created_at = models.DateTimeField(auto_now_add=True)
