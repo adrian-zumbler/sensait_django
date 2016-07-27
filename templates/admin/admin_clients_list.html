@@ -37,7 +37,7 @@
                 <tr>
                   <th>ID Usuario</th>
                   <th>Nombre del Usuario</th>
-                  <th>Fecha Creación</th>
+                  <th>Empresa</th>
                   <th>Estatus</th>
                   <th>Accion</th>
                 </tr>
@@ -48,7 +48,7 @@
                 <tr>
                   <td> {{client.id}} </td>
                   <td> {{client.user}} </td>
-                  <td> {{client.created_at}} </td>
+                  <td> {{client.enterprise}} </td>
 
                   {% if  enterprise.id|isEven == 0%}
                     <td> <span class="label label-danger">Pendiente Success</span> </td>
