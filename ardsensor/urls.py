@@ -26,7 +26,7 @@ from arduino.models import Arduino, ArduinoSensor
 from client.models import Project, Client
 
 from django.http import *
-from django.shortcuts import render_to_response,redirect
+from django.shortcuts import render_to_response, redirect
 from django.template import RequestContext
 
 from django.contrib.auth.decorators import login_required
@@ -48,6 +48,7 @@ def login_user(request):
 
 #       CLASES PARA USUARIO/CLIENTE
 # _____________________________________________#
+
 
 class ProjectsListView(ListView):
     template_name = 'client/user_projects.html'
@@ -84,11 +85,11 @@ class DashMainListView(ListView):
     queryset = Project.objects.all()
 
     def get_queryset(self):
-        queryset = Project.clients_set.filter(client=self.request.user.client)
+        queryset = Project.objects.all()
         return queryset
 
 
-#       CLASES PARA ADMIN
+#       CLASES PARA ADMIN filter(user=self.request.user)
 # _____________________________________________#
 
 
@@ -104,13 +105,13 @@ class AdminProjectsDetailView(DetailView):
     queryset = Project.objects.all()
 
 
-
 class AdminProjectCreateForm(forms.ModelForm):
     name = forms.RegexField(r'[A-Za-z]+')
 
     class Meta:
         model = Project
         exclude = ('clients', )
+
 
 class AdminProjectUpdateForm(forms.ModelForm):
     name = forms.RegexField(r'[A-Za-z]+')
@@ -128,8 +129,7 @@ class AdminProjectUpdateForm(forms.ModelForm):
         clients = self.fields
 
 
-
-    class Meta:
+class Meta:
         model = Project
         fields = '__all__'
 

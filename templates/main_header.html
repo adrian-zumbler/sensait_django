@@ -210,15 +210,14 @@
         <li class="dropdown user user-menu">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">
             <img src="{% static 'adminlte/img/user2-160x160.jpg' %}" class="user-image" alt="User Image">
-            <span class="hidden-xs">Alexander Pierce</span>
+            <span class="hidden-xs">{{request.user}}</span>
           </a>
           <ul class="dropdown-menu">
             <!-- User image -->
             <li class="user-header">
               <img src="{% static 'adminlte/img/user2-160x160.jpg' %}" class="img-circle" alt="User Image">
               <p>
-                Alexander Pierce - Web Developer
-                <small>Member since Nov. 2012</small>
+                {{request.user}}
               </p>
             </li>
             <!-- Menu Body -->
@@ -272,20 +271,12 @@
         <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
       </div>
     </div>
-    <!-- search form -->
-    <form action="#" method="get" class="sidebar-form">
-      <div class="input-group">
-        <input type="text" name="q" class="form-control" placeholder="Search...">
-        <span class="input-group-btn">
-          <button type="submit" name="search" id="search-btn" class="btn btn-flat"><i class="fa fa-search"></i></button>
-        </span>
-      </div>
-    </form>
-    <!-- /.search form -->
     <!-- sidebar menu: : style can be found in sidebar.less -->
     <ul class="sidebar-menu">
 
-      <li><a href="{% url 'main' %}"><i class="fa fa-book"></i> <span>Principal</span></a></li>
+
+      <li class="header">MENU PRINCIPAL </li>
+      <li><a href="{% url 'main' %}"><i class="fa fa-book"></i> <span>Inicio</span></a></li>
 
       {% if not request.user.client %}
 
@@ -330,6 +321,19 @@
           </ul>
         </li>
 
+        <li class="treeview">
+          <a href="#">
+            <i class="fa fa-laptop"></i>
+            <span>SENSORES</span>
+            <i class="fa fa-angle-left pull-right"></i>
+          </a>
+          <ul class="treeview-menu" style="display: none;">
+            <li><a href="{% url 'projectsList' %}"><i class="fa fa-laptop"></i> <span>Lista de sensores</span></a></li>
+            <li><a href="{% url 'projectsNew' %}"><i class="fa fa-laptop"></i> <span>Nuevo sensor</span></a></li>
+          </ul>
+        </li>
+
+
         <li class="header">Soporte</li>
         <li class="treeview">
           <a href="#">
@@ -344,6 +348,7 @@
         </li>
 
       {% else %}
+
         <li class="header">CLIENTES</li>
         <li><a href="{% url 'projects' %}"><i class="fa fa-laptop"></i> <span>Proyectos</span></a></li>
       {% endif %}
