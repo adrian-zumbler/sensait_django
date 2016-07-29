@@ -54,7 +54,7 @@ class ProjectsListView(ListView):
     queryset = Project.objects.all()
 
     def get_queryset(self):
-        queryset = Project.objects.filter(user=self.request.user)
+        queryset = Project.objects.all()  # .filter(user=self.request.user)
         return queryset
 
 
@@ -84,7 +84,7 @@ class DashMainListView(ListView):
     queryset = Project.objects.all()
 
     def get_queryset(self):
-        queryset = Project.objects.filter(user=self.request.user)
+        queryset = Project.clients_set.filter(client=self.request.user.client)
         return queryset
 
 
