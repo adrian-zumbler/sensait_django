@@ -9,7 +9,7 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-        Admin - Control de Clientes
+        DETALLE DEL PROYECTO
         <small>LISTA DE TODOS LOS PROYECTOS</small>
 
       </h1>
@@ -67,7 +67,7 @@
         <h3 class="box-title">Lista de ARDUINOS ACTIVOS</h3>
       </div><!-- /.box-header -->
       <div class="box-body">
-        <table id="table_arduinos" class="table table-bordered table-striped">
+        <table id="table_projects" class="table table-bordered table-striped">
           <thead>
             <tr>
               <th>Accion</th>
@@ -79,8 +79,13 @@
             </tr>
           </thead>
           <tbody>
+<<<<<<< Updated upstream:dashboard/templates/admin/admin_projects_detail.html
 
             {% for arduino in arduinos %}
+=======
+            HOLO {{project.id }}
+            {% for arduino in project.arduinos.all %}
+>>>>>>> Stashed changes:templates/admin/admin_projects_detail.html
             <tr>
               <td>
                 <div class="btn-group">
@@ -113,10 +118,11 @@
           </tbody>
           <tfoot>
             <tr>
-              <th>ID Cliente</th>
-              <th>Nombre Cliente</th>
-              <th>Proyectos</th>
-              <th>Iots Instalados</th>
+              <th>Accion</th>
+              <th>ID IoT</th>
+              <th>Nombre IoT </th>
+              <th>Ubicación</th>
+              <th>Fecha Creación</th>
               <th>Estatus</th>
             </tr>
           </tfoot>
