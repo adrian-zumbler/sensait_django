@@ -80,17 +80,17 @@
           </thead>
           <tbody>
 
-            {% for arduino in project.arduinos.all %}
+            {% for arduino in arduinos %}
             <tr>
               <td>
                 <div class="btn-group">
-                  <a href="/dash/admin/iot/detail/{{project.id}}" target="_self">
+                  <a href="/dash/admin/iot/detail/{{arduino.id}}" target="_self">
                     <button  type="button" class="btn btn-success">Ver</button>
                   </a>
-                  <a href="/dash/admin/iot/edit/{{project.id}}" target="_self">
+                  <a href="{% url 'arduinoSensorsEdit' pk=arduino.id %}" target="_self">
                     <button  type="button" class="btn btn-info">Editar</button>
                   </a>
-                  <a href="/dash/admin/iot/delete/{{project.id}}" target="_self">
+                  <a href="/dash/admin/iot/delete/{{arduino.id}}" target="_self">
                     <button type="button" class="btn btn-danger">Borrar</button>
                   </a>
                 </div>

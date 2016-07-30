@@ -32,15 +32,15 @@
           <h3 class="box-title">Estas seguro?</h3>
         </div><!-- /.box-header -->
         <!-- form start -->
-        <h1>Nombre del proyecto:  {{project.name}}</h1>
-        <form role="form" action="." method="post">
+        <h1>Nombre de la empresa:  {{enterprise.name}}</h1>
+        <form role="form" action="" method="post">
           {% csrf_token %}
 
           {{form}}
 
           <div class="box-footer">
             <a href="#">
-              <button type="cancel" class="btn btn-info">Cancelar</button>
+              <a href="{% url 'enterprise-client:enterprise-list' %}" class="btn btn-info">Cancelar</a>
             </a>
             <a href="#">
               <button type="submit" class="btn btn-primary">Borrar</button>

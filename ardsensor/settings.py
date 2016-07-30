@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'helpdesk',
     'arduino',
     'ticket',
+    'dashboard',
     'widget_tweaks',
     'ws4redis',
 ]

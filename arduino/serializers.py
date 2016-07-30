@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from arduino.models import ArduinoSensor, Arduino, Sensor, SensorData
+from arduino.models import ArduinoSensor, Arduino, SensorType, SensorData
 
 
 class ArduinoSerializer(serializers.ModelSerializer):
@@ -14,7 +14,7 @@ class ArduinoSerializer(serializers.ModelSerializer):
 
 class SensorSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Sensor
+        model = SensorType
         fields = '__all__'
 
 

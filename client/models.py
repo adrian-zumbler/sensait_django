@@ -37,5 +37,5 @@ class Project(models.Model):
 
 @receiver(post_delete, sender=Client)
 def post_delete_user(sender, instance, *args, **kwargs):
-    if instance.user: # just in case user is not specified
+    if instance.user:  # just in case user is not specified
         instance.user.delete()
