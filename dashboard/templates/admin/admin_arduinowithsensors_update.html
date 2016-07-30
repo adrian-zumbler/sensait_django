@@ -10,8 +10,8 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-        AGREGAR ARDUINO AL PROYECTO
-        <small>SISTEMA</small>
+        SENSORES DEL SISTEMA
+        <small>LISTA DE SENSORES</small>
       </h1>
       <ol class="breadcrumb">
         <li>
@@ -25,26 +25,96 @@
 
     <!-- Main content -->
 <section class="content">
+
+  <div class="row">
+    <div class="col-xs-6">
+      <div class="box box-solid">
+        <div class="box-header with-border">
+          <i class="fa fa-adjust"></i>
+          <h3 class="box-title">Información del Sistema:  <b>{{arduino.name}}</b></h3>
+        </div><!-- /.box-header -->
+        <div class="box-body">
+          <dl class="dl-horizontal">
+            <dt>Sistema</dt>
+            <dd>
+              <a href="#" target="_self">
+                {{arduino.name}}
+              </a>
+            </dd>
+            <dt>Proyecto Parent</dt>
+            <dd>
+                {{arduino.project}}
+            </dd>
+            <dt>ID Sistema</dt>
+            <dd>
+              <a href="#" target="_self">
+                {{arduino.id}}
+              </a>
+            </dd>
+            <dt>Ubicación</dt>
+            <dd>{{arduino.location}}</dd>
+            <dt>Fecha de Creación</dt>
+            <dd>{{arduino.created_at}}</dd>
+            <dt>Fecha de Actualización</dt>
+            <dd>{{arduino.updated_at}}</dd>
+          </dl>
+        </div><!-- /.box-body -->
+      </div><!-- /.box -->
+    </div>
+  </div><!-- /.row -->
+
+
+
   <div class="row">
     <div class="col-xs-12">
       <div class="box box-primary">
         <div class="box-header with-border">
-          <h3 class="box-title">Quick Example</h3>
+          <h3 class="box-title">SENSORES DEL SISTEMA INSTALADO</h3>
         </div><!-- /.box-header -->
-        <!-- form start -->
-        <form role="form" action="" method="post">
+
+        <!-- form start  {{form}} -->
+        <form id="myform" role="form" action="" method="post">
           {% csrf_token %}
           <hr>
           <div class="arduino-form">
-            {{form}}
+
           </div>
-          <hr>
-          <div class="sensor-formset">
-            {{ sensor_formset.management_form }}
-            {% for sform in sensor_formset %}
-              {{ sform }}
-              <hr>
-            {% endfor %}
+          <div class="row">
+            <div class="sensor-formset">
+              {{ sensor_formset.management_form }}
+
+              {% for sform in sensor_formset %}
+
+                <div class="col-xs-3">
+                  <div class="form-group">
+                    <label for="sensor_type">Tipo Sensor:</label>
+                    {% render_field sform.sensor_type class="form-control" %}
+                  </div>
+                </div>
+
+                <div class="col-xs-3">
+                  <div class="form-group">
+                    <label for="description">Descripcion:</label>
+                    {% render_field sform.description class="form-control" %}
+                  </div>
+                </div>
+
+                <div class="col-xs-3">
+                  <div class="form-group">
+                    <label for="index">Indice: </label>
+                    {% render_field sform.index class="form-control" %}
+                  </div>
+                </div>
+
+                <div class="col-xs-3">
+                  <div class="form-group">
+                    <label for="index">Data Key:</label>
+                    {% render_field sform.data_key class="form-control" %}
+                  </div>
+                </div>
+
+              {% endfor %}
+            </div>
           </div>
           <div class="box-footer">
             <button type="submit" class="btn btn-primary">Enviar</button>
@@ -69,7 +139,12 @@
 
 {% endblock main_content_wrapper %}
 
-{% block content_js %}
 
 
-{% endblock content_js %}
+  {% block content_js %}
+    <script src="{% static 'js/django-dynamic-formset/jquery.formset.js' %}"></script>
+    $(function() {
+        $('#myform').formset();
+    });
+
+  {% endblock content_js %}
