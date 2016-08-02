@@ -41,7 +41,7 @@ class AdminArduinoCreateForm(forms.ModelForm):
 
     class Meta:
         model = Arduino
-        fields = ['name', 'location', 'project']
+        fields = ['name', 'location']
 
 
 class AdminSensorCreateForm(forms.ModelForm):

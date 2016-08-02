@@ -102,8 +102,16 @@ class AdminArduinoCreateView(CreateView):
     form_class = AdminArduinoCreateForm
     template_name = 'admin/admin_arduinos_create.html'
 
+    def form_valid(self, form):
+        self.object = form.save(commit=False)
+        self.object.project = Project.objects.get(
+            id=self.kwargs['project_pk']
+        )
+        self.object.save()
+        return HttpResponseRedirect(self.get_success_url())
+
     def get_success_url(self):
-        return reverse('projectsDetail', kwargs={'pk': self.kwargs['project_pk']})
+        return reverse('projectsDetail', kwargs={'pk': self.object.project.id})
 
     def get_initial(self):
         """
