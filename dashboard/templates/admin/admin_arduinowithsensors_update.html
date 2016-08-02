@@ -111,7 +111,7 @@
               {{ sensor_formset.management_form }}
 
               {% for sform in sensor_formset %}
-
+                <div class="sensor-form" >
                 <div class="col-xs-3">
                   <div class="form-group">
                     <label for="sensor_type">Tipo Sensor:</label>
@@ -138,6 +138,7 @@
                     <label for="datakey">Data Key:</label>
                     {% render_field sform.data_key class="form-control" %}
                   </div>
+                </div>
                 </div>
 
               {% endfor %}
@@ -171,8 +172,13 @@
   {% block content_js %}
     <script src="{% static 'js/django-dynamic-formset/jquery.formset.js' %}"></script>
 
-    $(function() {
-        $('#myform').formset();
+      <script type="application/javascript">
+      $(function() {
+        $('.sensor-form').formset({
+            addText: 'Agregar sensor',
+            deleteText: 'Quitar'
+        });
     });
+      </script>
 
   {% endblock content_js %}

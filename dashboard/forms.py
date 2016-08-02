@@ -61,5 +61,5 @@ class AdminInlineArduinoSensorCreateForm(forms.ModelForm):
 ArduinoSensorFormSet = forms.modelformset_factory(
     ArduinoSensor,
     exclude=('arduino',),
-    extra=4
+    extra=2
 )
