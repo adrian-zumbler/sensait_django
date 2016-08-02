@@ -106,10 +106,6 @@
         <!-- form start  {{form}} -->
         <form id="myform" role="form" action="" method="post">
           {% csrf_token %}
-          <hr>
-          <div class="arduino-form">
-            {{ form }}
-          </div>
           <div class="row">
             <div class="sensor-formset">
               {{ sensor_formset.management_form }}
