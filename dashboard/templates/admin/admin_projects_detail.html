@@ -9,8 +9,8 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-        Admin - Control de Clientes
-        <small>LISTA DE TODOS LOS PROYECTOS</small>
+        DETALLE DEL PROYECTO
+        <small>LISTA DE SISTEMAS EN EL PROYECTO</small>
 
       </h1>
       <ol class="breadcrumb">
@@ -31,7 +31,7 @@
       <div class="box box-solid">
         <div class="box-header with-border">
           <i class="fa fa-adjust"></i>
-          <h3 class="box-title">Información del Proyecto:  {{project.name }}</h3>
+          <h3 class="box-title">Información del Proyecto:  <b>{{project.name }}</b></h3>
         </div><!-- /.box-header -->
         <div class="box-body">
           <dl class="dl-horizontal">
@@ -41,15 +41,13 @@
                 {{project.name }}
               </a>
             </dd>
-            <dt>IoT</dt>
+            <dt>ID Proyecto</dt>
             <dd>
               <a href="#" target="_self">
                 {{project.id }}
               </a>
             </dd>
-            <dt>Tipo de Sensor</dt>
-            <dd>holo</dd>
-            <dt># del Sensor en el IoT</dt>
+            <dt># de Sistemas instalados</dt>
             <dd>{{project.arduinos.count }}</dd>
           </dl>
         </div><!-- /.box-body -->
@@ -64,24 +62,35 @@
   <div class="col-xs-12">
     <div class="box">
       <div class="box-header">
-        <h3 class="box-title">Lista de ARDUINOS ACTIVOS</h3>
+        <h3 class="box-title">Lista de SISTEMAS</h3>
       </div><!-- /.box-header -->
       <div class="box-body">
-        <table id="table_arduinos" class="table table-bordered table-striped">
+        <table id="table_projects" class="table table-bordered table-striped">
           <thead>
             <tr>
-              <th>Accion</th>
-              <th>ID IoT</th>
-              <th>Nombre IoT </th>
+              <th>ID Sistema</th>
+              <th>Nombre Sistema </th>
               <th>Ubicación</th>
               <th>Fecha Creación</th>
               <th>Estatus</th>
+              <th>Acciones</th>
             </tr>
           </thead>
           <tbody>
-
             {% for arduino in arduinos %}
             <tr>
+
+              <td>{{arduino.id}}</td>
+              <td>{{arduino.name}}</td>
+              <td>{{arduino.location}}</td>
+              <td>{{arduino.created_at}}</td>
+
+              {% if  project.id|isEven == 0%}
+                <td> <span class="label label-danger">Pendiente Success</span> </td>
+              {% else %}
+                <td> <span class="label label-success">Estatus Correcto</span> </td>
+              {% endif %}
+
               <td>
                 <div class="btn-group">
                   <a href="/dash/admin/iot/detail/{{arduino.id}}" target="_self">
@@ -96,28 +105,18 @@
                 </div>
               </td>
 
-              <td>00000</td>
-              <td>Cliente nombre</td>
-              <td>{{arduino.id}} - {{arduino.name}}</td>
-              <td>00000</td>
-
-              {% if  project.id|isEven == 0%}
-                <td> <span class="label label-danger">Pendiente Success</span> </td>
-              {% else %}
-                <td> <span class="label label-success">Estatus Correcto</span> </td>
-              {% endif %}
-
             </tr>
             {% endfor %}
 
           </tbody>
           <tfoot>
             <tr>
-              <th>ID Cliente</th>
-              <th>Nombre Cliente</th>
-              <th>Proyectos</th>
-              <th>Iots Instalados</th>
+              <th>ID Sistema</th>
+              <th>Nombre Sistema </th>
+              <th>Ubicación</th>
+              <th>Fecha Creación</th>
               <th>Estatus</th>
+              <th>Acciones</th>
             </tr>
           </tfoot>
         </table>
