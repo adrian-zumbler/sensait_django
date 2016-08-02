@@ -25,6 +25,7 @@
 
     <!-- Main content -->
 <section class="content">
+  <form id="myform" role="form" action="" method="post">
 
   <div class="row">
     <div class="col-xs-6">
@@ -73,18 +74,14 @@
             <div class="form-group">
               <label for="sistema_name">Nombre:</label>
               {% render_field form.name class="form-control" %}
+              <label for="sensor_type_error">{{ form.name.errors }}</label>
             </div>
           </div>
           <div class="col-xs-4">
             <div class="form-group">
               <label for="sistema_location">Ubicación:</label>
               {% render_field form.location class="form-control" %}
-            </div>
-          </div>
-          <div class="col-xs-4">
-            <div class="form-group">
-              <label for="sistema_project">Proyecto:</label>
-              {% render_field form.project class="form-control" %}
+              <label for="sensor_type_error">{{ form.location.errors }}</label>
             </div>
           </div>
         </div><!-- /.box-body -->
@@ -104,7 +101,7 @@
         </div><!-- /.box-header -->
 
         <!-- form start  {{form}} -->
-        <form id="myform" role="form" action="" method="post">
+
           {% csrf_token %}
           <div class="row">
             <div class="sensor-formset">
@@ -116,6 +113,7 @@
                   <div class="form-group">
                     <label for="sensor_type">Tipo Sensor:</label>
                     {% render_field sform.sensor_type class="form-control" %}
+                    <label for="sensor_type_error">{{ sform.sensor_type.errors }}</label>
                   </div>
                 </div>
 
@@ -123,6 +121,7 @@
                   <div class="form-group">
                     <label for="description">Descripcion:</label>
                     {% render_field sform.description class="form-control" %}
+                    <label for="sensor_type_error">{{ sform.description.errors }}</label>
                   </div>
                 </div>
 
@@ -130,6 +129,7 @@
                   <div class="form-group">
                     <label for="index">Indice: </label>
                     {% render_field sform.index class="form-control" %}
+                    <label for="sensor_type_error">{{ sform.index.errors }}</label>
                   </div>
                 </div>
 
@@ -137,6 +137,7 @@
                   <div class="form-group">
                     <label for="datakey">Data Key:</label>
                     {% render_field sform.data_key class="form-control" %}
+                    <label for="sensor_type_error">{{ sform.data_key.errors }}</label>
                   </div>
                 </div>
                 </div>
@@ -147,7 +148,7 @@
           <div class="box-footer">
             <button type="submit" class="btn btn-primary">Enviar</button>
           </div>
-        </form>
+
       </div><!-- /.box -->
     </div>
   </div>
@@ -160,7 +161,8 @@
   </div>
 </div>
 
-    </section>
+  </form>
+</section>
     <!-- /.content -->
   </div>
   <!-- /.content-wrapper -->
@@ -180,5 +182,6 @@
         });
     });
       </script>
+
 
   {% endblock content_js %}
