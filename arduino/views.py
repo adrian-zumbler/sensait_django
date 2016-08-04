@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import json
 from django.shortcuts import render
 from ws4redis.publisher import RedisPublisher
@@ -8,7 +10,7 @@ from rest_framework.permissions import IsAuthenticated, DjangoModelPermissions, 
 from rest_framework.response import Response
 from rest_framework.request import Request
 from django.db.models.query import QuerySet
-from arduino.serializers import (ArduinoSerializer, SensorSerializer,
+from arduino.serializers import (ArduinoSerializer, SensorTypeSerializer,
                                  ArduinoSensorSerializer, SensorDataSerializer)
 from arduino.permissions import isArduinoPermission
 from arduino.models import Arduino
@@ -27,7 +29,7 @@ class SensorViewSet(mixins.CreateModelMixin,
                     mixins.ListModelMixin,
                     mixins.RetrieveModelMixin,
                     viewsets.GenericViewSet):
-    serializer_class = SensorSerializer
+    serializer_class = SensorTypeSerializer
     permission_classes = (IsAuthenticated, )
     queryset = serializer_class.Meta.model.objects.all()
 

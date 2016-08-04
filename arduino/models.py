@@ -1,33 +1,72 @@
+# -*- coding: utf-8 -*-
+
 from __future__ import unicode_literals
 
+from django.utils import timezone
 from django.db import models
 from django.contrib.auth.models import User
 from client.models import Client, Project as ProjectC
 import uuid
 
 
-# class ArduinoManager(models.Manager):
-#    def create(self):
-#        pass
-
-
-# TODO: Eliminar este modelo
-# class Project(models.Model):
-#     user = models.ForeignKey(User)
-#     client = models.ForeignKey(Client, related_name='projectos', blank=True, null=True)
-#     name = models.CharField(max_length=255)
-#
-#     created_at = models.DateTimeField(auto_now_add=True)
-#     updated_at = models.DateTimeField(auto_now=True)
-#
-#     def __unicode__(self):
-#         return self.name
+def sensortype_files_name(instance, filename):
+    today = timezone.now()
+    today_path = today.strftime('%Y/%m/%d')
+    return '/'.join(['sensor_type',
+                     today_path,
+                     'sensor_' + instance.name + '_' + str(instance.id),
+                     filename])
 
 
 class SensorType(models.Model):
-    name = models.CharField(max_length=255)
-    prefix = models.CharField(max_length=2, unique=True)
-    description = models.CharField(max_length=255)
+
+    BOOLEAN = 0
+    DECIMAL = 1
+    INTEGER = 2
+    STRING = 3
+
+    DATA_TYPE_CHOICES = (
+        (BOOLEAN, 'Booleano'),
+        (DECIMAL, 'Decimal'),
+        (INTEGER, 'Entero'),
+        (STRING, 'Texto')
+    )
+
+    name = models.CharField(
+        verbose_name='Nombre',
+        max_length=255,
+        default=''
+    )
+    prefix = models.CharField(
+        verbose_name='Prefijo',
+        max_length=2,
+        unique=True,
+        default=''
+    )
+    description = models.CharField(
+        verbose_name='Descripción',
+        max_length=255,
+        default=''
+    )
+    model = models.CharField(
+        verbose_name='Modelo de sensor',
+        max_length=255,
+        default=''
+    )
+    data_type = models.PositiveSmallIntegerField(
+        choices=DATA_TYPE_CHOICES, default=1)
+    data_sheet = models.FileField(
+        verbose_name='Ficha técnica',
+        upload_to=sensortype_files_name,
+        blank=True,
+        null=True
+    )
+    data_image = models.FileField(
+        verbose_name='Imagen del sensor',
+        upload_to=sensortype_files_name,
+        blank=True,
+        null=True
+    )
 
     def __unicode__(self):
         return self.name + ': ' + self.description
@@ -70,6 +109,20 @@ class ArduinoSensor(models.Model):
     description = models.CharField(max_length=255)
     index = models.PositiveSmallIntegerField()
     data_key = models.CharField(max_length=20)
+    max_value = models.DecimalField(
+        verbose_name='Valor máximo permitido',
+        max_digits=8,
+        decimal_places=4,
+        blank=True,
+        null=True
+    )
+    min_value = models.DecimalField(
+        verbose_name='Valor mínimo permitido',
+        max_digits=8,
+        decimal_places=4,
+        blank=True,
+        null=True
+    )
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

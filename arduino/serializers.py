@@ -12,7 +12,7 @@ class ArduinoSerializer(serializers.ModelSerializer):
         # exclude = ('arduino_token', )
 
 
-class SensorSerializer(serializers.ModelSerializer):
+class SensorTypeSerializer(serializers.ModelSerializer):
     class Meta:
         model = SensorType
         fields = '__all__'
