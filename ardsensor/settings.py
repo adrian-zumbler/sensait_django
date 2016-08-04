@@ -37,10 +37,18 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.humanize',
+    'django.contrib.sites',
     'rest_framework',
     'rest_framework.authtoken',
+    'client',
     'corsheaders',
+    'bootstrapform',
+    'markdown_deux',
+    'helpdesk',
     'arduino',
+    'ticket',
+    'dashboard',
     'widget_tweaks',
     'ws4redis',
 ]
@@ -83,6 +91,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                "django.core.context_processors.media",
                 'django.core.context_processors.static',
                 'ws4redis.context_processors.default',
             ],
@@ -92,6 +101,8 @@ TEMPLATES = [
 
 #WSGI_APPLICATION = 'ardsensor.wsgi.application'
 
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 # Database
 # https://docs.djangoproject.com/en/1.9/ref/settings/#databases
@@ -149,3 +160,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
 
 STATIC_URL = '/static/'
+MEDIA_URL = '/media/'
+
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')#'/home/jose/dev/corpbit/ardsensor/static'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'static/media')#'/home/jose/dev/corpbit/ardsensor/static/media'

@@ -1,0 +1,102 @@
+{% extends 'main_header.html' %}
+{% load staticfiles %}
+{% load arduino_tags %}
+
+{% block main_content_wrapper %}
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <h1>
+        Admin - Control de EMPRESAS
+        <small> EMPRESA </small>
+
+      </h1>
+      <ol class="breadcrumb">
+        <li>
+          <a href="#">
+            <i class="fa fa-dashboard"></i>
+            Home</a>
+        </li>
+        <li class="active">Cliente</li>
+      </ol>
+    </section>
+
+    <!-- Main content -->
+<section class="content">
+  <div class="row">
+    <div class="col-xs-12">
+
+      <div class="box box-solid">
+        <div class="box-header with-border">
+          <i class="fa fa-adjust"></i>
+          <h3 class="box-title">Información del Cliente:  {{client.user.username }}</h3>
+        </div><!-- /.box-header -->
+        <div class="box-body">
+          <dl class="dl-horizontal">
+            <dt>Cliente</dt>
+            <dd>
+              <a href="#" target="_self">
+                {{client.user.username }}
+              </a>
+            </dd>
+            <dt>Id</dt>
+            <dd>
+              <a href="#" target="_self">
+                {{client.id }}
+              </a>
+            </dd>
+            <dt>Empresa</dt>
+            <dd>{{ client.enterprise }}</dd>
+            <dt>Nombre</dt>
+            <dd>{{ client.user.first_name }} {{ client.user.last_name }}</dd>
+              <dt>Email</dt>
+            <dd>{{ client.user.email }}</dd>
+          </dl>
+        </div><!-- /.box-body -->
+      </div><!-- /.box -->
+    </div>
+  </div><!-- /.row -->
+
+
+<!-- /.CRUD PARA LOS ARDUINOS DEL PROYECTO -->
+
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="box">
+        <a href="">
+          <a href="{% url 'enterprise-client:client-list' %}" class="btn btn-block btn-info btn-lg">Regresar</a>
+        </a>
+      </div>
+    </div>
+  </div>
+
+<!-- /.END PARA LOS ARDUINOS DEL PROYECTO -->
+  </section>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+
+{% endblock main_content_wrapper %}
+
+{% block content_js %}
+  <script src="{% static 'plugins/datatables/jquery.dataTables.min.js' %}"></script>
+  <script src="{% static 'plugins/datatables/dataTables.bootstrap.min.js' %}"></script>
+  <!-- page script -->
+<script type="application/javascript">
+
+  $(function () {
+    $('#table_projects').DataTable({
+      "paging": true,
+      "lengthChange": false,
+      "searching": true,
+      "ordering": true,
+      "info": true,
+      "autoWidth": false
+    });
+  });
+
+</script>
+
+{% endblock content_js %}

@@ -135,7 +135,7 @@ class DataViewSet(mixins.CreateModelMixin,
         request = super(DataViewSet, self).initialize_request(request, *args, **kwargs)
         try:
             request.arduino = Arduino.objects.get(arduino_token=request.META['HTTP_X_ARDUINOTOKEN'])
-        except:
+        except Exception:
             pass
         return request
 
