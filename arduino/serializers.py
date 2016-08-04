@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from arduino.models import ArduinoSensor, Arduino, Sensor, SensorData
+from arduino.models import ArduinoSensor, Arduino, SensorType, SensorData
 
 
 class ArduinoSerializer(serializers.ModelSerializer):
@@ -9,12 +9,12 @@ class ArduinoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Arduino
         fields = '__all__'
-        #exclude = ('arduino_token', )
+        # exclude = ('arduino_token', )
 
 
 class SensorSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Sensor
+        model = SensorType
         fields = '__all__'
 
 
@@ -31,6 +31,7 @@ class SensorDataSerializer(serializers.ModelSerializer):
 
     def save(self, **kwargs):
         return super(SensorDataSerializer, self).save(**kwargs)
+
 
 class ArduinoDataSerializer(serializers.Serializer):
     arduino = ArduinoSerializer()

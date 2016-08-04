@@ -1,0 +1,193 @@
+{% extends 'main_header.html' %}
+{% load staticfiles %}
+{% load widget_tweaks %}
+
+
+{% block main_content_wrapper %}
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <h1>
+        SENSORES DEL SISTEMA
+        <small>LISTA DE SENSORES</small>
+      </h1>
+      <ol class="breadcrumb">
+        <li>
+          <a href="#">
+            <i class="fa fa-dashboard"></i>
+            Home</a>
+        </li>
+        <li class="active">Dashboard</li>
+      </ol>
+    </section>
+
+    <!-- Main content -->
+<section class="content">
+  <form id="myform" role="form" action="" method="post">
+
+  <div class="row">
+    <div class="col-xs-6">
+      <div class="box box-solid">
+        <div class="box-header with-border">
+          <i class="fa fa-adjust"></i>
+          <h3 class="box-title">Información General:  <b>{{arduino.name}}</b></h3>
+        </div><!-- /.box-header -->
+        <div class="box-body">
+          <dl class="dl-horizontal">
+            <dt>Sistema</dt>
+            <dd>
+              <a href="#" target="_self">
+                {{arduino.name}}
+              </a>
+            </dd>
+            <dt>Proyecto Parent</dt>
+            <dd>
+                {{arduino.project}}
+            </dd>
+            <dt>ID Sistema</dt>
+            <dd>
+              <a href="#" target="_self">
+                {{arduino.id}}
+              </a>
+            </dd>
+            <dt>Ubicación</dt>
+            <dd>{{arduino.location}}</dd>
+            <dt>Fecha de Creación</dt>
+            <dd>{{arduino.created_at}}</dd>
+            <dt>Fecha de Actualización</dt>
+            <dd>{{arduino.updated_at}}</dd>
+          </dl>
+        </div><!-- /.box-body -->
+      </div><!-- /.box -->
+    </div>
+
+    <div class="col-xs-6">
+      <div class="box box-solid">
+        <div class="box-header with-border">
+          <i class="fa fa-adjust"></i>
+          <h3 class="box-title">Información del Sistema:  <b>{{arduino.name}}</b></h3>
+        </div><!-- /.box-header -->
+        <div class="box-body">
+          <div class="col-xs-4">
+            <div class="form-group">
+              <label for="sistema_name">Nombre:</label>
+              {% render_field form.name class="form-control" %}
+              <label for="sensor_type_error">{{ form.name.errors }}</label>
+            </div>
+          </div>
+          <div class="col-xs-4">
+            <div class="form-group">
+              <label for="sistema_location">Ubicación:</label>
+              {% render_field form.location class="form-control" %}
+              <label for="sensor_type_error">{{ form.location.errors }}</label>
+            </div>
+          </div>
+        </div><!-- /.box-body -->
+      </div><!-- /.box -->
+    </div>
+
+
+  </div><!-- /.row -->
+
+
+
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="box box-primary">
+        <div class="box-header with-border">
+          <h3 class="box-title">SENSORES DEL SISTEMA INSTALADO</h3>
+        </div><!-- /.box-header -->
+
+        <!-- form start  {{form}} -->
+
+          {% csrf_token %}
+          <div class="row">
+            <div class="sensor-formset">
+              {{ sensor_formset.management_form }}
+
+              {% for sform in sensor_formset %}
+                <div class="sensor-form" >
+
+                <div class="col-xs-3">
+                  <div class="form-group">
+                    <label for="sensor_type">Tipo Sensor:</label>
+                    {% render_field sform.sensor_type class="form-control" %}
+                    <label for="sensor_type_error">{{ sform.sensor_type.errors }}</label>
+                  </div>
+                </div>
+
+                <div class="col-xs-3">
+                  <div class="form-group">
+                    <label for="description">Descripcion:</label>
+                    {% render_field sform.description class="form-control" %}
+                    <label for="sensor_type_error">{{ sform.description.errors }}</label>
+                  </div>
+                </div>
+
+                <div class="col-xs-3">
+                  <div class="form-group">
+                    <label for="index">Indice: </label>
+                    {% render_field sform.index class="form-control" %}
+                    <label for="sensor_type_error">{{ sform.index.errors }}</label>
+                  </div>
+                </div>
+
+                <div class="col-xs-2">
+                  <div class="form-group">
+                    <label for="datakey">Data Key:</label>
+                    {% render_field sform.data_key class="form-control" %}
+                    <label for="sensor_type_error">{{ sform.data_key.errors }}</label>
+                  </div>
+                </div>
+
+              </div>
+              {% endfor %}
+            </div>
+          </div>
+          <div class="box-footer">
+
+          </div>
+
+      </div><!-- /.box -->
+    </div>
+  </div>
+
+<div class="row">
+  <div class="col-xs-6 col-xs-offset-3">
+    <button type="submit" class="btn btn-block btn-primary btn-lg">Guardar Cambios</button>
+  </div>
+
+</div>
+
+  </form>
+</section>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+
+{% block content_css %}
+  <style type="text/css">
+  .add-row{
+    border:1px solid red;
+  }
+  </style>
+{% endblock content_css %}
+
+{% endblock main_content_wrapper %}
+
+  {% block content_js %}
+    <script src="{% static 'js/django-dynamic-formset/jquery.formset.js' %}"></script>
+
+      <script type="application/javascript">
+      $(function() {
+        $('.sensor-form').formset({
+            addText: 'Agregar sensor',
+            deleteText: 'Quitar'
+        });
+    });
+      </script>
+
+
+  {% endblock content_js %}

@@ -1,0 +1,140 @@
+{% extends 'main_header.html' %}
+{% load staticfiles %}
+
+
+
+{% block main_content_wrapper %}
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <h1>
+        ADMINISTRACIÓN DE TICKETS
+        <small>Administración de Tickets</small>
+      </h1>
+      <ol class="breadcrumb">
+        <li>
+          <a href="#">
+            <i class="fa fa-dashboard"></i>
+            Home</a>
+        </li>
+        <li class="active">Tickets</li>
+      </ol>
+    </section>
+
+
+    <section class="content">
+      <div class="row">
+        <div class="col-xs-12">
+          <div class="box">
+            <div class="box-header">
+              <h3 class="box-title">Lista de Tickets</h3>
+            </div><!-- /.box-header -->
+            <div class="box-body">
+              <table id="table_projects" class="table table-bordered table-striped">
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Proyecto</th>
+                    <th>Titulo Ticket</th>
+                    <th>Queue Nombre</th>
+                    <th>Usuario Asignado</th>
+                    <th>Estatus</th>
+                    <th>Accion</th>
+                  </tr>
+                </thead>
+                <tbody>
+
+                  {% for ticket in ticket_list %}
+                    <tr>
+                      <td>{{ticket.id}}</td>
+                      <td>Proyecto - {{ticket.id}} </td>
+                      <td>{{ticket.title}}</td>
+                      <td>{{ticket.queue}}</td>
+                      <td>{{ticket.assigned_to}}</td>
+
+                      {% if  ticket.status == 1 %}
+                        <td><span class="label label-info">
+                          {{ticket.get_status_display}}
+                        </span></td>
+                      {% elif  ticket.status == 3 %}
+                        <td><span class="label label-danger">
+                          {{ticket.get_status_display}}
+                        </span></td>
+                      {% else %}
+                        <td><span class="label label-success">
+                          {{ticket.get_status_display}}
+                        </span></td>
+                      {% endif %}
+
+
+                      <td>
+                        <div class="btn-group">
+                          <a href="{% url 'ticket:ticket-detail' pk=ticket.id %}" target="_self">
+                            <button  type="button" class="btn btn-success">Ver</button>
+                          </a>
+                          <a href="{% url 'ticket:ticket-edit' pk=ticket.id %}" target="_self">
+                            <button  type="button" class="btn btn-info">Editar</button>
+                          </a>
+                        </div>
+                      </td>
+                    </tr>
+                  {% endfor %}
+
+                </tbody>
+                <tfoot>
+                  <tr>
+                    <th>ID</th>
+                    <th>Proyecto</th>
+                    <th>Titulo Ticket</th>
+                    <th>Queue Nombre</th>
+                    <th>Usuario Asignado</th>
+                    <th>Estatus</th>
+                    <th>Accion</th>
+                  </tr>
+                </tfoot>
+              </table>
+            </div><!-- /.box-body -->
+          </div><!-- /.box -->
+
+        </div>
+      </div>
+
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="box">
+          <a href="{% url 'ticket:ticket-add' %}">
+            <button class="btn btn-block btn-info btn-lg">Crear Ticket</button>
+          </a>
+        </div>
+      </div>
+    </div>
+
+
+  </section>
+  <!-- /.content -->
+</div>
+<!-- /.content-wrapper -->
+{% endblock main_content_wrapper %}
+
+
+{% block content_js %}
+  <script src="{% static 'plugins/datatables/jquery.dataTables.min.js' %}"></script>
+  <script src="{% static 'plugins/datatables/dataTables.bootstrap.min.js' %}"></script>
+  <!-- page script -->
+<script type="application/javascript">
+
+  $(function () {
+    $('#table_projects').DataTable({
+      "paging": true,
+      "lengthChange": false,
+      "searching": true,
+      "ordering": true,
+      "info": true,
+      "autoWidth": true
+    });
+  });
+
+</script>
+
+{% endblock content_js %}

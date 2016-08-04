@@ -1,5 +1,6 @@
 from django.contrib import admin
-from arduino.models import Arduino, Sensor, ArduinoSensor, Project
+from arduino.models import Arduino, SensorType, ArduinoSensor
+
 
 
 class ArduinoFieldDataInline(admin.TabularInline):
@@ -14,8 +15,5 @@ class ArduinoAdmin(admin.ModelAdmin):
 class SensorAdmin(admin.ModelAdmin):
     pass
 
-admin.site.register(Project)
-admin.site.register(Arduino)
-admin.site.register(Sensor)
-
-
+admin.site.register(Arduino, ArduinoAdmin)
+admin.site.register(SensorType)
