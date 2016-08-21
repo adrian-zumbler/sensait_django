@@ -181,7 +181,7 @@ class SensorTypeDetailView(DetailView):
 
 
 class SensorTypeEditView(UpdateView):
-    template_name = 'admin/admin_sensorType_edit.html'
+    template_name = 'admin/admin_sensorType_create.html'
     form_class = SensorTypeForm
     queryset = SensorType.objects.all()
     success_url = reverse_lazy('sensorTypeList')
