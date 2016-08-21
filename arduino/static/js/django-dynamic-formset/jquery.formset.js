@@ -58,25 +58,25 @@
                 if (row.is('TR')) {
                     // If the forms are laid out in table rows, insert
                     // the remove button into the last table cell:
-                    row.children(':last').append('<a class="' + options.deleteCssClass +'" href="javascript:void(0)">' + options.deleteText + '</a>');
+                    row.children(':last').append('<div class="' + options.deleteCssClass + options.deleteCssClassExtra +'" href="javascript:void(0)">' + options.deleteText + '</div>');
                 } else if (row.is('UL') || row.is('OL')) {
                     // If they're laid out as an ordered/unordered list,
                     // insert an <li> after the last list item:
-                    row.append('<li><a class="' + options.deleteCssClass + '" href="javascript:void(0)">' + options.deleteText +'</a></li>');
+                    row.append('<li><div class="' + options.deleteCssClass + options.deleteCssClassExtra+ '" href="javascript:void(0)">' + options.deleteText +'</div></li>');
                 } else {
                     // Otherwise, just insert the remove button as the
                     // last child element of the form's container:
-                    row.append('<a class="' + options.deleteCssClass + '" href="javascript:void(0)">' + options.deleteText +'</a>');
+                    row.append('<div class="' + options.deleteCssClass + options.deleteCssClassExtra + '" href="javascript:void(0)">' + options.deleteText +'</div>');
                 }
                 // Check if we're under the minimum number of forms - not to display delete link at rendering
                 if (!showDeleteLinks()){
-                    row.find('a.' + delCssSelector).hide();
+                    row.find('div.' + delCssSelector).hide();
                 }
 
-                row.find('a.' + delCssSelector).click(function() {
+                row.find('div.' + delCssSelector).click(function() {
                     var row = $(this).parents('.' + options.formCssClass),
                         del = row.find('input:hidden[id $= "-DELETE"]'),
-                        buttonRow = row.siblings("a." + addCssSelector + ', .' + options.formCssClass + '-add'),
+                        buttonRow = row.siblings("div." + addCssSelector + ', .' + options.formCssClass + '-add'),
                         forms;
                     if (del.length) {
                         // We're dealing with an inline formset.
@@ -104,7 +104,7 @@
                     }
                     // Check if we've reached the minimum number of forms - hide all delete link(s)
                     if (!showDeleteLinks()){
-                        $('a.' + delCssSelector).each(function(){$(this).hide();});
+                        $('div.' + delCssSelector).each(function(){$(this).hide();});
                     }
                     // Check if we need to show the add button:
                     if (buttonRow.is(':hidden') && showAddButton()) buttonRow.show();
@@ -177,14 +177,14 @@
                 // If forms are laid out as table rows, insert the
                 // "add" button in a new table row:
                 var numCols = $$.eq(0).children().length,   // This is a bit of an assumption :|
-                    buttonRow = $('<tr><td colspan="' + numCols + '"><a class="' + options.addCssClassExtra + ' ' + options.addCssClass + '" href="javascript:void(0)">' + options.addText + '</a></tr>')
+                    buttonRow = $('<tr><td colspan="' + numCols + '"><div class="' + options.addCssClassExtra + ' ' + options.addCssClass + '" href="javascript:void(0)">' + options.addText + '</div></tr>')
                                 .addClass(options.formCssClass + '-add');
                 $$.parent().append(buttonRow);
                 if (hideAddButton) buttonRow.hide();
-                addButton = buttonRow.find('a');
+                addButton = buttonRow.find('div');
             } else {
                 // Otherwise, insert it immediately after the last form:
-                $$.filter(':last').after('<a class="' + options.addCssClassExtra + ' ' + options.addCssClass + '" href="javascript:void(0)">' + options.addText + '</a>');
+                $$.filter(':last').after('<div class="' + options.addCssClassExtra + ' ' + options.addCssClass + '" href="javascript:void(0)">' + options.addText + '</div>');
                 addButton = $$.filter(':last').next();
                 if (hideAddButton) addButton.hide();
             }
@@ -193,8 +193,8 @@
                     row = options.formTemplate.clone(true).removeClass('formset-custom-template'),
                     buttonRow = $($(this).parents('tr.' + options.formCssClass + '-add').get(0) || this)
                     delCssSelector = $.trim(options.deleteCssClass).replace(/\s+/g, '.');
-                    console.log(row);
-                    console.log(buttonRow);
+                    //console.log(row);
+                    //console.log(buttonRow);
                 applyExtraClasses(row, formCount);
                 row.insertBefore(buttonRow).show();
                 row.find(childElementSelector).each(function() {
@@ -203,7 +203,7 @@
                 totalForms.val(formCount + 1);
                 // Check if we're above the minimum allowed number of forms -> show all delete link(s)
                 if (showDeleteLinks()){
-                    $('a.' + delCssSelector).each(function(){$(this).show();});
+                    $('div.' + delCssSelector).each(function(){$(this).show();});
                 }
                 // Check if we've exceeded the maximum allowed number of forms:
                 if (!showAddButton()) buttonRow.hide();
@@ -225,6 +225,7 @@
         addCssClass: 'add-row',          // CSS class applied to the add link
         addCssClassExtra: 'btn btn-lg btn-info col-xs-6',          // CSS class applied to the add link
         deleteCssClass: 'delete-row',    // CSS class applied to the delete link
+        deleteCssClassExtra: ' btn btn-danger',    // CSS class applied to the delete link
         formCssClass: 'dynamic-form',    // CSS class applied to each form in a formset
         extraClasses: [],                // Additional CSS classes, which will be applied to each form in turn
         keepFieldValues: '',             // jQuery selector for fields whose values should be kept when the form is cloned

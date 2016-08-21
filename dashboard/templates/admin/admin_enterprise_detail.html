@@ -9,8 +9,8 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-        Admin - Control de EMPRESAS
-        <small> EMPRESA </small>
+        Admin - VISTA DETALLADA DE LA EMPRESA
+        <small>   {{enterprise.name }} </small>
 
       </h1>
       <ol class="breadcrumb">
@@ -19,59 +19,228 @@
             <i class="fa fa-dashboard"></i>
             Home</a>
         </li>
-        <li class="active">Empresas</li>
+        <li class="active">
+          <a href="#" target="_self">
+            Lista de Empresas
+          </a>
+        </li>
+        <li class="active"> Empresa  <b>{{enterprise.name }}</b></li>
+
       </ol>
     </section>
 
     <!-- Main content -->
 <section class="content">
-  <div class="row">
-    <div class="col-xs-12">
 
       <div class="box box-solid">
         <div class="box-header with-border">
           <i class="fa fa-adjust"></i>
-          <h3 class="box-title">Información del Proyecto:  {{enterprises.name }}</h3>
+          <h3 class="box-title">Información de la empresa:  {{enterprise.name }}</h3>
         </div><!-- /.box-header -->
         <div class="box-body">
+          <div class="row">
+            <div class="col-xs-8">
           <dl class="dl-horizontal">
-            <dt>Proyecto</dt>
+
+            <dt>Empresa:</dt>
             <dd>
-              <a href="#" target="_self">
-                {{enterprises.name }}
-              </a>
+                {{enterprise.name}}
             </dd>
-            <dt>IoT</dt>
+            <dt>Dirección:</dt>
             <dd>
-              <a href="#" target="_self">
-                {{enterprises.id }}
-              </a>
+              {{enterprise.direction}}
             </dd>
-            <dt>Tipo de Sensor</dt>
-            <dd>holo</dd>
-            <dt># del Sensor en el IoT</dt>
-            <dd>asdas</dd>
+            <dt>Ciudad:</dt>
+            <dd>  {{enterprise.city}} </dd>
+            <dt>Télefono de contacto #1</dt>
+            <dd>{{enterprise.phone_number_1}}</dd>
+            <dt>Télefono de contacto #2</dt>
+            <dd>{{enterprise.phone_number_2}}</dd>
+            <dt>Sitio web:</dt>
+            <dd>www.panthea.com.mx</dd>
+            <dt>Mapa de la empresa:</dt>
+            <dd>
+              <a href="https://goo.gl/maps/vtgW1R9woGL2" target="_blank"> Ver en mapa</a>
+            </dd>
+
+            <dt>Estatus de la empresa:</dt>
+            <dd> <b>ESTATUS DE LA EMPRESA</b> </dd>
+
           </dl>
-        </div><!-- /.box-body -->
-      </div><!-- /.box -->
-    </div>
-  </div><!-- /.row -->
+          </div><!-- /.box-body -->
+            <div class="col-xs-4">
+              <img src="http://placehold.it/180x180&amp;text=LOGO" alt="company logo">
+            </div>
+          </div><!-- /.box -->
+        </div>
+    </div><!-- /.row -->
 
 
 <!-- /.CRUD PARA LOS ARDUINOS DEL PROYECTO -->
-
   <div class="row">
-    <div class="col-xs-12">
-      <div class="box">
-        <a href="">
-          <button class="btn btn-block btn-info btn-lg">Agregar Usuario</button>
-        </a>
-      </div>
+    <div class="col-xs-6 ">
+      <div class="box box-solid">
+        <div class="box-header with-border">
+          <i class="fa fa-adjust"></i>
+          <h3 class="box-title">Lista de Usuarios de la empresa: {{enterprise.name }} </h3>
+        </div><!-- /.box-header -->
+        <div class="box-body">
+          Aqui debe ir la lista de todos los usuarios de la empresa:
+
+          <table id="table_clients" class="table table-bordered table-striped">
+            <thead>
+              <tr>
+                <th>ID USUARIO</th>
+                <th>Username</th>
+                <th>Proyectos Asignados</th>
+                <th>Accion</th>
+              </tr>
+            </thead>
+            <tbody>
+
+              <tr>
+                <td> 000000001 </td>
+                <td> dPeluChe </td>
+                <td>  2 </td>
+                <td>
+                  <div class="btn-group">
+                    <a href="/dash/admin/enterprises/detail/{{enterprise.id}}" target="_self">
+                      <button  type="button" class="btn btn-success">Ver</button>
+                    </a>
+                    <a href="/dash/admin/enterprises/edit/{{enterprise.id}}" target="_self">
+                      <button  type="button" class="btn btn-info">Editar</button>
+                    </a>
+                    <a href="/dash/admin/enterprises/delete/{{enterprise.id}}" target="_self">
+                      <button type="button" class="btn btn-danger">Borrar</button>
+                    </a>
+                  </div>
+                </td>
+              </tr>
+
+              {% for enterprise in enterprise_list %}
+              <tr>
+                <td> {{enterprise.id}} </td>
+                <td> {{enterprise.name}} </td>
+                <td> {{enterprise.created_at}} </td>
+
+                <td>
+                  <div class="btn-group">
+                    <a href="/dash/admin/clients/detail/{{enterprise.id}}" target="_self">
+                      <button  type="button" class="btn btn-success">Ver</button>
+                    </a>
+                    <a href="/dash/admin/clients/edit/{{enterprise.id}}" target="_self">
+                      <button  type="button" class="btn btn-info">Editar</button>
+                    </a>
+                    <a href="/dash/admin/clients/delete/{{enterprise.id}}" target="_self">
+                      <button type="button" class="btn btn-danger">Borrar</button>
+                    </a>
+                  </div>
+                </td>
+
+              </tr>
+              {% endfor %}
+
+            </tbody>
+              <tfoot>
+                <tr>
+                  <th>ID USUARIO</th>
+                  <th>Username</th>
+                  <th>Proyectos Asignados</th>
+                  <th>Accion</th>
+                </tr>
+              </tfoot>
+          </table>
+
+
+
+        </div><!-- /.box-body -->
+      </div><!-- /.box -->
     </div>
+    <div class="col-xs-6 ">
+      <div class="box box-solid">
+        <div class="box-header with-border">
+          <i class="fa fa-adjust"></i>
+          <h3 class="box-title">Lista de PROYECTOS de la empresa: {{enterprise.name }} </h3>
+        </div><!-- /.box-header -->
+        <div class="box-body">
+          Aqui debe ir la lista de todos los PROYECTOS de la empresa:
+
+          <table id="table_projects" class="table table-bordered table-striped">
+            <thead>
+              <tr>
+                <th>ID PROYECTO</th>
+                <th>Nombre</th>
+                <th>Sistemas Asignados</th>
+                <th>Accion</th>
+              </tr>
+            </thead>
+            <tbody>
+
+              <tr>
+                <td> 000000001 </td>
+                <td> REFRIS </td>
+                <td>  4 </td>
+                <td>
+                  <div class="btn-group">
+                    <a href="/dash/admin/project/detail/{{enterprise.id}}" target="_self">
+                      <button  type="button" class="btn btn-success">Ver</button>
+                    </a>
+                    <a href="/dash/admin/project/edit/{{enterprise.id}}" target="_self">
+                      <button  type="button" class="btn btn-info">Editar</button>
+                    </a>
+                    <a href="/dash/admin/project/delete/{{enterprise.id}}" target="_self">
+                      <button type="button" class="btn btn-danger">Borrar</button>
+                    </a>
+                  </div>
+                </td>
+              </tr>
+
+              {% for enterprise in enterprise_list %}
+              <tr>
+                <td> {{enterprise.id}} </td>
+                <td> {{enterprise.name}} </td>
+                <td> {{enterprise.created_at}} </td>
+
+                <td>
+                  <div class="btn-group">
+                    <a href="/dash/admin/clients/detail/{{enterprise.id}}" target="_self">
+                      <button  type="button" class="btn btn-success">Ver</button>
+                    </a>
+                    <a href="/dash/admin/clients/edit/{{enterprise.id}}" target="_self">
+                      <button  type="button" class="btn btn-info">Editar</button>
+                    </a>
+                    <a href="/dash/admin/clients/delete/{{enterprise.id}}" target="_self">
+                      <button type="button" class="btn btn-danger">Borrar</button>
+                    </a>
+                  </div>
+                </td>
+
+              </tr>
+              {% endfor %}
+
+            </tbody>
+              <tfoot>
+                <tr>
+                  <th>ID PROYECTO</th>
+                  <th>Nombre</th>
+                  <th>Sistemas Asignados</th>
+                  <th>Accion</th>
+                </tr>
+              </tfoot>
+          </table>
+
+
+
+        </div><!-- /.box-body -->
+      </div><!-- /.box -->
+    </div>
+
+
+
   </div>
 
 <!-- /.END PARA LOS ARDUINOS DEL PROYECTO -->
-  </section>
+</section>
     <!-- /.content -->
   </div>
   <!-- /.content-wrapper -->
@@ -93,6 +262,19 @@
       "info": true,
       "autoWidth": false
     });
+
+    $('#table_clients').DataTable({
+      "paging": true,
+      "lengthChange": false,
+      "searching": true,
+      "ordering": true,
+      "info": true,
+      "autoWidth": false
+    });
+
+
+
+
   });
 
 </script>

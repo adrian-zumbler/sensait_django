@@ -9,8 +9,8 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-        Admin - Control de EMPRESAS
-        <small> EMPRESA </small>
+        Admin - Cliente  - Detalle
+        <small> Usuario:   {{client.user.username }}  </small>
 
       </h1>
       <ol class="breadcrumb">
@@ -19,15 +19,18 @@
             <i class="fa fa-dashboard"></i>
             Home</a>
         </li>
-        <li class="active">Cliente</li>
+        <li class="active">Lista de Clientes</li>
       </ol>
     </section>
 
     <!-- Main content -->
 <section class="content">
   <div class="row">
-    <div class="col-xs-12">
+    <div class="col-sm-2">
+      <img src="http://placehold.it/180x180&amp;text=ProfilePic" alt="company logo">
+    </div>
 
+    <div class="col-sm-10">
       <div class="box box-solid">
         <div class="box-header with-border">
           <i class="fa fa-adjust"></i>
@@ -35,32 +38,113 @@
         </div><!-- /.box-header -->
         <div class="box-body">
           <dl class="dl-horizontal">
-            <dt>Cliente</dt>
-            <dd>
-              <a href="#" target="_self">
-                {{client.user.username }}
-              </a>
-            </dd>
             <dt>Id</dt>
             <dd>
-              <a href="#" target="_self">
                 {{client.id }}
-              </a>
+            </dd>
+            <dt>Nombre Completo:</dt>
+            <dd>
+              {{ client.user.first_name }} {{ client.user.last_name }}
+            </dd>
+            <dt>Username</dt>
+            <dd>
+              {{client.user.username }}
             </dd>
             <dt>Empresa</dt>
-            <dd>{{ client.enterprise }}</dd>
-            <dt>Nombre</dt>
-            <dd>{{ client.user.first_name }} {{ client.user.last_name }}</dd>
-              <dt>Email</dt>
+            <dd> {{ client.enterprise }} </dd>
+            <dt>Email</dt>
             <dd>{{ client.user.email }}</dd>
+            <dt>Fecha Nacimiento:</dt>
+            <dd> 24 01 1988 </dd>
           </dl>
         </div><!-- /.box-body -->
       </div><!-- /.box -->
     </div>
+
   </div><!-- /.row -->
 
+<!-- /. lista de PROYECTOS ASIGNADOS -->
+  <div class="row">
+    <div class="col-xs-12 ">
+      <div class="box box-solid">
+        <div class="box-header with-border">
+          <i class="fa fa-adjust"></i>
+          <h3 class="box-title">Lista de Proyectos asignados de la empresa:
+            {{client.enterprise }} </h3>
+        </div><!-- /.box-header -->
+        <div class="box-body">
+          Aqui debe ir la lista de todos los proyectos en los que el usuario esta asignado.
 
-<!-- /.CRUD PARA LOS ARDUINOS DEL PROYECTO -->
+          <table id="table_projects" class="table table-bordered table-striped">
+            <thead>
+              <tr>
+                <th>ID PROYECTO</th>
+                <th>Nombre Proyecto</th>
+                <th>Sistemas Asignados</th>
+                <th>Accion</th>
+              </tr>
+            </thead>
+            <tbody>
+
+              <tr>
+                <td> 000000001 </td>
+                <td> dPeluChe </td>
+                <td>  2 </td>
+                <td>
+                  <div class="btn-group">
+                    <a href="/dash/admin/enterprises/detail/{{enterprise.id}}" target="_self">
+                      <button  type="button" class="btn btn-success">Ver</button>
+                    </a>
+                    <a href="/dash/admin/enterprises/edit/{{enterprise.id}}" target="_self">
+                      <button  type="button" class="btn btn-info">Editar</button>
+                    </a>
+
+                  </div>
+                </td>
+              </tr>
+
+              {% for enterprise in enterprise_list %}
+              <tr>
+                <td> {{enterprise.id}} </td>
+                <td> {{enterprise.name}} </td>
+                <td> {{enterprise.created_at}} </td>
+
+                <td>
+                  <div class="btn-group">
+                    <a href="/dash/admin/clients/detail/{{enterprise.id}}" target="_self">
+                      <button  type="button" class="btn btn-success">Ver</button>
+                    </a>
+                    <a href="/dash/admin/clients/edit/{{enterprise.id}}" target="_self">
+                      <button  type="button" class="btn btn-info">Editar</button>
+                    </a>
+                    <a href="/dash/admin/clients/delete/{{enterprise.id}}" target="_self">
+                      <button type="button" class="btn btn-danger">Borrar</button>
+                    </a>
+                  </div>
+                </td>
+
+              </tr>
+              {% endfor %}
+
+            </tbody>
+              <tfoot>
+                <tr>
+                  <th>ID PROYECTO</th>
+                  <th>Nombre Proyecto</th>
+                  <th>Sistemas Asignados</th>
+                  <th>Accion</th>
+                </tr>
+              </tfoot>
+          </table>
+        </div><!-- /.box-body -->
+      </div><!-- /.box -->
+    </div>
+  </div>
+
+
+
+
+<!-- /. BTN PARA REGRESAR -->
 
   <div class="row">
     <div class="col-xs-12">
@@ -72,7 +156,6 @@
     </div>
   </div>
 
-<!-- /.END PARA LOS ARDUINOS DEL PROYECTO -->
   </section>
     <!-- /.content -->
   </div>

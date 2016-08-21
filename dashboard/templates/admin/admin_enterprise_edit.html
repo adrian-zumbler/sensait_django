@@ -8,7 +8,8 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-        CREAR NUEVA EMPRESA
+        ADMIN - {% if form.initial %} EDITAR {% else %} CREAR {% endif %}
+         - EMPRESA
         <small>Control de Empresas</small>
       </h1>
       <ol class="breadcrumb">
@@ -17,7 +18,16 @@
             <i class="fa fa-dashboard"></i>
             Home</a>
         </li>
-        <li class="active">Empresas</li>
+        <li class="active">
+          <a href="#" target="_self">
+            Lista de Empresas
+          </a>
+        </li>
+        {% if form.initial %}
+          <li class="active"> Empresa: <b>{{enterprise.name }}</b></li>
+        {% else %}
+
+        {% endif %}
       </ol>
     </section>
 
@@ -50,7 +60,10 @@
               <!-- /.box-body -->
               <div class="box-footer">
                 <a href="{% url 'enterprise-client:enterprise-list' %}" class="btn btn-default">Regresar</a>
-                <button type="submit" class="btn btn-primary">Agregar Empresa</button>
+                <button type="submit" class="btn btn-primary">
+                  {% if form.initial %} Editar {% else %} Crear {% endif %}
+                  Empresa
+                </button>
               </div>
               <!-- /.box-footer -->
             </form>
