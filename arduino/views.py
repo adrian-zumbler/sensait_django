@@ -165,12 +165,12 @@ class DataViewSet(mixins.CreateModelMixin,
 
 
 class SensorTypeListView(ListView):
-    template_name = 'admin/admin_sensoType_list.html'
+    template_name = 'admin/admin_sensorType_list.html'
     queryset = SensorType.objects.all()
 
 
 class SensorTypeCreateView(CreateView):
-    template_name = 'admin/admin_sensoType_edit.html'
+    template_name = 'admin/admin_sensorType_edit.html'
     form_class = SensorTypeForm
     success_url = reverse_lazy('sensorTypeList')
 
