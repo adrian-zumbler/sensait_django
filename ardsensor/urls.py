@@ -31,6 +31,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 
 from dashboard.views import *
+from arduino.views import *
 
 def login_user(request):
     logout(request)
@@ -67,11 +68,19 @@ urlpatterns = [
 
 
     url(r'^dash/admin/clients/$', TemplateView.as_view(template_name='admin/admin_clients.html'), name="clientsList"),
+
     url(r'^dash/admin/projects/$', AdminProjectsListView.as_view(), name="projectsList"),
     url(r'^dash/admin/projects/detail/(?P<pk>\d+)/$', AdminProjectsDetailView.as_view(), name="projectsDetail"),
     url(r'^dash/admin/projects/new/$', AdminProjectCreateView.as_view(), name="projectsNew"),
     url(r'^dash/admin/projects/edit/(?P<pk>\d+)/$', AdminProjectsEditView.as_view(), name="projectsEdit"),
     url(r'^dash/admin/projects/delete/(?P<pk>\d+)/$', AdminProjectsDeleteView.as_view(), name="projectsDelete"),
+
+    url(r'^dash/admin/sensortypes/$', SensorTypeListView.as_view(), name="sensorTypeList"),
+    url(r'^dash/admin/sensortypes/detail/(?P<pk>\d+)/$', SensorTypeDetailView.as_view(), name="sensorTypeDetail"),
+    url(r'^dash/admin/sensortypes/new/$', SensorTypeCreateView.as_view(), name="sensorTypeNew"),
+    url(r'^dash/admin/sensortypes/edit/(?P<pk>\d+)/$', SensorTypeEditView.as_view(), name="sensorTypeEdit"),
+    url(r'^dash/admin/sensortypes/delete/(?P<pk>\d+)/$', SensorTypeDeleteView.as_view(), name="sensorTypeDelete"),
+
     url(r'^dash/admin/projects/(?P<project_pk>\d+)/iot/new/$', AdminArduinoCreateView.as_view(), name="newArduino"),
     url(r'^dash/admin/iot/edit/(?P<pk>\d+)/$',
         AdminArduinoWithSensorsUpdateView.as_view(), name="arduinoSensorsEdit"),

@@ -2,6 +2,9 @@
 
 import json
 from django.shortcuts import render
+from django.views.generic import ListView, CreateView, UpdateView, DetailView, DeleteView
+from django.core.urlresolvers import reverse_lazy
+
 from ws4redis.publisher import RedisPublisher
 from ws4redis.redis_store import RedisMessage
 
@@ -13,7 +16,8 @@ from django.db.models.query import QuerySet
 from arduino.serializers import (ArduinoSerializer, SensorTypeSerializer,
                                  ArduinoSensorSerializer, SensorDataSerializer)
 from arduino.permissions import isArduinoPermission
-from arduino.models import Arduino
+from arduino.models import Arduino, SensorType
+from .forms import SensorTypeForm
 
 
 class ArduinoViewSet(mixins.CreateModelMixin,
@@ -159,3 +163,30 @@ class DataViewSet(mixins.CreateModelMixin,
 
         return Response({'message': 'data created'}, status=status.HTTP_201_CREATED)
 
+
+class SensorTypeListView(ListView):
+    template_name = 'admin/admin_sensoType_list.html'
+    queryset = SensorType.objects.all()
+
+
+class SensorTypeCreateView(CreateView):
+    template_name = 'admin/admin_sensoType_edit.html'
+    form_class = SensorTypeForm
+    success_url = reverse_lazy('sensorTypeList')
+
+
+class SensorTypeDetailView(DetailView):
+    template_name = 'admin/admin_sensorType_detail.html'
+    queryset = SensorType.objects.all()
+
+
+class SensorTypeEditView(UpdateView):
+    template_name = 'admin/admin_sensorType_edit.html'
+    form_class = SensorTypeForm
+    queryset = SensorType.objects.all()
+    success_url = reverse_lazy('sensorTypeList')
+
+class SensorTypeDeleteView(DeleteView):
+    template_name = 'admin/admin_sensorType_delete.html'
+    success_url = reverse_lazy('sensorTypeList')
+    queryset = SensorType.objects.all()
