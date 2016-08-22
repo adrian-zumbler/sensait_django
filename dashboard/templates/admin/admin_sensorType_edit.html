@@ -38,7 +38,7 @@
         </div><!-- /.box-header -->
 
         <!-- form start -->
-        <form class="form-horizontal" role="form" action="" method="post">
+        <form class="form-horizontal" role="form" action="" method="post" enctype="multipart/form-data">
         <div class="box-body">
             {% csrf_token %}
             {% for field in form %}
