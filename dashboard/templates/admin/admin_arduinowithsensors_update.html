@@ -119,9 +119,9 @@
 
               <div class="row">
               <div class="sensor-form" >
+                {{ sform }}
 
-
-                <div class="col-xs-2">
+                {% comment %}<div class="col-xs-2">
                   <div class="form-group">
                     <label for="sensor_type">Tipo Sensor:</label>
                     {% render_field sform.sensor_type class="form-control" %}
@@ -167,7 +167,7 @@
                     {% render_field sform.data_key class="form-control" %}
                     <label for="sensor_type_error">{{ sform.data_key.errors }}</label>
                   </div>
-                </div>
+                </div>{% endcomment %}
 
               </div>
               </div>
