@@ -164,29 +164,41 @@ class DataViewSet(mixins.CreateModelMixin,
         return Response({'message': 'data created'}, status=status.HTTP_201_CREATED)
 
 
-class SensorTypeListView(ListView):
+class AdminSensorTypeListView(ListView):
     template_name = 'admin/admin_sensorType_list.html'
     queryset = SensorType.objects.all()
 
 
-class SensorTypeCreateView(CreateView):
+class AdminSensorTypeCreateView(CreateView):
     template_name = 'admin/admin_sensorType_edit.html'
     form_class = SensorTypeForm
     success_url = reverse_lazy('sensorTypeList')
 
 
-class SensorTypeDetailView(DetailView):
+class AdminSensorTypeDetailView(DetailView):
     template_name = 'admin/admin_sensorType_detail.html'
     queryset = SensorType.objects.all()
 
 
-class SensorTypeEditView(UpdateView):
+class AdminSensorTypeEditView(UpdateView):
     template_name = 'admin/admin_sensorType_edit.html'
     form_class = SensorTypeForm
     queryset = SensorType.objects.all()
     success_url = reverse_lazy('sensorTypeList')
 
-class SensorTypeDeleteView(DeleteView):
+
+class AdminSensorTypeDeleteView(DeleteView):
     template_name = 'admin/admin_sensorType_delete.html'
     success_url = reverse_lazy('sensorTypeList')
     queryset = SensorType.objects.all()
+
+
+class AdminArduinoDetailView(DetailView):
+    template_name = 'admin/admin_arduino_detail.html'
+    queryset = Arduino.objects.all()
+
+
+class AdminArduinoDeleteView(DeleteView):
+    template_name = 'admin/admin_arduino_delete.html'
+    success_url = reverse_lazy('projectsDetail')
+    queryset = Arduino.objects.all()

@@ -75,13 +75,15 @@ urlpatterns = [
     url(r'^dash/admin/projects/edit/(?P<pk>\d+)/$', AdminProjectsEditView.as_view(), name="projectsEdit"),
     url(r'^dash/admin/projects/delete/(?P<pk>\d+)/$', AdminProjectsDeleteView.as_view(), name="projectsDelete"),
 
-    url(r'^dash/admin/sensortypes/$', SensorTypeListView.as_view(), name="sensorTypeList"),
-    url(r'^dash/admin/sensortypes/detail/(?P<pk>\d+)/$', SensorTypeDetailView.as_view(), name="sensorTypeDetail"),
-    url(r'^dash/admin/sensortypes/new/$', SensorTypeCreateView.as_view(), name="sensorTypeNew"),
-    url(r'^dash/admin/sensortypes/edit/(?P<pk>\d+)/$', SensorTypeEditView.as_view(), name="sensorTypeEdit"),
-    url(r'^dash/admin/sensortypes/delete/(?P<pk>\d+)/$', SensorTypeDeleteView.as_view(), name="sensorTypeDelete"),
+    url(r'^dash/admin/sensortypes/$', AdminSensorTypeListView.as_view(), name="sensorTypeList"),
+    url(r'^dash/admin/sensortypes/detail/(?P<pk>\d+)/$', AdminSensorTypeDetailView.as_view(), name="sensorTypeDetail"),
+    url(r'^dash/admin/sensortypes/new/$', AdminSensorTypeCreateView.as_view(), name="sensorTypeNew"),
+    url(r'^dash/admin/sensortypes/edit/(?P<pk>\d+)/$', AdminSensorTypeEditView.as_view(), name="sensorTypeEdit"),
+    url(r'^dash/admin/sensortypes/delete/(?P<pk>\d+)/$', AdminSensorTypeDeleteView.as_view(), name="sensorTypeDelete"),
 
-    url(r'^dash/admin/projects/(?P<project_pk>\d+)/iot/new/$', AdminArduinoCreateView.as_view(), name="newArduino"),
-    url(r'^dash/admin/iot/edit/(?P<pk>\d+)/$',
+    url(r'^dash/admin/iots/detail/(?P<pk>\d+)/$', AdminArduinoDetailView.as_view(), name="adminarduinoDetail"),
+    url(r'^dash/admin/projects/(?P<project_pk>\d+)/iots/new/$', AdminArduinoCreateView.as_view(), name="newArduino"),
+    url(r'^dash/admin/iots/edit/(?P<pk>\d+)/$',
         AdminArduinoWithSensorsUpdateView.as_view(), name="arduinoSensorsEdit"),
+    url(r'^dash/admin/iots/delete/(?P<pk>\d+)/$', AdminArduinoDeleteView.as_view(), name="arduinoDelete"),
 ] + staticfiles_urlpatterns() + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

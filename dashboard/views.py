@@ -100,7 +100,7 @@ class AdminProjectsDeleteView(DeleteView):
 # _____________________________________________#
 class AdminArduinoCreateView(CreateView):
     form_class = AdminArduinoCreateForm
-    template_name = 'admin/admin_arduinos_create.html'
+    template_name = 'admin/admin_arduino_create.html'
 
     def form_valid(self, form):
         self.object = form.save(commit=False)
