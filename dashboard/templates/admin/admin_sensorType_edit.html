@@ -33,7 +33,7 @@
         </div><!-- /.box-header -->
         <!-- form start -->
         <h1>Nombre del Sensor: <b> {{sensortype.name}} </b> </h1>
-        <form role="form" action="" method="post">
+        <form role="form" action="" method="post" enctype="multipart/form-data">
           {% csrf_token %}
 
           {{form}}
