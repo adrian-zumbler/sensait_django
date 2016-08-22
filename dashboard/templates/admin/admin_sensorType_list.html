@@ -35,20 +35,20 @@
                 <tr>
                   <th>ID Sensor</th>
                   <th>Nombre Sensor</th>
-                  <th>Projecto ID/Nombre</th>
                   <th>Fecha Creación</th>
+                  <th>Fecha Actualización</th>
                   <th>Estatus</th>
                   <th>Accion</th>
                 </tr>
               </thead>
               <tbody>
 
-                {% for sensor in sensors_list %}
+                {% for sensor in sensortype_list %}
                 <tr>
-                  <td>00000</td>
-                  <td>Cliente nombre</td>
-                  <td>{{sensor.id}} - {{sensor.name}}</td>
+                  <td>{{sensor.id}}</td>
+                  <td>{{sensor.name}}</td>
                   <td> {{sensor.created_at}} </td>
+                  <td> {{sensor.updated_at}} </td>
 
                   {% if  project.id|isEven == 0%}
                     <td> <span class="label label-danger">Pendiente Success</span> </td>
@@ -58,13 +58,13 @@
 
                   <td>
                     <div class="btn-group">
-                      <a href="/dash/admin/projects/detail/{{project.id}}" target="_self">
+                      <a href= "{% url 'sensorTypeDetail' pk=sensor.id %} " target="_self">
                         <button  type="button" class="btn btn-success">Ver</button>
                       </a>
-                      <a href="/dash/admin/projects/edit/{{project.id}}" target="_self">
+                      <a href= "{% url 'sensorTypeEdit' pk=sensor.id %} " target="_self">
                         <button  type="button" class="btn btn-info">Editar</button>
                       </a>
-                      <a href="/dash/admin/projects/delete/{{project.id}}" target="_self">
+                      <a href= "{% url 'sensorTypeDelete' pk=sensor.id %} " target="_self">
                         <button type="button" class="btn btn-danger">Borrar</button>
                       </a>
                     </div>
@@ -78,8 +78,8 @@
                 <tr>
                   <th>ID Sensor</th>
                   <th>Nombre Sensor</th>
-                  <th>Projecto ID/Nombre</th>
                   <th>Fecha Creación</th>
+                  <th>Fecha Actualización</th>
                   <th>Estatus</th>
                   <th>Accion</th>
                 </tr>
@@ -94,8 +94,8 @@
     <div class="row">
       <div class="col-xs-12">
         <div class="box">
-          <a href="/dash/admin/projects/new/">
-            <button class="btn btn-block btn-info btn-lg">Agregar Proyecto</button>
+          <a href="/dash/admin/sensorType/new/">
+            <button class="btn btn-block btn-info btn-lg">Agregar Sensor</button>
           </a>
         </div>
       </div>

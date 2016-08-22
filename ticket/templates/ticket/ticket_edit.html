@@ -8,7 +8,7 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-        CREAR NUEVO TICKET
+        ADMIN - {% if form.initial %} EDITAR {% else %} CREAR {% endif %} TICKETS
         <small>Control de Tickets</small>
       </h1>
       <ol class="breadcrumb">
@@ -28,7 +28,9 @@
         <div class="col-xs-10">
           <div class="box box-info">
             <div class="box-header with-border">
-              <h3 class="box-title">Crear Ticket</h3>
+              <h3 class="box-title">
+                {% if form.initial %} Editar {% else %} Crear {% endif %} Ticket
+              </h3>
             </div>
             <!-- /.box-header -->
             <!-- form start -->
@@ -99,8 +101,10 @@
               </div>
               <!-- /.box-body -->
               <div class="box-footer">
-                <button type="reset" class="btn btn-default">Reset</button>
-                <button type="submit" class="btn btn-primary">Crear Ticket</button>
+                <button type="cancel" class="btn btn-default">Cancelar</button>
+                <button type="submit" class="btn btn-primary">
+                  {% if form.initial %} Editar {% else %} Crear {% endif %}
+                   Ticket</button>
               </div>
               <!-- /.box-footer -->
             </form>
