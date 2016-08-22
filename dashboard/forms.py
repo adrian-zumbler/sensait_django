@@ -25,7 +25,7 @@ class AdminProjectUpdateForm(forms.ModelForm):
 
         queryset = Client.objects.filter(enterprise=instance.enterprise)
 
-        self.fields['clients'] = forms.ModelChoiceField(
+        self.fields['clients'] = forms.ModelMultipleChoiceField(
             queryset=queryset
         )
 
