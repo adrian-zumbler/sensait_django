@@ -32,7 +32,7 @@
           <h3 class="box-title">Estas seguro?</h3>
         </div><!-- /.box-header -->
         <!-- form start -->
-        <h1>Nombre del Sensor:  {{sensorType.name}}</h1>
+        <h1>Nombre del Sensor: <b> {{sensortype.name}} </b> </h1>
         <form role="form" action="" method="post">
           {% csrf_token %}
 
@@ -43,7 +43,7 @@
               <button type="cancel" class="btn btn-info">Cancelar</button>
             </a>
             <a href="#">
-              <button type="submit" class="btn btn-primary">Borrar</button>
+              <button type="submit" class="btn btn-danger">Borrar</button>
             </a>
           </div>
         </form>
