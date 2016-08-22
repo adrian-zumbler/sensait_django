@@ -35,48 +35,120 @@
         </div><!-- /.box-header -->
         <div class="box-body">
           <dl class="dl-horizontal">
-            <dt>Nombre del Arduino</dt>
+
+            <dt>Proyecto del Sistema</dt>
             <dd>
-              <a href="#" target="_self">
-                {{sensortype.name }}
-              </a>
-            </dd>
-            <dt>ID Sensor</dt>
-            <dd>
-                {{sensortype.id }}
+              {{arduino.project }}
             </dd>
 
-            <dt>Descripción</dt>
+            <dt>Ubicación</dt>
             <dd>
-                {{sensortype.description }}
+                {{arduino.location }}
             </dd>
 
-            <dt>Prefijo del Sensor</dt>
+            <dt>ID Sistema</dt>
             <dd>
-                {{sensortype.prefix }}
+                {{arduino.id }}
             </dd>
 
-            <dt>Modelo del Sensor</dt>
+            <dt>Nombre del Sistema</dt>
             <dd>
-                {{sensortype.model }}
+              {{arduino.name }}
             </dd>
 
-            <dt>Tipo de dato a enviar</dt>
+
+            <dt>Sensores</dt>
             <dd>
-                {{sensortype.get_data_type_display }}
+                {{arduino.sensors.count }}
             </dd>
 
-            <dt>Archivo técnico</dt>
-            <dd> {{sensortype.data_sheet }} </dd>
+            <dt> Sensores Disponibles </dt>
+            <dd>
+                {{arduino.available_sensors }}
+            </dd>
 
-            <dt>Foto del Sensor</dt>
-            <dd> {{sensortype.data_image }} </dd>
+            <dt>Fecha de Creación</dt>
+            <dd>
+                {{arduino.created_at }}
+            </dd>
+
+            <dt>Fecha de Actualización</dt>
+            <dd>
+                {{arduino.updated_at }}
+            </dd>
 
           </dl>
         </div><!-- /.box-body -->
       </div><!-- /.box -->
     </div>
   </div><!-- /.row -->
+
+
+
+  <!-- /. lista de PROYECTOS ASIGNADOS -->
+    <div class="row">
+      <div class="col-xs-12 ">
+        <div class="box box-solid">
+          <div class="box-header with-border">
+            <i class="fa fa-adjust"></i>
+            <h3 class="box-title">Lista de Sensores asignados al Sistema:
+              {{client.enterprise }} </h3>
+          </div><!-- /.box-header -->
+          <div class="box-body">
+            <table id="table_sensors" class="table table-bordered table-striped">
+              <thead>
+                <tr>
+                  <th>ID Sensor</th>
+                  <th>Nombre del Sensor</th>
+                  <th>Tipo de Sensor</th>
+                  <th>Tipo de Dato</th>
+                  <th>Valor Maximo</th>
+                  <th>Valor Minimo</th>
+                  <th>Accion</th>
+                </tr>
+              </thead>
+              <tbody>
+
+                {% for sensor in arduino.sensors.all %}
+                <tr>
+                  <td> {{sensor.id}} </td>
+                  <td> {{sensor.name}} </td>
+                  <td> {{sensor}} </td>
+                  <td> {{sensor.sensor_type.dataType}} </td>
+                  <td> {{sensor.max_value}} </td>
+                  <td> {{sensor.sensor_type.min_value}} </td>
+
+                  <td>
+                    <div class="btn-group">
+                      <a href="#" target="_self">
+                        <button  type="button" class="btn btn-success">Ver Grafica</button>
+                      </a>
+                    </div>
+                  </td>
+
+                </tr>
+                {% endfor %}
+
+              </tbody>
+                <tfoot>
+                  <tr>
+                    <th>ID Sensor</th>
+                    <th>Nombre del Sensor</th>
+                    <th>Tipo de Sensor</th>
+                    <th>Tipo de Dato</th>
+                    <th>Valor Maximo</th>
+                    <th>Valor Minimo</th>
+                    <th>Accion</th>
+                  </tr>
+                </tfoot>
+            </table>
+          </div><!-- /.box-body -->
+        </div><!-- /.box -->
+      </div>
+    </div>
+
+
+
 
   <div class="row">
     <div class="col-xs-12">
@@ -104,7 +176,7 @@
 <script type="application/javascript">
 
   $(function () {
-    $('#table_projects').DataTable({
+    $('#table_sensors').DataTable({
       "paging": true,
       "lengthChange": false,
       "searching": true,
