@@ -93,13 +93,13 @@
 
               <td>
                 <div class="btn-group">
-                  <a href="{% url '' %}arduino.id}}" target="_self">
+                  <a href="{% url 'adminArduinoDetail' pk=arduino.id %}" target="_self">
                     <button  type="button" class="btn btn-success">Ver</button>
                   </a>
                   <a href="{% url 'arduinoSensorsEdit' pk=arduino.id %}" target="_self">
                     <button  type="button" class="btn btn-info">Editar</button>
                   </a>
-                  <a href="/dash/admin/iot/delete/{{arduino.id}}" target="_self">
+                  <a href="{% url 'arduinoDelete' pk=arduino.id %}" target="_self">
                     <button type="button" class="btn btn-danger">Borrar</button>
                   </a>
                 </div>
