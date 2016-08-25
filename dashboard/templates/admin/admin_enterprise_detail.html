@@ -97,48 +97,28 @@
               </tr>
             </thead>
             <tbody>
-
+                {% for client in enterprise.clients.all %}
               <tr>
-                <td> 000000001 </td>
-                <td> dPeluChe </td>
-                <td>  2 </td>
+                <td> {{ client.id }} </td>
+                <td> {{ client.user.username }} </td>
+                <td>  {{ client.projects.count }} </td>
                 <td>
                   <div class="btn-group">
-                    <a href="/dash/admin/enterprises/detail/{{enterprise.id}}" target="_self">
+                    <a href="{% url 'enterprise-client:client-detail' pk=client.id %}" target="_self">
                       <button  type="button" class="btn btn-success">Ver</button>
                     </a>
-                    <a href="/dash/admin/enterprises/edit/{{enterprise.id}}" target="_self">
+                    <a href="{% url 'enterprise-client:client-update' pk=client.id %}" target="_self">
                       <button  type="button" class="btn btn-info">Editar</button>
                     </a>
-                    <a href="/dash/admin/enterprises/delete/{{enterprise.id}}" target="_self">
+                    <a href="{% url 'enterprise-client:client-delete' pk=client.id %}" target="_self">
                       <button type="button" class="btn btn-danger">Borrar</button>
                     </a>
                   </div>
                 </td>
               </tr>
+                {% endfor %}
 
-              {% for enterprise in enterprise_list %}
-              <tr>
-                <td> {{enterprise.id}} </td>
-                <td> {{enterprise.name}} </td>
-                <td> {{enterprise.created_at}} </td>
 
-                <td>
-                  <div class="btn-group">
-                    <a href="/dash/admin/clients/detail/{{enterprise.id}}" target="_self">
-                      <button  type="button" class="btn btn-success">Ver</button>
-                    </a>
-                    <a href="/dash/admin/clients/edit/{{enterprise.id}}" target="_self">
-                      <button  type="button" class="btn btn-info">Editar</button>
-                    </a>
-                    <a href="/dash/admin/clients/delete/{{enterprise.id}}" target="_self">
-                      <button type="button" class="btn btn-danger">Borrar</button>
-                    </a>
-                  </div>
-                </td>
-
-              </tr>
-              {% endfor %}
 
             </tbody>
               <tfoot>
@@ -150,9 +130,6 @@
                 </tr>
               </tfoot>
           </table>
-
-
-
         </div><!-- /.box-body -->
       </div><!-- /.box -->
     </div>
@@ -175,48 +152,27 @@
               </tr>
             </thead>
             <tbody>
-
+                {% for project in enterprise.projects.all %}
               <tr>
-                <td> 000000001 </td>
-                <td> REFRIS </td>
-                <td>  4 </td>
+                <td> {{ project.id }} </td>
+                <td> {{ project.name }} </td>
+                <td>  {{ project.arduinos.count }} </td>
                 <td>
                   <div class="btn-group">
-                    <a href="/dash/admin/project/detail/{{enterprise.id}}" target="_self">
+                    <a href="{% url 'adminArduinoDetail' pk=project.id %}" target="_self">
                       <button  type="button" class="btn btn-success">Ver</button>
                     </a>
-                    <a href="/dash/admin/project/edit/{{enterprise.id}}" target="_self">
+                    <a href="{% url 'arduinoSensorsEdit' pk=project.id %}" target="_self">
                       <button  type="button" class="btn btn-info">Editar</button>
                     </a>
-                    <a href="/dash/admin/project/delete/{{enterprise.id}}" target="_self">
+                    <a href="{% url 'arduinoDelete' pk=project.id %}" target="_self">
                       <button type="button" class="btn btn-danger">Borrar</button>
                     </a>
                   </div>
                 </td>
               </tr>
+                {% endfor %}
 
-              {% for enterprise in enterprise_list %}
-              <tr>
-                <td> {{enterprise.id}} </td>
-                <td> {{enterprise.name}} </td>
-                <td> {{enterprise.created_at}} </td>
-
-                <td>
-                  <div class="btn-group">
-                    <a href="/dash/admin/clients/detail/{{enterprise.id}}" target="_self">
-                      <button  type="button" class="btn btn-success">Ver</button>
-                    </a>
-                    <a href="/dash/admin/clients/edit/{{enterprise.id}}" target="_self">
-                      <button  type="button" class="btn btn-info">Editar</button>
-                    </a>
-                    <a href="/dash/admin/clients/delete/{{enterprise.id}}" target="_self">
-                      <button type="button" class="btn btn-danger">Borrar</button>
-                    </a>
-                  </div>
-                </td>
-
-              </tr>
-              {% endfor %}
 
             </tbody>
               <tfoot>

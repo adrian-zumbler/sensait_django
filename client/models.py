@@ -96,7 +96,7 @@ class Client(models.Model):
 
 
 class Project(models.Model):
-    enterprise = models.ForeignKey(Enterprise)
+    enterprise = models.ForeignKey(Enterprise, related_name='projects')
     clients = models.ManyToManyField(Client, related_name='projects', blank=True) # ForeignKey(Client, related_name='projects', blank=True, null=True)
     name = models.CharField(max_length=255)
 
