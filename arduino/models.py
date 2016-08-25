@@ -76,12 +76,23 @@ class SensorType(models.Model):
 
 
 class Arduino(models.Model):
+
+    ESTATUS_CHOICES = (
+        (1, 'Diseño'),
+        (2, 'Construcción'),
+        (3, 'Implementación'),
+        (4, 'Mantenimiento/Pruebas'),
+        (5, 'Producción'),
+        (6, 'Fallo de Sistema')
+    )
+
     project = models.ForeignKey(ProjectC, related_name="arduinos")
     name = models.CharField(max_length=255)
     arduino_token = models.CharField(max_length=20, unique=True)
     location = models.CharField(max_length=255)
     sensors = models.ManyToManyField(SensorType, through='ArduinoSensor')
     available_sensors = models.SmallIntegerField(default=1)
+    estatus = models.PositiveSmallIntegerField(verbose_name='Estatus', choices=ESTATUS_CHOICES, default=1)
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

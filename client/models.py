@@ -20,6 +20,14 @@ def client_files_name(instance, filename):
 
 class Enterprise(models.Model):
 
+    ESTATUS_CHOICES = (
+        (1, 'Contacto'),
+        (2, 'Contrato Firmado'),
+        (3, 'Revisión de Contrato'),
+        (4, 'Pago Pendiente'),
+        (5, 'Fin de Relación')
+    )
+
     name = models.CharField(verbose_name='Nombre', max_length=55)
     direction = models.CharField(
         verbose_name='Dirección',
@@ -42,6 +50,7 @@ class Enterprise(models.Model):
         blank=True,
         null=True
     )
+    estatus = models.PositiveSmallIntegerField(verbose_name='Estatus', choices=ESTATUS_CHOICES, default=1)
 
     def __unicode__(self):
         return self.name
@@ -96,9 +105,22 @@ class Client(models.Model):
 
 
 class Project(models.Model):
+
+    ESTATUS_CHOICES = (
+        (1, 'Levantamiento'),
+        (2, 'Diseño'),
+        (3, 'Retroalimentación de cliente'),
+        (4, 'Implementación'),
+        (5, 'Mantenimiento'),
+        (6, 'DEMO'),
+        (7, 'Activo'),
+        (8, 'Alerta')
+    )
+
     enterprise = models.ForeignKey(Enterprise, related_name='projects')
     clients = models.ManyToManyField(Client, related_name='projects', blank=True) # ForeignKey(Client, related_name='projects', blank=True, null=True)
     name = models.CharField(max_length=255)
+    estatus = models.PositiveSmallIntegerField(verbose_name='Estatus', choices=ESTATUS_CHOICES, default=1)
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
