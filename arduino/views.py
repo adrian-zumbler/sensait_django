@@ -154,8 +154,11 @@ class DataViewSet(mixins.CreateModelMixin,
             broadcast=True)
         sensors = request.arduino.arduino_sensors.all()
         ret = []
-        body = request.body
-        request_data = parse_qs(request.body)
+        try:
+            request_data = request.data
+        except Exception as exc:
+            print(exc)
+            request_data = parse_qs(request.body)
         for k in request_data:
             a_sensor = sensors.filter(data_key=k)
             data = {'arduino_sensor': a_sensor, 'data': request_data[k][0]}
