@@ -112,7 +112,7 @@ class Arduino(models.Model):
 class ArduinoSensor(models.Model):
     arduino = models.ForeignKey(
         Arduino,
-        # related_name='arduino_sensors',
+        related_name='arduino_sensors',
         # to_field='arduino_token',
         on_delete=models.CASCADE
     )
