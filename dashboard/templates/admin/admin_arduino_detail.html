@@ -9,7 +9,7 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-        ADMIN - ARDUINO -  DETALLE -  {{arduino.name }}
+        ADMIN - SISTEMA -  DETALLE -  {{arduino.name }}
         <small>DETALLE DEL SISTEMA </small>
 
       </h1>
@@ -35,6 +35,11 @@
         </div><!-- /.box-header -->
         <div class="box-body">
           <dl class="dl-horizontal">
+
+            <dt>key del Sistema</dt>
+            <dd>
+              <b>{{arduino.arduino_token }} </b>
+            </dd>
 
             <dt>Proyecto del Sistema</dt>
             <dd>
@@ -75,6 +80,11 @@
             <dt>Fecha de Actualización</dt>
             <dd>
                 {{arduino.updated_at }}
+            </dd>
+
+            <dt>ESTATUS</dt>
+            <dd>
+                <b>{{arduino.get_estatus_display }}</b>
             </dd>
 
           </dl>
