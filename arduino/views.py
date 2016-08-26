@@ -148,7 +148,10 @@ class DataViewSet(mixins.CreateModelMixin,
         return request
 
     def create(self, request, *args, **kwargs):
-        redis_publisher = RedisPublisher(facility='foobar', broadcast=True)
+
+        redis_publisher = RedisPublisher(
+            facility=request.aduino.arduino_token,
+            broadcast=True)
         sensors = request.arduino.arduino_sensors.all()
         ret = []
         body = request.body
