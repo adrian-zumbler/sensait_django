@@ -41,8 +41,7 @@ class ArduinoDetailView(DetailView):
         user = self.request.user
         queryset = Arduino.objects.none()
         if hasattr(user, 'client'):
-            client = self.request.user.client
-            queryset = Arduino.objects.filter(project__clients__contains=client)
+            queryset = Arduino.objects.filter(project__clients__user=user)
         elif user.is_staf:
             queryset = Arduino.objects.all()
 
@@ -53,17 +52,22 @@ class ArduinoSensorDetailView(DetailView):
     template_name = 'client/user_selected_sensor.html'
 
     def get_queryset(self):
-        queryset = ArduinoSensor.objects.filter(arduino__project__user=self.request.user)
+        queryset = ArduinoSensor.objects.filter(arduino__project__clients__user=self.request.user)
         return queryset
 
 
 class DashMainListView(ListView):
     template_name = 'client/user_dashboard.html'
-    queryset = Project.objects.all()
 
     def get_queryset(self):
-        # TODO: Filtrar por clientes permitios
-        queryset = Project.objects.all()  # filter(user=self.request.user)
+        user = self.request.user
+        queryset = Project.objects.none()
+        if hasattr(user, 'client'):
+            client = user.client
+            queryset = client.projects.all()
+        elif user.is_staf:
+            queryset = Project.objects.all()
+
         return queryset
 
 
