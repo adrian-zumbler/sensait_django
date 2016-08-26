@@ -55,6 +55,7 @@ urlpatterns = [
     url(r'^', include('ticket.urls', namespace='ticket')),
     url(r'^dash/', include('client.urls', namespace='enterprise-client')),
 
+    url(r'^logout/$', 'django.contrib.auth.views.logout', {'next_page': '/logins/'}, name="logout"),
     url(r'^logins/$', login_user),
     url(r'^error/$', TemplateView.as_view(template_name='system/errors/error.html')),
 

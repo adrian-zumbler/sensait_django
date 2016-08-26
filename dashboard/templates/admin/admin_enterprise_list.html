@@ -51,9 +51,9 @@
                   <td> {{enterprise.created_at}} </td>
 
                   {% if  enterprise.id|isEven == 0%}
-                    <td> <span class="label label-danger">Pendiente Success</span> </td>
+                    <td> <span class="label label-danger">{{enterprise.get_estatus_display }}</span> </td>
                   {% else %}
-                    <td> <span class="label label-success">Estatus Correcto</span> </td>
+                    <td> <span class="label label-success">{{enterprise.get_estatus_display }}</span> </td>
                   {% endif %}
 
                   <td>

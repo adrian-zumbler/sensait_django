@@ -347,10 +347,18 @@
           </ul>
         </li>
 
+
+
+
+
       {% else %}
 
         <li class="header">CLIENTES</li>
         <li><a href="{% url 'projects' %}"><i class="fa fa-laptop"></i> <span>Proyectos</span></a></li>
+
+        <li class="header">Sesion</li>
+        <li><a href="{% url 'logout' %}"><i class="fa fa-laptop"></i> <span>Cerrar Sesión</span></a></li>
+
       {% endif %}
     </ul>
   </section>
