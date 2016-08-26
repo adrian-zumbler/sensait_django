@@ -85,11 +85,11 @@
               </tr>
             </thead>
             <tbody>
-
+                {% for project in client.projects.all %}
               <tr>
-                <td> 000000001 </td>
-                <td> dPeluChe </td>
-                <td>  2 </td>
+                <td> {{ project.id }} </td>
+                <td> {{ project.name }} </td>
+                <td> {{ project.arduinos.count }} </td>
                 <td>
                   <div class="btn-group">
                     <a href="/dash/admin/enterprises/detail/{{enterprise.id}}" target="_self">
@@ -102,29 +102,7 @@
                   </div>
                 </td>
               </tr>
-
-              {% for enterprise in enterprise_list %}
-              <tr>
-                <td> {{enterprise.id}} </td>
-                <td> {{enterprise.name}} </td>
-                <td> {{enterprise.created_at}} </td>
-
-                <td>
-                  <div class="btn-group">
-                    <a href="/dash/admin/clients/detail/{{enterprise.id}}" target="_self">
-                      <button  type="button" class="btn btn-success">Ver</button>
-                    </a>
-                    <a href="/dash/admin/clients/edit/{{enterprise.id}}" target="_self">
-                      <button  type="button" class="btn btn-info">Editar</button>
-                    </a>
-                    <a href="/dash/admin/clients/delete/{{enterprise.id}}" target="_self">
-                      <button type="button" class="btn btn-danger">Borrar</button>
-                    </a>
-                  </div>
-                </td>
-
-              </tr>
-              {% endfor %}
+                {% endfor %}
 
             </tbody>
               <tfoot>

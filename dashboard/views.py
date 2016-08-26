@@ -31,7 +31,14 @@ class ArduinoDetailView(DetailView):
     template_name = 'client/user_iots.html'
 
     def get_queryset(self):
-        queryset = Arduino.objects.filter(project__user=self.request.user)
+        user = self.request.user
+        queryset = Arduino.objects.none()
+        if hasattr(user, 'client'):
+            client = self.request.user.client
+            queryset = Arduino.objects.filter(project__clients__contains=client)
+        elif user.is_staf:
+            queryset = Arduino.objects.all()
+
         return queryset
 
 
