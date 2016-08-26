@@ -204,9 +204,10 @@
 
 
   <script type="application/javascript">
+  var g ;
  var canUseSocket = false;
   var ws4redis = WS4Redis({
-    uri: 'ws://192.168.1.89:8000/ws/{{arduinosensor.arduino.arduino_token}}?subscribe-broadcast&publish-broadcast&echo',
+    uri: 'ws://dashboard:8000/ws/{{arduinosensor.arduino.arduino_token}}?subscribe-broadcast&publish-broadcast&echo',
     connecting: on_connecting,
     connected: on_connected,
     receive_message: receiveMessage,
@@ -255,12 +256,38 @@
           sensor_date_chart.push(d_time);
           var lastPosition = _sensors_data.length;
 
+          $('#totalRegistros').html(lastPosition);
+
           _sensors_data.push(jso[i]);
           console.log(_sensors_data);
           console.log(lastPosition);
            //_sensors_data[lastPosition]['data'] = jso[i]['data'];
 
           dygraphs_data.push([d, _sensors_data[lastPosition]['data'], "10", "50"]);
+
+          console.log("______");
+          console.log(g);
+          console.log("______");
+
+          g.destroy();
+
+          g = new Dygraph(document.getElementById("graphdiv"), dygraphs_data, {
+            drawPoints: true,
+            showRoller: true,
+            valueRange: [
+              0, 150
+            ],
+            height: 400,
+            //width: 100%,
+            highlightSeriesBackgroundAlpha: 0.8,
+            fillGraph: true,
+            includeZero: true,
+            strokeWidth: 3,
+            //showRangeSelector: true,
+            labels: ['Tiempo', 'Temperatura', 'Min', 'Max']
+          });
+
+
         }else{
           console.log("ño");
         }
@@ -405,7 +432,7 @@
       drawPoints: true,
       showRoller: true,
       valueRange: [
-        0, 300
+        0, 100
       ],
       height: 400,
       //width: 100%,
