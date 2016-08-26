@@ -18,7 +18,14 @@ class ProjectsListView(ListView):
     queryset = Project.objects.all()
 
     def get_queryset(self):
-        queryset = Project.objects.all()  # .filter(user=self.request.user)
+        user = self.request.user
+        queryset = Project.objects.none()
+        if hasattr(user, 'client'):
+            client = user.client
+            queryset = client.projects.all()
+        elif user.is_staf:
+            queryset = Project.objects.all()
+        # queryset = Project.objects.all()  # .filter(user=self.request.user)
         return queryset
 
 
