@@ -72,7 +72,7 @@ class DashMainListView(ListView):
         if hasattr(user, 'client'):
             client = user.client
             queryset = client.projects.all()
-        elif user.is_staf:
+        elif user.is_staff:
             queryset = Project.objects.all()
 
         return queryset
@@ -193,5 +193,3 @@ class AdminArduinoWithSensorsUpdateView(UpdateView):
         qs = Arduino.objects.all()
 
         return qs
-
-

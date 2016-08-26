@@ -204,10 +204,47 @@
 
 
   <script type="application/javascript">
+
+  var ws4redis = WS4Redis({
+    uri: 'ws://192.168.1.89:8000/ws/foobar?subscribe-broadcast&publish-broadcast&echo',
+    connecting: on_connecting,
+    connected: on_connected,
+    receive_message: receiveMessage,
+    disconnected: on_disconnected,
+    heartbeat_msg: {{ WS4REDIS_HEARTBEAT }}
+  });
+
+  // attach this function to an event handler on your site
+  function sendMessage() {
+    ws4redis.send_message('A message');
+  }
+
+  function on_connecting() {
+    alert('Websocket is connecting...');
+  }
+
+  function on_connected() {
+    ws4redis.send_message('Hello');
+  }
+
+  function on_disconnected(evt) {
+    alert('Websocket was disconnected: ' + JSON.stringify(evt));
+  }
+
+  // receive a message though the websocket from the server
+  function receiveMessage(msg) {
+    var jso = JSON.parse(msg);
+    //console.log(jso);
+    console.log('Message from Websocket: ' + msg);
+
+  }
+
+
+
   var tableNameID = '#table_allData';
-  var tokenCode = 'Token 913ac3cc5ae3a881e238b1cd9fbfa70a75bc1237';
+  var tokenCode = 'Token 6b4f2e70ae0d435bf512897355947fe0a564972a';
   var allData;
-  var urlApi = 'http://192.168.1.66:8000/api/arduinos/{{ arduinosensor.arduino.id }}/sensors/{{ arduinosensor.id }}/data/';
+  var urlApi = 'http://192.168.1.89:8000/api/arduinos/{{ arduinosensor.arduino.id }}/sensors/{{ arduinosensor.id }}/data/';
 
   var _arduino;
   var _sensors;
@@ -317,7 +354,7 @@
       var d_time = completeTimeFormat(d.getHours(), d.getMinutes(), d.getSeconds());
       sensor_date_chart.push(d_time);
 
-      dygraphs_data.push([d, _sensors_data[i]['data'], "100", "250"]);
+      dygraphs_data.push([d, _sensors_data[i]['data'], "10", "50"]);
 
     }
 
