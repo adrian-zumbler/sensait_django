@@ -122,6 +122,9 @@
                     {%for arduino in project.arduinos.all %}
                     <tr>
                       <td>
+                        {% comment %}
+                          {% url 'sensorTypeDetail' pk=sensor.id %}
+                        {% endcomment %}
                         <a href="/dash/iot/{{ arduino.id}}">IoT00{{ arduino.id}}</a>
                       </td>
                       <td> {{ arduino.name }}</td>
@@ -132,7 +135,7 @@
                       </td>
                     </tr>
                     {% endfor %}
-                    
+
                   </tbody>
                 </table>
               </div>
