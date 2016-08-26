@@ -36,11 +36,13 @@
     <div class="login-box-body">
       <p class="login-box-msg">Inicia sesión</p>
 
-      {% if form.errors %}
-          {{ form.errors }} <!-- display the form errors if they exist -->
-      {% endif %}
+
 
       <form action="." method="post">
+        {% if form.errors %}
+          {{ form.errors }} <!-- display the form errors if they exist -->
+        {% endif %}
+
         {% csrf_token %}
         <div class="form-group has-feedback">
           <input type="text" class="form-control" id="username" name="username"  placeholder="Username">
