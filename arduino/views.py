@@ -19,6 +19,8 @@ from arduino.permissions import isArduinoPermission
 from arduino.models import Arduino, SensorType
 from .forms import SensorTypeForm
 
+from urlparse import parse_qs
+
 
 class ArduinoViewSet(mixins.CreateModelMixin,
                      mixins.ListModelMixin,
@@ -149,9 +151,11 @@ class DataViewSet(mixins.CreateModelMixin,
         redis_publisher = RedisPublisher(facility='foobar', broadcast=True)
         sensors = request.arduino.arduino_sensors.all()
         ret = []
-        for k in request.data:
+        body = request.body
+        request_data = parse_qs(request.body)
+        for k in request_data:
             a_sensor = sensors.filter(data_key=k)
-            data = {'arduino_sensor': a_sensor, 'data': request.data[k]}
+            data = {'arduino_sensor': a_sensor, 'data': request_data[k][0]}
             serializer = self.get_serializer(data=data)
             serializer.is_valid(raise_exception=True)
             self.perform_create(serializer)

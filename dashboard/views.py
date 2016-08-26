@@ -23,7 +23,7 @@ class ProjectsListView(ListView):
         if hasattr(user, 'client'):
             client = user.client
             queryset = client.projects.all()
-        elif user.is_staf:
+        elif user.is_staff:
             queryset = Project.objects.all()
         # queryset = Project.objects.all()  # .filter(user=self.request.user)
         return queryset
@@ -42,7 +42,7 @@ class ArduinoDetailView(DetailView):
         queryset = Arduino.objects.none()
         if hasattr(user, 'client'):
             queryset = Arduino.objects.filter(project__clients__user=user)
-        elif user.is_staf:
+        elif user.is_staff:
             queryset = Arduino.objects.all()
 
         return queryset
@@ -52,8 +52,15 @@ class ArduinoSensorDetailView(DetailView):
     template_name = 'client/user_selected_sensor.html'
 
     def get_queryset(self):
-        queryset = ArduinoSensor.objects.filter(arduino__project__clients__user=self.request.user)
+        user = self.request.user
+        queryset = ArduinoSensor.objects.none()
+        if hasattr(user, 'client'):
+            queryset = ArduinoSensor.objects.filter(arduino__project__clients__user=self.request.user)
+        elif user.is_staff:
+            queryset = ArduinoSensor.objects.all()
+
         return queryset
+
 
 
 class DashMainListView(ListView):
@@ -173,7 +180,7 @@ class AdminArduinoWithSensorsUpdateView(UpdateView):
         #     arduino=self.object
         # )  # self.object.sensors.all()
         ctx['sensor_formset'] = ArduinoSensorFormSet(
-            queryset=self.object.arduinosensor_set.all()
+            queryset=self.object.arduino_sensors.all()
         )
         return ctx
 
