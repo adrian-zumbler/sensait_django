@@ -50,6 +50,7 @@ def login_user(request):
 #       URLS
 # _____________________________________________#
 urlpatterns = [
+    url(r'^/$', TemplateView.as_view(template_name='landing/indexs.html'), name="landingPage"),
     url(r'^admin/', admin.site.urls),
     url(r'^', include('arduino.urls', namespace='arduino', app_name='arduino')),
     url(r'^', include('ticket.urls', namespace='ticket')),
@@ -64,9 +65,6 @@ urlpatterns = [
     url(r'^dash/projects/(?P<pk>\d+)/$', ProjectDetailView.as_view(), name="projectDetail"),
     url(r'^dash/iot/(?P<pk>\d+)/$', ArduinoDetailView.as_view(), name="arduinoDetail"),
     url(r'^dash/sensor/(?P<pk>\d+)/$', ArduinoSensorDetailView.as_view(), name="sensorDetail"),
-
-
-
 
     url(r'^dash/admin/clients/$', TemplateView.as_view(template_name='admin/admin_clients.html'), name="clientsList"),
 

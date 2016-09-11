@@ -1,0 +1,476 @@
+//############################################
+//      FUENTES - GOOGLE FONTS
+//############################################
+
+@import url('https://fonts.googleapis.com/css?family=Lato|Lato');
+@import url('https://fonts.googleapis.com/css?family=Roboto');
+
+
+//############################################
+//      VARIABLES -  MEDIA QUERYS
+//############################################
+
+$screen-xs-min: 1px;
+$screen-xs-max: 767px;
+
+$screen-sm-min: 768px;
+$screen-sm-max: 991px;
+
+$screen-md-min: 992px;
+$screen-md-max: 1199px;
+
+$screen-lg-min: 1200px;
+$screen-lg-max: 1400px;
+
+$screen-xl-min: 1401px;
+
+//############################################
+//      VARIABLES -  MIXINS
+//############################################
+
+@mixin size_xs {
+  @media (min-width: #{$screen-xs-min}) and (max-width: #{$screen-xs-max}) {
+    @content;
+  }
+}
+
+@mixin size_sm {
+  @media (min-width: #{$screen-sm-min}) and (max-width: #{$screen-sm-max}) {
+    @content;
+  }
+}
+
+@mixin size_md {
+  @media (min-width: #{$screen-md-min}) and (max-width: #{$screen-md-max}) {
+    @content;
+  }
+}
+
+
+@mixin size_lg {
+  @media (min-width: #{$screen-lg-min}) and (max-width: #{$screen-lg-max}) {
+    @content;
+  }
+}
+
+
+@mixin size_xl {
+  @media (min-width: #{$screen-xl-min}){
+    @content;
+  }
+}
+
+//############################################
+//      VARIABLES -  COLOR
+//############################################
+
+$color_white:  			#FFF;
+$color_black:  			#000;
+
+$color_green:  			#40b284;
+$color_yellow:  		#fdb836;
+$color_purple:  		#bf75d1;
+
+$color_gray_dark: 	#535A5B;
+$color_gray_dark_2: #353535;
+
+$color_gray_1: 	    #A0A0A0;
+
+
+$color_gray: 				#1D1E1E;
+$color_gray_2: 			#272B2C; //FOOTER
+$color_gray_3: 			#535a5b;
+$color_gray_4: 			#F4F4F4; //Fondo para el mouse over
+
+
+
+
+$color_orange:  		#D24E15;
+$color_banregio: 		#73243C;
+
+
+$color_black_2: 		#2A3F50;
+
+$color_dark_blue: 	#34495e;
+
+
+
+
+//############################################
+//      CSS CLASES - TEXTOS -  FONT SIZES
+//############################################
+
+.color_white{ color: $color_white;}
+.color_black{ color: $color_black;}
+.color_green{color: $color_green;}
+.color_yellow{color: $color_yellow;}
+.color_purple{color: $color_purple;}
+
+
+.txt_orange{ color: $color_orange;}
+.txt_red{ color: $color_banregio;}
+.txt_gray_1{ color: $color_gray_1;}
+.txt_gray_3{ color: $color_gray_3;}
+
+.bg_red{ background-color: $color_orange;}
+.bg_green{ background-color: $color_green;}
+.bg_banregio{ background-color: $color_banregio;}
+.bg_gray_4{ background-color: $color_gray_4;}
+
+.txt_bold{ font-weight: bold; }
+
+
+
+//############################################
+//      MAIN HTML TAGS
+//############################################
+
+body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,
+form,fieldset,input,textarea,p,span,blockquote,th,td {
+    padding: 0;
+    margin: 0;
+		font-family: 'Roboto', sans-serif;
+    color: $color_white;
+}
+
+q:before,q:after {
+    content:'';
+}
+abbr,acronym { border: 0;
+}
+
+p{
+	font-size: 2em;
+}
+
+a:hover{
+  text-decoration: none;
+}
+
+//############################################
+//      CLASES GENERALES
+//############################################
+
+.border{
+  border:1px solid red;
+}
+
+p.description{
+  font-size:14px;
+  color:$color_black;
+
+}
+
+.imgCenter{
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.section{
+	text-align: center;
+}
+
+.img-repeat-y{
+  width: 100%;
+}
+.product_description{
+  font-size:14px;
+}
+
+.top10px{
+  padding-top: 10px;
+}
+
+.products{
+  background-color: $color_gray_4;
+  padding:20px;
+  min-height: 425px;
+  @include size_xs {
+    min-height: 220px;
+  }
+}
+
+.products_title{
+  font-size: 42px;
+  @include size_xs {
+    font-size: 20px;
+  }
+  @include size_sm {
+    font-size: 30px;
+  }
+  @include size_md {
+    font-size: 40px;
+  }
+}
+
+.products_price{
+  font-size: 20px;
+  color:$color_gray_dark;
+}
+
+.products_description{
+  font-size: 12px;
+  text-align: justify;
+}
+
+
+
+.product_ideal_descrip{
+  font-size: 12px;
+  text-align: justify;
+}
+
+
+.verticalSeparator{
+  height: 100px;
+  width: 5px;
+  background-color: $color_white;
+  display:block;
+  position: relative;
+  border: 1px solid red;
+  margin: auto auto;
+}
+
+
+.animElements {
+   visibility: hidden;
+}
+
+//############################################
+//      CSS - IDS - ESPECIFICOS
+//############################################
+
+#masPopular{
+  color: $color_gray;
+  background-color: $color_yellow;
+  padding:8px;
+  text-align: center;
+}
+
+#line_basico{
+  height: 5px;
+  width: 100%;
+  background-color: $color_green;
+}
+
+#line_profesional{
+  height: 5px;
+  width: 100%;
+  background-color: $color_purple;
+}
+
+#line_ejecutivo{
+  height: 5px;
+  width: 100%;
+  background-color: $color_yellow;
+}
+
+//############################################
+//      BLOQUES - SECCIONES - PAGES - INICIO INDEX
+//############################################
+
+#section1{
+  background-image: url('../imgs/bloque_1_banner.png');
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: cover;
+
+
+  #btn_comienza{
+    font-weight: lighter;
+    background-color: $color_green;
+    border: 0px;
+    color:$color_white;
+  }
+
+  #img_scroll{
+    display: block;
+    position: relative;
+    bottom: -200px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+}
+
+
+#section2{
+
+  h1{
+    color: $color_gray_dark;
+  }
+  p{
+    font-weight: 100;
+    font-size: 14px;
+    color:$color_gray_1
+  }
+
+  #btn_conocelo{
+    font-weight: lighter;
+    background-color: $color_green;
+    border: 0px;
+    font-size: 20px;
+    color:$color_white;
+  }
+  #img_sec2{
+    position:relative;
+    bottom: -49px;
+  }
+}
+
+
+#section3{
+
+  h1{
+    color: $color_gray_dark;
+  }
+  p{
+    font-weight: 100;
+    font-size: 14px;
+    color:$color_gray_1
+  }
+
+  .solutions{
+    min-height: 150px;
+    padding: 13px;
+    span{
+      font-size: 18px;
+      color: $color_gray_dark;
+    }
+    p.description{
+      color: $color_gray_1;
+      font-size: 14px;
+      line-height: 22px;
+      font-weight: 100;
+    }
+  }
+
+  #btn_sabermas{
+    font-weight: lighter;
+    background-color: $color_green;
+    border: 0px;
+    font-size: 20px;
+    color:$color_white;
+  }
+}
+
+
+
+#section5{
+  h1{
+    color: $color_gray_dark;
+  }
+  p{
+    font-weight: 100;
+    font-size: 14px;
+    color:$color_gray_1
+  }
+
+  .product_ideal_title{
+    text-align: left;
+    width: 100%;
+    color:$color_gray_dark;
+    font-size: 14px;
+  }
+
+}
+
+
+
+#section6{
+  h1{
+    color: $color_gray_dark;
+  }
+  p{
+    font-weight: 100;
+    font-size: 14px;
+    color:$color_gray_1
+  }
+
+  .product_ideal_title{
+    text-align: left;
+    width: 100%;
+    color:$color_gray_dark;
+    font-size: 14px;
+  }
+
+  ul {
+    list-style-image: url('../imgs/7.png');
+    padding-left: 40px;
+  }
+  li{
+    color:$color_gray_1;
+    text-align: left;
+    font-size:18px;
+    line-height: 50px;
+
+    @include size_xs {
+      font-size:14px;
+      line-height: 20px;
+    }
+  }
+}
+
+#footer{
+
+  display: block;
+  position:relative;
+  background-color: $color_gray_2;
+  width: 100%;
+  height: 120px;
+  bottom: -10%;
+  padding-top: 10px;
+
+  p{
+    font-size: 12px;
+    color:$color_gray_3;
+  }
+
+  @include size_md {
+    bottom: -10%;
+  }
+  @include size_sm {
+    bottom: -17%;
+  }
+  @include size_xs {
+    display: none;
+  }
+}
+
+
+
+//############################################
+//      BLOQUES - PRODUCTOS
+//############################################
+
+#products_home{
+
+  .greenBlock{
+    @extend .bg_green;
+    @extend .color_white;
+    padding: 30px;
+  }
+}
+
+
+#products_1{
+  background-image: url("../imgs/productos/3-fondo.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+
+
+#products_2{
+  background-image: url("../imgs/productos/3-fondo.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+
+
+#products_3{
+  background-image: url("../imgs/productos/3-fondo.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+}
