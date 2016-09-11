@@ -50,7 +50,7 @@ def login_user(request):
 #       URLS
 # _____________________________________________#
 urlpatterns = [
-    url(r'^/$', TemplateView.as_view(template_name='landing/indexs.html'), name="landingPage"),
+    url(r'', TemplateView.as_view(template_name='landing/index.html'), name="landingPage"),
     url(r'^admin/', admin.site.urls),
     url(r'^', include('arduino.urls', namespace='arduino', app_name='arduino')),
     url(r'^', include('ticket.urls', namespace='ticket')),
