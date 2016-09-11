@@ -114,6 +114,25 @@ DATABASES = {
     }
 }
 
+if 'manto' in BASE_DIR:
+    WS4REDIS_CONNECTION = {
+        'host': '192.168.253.32',
+        'port': 6379,
+        'db': 0,
+        'password': None,
+    }
+
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': 'sensait',
+            'USER': 'sensait_user',
+            'PASSWORD': 'yG6$Pz2&',
+            'HOST': '192.168.253.32',
+            'PORT': '',
+        }
+    }
+
 
 # Password validation
 # https://docs.djangoproject.com/en/1.9/ref/settings/#auth-password-validators
@@ -163,5 +182,6 @@ STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
 
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')#'/home/jose/dev/corpbit/ardsensor/static'
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'static/')#'/home/jose/dev/corpbit/ardsensor/static'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'static/media')#'/home/jose/dev/corpbit/ardsensor/static/media'
