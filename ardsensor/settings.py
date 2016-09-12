@@ -75,6 +75,8 @@ WS4REDIS_EXPIRE = 7200
 
 WSGI_APPLICATION = 'ws4redis.django_runserver.application'
 
+#WSGI_APPLICATION = 'ardsensor.wsgi.application'
+
 WS4REDIS_ALLOWED_CHANNELS = 'arduino.channels.get_allowed_channels'
 
 SESSION_ENGINE = 'redis_sessions.session'
@@ -99,7 +101,7 @@ TEMPLATES = [
     },
 ]
 
-#WSGI_APPLICATION = 'ardsensor.wsgi.application'
+
 
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
@@ -113,6 +115,25 @@ DATABASES = {
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
+
+if 'manto' in BASE_DIR:
+    WS4REDIS_CONNECTION = {
+        'host': '192.168.253.32',
+        'port': 6379,
+        'db': 0,
+        'password': None,
+    }
+
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': 'sensait',
+            'USER': 'sensait_user',
+            'PASSWORD': 'yG6$Pz2&',
+            'HOST': '192.168.253.32',
+            'PORT': '',
+        }
+    }
 
 
 # Password validation
@@ -163,5 +184,6 @@ STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
 
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')#'/home/jose/dev/corpbit/ardsensor/static'
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'static/')#'/home/jose/dev/corpbit/ardsensor/static'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'static/media')#'/home/jose/dev/corpbit/ardsensor/static/media'
