@@ -1,449 +1,315 @@
-<html>
-  <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>Colecto</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" type="text/css">
-    <link href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-    <link rel="stylesheet" type="text/css" href="../../static/landing/css/base.css"  >
-    <link rel="stylesheet" type="text/css" href="../../static/landing/css/jquery.pagepiling.css">
-    <link rel="stylesheet" type="text/css" href="../../static/landing/css/animate.css">
-    <link rel="stylesheet" type="text/css" href="../../static/landing/css/colecto.css">
-    <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
-    <script type="text/javascript" src="http://netdna.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="../../static/landing/js/jquery.pagepiling.min.js"></script>
-    <script type="text/javascript" src="../../static/landing/js/wow.js"></script>
-    <script type="text/javascript" src="../../static/landing/js/banregio.js"></script>
+{% load staticfiles %}
 
-  </head>
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+    	<!--
+    	Boxer Template
+    	http://www.templatemo.com/tm-446-boxer
+    	-->
+		<meta charset="utf-8">
+		<title>SENSA IT -  ADU</title>
+		<meta http-equiv="X-UA-Compatible" content="IE=Edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="keywords" content="">
+		<meta name="description" content="">
+
+		<!-- animate css -->
+		<link rel="stylesheet" href="{% static 'landing/css/animate.min.css' %}">
+		<!-- bootstrap css -->
+		<link rel="stylesheet" href="{% static 'landing/css/bootstrap.min.css' %}">
+		<!-- font-awesome -->
+		<link rel="stylesheet" href="{% static 'landing/css/font-awesome.min.css' %}">
+		<!-- google font -->
+		<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,400italic,700,800' rel='stylesheet' type='text/css'>
+
+		<!-- custom css -->
+		<link rel="stylesheet" href=" {% static 'landing/css/templatemo-style.css' %} ">
+
+	</head>
 	<body>
+		<!-- start preloader -->
+		<div class="preloader">
+			<div class="sk-spinner sk-spinner-rotating-plane"></div>
+    	 </div>
+		<!-- end preloader -->
+		<!-- start navigation -->
+		<nav class="navbar navbar-default navbar-fixed-top templatemo-nav" role="navigation">
+			<div class="container">
+				<div class="navbar-header">
+					<button class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+						<span class="icon icon-bar"></span>
+						<span class="icon icon-bar"></span>
+						<span class="icon icon-bar"></span>
+					</button>
+					<a href="#" class="navbar-brand">SENSA IT</a>
+				</div>
+				<div class="collapse navbar-collapse">
+					<ul class="nav navbar-nav navbar-right text-uppercase">
+						<li><a href="#home">Home</a></li>
+						<li><a target="_self" href="#feature">Features</a></li>
+						<li><a href="#pricing" >Pricing</a></li>
+						<li><a href="./dash/main/" target="_blank">PANEL</a></li>
+						<li><a href="./logins/" target="_blank" >INICIAR SESIÓN</a></li>
+					</ul>
+				</div>
+			</div>
+		</nav>
+		<!-- end navigation -->
+		<!-- start home -->
+		<section id="home">
+			<div class="overlay">
+				<div class="container">
+					<div class="row">
+						<div class="col-md-1"></div>
+						<div class="col-md-10 wow fadeIn" data-wow-delay="0.3s">
+							<h1 class="text-upper">SENSA IT LANDING PAGE...</h1>
 
-    <div class="navbar navbar-default navbar-fixed-top navbar-inverse">
-      <div id="menu_main">
-        <div class="container">
-          <div class="navbar-header">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-ex-collapse">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            </button>
-            <img  class="top10px img-responsive imgCenter" src="../../static/landing/imgs/2-logotipo.png">
-          </div>
-          <div class="collapse navbar-collapse" id="navbar-ex-collapse">
-            <ul class="nav navbar-nav navbar-right">
-              <li class="active">
-                <a href="index.html">Inicio</a>
-            </li>
-              <li>
-                <a href="productos.html">Productos</a>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </div>
-        <div id="menu_slides">
-          <div class="container">
-              <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-ex-collapse">
-                  <span class="sr-only">Toggle navigation</span>
-                  <span class="icon-bar">holo 1</span>
-                  <span class="icon-bar">holo 2</span>
-                  <span class="icon-bar"></span>
-                </button>
-              </div>
-              <div class="collapse navbar-collapse" id="navbar-ex-collapse">
-                <ul class="nav navbar-nav navbar-left">
-                  <li class="active">
-                      <a href="#Home">Inicio</a>
-                  </li>
-                  <li class="active">
-                      <a href="#QueEs">¿Que es Colecto?</a>
-                  </li>
-                  <li>
-                      <a href="#Soluciones">Soluciones </a>
-                  </li>
-                  <li>
-                      <a href="#Ventajas">Ventajas </a>
-                  </li>
-                  <li>
-                      <a href="#Paquetes">Paquetes</a>
-                  </li>
-                  <li>
-                      <a href="#Adquierelo">Adquierelo</a>
-                  </li>
-                </ul>
-              </div>
-          </div>
-        </div>
-    </div>
+              <a href="logins/" target="_self" ><button type="button" class="btn btn-warning btn-lg">LOGIN </button></a>
 
-	  <div id="pagepiling">
+              <a href="dash/main/" target="_self" ><button type="button" class="btn btn-info btn-lg">PANEL SENSAIT </button></a>
+              <br/>
+              <br/>
 
-    <div class="section cover-image" id="section1">
-        <div class="cover">
-            <div class="container">
-                <div class="row">
-                    <div class="col-md-12 text-center">
+							<img src="{% static 'landing/imgs/software-img.png' %}   " class="img-responsive" alt="home img">
+						</div>
+						<div class="col-md-1"></div>
+					</div>
+				</div>
+			</div>
+		</section>
+		<!-- end home -->
 
-                        <h1 class="txt_white">La semilla de tu negocio</h1>
-                        <p class="txt_white">El punto de venta que te ayudará a crecer</p>
-                        <br/><br/>
-
-                        <a href="#Adquierelo" target="_self">
-                          <div id="btn_comienza" class="btn btn-lg btn-default animated slideInRight">Comienza ahora</div>
-                        </a>
-
-                        <br/><br/><br/>
-                        <a href="#QueEs" target="_self">
-                          <img id="img_scroll" src="../../static/landing/imgs/7-icon.png" class="">
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="section" id="section2">
-      <div class="container">
-          <div class="row ">
-              <div class="col-md-12 text-center">
-
-                <br/><br/><br/><br/>
-
-                  <h1 class="txt_gray_dark">¿Qué es Colecto?</h1>
-                  <br/>
-                  <p >
-                    Un punto de venta integral que incluye el sistema de administración <br/> y el equipo necesario para hacer crecer tu negocio.
-                  </p>
-                  <br/><br/>
-
-                  <a href="#Soluciones" target="_self">
-                    <div id="btn_conocelo" class="btn btn-lg btn-default animated slideInRight">Conócelo</div>
-                  </a>
-
-                  <br/><br/><br/>
-
-              </div>
-          </div>
-          <img id="img_sec2" src="../../static/landing/imgs/1.png" class="img-responsive">
-      </div>
-    </div>
-
-    <div class="section" id="section3">
-        <div class="container">
-          <br/><br/>
-            <div class="row">
-              <div class="col-sm-12 text-center">
-                <h1 class="txt_gray_dark">
-                  La solución inteligente para administrar tu negocio
-                </h1>
-                <br/>
-                <p >
-                  Un sistema de administración que te permite entender como se desempeña tu negocio e identificar áreas de oportunidad.
-                </p>
-              </div>
-            </div>
-            <br/><br/>
-            <div class="row ">
-                <div class="col-sm-4 text-left">
-                  <div id="solution_1" class="col-sm-12 text-left solutions" >
-                    <span>Control de inventario</span>
-                    <br/><br/>
-                    <p class="description">Nunca más te quedes sin producto,
-                      administra y lleva el control de tu inventario desde tu tableta o desde tu portal web.</p>
-                  </div>
-                </div>
-                <div class="col-sm-4 text-center">
-                  <div id="solution_3" class="col-sm-12 text-left solutions">
-                    <span>Cobro con tarjetas</span>
-                    <br/><br/>
-                    <p class="description">No pierdas clientes, con Colecto ahora también puedes aceptar tarjetas
-                        de crédito y debito.</p>
-                  </div>
-                </div>
-                <div class="col-sm-4 text-center">
-                  <div id="solution_2" class="col-sm-12 text-left solutions">
-                    <span>Reportes</span>
-                    <br/><br/>
-                    <p class="description">Conoce como se desempeña tu negocio, identifica tus productos más vendidos
-                        y tus clientes más frecuentes.</p>
-                  </div>
-                </div>
-              </div>
-              <div class="row ">
-                <a href="#Ventajas" target="_self">
-                  <div id="btn_sabermas" class="btn btn-lg btn-default animated slideInRight">Saber más</div>
-                </a>
-                <br/><br/>
-                <div class="col-sm-12  hidden-xs">
-                  <img id="solution_img" class=" img-responsive imgCenter" src="../../static/landing/imgs/solutions/solution_1.png">
-                </div>
-            </div>
-
-        </div>
-    </div>
-
-
-    <div class="section" id="section4">
-        <div class="container">
-            <div class="row">
-                <div class="col-sm-12 text-center">
-                  <br/><br/>
-                  <div class="visible-xs">
-                    <br/><br/><br/><br/>
-                  </div>
-                  <h2 class="txt_white">Atractivo y funcional</h2>
-                  <br/><br/><br/>
-                </div>
-            </div>
-            <div class="row">
-              <div class="col-sm-12 text-left  ">
-                <img id="solution_img" class="img-responsive imgCenter" src="../../static/landing/imgs/5.png">
-              </div>
-            </div>
-        </div>
-    </div>
-
-
-    <div class="section" id="section5">
-        <div class="container">
-            <div class="row">
-              <div class="col-sm-12 text-center">
-                <h1 class="txt_gray_dark">
-                  La solución inteligente para administrar tu negocio
-                </h1>
-                <br/>
-                <p >
-                  Un sistema de administración que te permite entender como se desempeña tu negocio e identificar áreas de oportunidad.
-                </p>
-              </div>
-            </div>
-            <div class="row hidden-xs">
-            <br/>
-            <br/>
-                <div class="col-sm-8 text-left">&nbsp;</div>
-                <div class="col-sm-4 text-left">
-                    <div id="masPopular">más popular</div>
-                </div>
-            </div>
-            <br/>
-
-            <div class="row">
-                <div class="col-sm-4 col-xs-6">
-                  <img class=" img-repeat-y img-responsive" src="../../static/landing/imgs/19-line.png">
-                <div class="products">
-                    <img class="hidden-xs img-responsive" src="../../static/landing/imgs/15-icon.png">
-                    <br/>
-
-                    <div class="row">
-                      <div class="col-md-6 col-xs-6">
-                          <span class="products_title text-left color_green">Básico</span>
-                      </div>
-                      <div class="col-md-6 col-xs-6">
-                          <br/>
-                          <span class="products_price  text-right">$350/m</span>
-                      </div>
-
-                      <div class="col-md-12 ">
-                        <br/>
-                        <p class="txt_white products_description">
-                          Pensado para aquellos emprendedores que van comenzando y buscan ofrecer más opciones de pago a sus clientes, también para los negocios enfocados a servicios o móviles.
-                        </p>
-
-                        <div class="hidden-xs">
-                        <br/><br/>
-
-                          <p class="product_ideal_title ">Ideal para:</p>
-                          <p class="product_ideal_descrip text-left">Spas, estéticas, crossfits, kioskos o foodtrucks</p>
-                          <br/><br/>
-                        </div>
-                      </div>
-
-                    </div>
-
-                    <a href="productos.html#Producto1">
-          					<div class="text-right">
-
-          						<span class="color_green"> Leer más</span>
-          						<img src="../../static/landing/imgs/19-icon.png">
-          					</div>
-            				</a>
-                  </div>
-                </div>
-
-                <div class="col-sm-4 col-xs-6">
-                    <img class="img-repeat-y img-responsive" src="../../static/landing/imgs/21-line.png">
-                    <div class="products">
-                        <img class="hidden-xs img-responsive" src="../../static/landing/imgs/16-icon.png">
-                        <br/>
-                        <div class="row">
-                          <div class="col-md-9 col-xs-6 ">
-                              <span class="products_title text-left color_purple">Profesional</span>
-                          </div>
-                          <div class="col-md-3 col-xs-6">
-                              <br/>
-                              <span class="products_price  text-right">$550/m</span>
-                          </div>
-                        </div>
-
-                        <div class="col-md-12 ">
-                          <br/>
-                          <p class="txt_white products_description">
-                            Perfecto para los negocios que venden en mostrador, mantén más seguro tu dinero con el cajón registrador y la impresora de tickets de venta.
-                          </p>
-
-                          <div class="hidden-xs">
-                          <br/><br/>
-                            <p class="product_ideal_title ">Ideal para:</p>
-                            <p class="product_ideal_descrip text-left">
-                              Cafeterías, heladerías, venta de postres o comida saludable, lavanderías o tintorerías.
-                            </p>
-                            <br/>
-                          </div>
-                        </div>
-
-
-                      <a href="productos.html#Producto2">
-              				<div class="text-right">
-                        <br/>
-              					<span class="color_purple"> Leer más</span>
-              					<img src="../../static/landing/imgs/18-icon.png">
-              				</div>
-              			</a>
-                  </div>
-                </div>
-
-
-                <div class="col-sm-4 col-xs-12 ">
-                    <img class=" img-repeat-y  img-responsive" src="../../static/landing/imgs/20-line.png">
-                    <div class="products">
-                        <img class="hidden-xs img-responsive" src="../../static/landing/imgs/17-icon.png">
-                        <br/>
-                        <div class="row">
-                            <div class="col-md-6 col-xs-6">
-                                <span class="products_title text-left color_yellow">Ejecutivo</span>
-                            </div>
-                            <div class="col-md-6 col-xs-6">
-                                <br/>
-                                <span class="products_price  text-right">$600/m</span>
-                            </div>
-                        </div>
-
-                        <div class="col-md-12 ">
-                          <br/>
-                          <p class="txt_white products_description">
-                            Para aquellos negocios con un poco más de inventario, agiliza el proceso de cobro con el lector de código de barras y lleva un mejor registro de tus ventas.
-                          </p>
-
-                          <div class="hidden-xs">
-                          <br/><br/>
-                            <p class="product_ideal_title ">Ideal para:</p>
-                            <p class="product_ideal_descrip text-left">
-                              Venta de ropa, accesorios o calzado, renta de vestidos.
-                            </p>
-                            <br/>
-                          </div>
-                        </div>
-                        <br/>
-                        <a href="productos.html#Producto3">
-                					<div class="text-right">
-                						<span class="color_yellow"> Leer más</span>
-                						<img src="../../static/landing/imgs/20-icon.png">
-                					</div>
-                				</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-
-    <div class="section" id="section6">
-      <div class="container">
-          <div class="row ">
-              <div class="col-md-12 text-center">
-
-                <br/><br/><br/><br/>
-
-                  <h1 class="txt_gray_dark">
-                    Adquiérelo ya, acude a tu sucursal BanRegio
-                  </h1>
-                  <br/>
-                  <p >
-                    Solo necesitas estar registrado como persona física con actividad empresarial o como persona moral,<br/> tener una cuenta con BanRegio o abrir una y contar con internet en tu negocio.
-
-                  </p>
-                  <br/><br/>
-              </div>
-              <div class=" col-md-5 col-sm-12 text-center">
-                <ul>
-                  <li>Identificación oficial vigente</li>
-                  <li>Comprobante de domicilio (no mayor a 3 meses)</li>
-                  <li>Alta de hacienda o cédula fiscal</li>
-                  <li>Acta constitutiva (para persona moral)</li>
-                  <li>Poder notarial del solicitante (para persona moral)</li>
-                  <li>Estados de cuenta bancarios (6 meses atrás)</li>
-                </ul>
-
-              </div>
-              <div class="col-md-7  text-center hidden-sm">
-                <img id="img_sec6" src="../../static/landing/imgs/6.png" class="img-responsive">
-              </div>
+    <!-- start divider -->
+		<section id="realTime">
+      <br/>
+			<div class="container">
+				<div class="row">
+          <div class="col-md-12 wow fadeInUp templatemo-box" data-wow-delay="0.3s">
+            <h2 class="text-center">REAL TIME... ;) BITCHES </h2>
+            <br/><br/><br/>
+            <div id="realTimeDemo"></div>
           </div>
 
-      </div>
+					<div class="col-md-4 wow fadeInUp templatemo-box" data-wow-delay="0.3s">
+            <h3>Sensor #1</h3>
+            <h2><div id="UltimoValor">22.05</div></h2>
+					</div>
 
-      <div id="footer">
-          <div class="row">
-              <div class="col-xs-4 ">
-                  <div class="row">
-                      <div class="col-sm-6 ">
-                        <br/>
-                        <p>
-                          Calle matamoros<br/>
-                          San Pedro Garza Garcia
-                        </p>
-                      </div>
-                      <div class="col-sm-6 ">
-                        <br/>
-                        <p>
-                          811 2345 678<br/>
-                          info@colecto.com
-                        </p>
-                      </div>
-                  </div>
-              </div>
-              <div class="col-xs-4 text-center">
-                <br/>
-                  <img class="img-responsive imgCenter" src="../../static/landing/imgs/8-icon.png" width="40" height="40">
+          <div class="col-md-4 wow fadeInUp templatemo-box" data-wow-delay="0.3s">
+            <h3>Sensor #3</h3>
+            <h2><div id="UltimoValor">22.05</div></h2>
 
-              </div>
-              <div class="col-xs-4 ">
-                  <div class="row">
-                      <div class="col-sm-6 ">
-                        <br/>
-                        <p>
-                          Aviso de privacidad<br/>
-                          Legal
-                        </p>
-                      </div>
-                      <div class="col-sm-6 ">
-                        <br/>
-                        <p>
-                          Facebook<br/>
-                          Twitter<br/>
-                          Instagram<br/>
-                        </p>
-                      </div>
-                  </div>
-              </div>
+					</div>
+
+          <div class="col-md-4 wow fadeInUp templatemo-box" data-wow-delay="0.3s">
+            <h3>Sensor #3</h3>
+            <h2><div id="UltimoValor">22.05</div></h2>
           </div>
-      </div>
-    </div>
 
-</div>
-        <!-- FIN DEL DIV DE SLIDES--->
+				</div>
+			</div>
+      <br/><br/><br/>
+		</section>
+		<!-- end divider -->
 
 
-</body></html>
+
+    <hr/>
+
+		<!-- start divider -->
+		<section id="divider">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-4 wow fadeInUp templatemo-box" data-wow-delay="0.3s">
+						<i class="fa fa-laptop"></i>
+						<h3 class="text-uppercase">RESPONSIVE LAYOUT</h3>
+						<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation. </p>
+					</div>
+					<div class="col-md-4 wow fadeInUp templatemo-box" data-wow-delay="0.3s">
+						<i class="fa fa-twitter"></i>
+						<h3 class="text-uppercase">BOOTSTRAP 3.3.4</h3>
+						<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation. </p>
+					</div>
+					<div class="col-md-4 wow fadeInUp templatemo-box" data-wow-delay="0.3s">
+						<i class="fa fa-font"></i>
+						<h3 class="text-uppercase">GOOGLE FONT</h3>
+						<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation. </p>
+					</div>
+				</div>
+			</div>
+		</section>
+		<!-- end divider -->
+
+		<!-- start feature -->
+		<section id="feature">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-6 wow fadeInLeft" data-wow-delay="0.6s">
+						<h2 class="text-uppercase">Our Software Features</h2>
+						<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+						<p><span><i class="fa fa-mobile"></i></span>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+						<p><i class="fa fa-code"></i>Quis autem velis reprehenderit et quis voluptate velit esse quam.</p>
+					</div>
+					<div class="col-md-6 wow fadeInRight" data-wow-delay="0.6s">
+						<img src="{% static 'landing/imgs/software-img.png' %} " class="img-responsive" alt="feature img">
+					</div>
+				</div>
+			</div>
+		</section>
+		<!-- end feature -->
+
+		<!-- start feature1 -->
+		<section id="feature1">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-6 wow fadeInUp" data-wow-delay="0.6s">
+						<img src="{% static 'landing/imgs/software-img.png' %} " class="img-responsive" alt="feature img">
+					</div>
+					<div class="col-md-6 wow fadeInUp" data-wow-delay="0.6s">
+						<h2 class="text-uppercase">More of Your Software</h2>
+						<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+						<p><span><i class="fa fa-mobile"></i></span>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+						<p><i class="fa fa-code"></i>Quis autem velis reprehenderit et quis voluptate velit esse quam.</p>
+					</div>
+				</div>
+			</div>
+		</section>
+		<!-- end feature1 -->
+
+		<!-- start pricing -->
+		<section id="pricing">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-12 wow bounceIn">
+						<h2 class="text-uppercase">Our Pricing</h2>
+					</div>
+					<div class="col-md-4 wow fadeIn" data-wow-delay="0.6s">
+						<div class="pricing text-uppercase">
+							<div class="pricing-title">
+								<h4>Basic Plan</h4>
+								<p>$11</p>
+								<small class="text-lowercase">monthly</small>
+							</div>
+							<ul>
+								<li>6 GB Space</li>
+								<li>600 GB Bandwidth</li>
+								<li>60 More Themes</li>
+								<li>Lifetime Support</li>
+							</ul>
+							<button class="btn btn-primary text-uppercase">Sign up</button>
+						</div>
+					</div>
+					<div class="col-md-4 wow fadeIn" data-wow-delay="0.6s">
+						<div class="pricing active text-uppercase">
+							<div class="pricing-title">
+								<h4>Business Plan</h4>
+								<p>$22</p>
+								<small class="text-lowercase">monthly</small>
+							</div>
+							<ul>
+								<li>15 GB space</li>
+								<li>1,500 GB Bandwidth</li>
+								<li>150 More Themes</li>
+								<li>Lifetime Support</li>
+							</ul>
+							<button class="btn btn-primary text-uppercase">Sign up</button>
+						</div>
+					</div>
+					<div class="col-md-4 wow fadeIn" data-wow-delay="0.6s">
+						<div class="pricing text-uppercase">
+							<div class="pricing-title">
+								<h4>Pro Plan</h4>
+								<p>$33</p>
+								<small class="text-lowercase">monthly</small>
+							</div>
+							<ul>
+								<li>35 GB space</li>
+								<li>3,500 GB bandwidth</li>
+								<li>350 more themes</li>
+								<li>Lifetime Support</li>
+							</ul>
+							<button class="btn btn-primary text-uppercase">Sign Up</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+		<!-- end pricing -->
+
+		<!-- start download -->
+		<section id="download">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-6 wow fadeInLeft" data-wow-delay="0.6s">
+						<h2 class="text-uppercase">Download Our Software</h2>
+						<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation. </p>
+						<button class="btn btn-primary text-uppercase"><i class="fa fa-download"></i> Download</button>
+					</div>
+					<div class="col-md-6 wow fadeInRight" data-wow-delay="0.6s">
+						<img src="{% static 'landing/imgs/software-img.png' %} " class="img-responsive" alt="feature img">
+					</div>
+				</div>
+			</div>
+		</section>
+		<!-- end download -->
+
+		<!-- start contact -->
+		<section id="contact">
+			<div class="overlay">
+				<div class="container">
+					<div class="row">
+						<div class="col-md-6 wow fadeInUp" data-wow-delay="0.6s">
+							<h2 class="text-uppercase">Contact Us</h2>
+							<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation. </p>
+							<address>
+								<p><i class="fa fa-map-marker"></i>36 Street Name, City Name, United States</p>
+								<p><i class="fa fa-phone"></i> 010-010-0110 or 020-020-0220</p>
+								<p><i class="fa fa-envelope-o"></i> info@company.com</p>
+							</address>
+						</div>
+						<div class="col-md-6 wow fadeInUp" data-wow-delay="0.6s">
+							<div class="contact-form">
+								<form action="#" method="post">
+									<div class="col-md-6">
+										<input type="text" class="form-control" placeholder="Name">
+									</div>
+									<div class="col-md-6">
+										<input type="email" class="form-control" placeholder="Email">
+									</div>
+									<div class="col-md-12">
+										<input type="text" class="form-control" placeholder="Subject">
+									</div>
+									<div class="col-md-12">
+										<textarea class="form-control" placeholder="Message" rows="4"></textarea>
+									</div>
+									<div class="col-md-8">
+										<input type="submit" class="form-control text-uppercase" value="Send">
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+		<!-- end contact -->
+
+		<!-- start footer -->
+		<footer>
+			<div class="container">
+				<div class="row">
+					<p>Copyright © 2084 Your Company Name</p>
+				</div>
+			</div>
+		</footer>
+		<!-- end footer -->
+
+		<script src="{% static 'landing/js/jquery.js' %}"></script>
+		<script src="{% static 'landing/js/bootstrap.min.js' %}"></script>
+		<script src="{% static 'landing/js/wow.min.js' %} "></script>
+		<script src="{% static 'landing/js/jquery.singlePageNav.min.js' %}"></script>
+		<script src="{% static 'landing/js/custom.js' %}"></script>
+    <script src="{% static 'landing/js/sensait.js' %}"></script>
+	</body>
+</html>

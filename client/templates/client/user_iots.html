@@ -1,29 +1,17 @@
 {% extends 'main_header.html' %}
 {% load staticfiles %}
 
+
+{% load arduino_tags %}
+
 {% block main_content_wrapper %}
-
-
-
-{% comment %}
-  {%for arduino in project.arduinos.all %}
-    <br/>
-    {{ arduino.name }} ----
-    {{ arduino.id}}
-    {%for sensor in arduino.arduino_sensors.all %}
-      <br/>
-      <h2>   {{sensor.arduino_sensor.name }} </h2>
-    {% endfor %}
-  {% endfor %}
-{% endcomment %}
-
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-        IoT - Dashboard - Selected IoT
-        <small>Control panel</small>
+        {{ arduino.name }}
+        <small>Sistema Seleccionado</small>
       </h1>
       <ol class="breadcrumb">
         <li>
@@ -42,16 +30,18 @@
               <div class="box box-solid">
                 <div class="box-header with-border">
                   <i class="fa fa-adjust"></i>
-                  <h3 class="box-title">Información del IoT</h3>
+                  <h3 class="box-title">Información del Sistema</h3>
                 </div><!-- /.box-header -->
                 <div class="box-body">
                   <dl class="dl-horizontal">
-                    <dt>Nombre del IoT </dt>
+                    <dt>Nombre  </dt>
                     <dd>{{ arduino.name }} </dd>
                     <dt>Ubicación</dt>
                     <dd>{{ arduino.location }} </dd>
                     <dt>ID del IoT </dt>
                     <dd> {{ arduino.id }} </dd>
+                    <dt>Versión</dt>
+                    <dd> V. 0.0{{ arduino.id }} </dd>
                   </dl>
                 </div><!-- /.box-body -->
               </div><!-- /.box -->
@@ -61,7 +51,7 @@
               <div class="box box-solid">
                 <div class="box-header with-border">
                   <i class="fa fa-adjust"></i>
-                  <h3 class="box-title">Información de los IoTs</h3>
+                  <h3 class="box-title">Información del Sistema</h3>
                 </div><!-- /.box-header -->
                 <div class="box-body">
                   <dl class="dl-horizontal">
@@ -89,7 +79,7 @@
           <div class="box box-info">
             <div class="box-header with-border">
               <h3 class="box-title">
-                Lista de Sensores del IoT - Selected
+                Lista de sensores
               </h3>
               <div class="box-tools pull-right">
                 <button class="btn btn-box-tool" data-widget="collapse">
@@ -103,7 +93,7 @@
             <!-- /.box-header -->
             <div class="box-body">
               <div class="table-responsive">
-                <table class="table no-margin">
+                <table id="table_sistemas" class="table table-bordered table-striped">
                   <thead>
                     <tr>
                       <th>Sensor ID</th>
@@ -112,18 +102,30 @@
                       <th>Ultimo Fecha</th>
                       <th>Ultimo Valor</th>
                       <th>Estatus </th>
+                      <th> </th>
                     </tr>
                   </thead>
                   <tbody>
 
                     {% for sensor in arduino.arduino_sensors.all %}
                       <tr>
-                        <td> <a href="/dash/sensor/{{sensor.id}}">SENSOR-{{sensor.index}}</a> </td>
-                        <td>{{ sensor.arduino_sensor.name }}</td>
+                        <td> <a href="/dash/sensor/{{sensor.id}}">SENSOR-00{{sensor.index}}</a> </td>
+                        <td>{{ sensor.sensor_type.name }}</td>
                         <td>{{ sensor.description }}</td>
                         <td>{{ sensor.sensor_data.last.created_at }}</td>
                         <td>{{ sensor.sensor_data.last.data }}</td>
-                        <td> <span class="badge bg-green">En rango</span> </td>
+                        {% if  arduino.id|isEven == 0%}
+                          <td> <span class="label label-danger">{{arduino.get_estatus_display }}</span> </td>
+                        {% else %}
+                          <td> <span class="label label-success">{{arduino.get_estatus_display }}</span> </td>
+                        {% endif %}
+                        <td>
+                          <div class="btn-group">
+                            <a href="/dash/sensor/{{sensor.id}}" target="_self">
+                              <button  type="button" class="btn btn-success">Grafica</button>
+                            </a>
+                          </div>
+                        </td>
                       </tr>
                     {% endfor %}
 
@@ -133,11 +135,6 @@
               <!-- /.table-responsive -->
             </div>
             <!-- /.box-body -->
-            <div class="box-footer clearfix">
-              <a href="javascript::;" class="btn btn-sm btn-default btn-flat pull-right">
-                Ver detalle del Proyecto
-              </a>
-            </div>
             <!-- /.box-footer -->
           </div>
           <!-- /.box -->
@@ -151,3 +148,26 @@
   <!-- /.content-wrapper -->
 
 {% endblock main_content_wrapper %}
+
+
+
+{% block content_js %}
+  <script src="{% static 'plugins/datatables/jquery.dataTables.min.js' %}"></script>
+  <script src="{% static 'plugins/datatables/dataTables.bootstrap.min.js' %}"></script>
+  <!-- page script -->
+<script type="application/javascript">
+
+  $(function () {
+    $('#table_sistemas').DataTable({
+      "paging": true,
+      "lengthChange": false,
+      "searching": false,
+      "ordering": true,
+      "info": false,
+      "autoWidth": false
+    });
+  });
+
+</script>
+
+{% endblock content_js %}

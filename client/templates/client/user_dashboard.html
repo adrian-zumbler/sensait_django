@@ -1,6 +1,8 @@
 {% extends 'main_header.html' %}
 {% load staticfiles %}
 
+{% load arduino_tags %}
+
 {% block main_content_wrapper %}
 
   <!-- Content Wrapper. Contains page content -->
@@ -31,7 +33,7 @@
           <div class="box box-info">
             <div class="box-header with-border">
               <h3 class="box-title">
-                PROYECTOS ACTUALES
+                PROYECTOS ACTIVOS
               </h3>
               <div class="box-tools pull-right">
                 <button class="btn btn-box-tool" data-widget="collapse">
@@ -53,6 +55,7 @@
                       <th>Nombre</th>
                       <th>No. de IoTs</th>
                       <th>Estatus</th>
+                      <th>Accion</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -60,17 +63,29 @@
                     {% for project in project_list %}
                     <tr id="proy_{{project.id}}" >
                       <td>
+                        PROY00{{project.id}}
+                      </td>
+                      <td>
                         {{project.name}}
                       </td>
-                      <td>{{project}}</td>
                       <td>{{project.arduinos.count}}</td>
                       <td>
-                        {% for arduino in project.arduinos.all %}
-                          {{ arduino.id }} ,
-                          {% for sensor in arduino.arduino_sensors.all %}
-                              {{ sensor.description }} ,
+                        <span class="label label-success">Correcto</span>
+                        {% comment %}
+                          {% for arduino in project.arduinos.all %}
+                            {{ arduino.id }} ,
+                            {% for sensor in arduino.arduino_sensors.all %}
+                                {{ sensor.description }} ,
+                            {% endfor %}
                           {% endfor %}
-                        {% endfor %}
+                        {% endcomment %}
+                      </td>
+                      <td>
+                        {%if forloop.counter0	== 0 %}
+                        <button  id="activar_{{project.id}}" type="button" class="btn btn-info">Activo</button>
+                        {% else %}
+                        <button  id="activar_{{project.id}}" type="button" class="btn btn-default">Seleccionar</button>
+                        {% endif%}
                       </td>
                     </tr>
                     {% endfor %}
@@ -89,82 +104,46 @@
         </div>
 
         <div class="col-md-4">
-          <!-- TABLE: LATEST ORDERS -->
-
-          <div class="row">
-
-            <div class="col-lg-6 col-xs-6">
-              <!-- small box -->
-              <div class="small-box bg-aqua">
-                <div class="inner">
-                  <h3>2</h3>
-                  <p>Proyectos</p>
-                </div>
-                <div class="icon">
-                  <i class="ion ion-bag"></i>
-                </div>
-                <a href="#" class="small-box-footer">More info
-                  <i class="fa fa-arrow-circle-right"></i>
-                </a>
+          <div class="box box-info">
+            <div class="box-header with-border">
+              <h3 class="box-title">
+                <b> {{project_list.first.name}}   </b>
+                 - Sistemas Activos
+              </h3>
+              <div class="box-tools pull-right">
+                <button class="btn btn-box-tool" data-widget="collapse">
+                  <i class="fa fa-minus"></i>
+                </button>
+                <button class="btn btn-box-tool" data-widget="remove">
+                  <i class="fa fa-times"></i>
+                </button>
               </div>
             </div>
+            <!-- /.box-header -->
 
-            <div class="col-lg-6 col-xs-6">
-              <div class="small-box bg-yellow">
-                <div class="inner">
-                  <h3>12</h3>
-                  <p>Sistemas Instalados</p>
+            <div class="box-body">
+              <div id ="my_sistemas" class="table">
+                <table id="table_sistemas"  class="table no-margin">
+                  <thead>
+                    <tr>
+                      <th>Nombre</th>
+                      <th>Accion</th>
+                    </tr>
+                  </thead>
+                  <tbody id="my_arduinos">
+
+                  </tbody>
+                  </table>
                 </div>
-                <div class="icon">
-                  <i class="ion ion-person-add"></i>
-                </div>
-                <a href="#" class="small-box-footer">More info
-                  <i class="fa fa-arrow-circle-right"></i>
-                </a>
-              </div>
+
+            <!-- /.box-body -->
+            <!-- /.box-footer -->
             </div>
-
-
-            <div class="col-lg-6 col-xs-6">
-              <div class="small-box bg-red">
-                <div class="inner">
-                  <h3>1</h3>
-                  <p>Alertas Enviadas</p>
-                </div>
-                <div class="icon">
-                  <i class="ion ion-pie-graph"></i>
-                </div>
-                <a href="#" class="small-box-footer">More info
-                  <i class="fa fa-arrow-circle-right"></i>
-                </a>
-              </div>
-            </div>
-
-            <div class="col-lg-6 col-xs-6">
-              <div class="small-box bg-green">
-                <div class="inner">
-                  <h3>98<sup style="font-size: 20px">%</sup>
-                  </h3>
-                  <p>Actividad del sistemna</p>
-                </div>
-                <div class="icon">
-                  <i class="ion ion-stats-bars"></i>
-                </div>
-                <a href="#" class="small-box-footer">More info
-                  <i class="fa fa-arrow-circle-right"></i>
-                </a>
-              </div>
-            </div>
-
-
-
-
           </div>
-
-          <!-- /.box -->
         </div>
 
-        <div class="col-md-8">
+
+        <div class="col-md-12">
           <!-- TABLE: LATEST ORDERS -->
           <div class="box box-info">
             <div class="box-header with-border">
@@ -176,8 +155,7 @@
               <div class="nav-tabs-custom">
               <ul class="nav nav-tabs">
 
-                {% for project in project_list %}
-                    {% for arduino in project.arduinos.all %}
+                    {% for arduino in project_list.first.arduinos.all %}
                       {% for sensor in arduino.arduino_sensors.all %}
 
                       {% if forloop.counter0 == 0 %}
@@ -192,13 +170,11 @@
 
                       {% endfor %}
                     {% endfor %}
-                {% endfor %}
               </ul>
 
               <div class="tab-content">
 
-                {% for project in project_list %}
-                    {% for arduino in project.arduinos.all %}
+                  {% for arduino in project_list.first.arduinos.all %}
                       {% for sensor in arduino.arduino_sensors.all %}
 
                       {% if forloop.counter0 == 0 %}
@@ -209,7 +185,6 @@
 
                       {% endfor %}
                     {% endfor %}
-                {% endfor %}
                 <!-- /.tab-pane -->
               </div>
               <!-- /.tab-content -->
@@ -218,33 +193,7 @@
           </div>
       </div>
 
-      <div class="col-md-4">
-        <div class="box box-info">
-          <div class="box-header with-border">
-            <h3 class="box-title">
-              ARDUINOS DEL PROYECTO SELECCIONADO
-            </h3>
-            <div class="box-tools pull-right">
-              <button class="btn btn-box-tool" data-widget="collapse">
-                <i class="fa fa-minus"></i>
-              </button>
-              <button class="btn btn-box-tool" data-widget="remove">
-                <i class="fa fa-times"></i>
-              </button>
-            </div>
-          </div>
-          <!-- /.box-header -->
 
-          <div class="box-body">
-            <div id="my_arduinos">
-              <div id="my_arduinos_data"></div>
-            </div>
-          </div>
-
-          <!-- /.box-body -->
-          <!-- /.box-footer -->
-        </div>
-      </div>
 
 
     </section>
@@ -271,13 +220,28 @@
     "info":true,
   });
 
+
+  $('#table_sistemas').DataTable({
+    "paging": true,
+    "lengthChange": false,
+    "searching": false,
+    "ordering": true,
+    "info":true,
+  });
+
+
+
+
   var tokenCode = 'Token 6b4f2e70ae0d435bf512897355947fe0a564972a';
   var allData;
-  var urlApiBase  = 'http://127.0.0.1:8000/api/';
+  var urlApiBase  = 'http://dashboard:8000/api/';
 
-  var projectsApi = 'projects/{{ project_list.first.arduinos.first.id }}/';
-  var arduinosApi = 'arduinos/{{ project_list.first.arduinos.first.id }}/';
-  var sensorsApi  = 'sensors/idsensor/data/';
+
+  var actualProject = ' ' ;
+  var actualArduino = ' ' ;
+  var projectsApi   = 'projects/{{ project_list.first.arduinos.first.id }}/';
+  var arduinosApi   = 'arduinos/';
+  var sensorsApi    = 'sensors/idsensor/data/';
 
   var _sensors_data;
   var g;  //variable para crear la grafica.
@@ -285,7 +249,10 @@
 
   $(document).ready(function(){
     //console.log("HOLO");
-    getArduinosFromAPI( {{ project_list.first.id }} );
+    actualProject = {{ project_list.first.id }} ;
+    actualArduino = {{ project_list.first.arduinos.first.id }};
+
+    getArduinosFromAPI( actualProject );
   });
 
   $("[id^=proy_]").click(function(){
@@ -298,10 +265,12 @@
   });
 
 
-  function getArduinosFromAPI(project_ID){
+  function getArduinosFromAPI(arduino_ID){
     //Peticion AJAX de los datos
+    //console.log(urlApiBase + arduinosApi + actualArduino + '/');
+
     $.ajax({
-      url: urlApiBase + arduinosApi ,
+      url: urlApiBase + arduinosApi + actualArduino + '/',
       type: 'GET',
       contentType: 'json/application',
       dataType: 'json',
@@ -313,7 +282,7 @@
         'Authorization': tokenCode
       },
       success: function(data) {
-        console.log('AJAX API SUCCESS - PROYECTO SELECCIONADO ' +  project_ID);
+        console.log('AJAX API SUCCESS - PROYECTO SELECCIONADO ' +  arduino_ID);
         //Se hara un return con el JSON obtenido en la API
         //console.log(data);
         dataArduinosCallBack(data);
@@ -326,24 +295,34 @@
 
 
   function dataArduinosCallBack( data ){
-    //console.log("Llego la información ARDUINO");
+    console.log("Llego la información ARDUINO");
     console.log(data);
+    console.log(actualArduino);
+    //actualArduino = data.id; //ID del arduino seleccionado
+
     $('#my_arduinos').html(" ");
-    $('#my_arduinos').append(data.id + '<br/>');
-    $('#my_arduinos').append(data.location + '<br/>');
-    $('#my_arduinos').append(data.name + '<br/>');
-    $('#my_arduinos').append('<hr/>');
+
+    var rowData = " ";
+    rowData += '<tr><td>' + data.name + '</td><td><button id="activar_ard_'+actualArduino+'" type="button" class="btn btn-info">Activo</button> </td></tr>';
+
+    $('#my_arduinos').html(rowData);
+
     for(var i=0 ; i < data.sensors.length; i++){
       //$('#my_arduinos').append(data.sensors[i] + '<br/>');
       //$('#my_arduinos').append('<div id=ard_'+data.id+ '_sens_'+ i + '></div>');
       //$('#my_arduinos').append('----------------------------<br/>' );
-      getSensorsFromAPI(data.sensors[i], data.id, i);
+
+
+      getSensorsFromAPI(data.sensors[i], actualArduino, i);
     }
   }
 
     function getSensorsFromAPI(sensor_ID, arduinoID, sensID){
+
       var passData_arduinoID  = arduinoID;
       var passData_sensID     = sensor_ID;
+
+      console.log(urlApiBase + arduinosApi+ actualArduino +'/'+'sensors/'+ sensor_ID + '/data/');
 
       //Peticion AJAX de los datos
       var allData;
@@ -360,9 +339,9 @@
           'Authorization': tokenCode
         },
         success: function(data) {
-          console.log('AJAX API SUCCESS! SENSORS');
+          //console.log('AJAX API SUCCESS! SENSORS');
           //Se hara un return con el JSON obtenido en la API
-          //console.log(data);
+          console.log(data);
           dataSensorsCallBack(data,passData_arduinoID,passData_sensID);
         },
         error: function() {
@@ -374,7 +353,7 @@
 
     function dataSensorsCallBack( data, arduinoID, sensID ){
       //$('#ard_'+arduinoID+'_sens_'+sensID).append('holo');
-
+      //console.log(data);
       var passData_arduinoID  = arduinoID;
       var passData_sensID     = sensID;
 

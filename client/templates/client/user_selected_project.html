@@ -1,6 +1,8 @@
 {% extends 'main_header.html' %}
 {% load staticfiles %}
 
+{% load arduino_tags %}
+
 {% block main_content_wrapper %}
 
   <!-- Content Wrapper. Contains page content -->
@@ -8,8 +10,8 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-        IoT - Dashboard - Selected Project
-        <small>Control panel</small>
+        {{ project.name}}
+        <small>Detalle del Proyecto</small>
       </h1>
       <ol class="breadcrumb">
         <li>
@@ -23,18 +25,6 @@
 
     <!-- Main content -->
     <section class="content">
-      {% comment %}
-        {%for arduino in project.arduinos.all %}
-          <br/>
-          {{ arduino.name }} ----
-          {{ arduino.id}}
-          {%for sensor in arduino.arduino_sensors.all %}
-            <br/>
-            <h2>   {{sensor.arduino_sensor.name }} </h2>
-          {% endfor %}
-        {% endfor %}
-      {% endcomment %}
-
 
     <div class="row">
 
@@ -72,8 +62,6 @@
             <dl class="dl-horizontal">
               <dt>Sistemas - Instalados</dt>
               <dd>  {{ project.arduinos.count}}  </dd>
-              <dt>Sensores - Instalados</dt>
-              <dd> 00 </dd>
               <dt>Configuración de Alertas</dt>
               <dd>
                 <a href="#">
@@ -93,7 +81,7 @@
           <div class="box box-info">
             <div class="box-header with-border">
               <h3 class="box-title">
-                Lista de IoTs en el Proyecto
+                Lista de Sistemas en el Proyecto
               </h3>
               <div class="box-tools pull-right">
                 <button class="btn btn-box-tool" data-widget="collapse">
@@ -110,11 +98,11 @@
                 <table class="table no-margin">
                   <thead>
                     <tr>
-                      <th>IoT ID</th>
-                      <th>IoT Nombre</th>
-                      <th>Ultimo Fecha</th>
-                      <th>Ultimo Valor</th>
+                      <th>ID Sistema</th>
+                      <th>Sistema Nombre</th>
+                      <th>Ultima Actualización</th>
                       <th>Estatus</th>
+                      <th> </th>
                     </tr>
                   </thead>
                   <tbody>
@@ -122,19 +110,25 @@
                     {%for arduino in project.arduinos.all %}
                     <tr>
                       <td>
-                        {% comment %}
-                          {% url 'sensorTypeDetail' pk=sensor.id %}
-                        {% endcomment %}
-                        <a href="/dash/iot/{{ arduino.id}}">IoT00{{ arduino.id}}</a>
+                        <a href="/dash/iot/{{ arduino.id}}">Sist-00{{ arduino.id}}</a>
                       </td>
                       <td> {{ arduino.name }}</td>
                       <td> {{ arduino.updated_at }}</td>
-                      <td>25.55</td>
+                      {% if  arduino.id|isEven == 0%}
+                        <td> <span class="label label-danger">{{arduino.get_estatus_display }}</span> </td>
+                      {% else %}
+                        <td> <span class="label label-success">{{arduino.get_estatus_display }}</span> </td>
+                      {% endif %}
                       <td>
-                        <span class="label label-success">En rango</span>
+                        <div class="btn-group">
+                          <a href="/dash/iot/{{arduino.id}}" target="_self">
+                            <button  type="button" class="btn btn-success">Ver</button>
+                          </a>
+                        </div>
                       </td>
                     </tr>
                     {% endfor %}
+
 
                   </tbody>
                 </table>

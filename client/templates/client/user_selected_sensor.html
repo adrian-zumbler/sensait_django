@@ -8,8 +8,8 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-        IoT - Dashboard - Selected IoT
-        <small>Control panel</small>
+        {{arduinosensor.arduino.name}} - {{ arduinosensor.sensor_type.name }} - {{ arduinosensor.data_key }}
+        <small>Sistema seleccionado</small>
       </h1>
       <ol class="breadcrumb">
         <li>
@@ -40,16 +40,20 @@
                     {{arduinosensor.arduino.project.name }}
                   </a>
                 </dd>
-                <dt>IoT</dt>
+                <dt>Sistema</dt>
                 <dd>
                   <a href="/dash/iot/{{arduinosensor.arduino.id }}" target="_self">
                     {{arduinosensor.arduino.name}}
                   </a>
                 </dd>
                 <dt>Tipo de Sensor</dt>
-                <dd>{{ arduinosensor.arduino_sensor.name }}</dd>
-                <dt># del Sensor en el IoT</dt>
-                <dd>{{ arduinosensor.arduino_sensor }}</dd>
+                <dd>{{ arduinosensor.sensor_type.name }}</dd>
+                <dt># del Sensor en el sistema</dt>
+                <dd>{{ arduinosensor.index }}</dd>
+                <dt>Valor Maximo</dt>
+                <dd>{{ arduinosensor.max_value }}</dd>
+                <dt>Valor Minimo</dt>
+                <dd>{{ arduinosensor.min_value }}</dd>
               </dl>
             </div><!-- /.box-body -->
           </div><!-- /.box -->
@@ -68,9 +72,6 @@
             <div class="icon">
               <i class="ion ion-stats-bars"></i>
             </div>
-            <a href="#" class="small-box-footer">More info
-              <i class="fa fa-arrow-circle-right"></i>
-            </a>
           </div>
         </div>
 
@@ -96,7 +97,7 @@
           <div class="box box-info">
             <div class="box-header with-border">
               <h3 class="box-title">
-                Graficas del Iot - Selected
+                Graficas del Sensor - Seleccionado
               </h3>
               <div class="box-tools pull-right">
                 <button class="btn btn-box-tool" data-widget="collapse">
@@ -170,7 +171,7 @@
               <dt>Registros con riesgo</dt>
               <dd id="totalConRiesgo">200</dd>
               <dt>Alertas Enviadas</dt>
-              <dd id="totalAlertas">2</dd>
+              <dd id="totalAlertas">0</dd>
               <dt>Promedio</dt>
               <dd id="totalPromedio">25,20</dd>
               <dt>Valor minimo</dt>
