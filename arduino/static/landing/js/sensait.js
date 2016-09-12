@@ -2,7 +2,8 @@
 
   var tokenCode     = 'Token d7e7f378cdc67dcd7cec11b76e017927c3e73bc3';
   var allData;
-  var urlApiBase    = 'http://dashboard:8000/api/arduinos/';
+  //var urlApiBase    = 'http://dashboard:8000/api/arduinos/';
+  var urlApiBase    = 'http://sensait.dyndns.org:8000/api/arduinos/';
   var actualArduino = 5;
 
 
