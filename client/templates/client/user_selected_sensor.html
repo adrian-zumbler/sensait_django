@@ -79,8 +79,8 @@
           <!-- small box -->
           <div class="small-box bg-aqua">
             <div class="inner">
-              <h3 id="widget_Promedio">25,62</h3>
-              <p>Promedio <span id="widget_TotalRegistros">(2,000)</span> registros</p>
+              <h3 id="widget_Promedio">0</h3>
+              <p>Promedio <span id="widget_TotalRegistros">(0)</span> registros</p>
             </div>
           </div>
         </div>
@@ -167,17 +167,17 @@
           <div class="box-body">
             <dl class="dl-horizontal">
               <dt>Registros taotales</dt>
-              <dd id="totalRegistros">1,459</dd>
+              <dd id="totalRegistros">0</dd>
               <dt>Registros con riesgo</dt>
-              <dd id="totalConRiesgo">200</dd>
+              <dd id="totalConRiesgo">0</dd>
               <dt>Alertas Enviadas</dt>
               <dd id="totalAlertas">0</dd>
               <dt>Promedio</dt>
-              <dd id="totalPromedio">25,20</dd>
+              <dd id="totalPromedio">0</dd>
               <dt>Valor minimo</dt>
-              <dd id="valorMinimo">21,55</dd>
+              <dd id="valorMinimo">0</dd>
               <dt>Valor maximo</dt>
-              <dd id="valorMaximo">31,78</dd>
+              <dd id="valorMaximo">0</dd>
             </dl>
           </div><!-- /.box-body -->
         </div><!-- /.box -->
@@ -306,7 +306,7 @@ function useWSData(data){
 
 
   var tableNameID = '#table_allData';
-  var tokenCode = 'Token 913ac3cc5ae3a881e238b1cd9fbfa70a75bc1237';
+  var tokenCode = 'Token d7e7f378cdc67dcd7cec11b76e017927c3e73bc3';
   var allData;
   var urlApi = 'http://dashboard:8000/api/arduinos/{{ arduinosensor.arduino.id }}/sensors/{{ arduinosensor.id }}/data/';
 
