@@ -5,7 +5,8 @@ from __future__ import unicode_literals
 from django.utils import timezone
 from django.db import models
 from django.contrib.auth.models import User
-from django.db.models.signals import post_delete
+from django.db.models.signals import post_delete, post_save
+from rest_framework.authtoken.models import Token
 from django.dispatch import receiver
 
 
@@ -133,3 +134,8 @@ class Project(models.Model):
 def post_delete_user(sender, instance, *args, **kwargs):
     if instance.user:  # just in case user is not specified
         instance.user.delete()
+
+@receiver(post_save, sender=User)
+def create_auth_token(sender, instance=None, created=False, **kwargs):
+    if created:
+        Token.objects.create(user=instance)
