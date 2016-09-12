@@ -75,6 +75,8 @@ WS4REDIS_EXPIRE = 7200
 
 WSGI_APPLICATION = 'ws4redis.django_runserver.application'
 
+#WSGI_APPLICATION = 'ardsensor.wsgi.application'
+
 WS4REDIS_ALLOWED_CHANNELS = 'arduino.channels.get_allowed_channels'
 
 SESSION_ENGINE = 'redis_sessions.session'
@@ -99,7 +101,7 @@ TEMPLATES = [
     },
 ]
 
-#WSGI_APPLICATION = 'ardsensor.wsgi.application'
+
 
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

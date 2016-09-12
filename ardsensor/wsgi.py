@@ -8,7 +8,7 @@ https://docs.djangoproject.com/en/1.9/howto/deployment/wsgi/
 """
 
 import os
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'myapp.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'ardsensor.settings')
 from django.conf import settings
 from django.core.wsgi import get_wsgi_application
 from ws4redis.uwsgi_runserver import uWSGIWebsocketServer
