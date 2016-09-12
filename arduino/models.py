@@ -105,7 +105,10 @@ class Arduino(models.Model):
     def save(self, force_insert=False, force_update=False, using=None,
              update_fields=None):
         if not self.id:
-            self.arduino_token = str(uuid.uuid4().hex)
+            token = str(uuid.uuid4().hex)
+            if len(token) > 20:
+                token = token[0:20]
+            self.arduino_token = token
         # self.objects.filter(arduino_id=self.arduino_id)
         super(Arduino, self).save(force_insert, force_update, using, update_fields)
 
