@@ -33,6 +33,7 @@ from django.contrib.auth import authenticate, login, logout
 from dashboard.views import *
 from arduino.views import *
 
+
 def login_user(request):
     logout(request)
     if request.POST:
