@@ -86,4 +86,7 @@ urlpatterns = [
     url(r'^dash/admin/iots/edit/(?P<pk>\d+)/$',
         AdminArduinoWithSensorsUpdateView.as_view(), name="arduinoSensorsEdit"),
     url(r'^dash/admin/iots/delete/(?P<pk>\d+)/$', AdminArduinoDeleteView.as_view(), name="arduinoDelete"),
-] + staticfiles_urlpatterns() + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+]
+if settings.DEBUG:
+    urlpatterns += staticfiles_urlpatterns()
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
