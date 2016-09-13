@@ -10,6 +10,7 @@
   $(document).ready(function() {
 
     getArduinosFromAPI(actualArduino);
+    console.log("Saludos Humanos desde MTY");
   });
 
 
