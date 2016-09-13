@@ -209,8 +209,7 @@
 
  var canUseSocket = false;
   var ws4redis = WS4Redis({
-    uri: 'ws://dashboard:8000/ws/{{arduinosensor.arduino.arduino_token}}?subscribe-broadcast&publish-broadcast&echo',
-    //'ws://sensait.dyndns.org/ws/{{arduinosensor.arduino.arduino_token}}?subscribe-broadcast&publish-broadcast&echo',
+    uri: 'ws://sensait.dyndns.org/ws/{{arduinosensor.arduino.arduino_token}}?subscribe-broadcast&publish-broadcast&echo',
     connecting: on_connecting,
     connected: on_connected,
     receive_message: receiveMessage,
@@ -310,10 +309,9 @@ function useWSData(data){
   var tableNameID = '#table_allData';
   var tokenCode = 'Token d7e7f378cdc67dcd7cec11b76e017927c3e73bc3';
   var allData;
+  var urlApi = 'http://sensait.dyndns.org/api/arduinos/{{ arduinosensor.arduino.id }}/sensors/{{ arduinosensor.id }}/data/';
 
-  //var urlApi = 'http://sensait.dyndns.org/api/arduinos/{{ arduinosensor.arduino.id }}/sensors/{{ arduinosensor.id }}/data/';
-
-  var urlApi = 'http://dashboard:8000/api/arduinos/{{ arduinosensor.arduino.id }}/sensors/{{ arduinosensor.id }}/data/';
+  //var urlApi = 'http://dashboard:8000/api/arduinos/{{ arduinosensor.arduino.id }}/sensors/{{ arduinosensor.id }}/data/';
 
   var _arduino;
   var _sensors;
