@@ -193,3 +193,5 @@ if 'manto' in BASE_DIR:
 
     DEBUG = False
 
+    ALLOWED_HOSTS = ['sensait.dyndns.org']
+
