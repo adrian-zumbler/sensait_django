@@ -166,7 +166,7 @@ MEDIA_URL = '/media/'
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'static/')  # '/home/jose/dev/corpbit/ardsensor/static'
 
-MEDIA_ROOT = os.path.join(BASE_DIR, 'static/media')  # '/home/jose/dev/corpbit/ardsensor/static/media'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'static/media/')  # '/home/jose/dev/corpbit/ardsensor/static/media'
 
 if 'manto' in BASE_DIR:
     WS4REDIS_CONNECTION = {
@@ -189,5 +189,7 @@ if 'manto' in BASE_DIR:
 
     STATIC_ROOT = os.path.join(BASE_DIR, '../static/')
 
-    MEDIA_ROOT = os.path.join(BASE_DIR, '../media')
+    MEDIA_ROOT = os.path.join(BASE_DIR, '../media/')
+
+    DEBUG = False
 
