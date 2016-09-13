@@ -2,16 +2,6 @@ from rest_framework import serializers
 from arduino.models import ArduinoSensor, Arduino, SensorType, SensorData
 
 
-class ArduinoSerializer(serializers.ModelSerializer):
-
-    arduino_token = serializers.CharField(read_only=True)
-
-    class Meta:
-        model = Arduino
-        fields = '__all__'
-        # exclude = ('arduino_token', )
-
-
 class SensorTypeSerializer(serializers.ModelSerializer):
     class Meta:
         model = SensorType
@@ -21,6 +11,16 @@ class SensorTypeSerializer(serializers.ModelSerializer):
 class ArduinoSensorSerializer(serializers.ModelSerializer):
     class Meta:
         model = ArduinoSensor
+        fields = '__all__'
+
+
+class ArduinoSerializer(serializers.ModelSerializer):
+
+    arduino_token = serializers.CharField(read_only=True)
+    sensors = ArduinoSensorSerializer(source='arduino_sensors', many=True)
+
+    class Meta:
+        model = Arduino
         fields = '__all__'
 
 
