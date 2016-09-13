@@ -97,7 +97,7 @@
           <div class="box box-info">
             <div class="box-header with-border">
               <h3 class="box-title">
-                Graficas del Sensor - Seleccionado
+                Grafica del Sensor - {{ arduinosensor.sensor_type.name }} - {{ arduinosensor.data_key }}
               </h3>
               <div class="box-tools pull-right">
                 <button class="btn btn-box-tool" data-widget="collapse">
@@ -206,7 +206,7 @@
 
   <script type="application/javascript">
   var g ;
-  //uri: 'ws://dashboard:8000/ws/{{arduinosensor.arduino.arduino_token}}?subscribe-broadcast&publish-broadcast&echo',
+
  var canUseSocket = false;
   var ws4redis = WS4Redis({
     uri: 'ws://sensait.dyndns.org/ws/{{arduinosensor.arduino.arduino_token}}?subscribe-broadcast&publish-broadcast&echo',
