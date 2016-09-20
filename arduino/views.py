@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import json
+from datetime import datetime
 from django.shortcuts import render
 from django.views.generic import ListView, CreateView, UpdateView, DetailView, DeleteView
 from django.core.urlresolvers import reverse_lazy
@@ -123,16 +124,20 @@ class SensorDataViewSet(mixins.ListModelMixin,
             # Ensure queryset is re-evaluated on each request.
             queryset = queryset.filter(arduino_sensor__pk=sensor_pk)
         min_time = self.request.query_params.get('min_time', None)
+
         max_time = self.request.query_params.get('max_time', None)
+
         last = self.request.query_params.get('last', None)
+
         if min_time is not None:
+            min_time = datetime.datetime.strptime(min_time, '%Y-%m-%d %H:%M:%S')
             queryset = queryset.filter(created_at__gt=min_time)
         if max_time is not None:
+            max_time = datetime.datetime.strptime(max_time, '%Y-%m-%d %H:%M:%S')
             queryset = queryset.filter(created_at__lt=max_time)
         if last is not None:
             queryset = queryset.reverse()[:last]
         return queryset
-
 
     def paginate_queryset(self, queryset):
         return super(SensorDataViewSet, self).paginate_queryset(queryset)
