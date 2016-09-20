@@ -130,10 +130,10 @@ class SensorDataViewSet(mixins.ListModelMixin,
         last = self.request.query_params.get('last', None)
 
         if min_time is not None:
-            min_time = datetime.datetime.strptime(min_time, '%Y-%m-%d %H:%M:%S')
+            min_time = datetime.strptime(min_time, '%Y-%m-%d %H:%M:%S')
             queryset = queryset.filter(created_at__gt=min_time)
         if max_time is not None:
-            max_time = datetime.datetime.strptime(max_time, '%Y-%m-%d %H:%M:%S')
+            max_time = datetime.strptime(max_time, '%Y-%m-%d %H:%M:%S')
             queryset = queryset.filter(created_at__lt=max_time)
         if last is not None:
             queryset = queryset.reverse()[:last]
