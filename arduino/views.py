@@ -129,6 +129,8 @@ class SensorDataViewSet(mixins.ListModelMixin,
             queryset = queryset.filter(created_at__gt=min_time)
         if max_time is not None:
             queryset = queryset.filter(created_at__lt=max_time)
+        if last is not None:
+            queryset = queryset.reverse()[:last]
         return queryset
 
 
