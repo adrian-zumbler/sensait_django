@@ -1,0 +1,297 @@
+dpkg: error while cleaning up:
+ unable to remove newly-extracted version of '/lib/modules/4.4.0-36-generic/kernel/sound/soc/codecs/snd-soc-tfa9879.ko': Read-only file system
+dpkg: error while cleaning up:
+ unable to remove newly-extracted version of '/lib/modules/4.4.0-36-generic/kernel/sound/soc/codecs/snd-soc-cs4271-i2c.ko': Read-only file system
+dpkg: error while cleaning up:
+ unable to remove newly-extracted version of '/lib/modules/4.4.0-36-generic/kernel/sound/soc/codecs/snd-soc-tpa6130a2.ko': Read-only file system
+dpkg: error while cleaning up:
+ unable to remove newly-extracted version of '/lib/modules/4.4.0-36-generic/kernel/sound/soc/codecs/snd-soc-rl6231.ko': Read-only file system
+dpkg: error while cleaning up:
+ unable to remove newly-extracted version of '/lib/modules/4.4.0-36-generic/kernel/sound/soc/codecs/snd-soc-alc5623.ko': Read-only file system
+dpkg: error while cleaning up:
+ unable to remove newly-extracted version of '/lib/modules/4.4.0-36-generic/kernel/sound/soc/codecs/snd-soc-sta350.ko': Read-only file system
+dpkg: error while cleaning up:
+ unable to remove newly-extracted version of '/lib/modules/4.4.0-36-generic/kernel/sound/soc/codecs/snd-soc-wm8776.ko': Read-only file system
+dpkg: error while cleaning up:
+ unable to remove newly-extracted version of '/lib/modules/4.4.0-36-generic/kernel/sound/soc/codecs/snd-soc-cs42xx8.ko': Read-only file system
+dpkg: error while cleaning up:
+ unable to remove newly-extracted version of '/lib/modules/4.4.0-36-generic/kernel/sound/soc/codecs/snd-soc-wm8978.ko': Read-only file system
+dpkg: error while cleaning up:
+ unable to remove newly-extracted version of '/lib/modules/4.4.0-36-generic/kernel/sound/soc/codecs/snd-soc-cs35l32.ko': Read-only file system
+dpkg: error while cleaning up:
+ unable to remove newly-extracted version of '/lib/modules/4.4.0-36-generic/kernel/sound/soc/codecs/snd-soc-gtm601.ko': Read-only file system
+dpkg: error while cleaning up:
+ unable to remove newly-extracted version of '/lib/modules/4.4.0-36-generic/kernel/sound/soc/codecs/snd-soc-ssm4567.ko': Read-only file system
+dpkg: error while cleaning up:
+ unable to remove newly-extracted version of '/lib/modules/4.4.0-36-generic/kernel/sound/soc/codecs/snd-soc-ssm2602-i2c.ko': Read-only file system
+dpkg: error while cleaning up:
+ unable to remove newly-extracted version of '/lib/modules/4.4.0-36-generic/kernel/sound/soc/codecs/snd-soc-wm8903.ko': Read-only file system
+dpkg: error while cleaning up:
+ unable to remove newly-extracted version of '/lib/modules/4.4.0-36-generic/kernel/sound/soc/codecs/snd-soc-cs42l51.ko': Read-only file system
+dpkg: error while cleaning up:
+ unable to remove newly-extracted version of '/lib/modules/4.4.0-36-generic/kernel/sound/soc/codecs/snd-soc-wm8741.ko': Read-only file system
+dpkg: error while cleaning up:
+ unable to remove newly-extracted version of '/lib/modules/4.4.0-36-generic/kernel/sound/soc/codecs/snd-soc-sta32x.ko': Read-only file system
+dpkg: error while cleaning up:
+ unable to remove newly-extracted version of '/lib/modules/4.4.0-36-generic/kernel/sound/soc/codecs/snd-soc-wm8750.ko': Read-only file system
+dpkg: error while cleaning up:
+ unable to remove newly-extracted version of '/lib/modules/4.4.0-36-generic/kernel/sound/soc/codecs/snd-soc-wm8962.ko': Read-only file system
+dpkg: error while cleaning up:
+ unable to remove newly-extracted version of '/lib/modules/4.4.0-36-generic/kernel/sound/soc/codecs/snd-soc-ts3a227e.ko': Read-only file system
+dpkg: error while cleaning up:
+ unable to remove newly-extracted version of '/lib/modules/4.4.0-36-generic/kernel/sound/soc/codecs/snd-soc-sgtl5000.ko': Read-only file system
+dpkg: error while cleaning up:
+ unable to remove newly-extracted version of '/lib/modules/4.4.0-36-generic/kernel/sound/soc/codecs/snd-soc-spdif-tx.ko': Read-only file system
+dpkg: error while cleaning up:
+ unable to remove newly-extracted version of '/lib/modules/4.4.0-36-generic/kernel/sound/soc/codecs/snd-soc-rt5631.ko': Read-only file system
+dpkg: error while cleaning up:
+ unable to remove newly-extracted version of '/lib/modules/4.4.0-36-generic/kernel/sound/soc/codecs/snd-soc-pcm1681.ko': Read-only file system
+dpkg: error while cleaning up:
+ unable to remove newly-extracted version of '/lib/modules/4.4.0-36-generic/kernel/sound/soc/codecs/snd-soc-cs42xx8-i2c.ko': Read-only file system
+dpkg: error while cleaning up:
+ unable to remove newly-extracted version of '/lib/modules/4.4.0-36-generic/kernel/sound/soc/codecs/snd-soc-tas5086.ko': Read-only file system
+dpkg: error while cleaning up:
+ unable to remove newly-extracted version of '/lib/modules/4.4.0-36-generic/kernel/sound/soc/codecs/snd-soc-wm8580.ko': Read-only file system
+dpkg: error while cleaning up:
+ unable to remove newly-extracted version of '/lib/modules/4.4.0-36-generic/kernel/sound/soc/codecs/snd-soc-cs4271.ko': Read-only file system
+dpkg: error while cleaning up:
+ unable to remove newly-extracted version of '/lib/modules/4.4.0-36-generic/kernel/sound/soc/codecs/snd-soc-si476x.ko': Read-only file system
+dpkg: error while cleaning up:
+ unable to remove newly-extracted version of '/lib/modules/4.4.0-36-generic/kernel/sound/soc/codecs/snd-soc-wm8753.ko': Read-only file system
+dpkg: error while cleaning up:
+ unable to remove newly-extracted version of '/lib/modules/4.4.0-36-generic/kernel/sound/soc/codecs/snd-soc-cs42l51-i2c.ko': Read-only file system
+dpkg: error while cleaning up:
+ unable to remove newly-extracted version of '/lib/modules/4.4.0-36-generic/kernel/sound/soc/codecs/snd-soc-ssm2602-spi.ko': Read-only file system
+dpkg: error while cleaning up:
+ unable to remove newly-extracted version of '/lib/modules/4.4.0-36-generic/kernel/sound/soc/codecs/snd-soc-tlv320aic23.ko': Read-only file system
+dpkg: error while cleaning up:
+ unable to remove newly-extracted version of '/lib/modules/4.4.0-36-generic/kernel/sound/soc/codecs/snd-soc-wm8804.ko': Read-only file system
+dpkg: error while cleaning up:
+ unable to remove newly-extracted version of '/lib/modules/4.4.0-36-generic/kernel/sound/soc/codecs/snd-soc-tas571x.ko': Read-only file system
+dpkg: error while cleaning up:
+ unable to remove newly-extracted version of '/lib/modules/4.4.0-36-generic/kernel/sound/soc/codecs/snd-soc-spdif-rx.ko': Read-only file system
+dpkg: error while cleaning up:
+ unable to remove newly-extracted version of '/lib/modules/4.4.0-36-generic/kernel/sound/soc/codecs/snd-soc-sigmadsp-i2c.ko': Read-only file system
+dpkg: error while cleaning up:
+ unable to remove newly-extracted version of '/lib/modules/4.4.0-36-generic/kernel/sound/soc/codecs/snd-soc-wm8804-i2c.ko': Read-only file system
+dpkg: error while cleaning up:
+ unable to remove newly-extracted version of '/lib/modules/4.4.0-36-generic/kernel/sound/soc/codecs/snd-soc-dmic.ko': Read-only file system
+dpkg: error while cleaning up:
+ unable to remove newly-extracted version of '/lib/modules/4.4.0-36-generic/kernel/sound/soc/codecs/snd-soc-pcm512x.ko': Read-only file system
+dpkg: error while cleaning up:
+ unable to remove newly-extracted version of '/lib/modules/4.4.0-36-generic/kernel/sound/soc/codecs/snd-soc-cs4265.ko': Read-only file system
+dpkg: error while cleaning up:
+ unable to remove newly-extracted version of '/lib/modules/4.4.0-36-generic/kernel/sound/soc/codecs/snd-soc-wm8731.ko': Read-only file system
+dpkg: error while cleaning up:
+ unable to remove newly-extracted version of '/lib/modules/4.4.0-36-generic/kernel/sound/soc/codecs/snd-soc-tlv320aic31xx.ko': Read-only file system
+dpkg: error while cleaning up:
+ unable to remove newly-extracted version of '/lib/modules/4.4.0-36-generic/kernel/sound/soc/codecs/snd-soc-sigmadsp.ko': Read-only file system
+dpkg: error while cleaning up:
+ unable to remove newly-extracted version of '/lib/modules/4.4.0-36-generic/kernel/sound/soc/codecs/snd-soc-wm8804-spi.ko': Read-only file system
+dpkg: error while cleaning up:
+ unable to remove newly-extracted version of '/lib/modules/4.4.0-36-generic/kernel/sound/soc/codecs/snd-soc-tlv320aic23-i2c.ko': Read-only file system
+dpkg: error while cleaning up:
+ unable to remove newly-extracted version of '/lib/modules/4.4.0-36-generic/kernel/sound/soc/codecs/snd-soc-wm8728.ko': Read-only file system
+dpkg: error while cleaning up:
+ unable to remove newly-extracted version of '/lib/modules/4.4.0-36-generic/kernel/sound/soc/codecs/snd-soc-pcm512x-spi.ko': Read-only file system
+dpkg: error while cleaning up:
+ unable to remove newly-extracted version of '/lib/modules/4.4.0-36-generic/kernel/sound/soc/codecs/snd-soc-cs42l52.ko': Read-only file system
+dpkg: error while cleaning up:
+ unable to remove newly-extracted version of '/lib/modules/4.4.0-36-generic/kernel/sound/soc/codecs/snd-soc-cs4270.ko': Read-only file system
+dpkg: error while cleaning up:
+ unable to remove newly-extracted version of '/lib/modules/4.4.0-36-generic/kernel/sound/soc/codecs/snd-soc-rt5670.ko': Read-only file system
+dpkg: error while cleaning up:
+ unable to remove newly-extracted version of '/lib/modules/4.4.0-36-generic/kernel/sound/soc/codecs/snd-soc-tlv320aic23-spi.ko': Read-only file system
+dpkg: error while cleaning up:
+ unable to remove newly-extracted version of '/lib/modules/4.4.0-36-generic/kernel/sound/soc/codecs/snd-soc-cs4271-spi.ko': Read-only file system
+dpkg: error while cleaning up:
+ unable to remove newly-extracted version of '/lib/modules/4.4.0-36-generic/kernel/sound/soc/codecs/snd-soc-wm8510.ko': Read-only file system
+dpkg: error while cleaning up:
+ unable to remove newly-extracted version of '/lib/modules/4.4.0-36-generic/kernel/sound/soc/codecs/snd-soc-cs4349.ko': Read-only file system
+dpkg: error while cleaning up:
+ unable to remove newly-extracted version of '/lib/modules/4.4.0-36-generic/kernel/sound/soc/codecs/snd-soc-wm8770.ko': Read-only file system
+dpkg: error while cleaning up:
+ unable to remove newly-extracted version of '/lib/modules/4.4.0-36-generic/kernel/sound/soc/codecs/snd-soc-rl6347a.ko': Read-only file system
+dpkg: error while cleaning up:
+ unable to remove newly-extracted version of '/lib/modules/4.4.0-36-generic/kernel/sound/soc/codecs/snd-soc-wm8523.ko': Read-only file system
+dpkg: error while cleaning up:
+ unable to remove newly-extracted version of '/lib/modules/4.4.0-36-generic/kernel/sound/soc/codecs/snd-soc-pcm512x-i2c.ko': Read-only file system
+dpkg: error while cleaning up:
+ unable to remove newly-extracted version of '/lib/modules/4.4.0-36-generic/kernel/sound/soc/codecs/snd-soc-ssm2602.ko': Read-only file system
+dpkg: error while cleaning up:
+ unable to remove newly-extracted version of '/lib/modules/4.4.0-36-generic/kernel/sound/soc/codecs/snd-soc-tlv320aic3x.ko': Read-only file system
+dpkg: error while cleaning up:
+ unable to remove newly-extracted version of '/lib/modules/4.4.0-36-generic/kernel/sound/soc/codecs/snd-soc-ak4104.ko': Read-only file system
+dpkg: error while cleaning up:
+ unable to remove newly-extracted version of '/lib/modules/4.4.0-36-generic/kernel/sound/soc/codecs/snd-soc-pcm1792a-codec.ko': Read-only file system
+dpkg: error while cleaning up:
+ unable to remove newly-extracted version of '/lib/modules/4.4.0-36-generic/kernel/sound/soc/codecs/snd-soc-rt5640.ko': Read-only file system
+dpkg: error while cleaning up:
+ unable to remove newly-extracted version of '/lib/modules/4.4.0-36-generic/kernel/sound/soc/codecs/snd-soc-ac97.ko': Read-only file system
+dpkg: error while cleaning up:
+ unable to remove newly-extracted version of '/lib/modules/4.4.0-36-generic/kernel/sound/soc/codecs/snd-soc-max98090.ko': Read-only file system
+dpkg: error while cleaning up:
+ unable to remove newly-extracted version of '/lib/modules/4.4.0-36-generic/kernel/sound/soc/codecs/snd-soc-es8328.ko': Read-only file system
+dpkg: error while cleaning up:
+ unable to remove newly-extracted version of '/lib/modules/4.4.0-36-generic/kernel/sound/soc/codecs/snd-soc-ak4554.ko': Read-only file system
+dpkg: error while cleaning up:
+ unable to remove newly-extracted version of '/lib/modules/4.4.0-36-generic/kernel/sound/soc/codecs/snd-soc-ak5386.ko': Read-only file system
+dpkg: error while cleaning up:
+ unable to remove newly-extracted version of '/lib/modules/4.4.0-36-generic/kernel/sound/soc/codecs/snd-soc-rt286.ko': Read-only file system
+dpkg: error while cleaning up:
+ unable to remove newly-extracted version of '/lib/modules/4.4.0-36-generic/kernel/sound/soc/codecs/snd-soc-wm8737.ko': Read-only file system
+dpkg: error while cleaning up:
+ unable to remove newly-extracted version of '/lib/modules/4.4.0-36-generic/kernel/sound/soc/codecs/snd-soc-ak4613.ko': Read-only file system
+dpkg: error while cleaning up:
+ unable to remove newly-extracted version of '/lib/modules/4.4.0-36-generic/kernel/sound/soc/codecs/snd-soc-cs42l73.ko': Read-only file system
+dpkg: error while cleaning up:
+ unable to remove newly-installed version of '/lib/modules/4.4.0-36-generic/kernel/sound/soc/codecs': Read-only file system
+dpkg: error while cleaning up:
+ unable to remove newly-extracted version of '/lib/modules/4.4.0-36-generic/kernel/sound/soc/fsl/snd-soc-fsl-spdif.ko': Read-only file system
+dpkg: error while cleaning up:
+ unable to remove newly-extracted version of '/lib/modules/4.4.0-36-generic/kernel/sound/soc/fsl/snd-soc-fsl-esai.ko': Read-only file system
+dpkg: error while cleaning up:
+ unable to remove newly-extracted version of '/lib/modules/4.4.0-36-generic/kernel/sound/soc/fsl/snd-soc-fsl-sai.ko': Read-only file system
+dpkg: error while cleaning up:
+ unable to remove newly-extracted version of '/lib/modules/4.4.0-36-generic/kernel/sound/soc/fsl/snd-soc-fsl-asrc.ko': Read-only file system
+dpkg: error while cleaning up:
+ unable to remove newly-extracted version of '/lib/modules/4.4.0-36-generic/kernel/sound/soc/fsl/snd-soc-imx-audmux.ko': Read-only file system
+dpkg: error while cleaning up:
+ unable to remove newly-extracted version of '/lib/modules/4.4.0-36-generic/kernel/sound/soc/fsl/snd-soc-fsl-ssi.ko': Read-only file system
+dpkg: error while cleaning up:
+ unable to remove newly-installed version of '/lib/modules/4.4.0-36-generic/kernel/sound/soc/fsl': Read-only file system
+dpkg: error while cleaning up:
+ unable to remove newly-extracted version of '/lib/modules/4.4.0-36-generic/kernel/sound/soc/dwc/designware_i2s.ko': Read-only file system
+dpkg: error while cleaning up:
+ unable to remove newly-installed version of '/lib/modules/4.4.0-36-generic/kernel/sound/soc/dwc': Read-only file system
+dpkg: error while cleaning up:
+ unable to remove newly-installed version of '/lib/modules/4.4.0-36-generic/kernel/sound/soc': Read-only file system
+dpkg: error while cleaning up:
+ unable to remove newly-extracted version of '/lib/modules/4.4.0-36-generic/kernel/sound/usb/6fire/snd-usb-6fire.ko': Read-only file system
+dpkg: error while cleaning up:
+ unable to remove newly-installed version of '/lib/modules/4.4.0-36-generic/kernel/sound/usb/6fire': Read-only file system
+dpkg: error while cleaning up:
+ unable to remove newly-extracted version of '/lib/modules/4.4.0-36-generic/kernel/sound/usb/misc/snd-ua101.ko': Read-only file system
+dpkg: error while cleaning up:
+ unable to remove newly-installed version of '/lib/modules/4.4.0-36-generic/kernel/sound/usb/misc': Read-only file system
+dpkg: error while cleaning up:
+ unable to remove newly-extracted version of '/lib/modules/4.4.0-36-generic/kernel/sound/usb/hiface/snd-usb-hiface.ko': Read-only file system
+dpkg: error while cleaning up:
+ unable to remove newly-installed version of '/lib/modules/4.4.0-36-generic/kernel/sound/usb/hiface': Read-only file system
+dpkg: error while cleaning up:
+ unable to remove newly-extracted version of '/lib/modules/4.4.0-36-generic/kernel/sound/usb/snd-usb-audio.ko': Read-only file system
+dpkg: error while cleaning up:
+ unable to remove newly-extracted version of '/lib/modules/4.4.0-36-generic/kernel/sound/usb/line6/snd-usb-podhd.ko': Read-only file system
+dpkg: error while cleaning up:
+ unable to remove newly-extracted version of '/lib/modules/4.4.0-36-generic/kernel/sound/usb/line6/snd-usb-toneport.ko': Read-only file system
+dpkg: error while cleaning up:
+ unable to remove newly-extracted version of '/lib/modules/4.4.0-36-generic/kernel/sound/usb/line6/snd-usb-pod.ko': Read-only file system
+dpkg: error while cleaning up:
+ unable to remove newly-extracted version of '/lib/modules/4.4.0-36-generic/kernel/sound/usb/line6/snd-usb-line6.ko': Read-only file system
+dpkg: error while cleaning up:
+ unable to remove newly-extracted version of '/lib/modules/4.4.0-36-generic/kernel/sound/usb/line6/snd-usb-variax.ko': Read-only file system
+dpkg: error while cleaning up:
+ unable to remove newly-installed version of '/lib/modules/4.4.0-36-generic/kernel/sound/usb/line6': Read-only file system
+dpkg: error while cleaning up:
+ unable to remove newly-extracted version of '/lib/modules/4.4.0-36-generic/kernel/sound/usb/usx2y/snd-usb-usx2y.ko': Read-only file system
+dpkg: error while cleaning up:
+ unable to remove newly-extracted version of '/lib/modules/4.4.0-36-generic/kernel/sound/usb/usx2y/snd-usb-us122l.ko': Read-only file system
+dpkg: error while cleaning up:
+ unable to remove newly-installed version of '/lib/modules/4.4.0-36-generic/kernel/sound/usb/usx2y': Read-only file system
+dpkg: error while cleaning up:
+ unable to remove newly-extracted version of '/lib/modules/4.4.0-36-generic/kernel/sound/usb/bcd2000/snd-bcd2000.ko': Read-only file system
+dpkg: error while cleaning up:
+ unable to remove newly-installed version of '/lib/modules/4.4.0-36-generic/kernel/sound/usb/bcd2000': Read-only file system
+dpkg: error while cleaning up:
+ unable to remove newly-extracted version of '/lib/modules/4.4.0-36-generic/kernel/sound/usb/snd-usbmidi-lib.ko': Read-only file system
+dpkg: error while cleaning up:
+ unable to remove newly-extracted version of '/lib/modules/4.4.0-36-generic/kernel/sound/usb/caiaq/snd-usb-caiaq.ko': Read-only file system
+dpkg: error while cleaning up:
+ unable to remove newly-installed version of '/lib/modules/4.4.0-36-generic/kernel/sound/usb/caiaq': Read-only file system
+dpkg: error while cleaning up:
+ unable to remove newly-installed version of '/lib/modules/4.4.0-36-generic/kernel/sound/usb': Read-only file system
+dpkg: error while cleaning up:
+ unable to remove newly-extracted version of '/lib/modules/4.4.0-36-generic/kernel/sound/hda/ext/snd-hda-ext-core.ko': Read-only file system
+dpkg: error while cleaning up:
+ unable to remove newly-installed version of '/lib/modules/4.4.0-36-generic/kernel/sound/hda/ext': Read-only file system
+dpkg: error while cleaning up:
+ unable to remove newly-extracted version of '/lib/modules/4.4.0-36-generic/kernel/sound/hda/snd-hda-core.ko': Read-only file system
+dpkg: error while cleaning up:
+ unable to remove newly-installed version of '/lib/modules/4.4.0-36-generic/kernel/sound/hda': Read-only file system
+dpkg: error while cleaning up:
+ unable to securely remove '/var/lib/dpkg/tmp.ci': Read-only file system
+dpkg: error while cleaning up:
+ unable to securely remove '/var/lib/dpkg/reassemble.deb': Read-only file system
+dpkg: error processing archive /var/cache/apt/archives/liblcms2-2_2.6-3ubuntu2_amd64.deb (--unpack):
+ error ensuring '/var/lib/dpkg/reassemble.deb' doesn't exist: Read-only file system
+dpkg: error processing archive /var/cache/apt/archives/libxrender1_1%3a0.9.9-0ubuntu1_amd64.deb (--unpack):
+ error ensuring '/var/lib/dpkg/reassemble.deb' doesn't exist: Read-only file system
+dpkg: error processing archive /var/cache/apt/archives/libxft2_2.3.2-1_amd64.deb (--unpack):
+ error ensuring '/var/lib/dpkg/reassemble.deb' doesn't exist: Read-only file system
+dpkg: error processing archive /var/cache/apt/archives/x11-common_1%3a7.7+13ubuntu3_all.deb (--unpack):
+ error ensuring '/var/lib/dpkg/reassemble.deb' doesn't exist: Read-only file system
+dpkg: error processing archive /var/cache/apt/archives/libxss1_1%3a1.2.2-1_amd64.deb (--unpack):
+ error ensuring '/var/lib/dpkg/reassemble.deb' doesn't exist: Read-only file system
+dpkg: error processing archive /var/cache/apt/archives/libtcl8.6_8.6.5+dfsg-2_amd64.deb (--unpack):
+ error ensuring '/var/lib/dpkg/reassemble.deb' doesn't exist: Read-only file system
+dpkg: error processing archive /var/cache/apt/archives/libtk8.6_8.6.5-1_amd64.deb (--unpack)No apport report written because MaxReports is reached already
+                   No apport report written because MaxReports is reached already
+                                                                                 No apport report written because MaxReports is reached already
+        No apport report written because MaxReports is reached already
+                                                                      No apport report written because MaxReports is reached already
+                                                                                                                                    No apport report written because MaxReports is reached already
+                                                           :
+ error ensuring '/var/lib/dpkg/reassemble.deb' doesn't exist: Read-only file system
+dpkg: error processing archive /var/cache/apt/archives/tk8.6-blt2.5_2.5.3+dfsg-3_amd64.deb (--unpack):
+ error ensuring '/var/lib/dpkg/reassemble.deb' doesn't exist: Read-only file system
+dpkg: error processing archive /var/cache/apt/archives/blt_2.5.3+dfsg-3_amd64.deb (--unpack):
+ error ensuring '/var/lib/dpkg/reassemble.deb' doesn't exist: Read-only file system
+dpkg: error processing archive /var/cache/apt/archives/fonts-lyx_2.1.4-2_all.deb (--unpack):
+ error ensuring '/var/lib/dpkg/reassemble.deb' doesn't exist: Read-only file system
+dpkg: error processing archive /var/cache/apt/archives/javascript-common_11_all.deb (--unpack):
+ error ensuring '/var/lib/dpkg/reassemble.deb' doesn't exist: Read-only file system
+No apport report written because MaxReports is reached already
+                                                              No apport report written because MaxReports is reached already
+                                                                                                                            No apport report written because MaxReports is reached already
+                                                   No apport report written because MaxReports is reached already
+                                                                                                                 No apport report written because MaxReports is reached already
+                                        No apport report written because MaxReports is reached already
+                                                                                                      dpkg: error processing archive /var/cache/apt/archives/libblas-common_3.6.0-2ubuntu2_amd64.deb (--unpack):
+ error ensuring '/var/lib/dpkg/reassemble.deb' doesn't exist: Read-only file system
+dpkg: error processing archive /var/cache/apt/archives/libblas3_3.6.0-2ubuntu2_amd64.deb (--unpack):
+ error ensuring '/var/lib/dpkg/reassemble.deb' doesn't exist: Read-only file system
+dpkg: error processing archive /var/cache/apt/archives/libgfortran3_5.4.0-6ubuntu1~16.04.2_amd64.deb (--unpack):
+ error ensuring '/var/lib/dpkg/reassemble.deb' doesn't exist: Read-only file system
+dpkg: error processing archive /var/cache/apt/archives/libjs-jquery_1.11.3+dfsg-4_all.deb (--unpack):
+ error ensuring '/var/lib/dpkg/reassemble.deb' doesn't exist: Read-only file system
+dpkg: error processing archive /var/cache/apt/archives/libjs-jquery-ui_1.10.1+dfsg-1_all.deb (--unpack):
+ error ensuring '/var/lib/dpkg/reassemble.deb' doesn't exist: Read-only file system
+dpkg: error processing archive /var/cache/apt/archives/liblapack3_No apport report written because MaxReports is reached already
+                                                                                                                                No apport report written because MaxReports is reached already
+                                                       No apport report written because MaxReports is reached already
+                                                                                                                     No apport report written because MaxReports is reached already
+                                            No apport report written because MaxReports is reached already
+                                                                                                          No apport report written because MaxReports is reached already
+                                 3.6.0-2ubuntu2_amd64.deb (--unpack):
+ error ensuring '/var/lib/dpkg/reassemble.deb' doesn't exist: Read-only file system
+dpkg: error processing archive /var/cache/apt/archives/libsensors4_1%3a3.4.0-2_amd64.deb (--unpack):
+ error ensuring '/var/lib/dpkg/reassemble.deb' doesn't exist: Read-only file system
+dpkg: error processing archive /var/cache/apt/archives/ttf-bitstream-vera_1.10-8_all.deb (--unpack):
+ error ensuring '/var/lib/dpkg/reassemble.deb' doesn't exist: Read-only file system
+dpkg: error processing archive /var/cache/apt/archives/python-matplotlib-data_1.5.1-1ubuntu1_all.deb (--unpack):
+ error ensuring '/var/lib/dpkg/reassemble.deb' doesn't exist: Read-only file system
+dpkg: error processing archive /var/cache/apt/archives/python-six_1.10.0-3_all.deb (--unpack):
+ error ensuring '/var/lib/dpkg/reassemble.deb' doesn't exist: Read-only file system
+dpkg: error processing archive /var/cache/apt/archives/python3-bottle_0.12.7-1_all.deb (--unpack):
+ error ensuring '/var/lib/dpkg/reassemble.deb' No apport report written because MaxReports is reached already
+                                                                                                             No apport report written because MaxReports is reached already
+                                    No apport report written because MaxReports is reached already
+                                                                                                  No apport report written because MaxReports is reached already
+                         No apport report written because MaxReports is reached already
+                                                                                       No apport report written because MaxReports is reached already
+              doesn't exist: Read-only file system
+dpkg: error processing archive /var/cache/apt/archives/python3-crypto_2.6.1-6build1_amd64.deb (--unpack):
+ error ensuring '/var/lib/dpkg/reassemble.deb' doesn't exist: Read-only file system
+dpkg: error processing archive /var/cache/apt/archives/python3-cycler_0.9.0-1_all.deb (--unpack):
+ error ensuring '/var/lib/dpkg/reassemble.deb' doesn't exist: Read-only file system
+dpkg-deb: error: subprocess paste was killed by signal (Broken pipe)
