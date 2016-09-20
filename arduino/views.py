@@ -123,8 +123,14 @@ class SensorDataViewSet(mixins.ListModelMixin,
             # Ensure queryset is re-evaluated on each request.
             queryset = queryset.filter(arduino_sensor__pk=sensor_pk)
         min_time = self.request.query_params.get('min_time', None)
+        max_time = self.request.query_params.get('max_time', None)
+        last = self.request.query_params.get('last', None)
         if min_time is not None:
             queryset = queryset.filter(created_at__gt=min_time)
+        if max_time is not None:
+            queryset = queryset.filter(created_at__lt=max_time)
+        if last is not None:
+            queryset = queryset.reverse()[:last]
         return queryset
 
 
