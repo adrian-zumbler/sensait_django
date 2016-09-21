@@ -207,9 +207,46 @@
   <script type="application/javascript">
   var g ;
 
+
+      // Validamos el entorno donde estamos trabajando
+      //Tambien tomamos la IP dinamica para ya no moverle :3
+      //##############################
+      var pageUrl = window.location.href;
+      pageUrl = pageUrl.split('//');
+      pageUrl[1] = pageUrl[1].split('.');
+
+
+      var urlApi;
+      var tokenCode ;
+      var userIP;
+
+      if(pageUrl[1][0] == 'sensait'){
+        urlApi = 'http://sensait.dyndns.org:8000/api/arduinos/{{ arduinosensor.arduino.id }}/sensors/{{ arduinosensor.id }}/data/'
+        tokenCode = 'Token d7e7f378cdc67dcd7cec11b76e017927c3e73bc3';
+      }
+      else{
+        var removePort = pageUrl[1][3];
+        removePort  = removePort.replace(":8000/dash/main/","")
+        userIP      = pageUrl[1][0]+'.'+pageUrl[1][1]+'.'+pageUrl[1][2]+'.'+removePort;
+
+        urlApi  = 'http://' + userIP +':8000/api/arduinos/{{ arduinosensor.arduino.id }}/sensors/{{ arduinosensor.id }}/data/';
+
+        if(userIP === "192.168.253.31")
+          tokenCode   = 'Token d7e7f378cdc67dcd7cec11b76e017927c3e73bc3';
+        else
+          tokenCode   = 'Token 6b4f2e70ae0d435bf512897355947fe0a564972a';
+
+      }
+
+        //var urlApi = 'http://dashboard:8000/api/arduinos/{{ arduinosensor.arduino.id }}/sensors/{{ arduinosensor.id }}/data/';
+      //##############################
+
+
+
  var canUseSocket = false;
   var ws4redis = WS4Redis({
-    uri: 'ws://sensait.dyndns.org/ws/{{arduinosensor.arduino.arduino_token}}?subscribe-broadcast&publish-broadcast&echo',
+    uri: 'ws://'+userIP+':8000/ws/{{arduinosensor.arduino.arduino_token}}?subscribe-broadcast&publish-broadcast&echo',
+    //'ws://sensait.dyndns.org/ws/{{arduinosensor.arduino.arduino_token}}?subscribe-broadcast&publish-broadcast&echo',
     connecting: on_connecting,
     connected: on_connected,
     receive_message: receiveMessage,
@@ -307,10 +344,8 @@ function useWSData(data){
 
 
   var tableNameID = '#table_allData';
-  var tokenCode = 'Token d7e7f378cdc67dcd7cec11b76e017927c3e73bc3';
   var allData;
-  var urlApi = 'http://sensait.dyndns.org/api/arduinos/{{ arduinosensor.arduino.id }}/sensors/{{ arduinosensor.id }}/data/';
-
+  //var urlApi = 'http://sensait.dyndns.org/api/arduinos/{{ arduinosensor.arduino.id }}/sensors/{{ arduinosensor.id }}/data/';
   //var urlApi = 'http://dashboard:8000/api/arduinos/{{ arduinosensor.arduino.id }}/sensors/{{ arduinosensor.id }}/data/';
 
   var _arduino;
