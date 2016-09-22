@@ -230,9 +230,6 @@
 
   <script type="application/javascript">
 
-
-
-
   // Validamos el entorno donde estamos trabajando
   //Tambien tomamos la IP dinamica para ya no moverle :3
   //##############################
@@ -633,17 +630,8 @@ function createDatePicker(sensID,min_date,max_date){
    maxDate: moment().add(1,'days'),
    startDate: moment(min_date,"YYYY-MM-DD"),
    endDate: moment(max_date,"YYYY-MM-DD")
-    /*
-    ranges: {
-      'Today': [moment(), moment()],
-      'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-      'Last 7 Days': [moment().subtract(6, 'days'), moment()],
-      'Last 30 Days': [moment().subtract(29, 'days'), moment()],
-      'This Month': [moment().startOf('month'), moment().endOf('month')],
-      'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
-    },*/
   },
-    function (start, end) {
+  function (start, end) {
       $('#daterange_'+sensID).html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
   });
 

@@ -109,15 +109,64 @@
               </div>
             </div>
             <!-- /.box-header -->
-            <div class="box-body"></div>
-            <!-- /.box-body -->
-            <div id="graphdiv"></div>
-            <div class="box-footer clearfix">
-              <a href="javascript::;" class="btn btn-sm btn-default btn-flat pull-right">
+            <div class="box-body">
+              <div class="row">
 
-              </a>
+                <div class="col-xs-4 ">
+                  <div id="filter_type" class="form-group">
+                    <label for="limit_selector" class=" col-xs-12 control-label">Tipo de Filtrado:</label>
+                    <div class="col-xs-8">
+                      <select class="form-control" id="type_selector">
+                        <option value="0">Seleccione una opcion</option>
+                        <option value="1">No. de Registros</option>
+                        <option value="2">Rango de Tiempo</option>
+                        <option value="3">Rango de Tiempo y No. de Registros</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-xs-4 ">
+                  <div id="filter_date" class="form-group">
+                    <label for="date_selector" class=" control-label">Seleccione fechas:</label>
+                    <div class="">
+                      <button type="button" class="btn btn-default pull-left" id="daterange"><span><i class="fa fa-calendar"></i> Selección de Fechas</span><i class="fa fa-caret-down"></i></button>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-xs-4 ">
+                  <div id="filter_limit" class="form-group">
+                    <label for="limit_selector" class=" col-xs-12 control-label">Ultimos Registros</label>
+                    <div class="col-xs-6">
+                      <select class="form-control" id="limit_selector">
+                        <option>1000</option>
+                        <option>750</option>
+                        <option>500</option>
+                        <option>400</option>
+                        <option>300</option>
+                        <option>250</option>
+                        <option>200</option>
+                        <option>100</option>
+                        <option>50</option>
+                        <option>Otra</option>
+                        <option>Todos</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-xs-12 ">
+                  <br/>
+                  La siguiente grafica corresponde a: <b><span id="filter_resume"></span></b>
+                  <br/><br/>
+                </div>
+                <br/><br/><br/><br/>
+              </div>
+
+              <div id="graphdiv"></div>
             </div>
-            <!-- /.box-footer -->
+            <!-- /.box-body -->
           </div>
           <!-- /.box -->
         </div>
@@ -205,10 +254,6 @@
 
 
   <script type="application/javascript">
-
-
-
-
     // Validamos el entorno donde estamos trabajando
     //Tambien tomamos la IP dinamica para ya no moverle :3
     //##############################
@@ -216,37 +261,37 @@
     pageUrl = pageUrl.split('//');
     pageUrl[1] = pageUrl[1].split('.');
 
-
     var urlApi;
     var tokenCode ;
     var userIP;
+    var userPort = "8000";
 
     if(pageUrl[1][0] == 'sensait'){
-      urlApi = 'http://sensait.dyndns.org:8000/api/arduinos/{{ arduinosensor.arduino.id }}/sensors/{{ arduinosensor.id }}/data/'
+      urlApi = 'http://sensait.dyndns.org:'+userPort+'/api/arduinos/{{ arduinosensor.arduino.id }}/sensors/{{ arduinosensor.id }}/data/'
       tokenCode = 'Token d7e7f378cdc67dcd7cec11b76e017927c3e73bc3';
     }
     else{
       var removePort = pageUrl[1][3];
-      removePort  = removePort.replace(":8000/dash/main/","")
-      userIP      = pageUrl[1][0]+'.'+pageUrl[1][1]+'.'+pageUrl[1][2]+'.'+removePort
-      urlApi  = 'http://' + userIP +':8000/api/arduinos/{{ arduinosensor.arduino.id }}/sensors/{{ arduinosensor.id }}/data/';
+      removePort  = removePort.split(":");
+      //removePort  = removePort.replace(":8000/dash/main/","")
+
+      userIP      = pageUrl[1][0]+'.'+pageUrl[1][1]+'.'+pageUrl[1][2]+'.'+removePort[0]
       tokenCode   = 'Token 6b4f2e70ae0d435bf512897355947fe0a564972a';
+
+      //Para cuando se accede desde la RED local el server
+      if( userIP == "192.168.253.31"){
+        tokenCode = 'Token d7e7f378cdc67dcd7cec11b76e017927c3e73bc3';
+        userPort = "80";
+      }
+
+      urlApi  = 'http://' + userIP +':'+userPort+'/api/arduinos/{{ arduinosensor.arduino.id }}/sensors/{{ arduinosensor.id }}/data/';
+
     }
-
-      //var urlApi = 'http://dashboard:8000/api/arduinos/{{ arduinosensor.arduino.id }}/sensors/{{ arduinosensor.id }}/data/';
-
-
-
     //##############################
-
-
-
-
 
   var canUseSocket = false;
   var ws4redis = WS4Redis({
-    uri: 'ws://'+userIP+':8000/ws/{{arduinosensor.arduino.arduino_token}}?subscribe-broadcast&publish-broadcast&echo',
-
+    uri: 'ws://'+userIP+':'+userPort+'/ws/{{arduinosensor.arduino.arduino_token}}?subscribe-broadcast&publish-broadcast&echo',
     //'ws://sensait.dyndns.org/ws/{{arduinosensor.arduino.arduino_token}}?subscribe-broadcast&publish-broadcast&echo',
     connecting: on_connecting,
     connected: on_connected,
@@ -277,23 +322,27 @@
     useWSData(msg);
   }
 
-
+//##############################
 
 function useWSData(data){
 
-      if(canUseSocket == true ){
-        var jso = JSON.parse(data);
-        //console.log(jso);
-        console.log('Message from Websocket: ' + data);
-        console.log(jso.length);
+  if(canUseSocket == true ){
+
+      var jso = JSON.parse(data);
+      //console.log(jso);
+      console.log('Message from Websocket: ' + data);
+      console.log(jso.length);
+
+      console.log(date_today);
+      console.log();
+
+      if( moment(date_today).isBetween(filter_date_start, filter_date_end ) || moment(date_today).isSameOrBefore(filter_date_end )){
 
         for(var i= 0 ; i < jso.length ; i++){
+
           console.log(jso[i]['data']);
+          if(jso[i]['arduino_sensor'] == {{arduinosensor.id}}){
 
-
-          if(jso[i]['arduino_sensor'] == {{arduinosensor.id}}  ){
-
-            console.log("Chi");
             sensor_data_chart.push(jso[i]['data']);
 
             var d = new Date(jso[i]['created_at']);
@@ -309,27 +358,18 @@ function useWSData(data){
             console.log(lastPosition);
              //_sensors_data[lastPosition]['data'] = jso[i]['data'];
 
-            dygraphs_data.push([d, _sensors_data[lastPosition]['data'], "10", "50"]);
-
-            console.log("______");
-            console.log(g);
-            console.log("______");
+            dygraphs_data.push([d, _sensors_data[lastPosition]['data'], {{ arduinosensor.min_value }}, {{ arduinosensor.max_value }}]);
 
             g.destroy();
 
             g = new Dygraph(document.getElementById("graphdiv"), dygraphs_data, {
               drawPoints: true,
               showRoller: true,
-              valueRange: [
-                0, 150
-              ],
               height: 400,
-              //width: 100%,
               highlightSeriesBackgroundAlpha: 0.8,
               fillGraph: true,
-              includeZero: true,
+              includeZero: false,
               strokeWidth: 3,
-              //showRangeSelector: true,
               labels: ['Tiempo', 'Temperatura', 'Min', 'Max']
             });
 
@@ -337,25 +377,25 @@ function useWSData(data){
           }else{
             console.log("ño");
           }
+        }
       }
-    }else{
-      console.log("Esperaaaa....");
-    }
-
+  }else{
+    console.log("Esperaaaa....");
+  }
 }
 
 
 
-  var tableNameID = '#table_allData';
-  var allData;
-
-  var g ;
 
   //var urlApi = 'http://sensait.dyndns.org/api/arduinos/{{ arduinosensor.arduino.id }}/sensors/{{ arduinosensor.id }}/data/';
 
   var _arduino;
   var _sensors;
   var _sensors_data;
+  var tableNameID = '#table_allData';
+  var allData;
+
+  var g ; // variable de la grafica
 
   var promedio=0,
       media=0,
@@ -365,10 +405,29 @@ function useWSData(data){
       totalAlertas=0,
       totalRiesgo=0;
 
+
+  var query_startDate   = "";
+  var query_endDate     = "";
+  var query_dataLimit   = "1000";
+  var filter_type       = 0 ;
+  var filter_registers  = query_dataLimit ;
+  var filter_date_start = "" ;
+  var filter_date_end   = "" ;
+  var date_today;
+
     $(document).ready(function(){
-      //console.log(urlApi);
-      allData = getDataFromAPI();
+
+      //ocultamos los selectores de la grafica
+      $("#filter_date").hide();
+      $("#filter_limit").hide();
+       date_today = moment().format("YYYY-MM-DD");
+      //primera petición de datos.
+      allData = getDataFromAPI("","",query_dataLimit);
+
+      $("#filter_resume").html("Ultimos " + query_dataLimit + " registros" );
     });
+
+
 
     $(tableNameID).DataTable({
       "paging": true,
@@ -380,11 +439,129 @@ function useWSData(data){
       "pageLength": 5
     });
 
+    $('#limit_selector').on('change', function() {
+      var limit = this.value;
+      filter_registers = limit;
 
-    function getDataFromAPI(){
-      //Peticion AJAX de los datos
+      if(filter_type == 1 ){
+        $("#filter_resume").html("Ultimos " + limit + " registros." );
+        getDataFromAPI("","", filter_registers);
+      }
+      else {
+        $("#filter_resume").html("Fecha del  " + filter_date_start + " al " + filter_date_end + " como maximo "+ limit + " registros" );
+        getDataFromAPI(filter_date_start,filter_date_end, filter_registers);
+      }
+    });
+
+    //moment.locale('es');
+    //moment("12/25/1995", "MM-DD-YYYY");
+    $('#daterange').daterangepicker({
+      locale: {
+       format: "YYYY-MM-DD",
+       "separator": " - ",
+       applyLabel: "Aplicar",
+       cancelLabel: "Cancelar",
+       fromLabel: "Del",
+       toLabel: "Al",
+       daysOfWeek: [
+            "Dom",
+            "Lun",
+            "Mar",
+            "Mie",
+            "Jue",
+            "Vie",
+            "Sab"
+        ],
+        monthNames: [
+          "Enero",
+          "Febrero",
+          "Marzo",
+          "Abril",
+          "Mayo",
+          "Junio",
+          "Julio",
+          "Agosto",
+          "Septiembre",
+          "Octubre",
+          "Noviembre",
+          "Diciembre"
+        ],
+     },
+     opens: "center",
+     drops: "up",
+     showWeekNumbers:true,
+     minDate: moment().subtract(40, 'days'), //moment(min_date,"YYYY-MM-DD"),
+     maxDate: moment().add(1,'days'),
+     startDate: moment(), //moment(min_date,"YYYY-MM-DD"),
+     endDate: moment() //moment(max_date,"YYYY-MM-DD")
+    },
+    function (start, end) {
+      console.log(start);
+      filter_date_start = start.format('YYYY-MM-DD');
+      filter_date_end   = end.format('YYYY-MM-DD');
+
+      if(filter_type == 2 )
+        $("#filter_resume").html("Fecha del  " + filter_date_start + " al " + filter_date_end  );
+      else {
+        $("#filter_resume").html("Fecha del  " + filter_date_start + " al " + filter_date_end + " como maximo "+ filter_registers + " registros" );
+      }
+
+      getDataFromAPI(filter_date_start,filter_date_end, filter_registers);
+
+    });
+
+    $('#type_selector').on('change', function() {
+      var type = this.value;
+      filter_type = type;
+
+      //Tipos:
+      //0   Titulo
+      //"1" No de Registros
+      //"2" Rango de Fechas
+      //"3" Rango de Fechas y No. de Registros
+      if(type != 0 ){
+        if(type == 1){
+          $("#filter_date").hide();
+          $("#filter_limit").show();
+          $("#filter_resume").html("Ultimos " + filter_registers + " registros." );
+          getDataFromAPI("","", filter_registers);
+        }else if (type == 2) {
+          $("#filter_date").show();
+          $("#filter_limit").hide();
+        }else if (type == 3) {
+          $("#filter_date").show();
+          $("#filter_limit").show();
+        }
+      }
+      console.log(type);
+
+      //getDataFromAPI("","",this.value);
+    });
+
+
+
+
+
+    function getDataFromAPI(query_startDate, query_endDate, query_dataLimit){
+
+
+      var query =  "?";
+
+      if(query_startDate != "")
+        query += "min_time=" + query_startDate + " 00:00:00";
+
+      if(query_endDate != "")
+        query += "&max_time=" + query_endDate + " 00:00:00";
+
+      if(query_dataLimit != "" && query_endDate == "")
+        query += "last=" + query_dataLimit;
+
+      if(query_dataLimit != "" && query_endDate != "")
+        query += "&last=" + query_dataLimit;
+
+        console.log(query);
       $.ajax({
-        url: urlApi,
+        url: urlApi + query ,
         type: 'GET',
         contentType: 'json/application',
         dataType: 'json',
@@ -396,10 +573,20 @@ function useWSData(data){
           'Authorization': tokenCode
         },
         success: function(data) {
-          console.log('AJAX API SUCCESS!');
-          //Se hara un return con el JSON obtenido en la API
-          //console.log(data);
-          dataCallBack(data);
+          //console.log('AJAX API SUCCESS!');
+          console.log();
+          if(data.length > 0){
+            dataCallBack(data);
+          }
+          else{
+            if(g != null ){
+              g.destroy();
+              g = null;
+            }
+            $('#graphdiv').html("Lo sentimos, no se encontraron registros con ese filtro aplicado, favor de especificar otro. ");
+
+          }
+
         },
         error: function() {
           console.log('boo!');
@@ -451,6 +638,11 @@ function useWSData(data){
     var dygraphs_data = [];
 
   function createGraph(data) {
+    _sensors_data = null;
+    sensor_data_chart = [];
+    sensor_date_chart = [];
+    dygraphs_data =  [];
+
     _sensors_data = data;
 
     for (var i = 0; i < _sensors_data.length; i++) {
@@ -461,33 +653,26 @@ function useWSData(data){
       var d_time = completeTimeFormat(d.getHours(), d.getMinutes(), d.getSeconds());
       sensor_date_chart.push(d_time);
 
-      dygraphs_data.push([d, _sensors_data[i]['data'], "10", "50"]);
+      dygraphs_data.push([d, _sensors_data[i]['data'], {{ arduinosensor.min_value }}, {{ arduinosensor.max_value }}]);
 
     }
 
-    /*
-    console.log("LABELS");
-    console.log(sensor_date_chart);
+    if(g != null ){
+      g.destroy();
+      g = null;
+      $('#graphdiv').html('');
+    }
 
-    console.log("SERIES");
-    console.log(sensor_data_chart);
 
-    console.log("a verssss");
-    console.log(dygraphs_data);
-    */
+
     g = new Dygraph(document.getElementById("graphdiv"), dygraphs_data, {
       drawPoints: true,
       showRoller: true,
-      valueRange: [
-        0, 100
-      ],
       height: 400,
-      //width: 100%,
       highlightSeriesBackgroundAlpha: 0.8,
       fillGraph: true,
-      includeZero: true,
+      includeZero: false,
       strokeWidth: 3,
-      //showRangeSelector: true,
       labels: ['Tiempo', 'Temperatura', 'Min', 'Max']
     });
 
@@ -510,43 +695,3 @@ function useWSData(data){
 
   </script>
 {% endblock content_js %}
-
-
-
-
-{% block ws %}
-  //uri: 'ws://192.168.15.17:8000/ws/foobar?subscribe-broadcast&publish-broadcast&echo',
-    var ws4redis = WS4Redis({
-      uri: 'ws://192.168.15.17:8000/ws/foobar?subscribe-broadcast&publish-broadcast&echo',
-      connecting: on_connecting,
-      connected: on_connected,
-      receive_message: receiveMessage,
-      disconnected: on_disconnected,
-      heartbeat_msg: {{ WS4REDIS_HEARTBEAT }}
-    });
-
-    // attach this function to an event handler on your site
-    function sendMessage() {
-      ws4redis.send_message('A message');
-    }
-
-    function on_connecting() {
-      alert('Websocket is connecting...');
-    }
-
-    function on_connected() {
-      ws4redis.send_message('Hello');
-    }
-
-    function on_disconnected(evt) {
-      alert('Websocket was disconnected: ' + JSON.stringify(evt));
-    }
-
-    // receive a message though the websocket from the server
-    function receiveMessage(msg) {
-      var jso = JSON.parse(msg);
-      //console.log(jso);
-      console.log('Message from Websocket: ' + msg);
-
-    }
-{% endblock ws %}
