@@ -193,5 +193,5 @@ if 'manto' in BASE_DIR:
 
     DEBUG = False
 
-    ALLOWED_HOSTS = ['sensait.dyndns.org']
+    ALLOWED_HOSTS = ['sensait.dyndns.org', '192.168.253.31']
 
