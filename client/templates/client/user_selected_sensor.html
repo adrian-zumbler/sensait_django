@@ -300,8 +300,9 @@
 
   var canUseSocket = false;
   var ws4redis = WS4Redis({
-    uri: 'ws://'+userIP+':'+userPort+'/ws/{{arduinosensor.arduino.arduino_token}}?subscribe-broadcast&publish-broadcast&echo',
+    uri: 'ws://'+userIP+'/ws/{{arduinosensor.arduino.arduino_token}}?subscribe-broadcast&publish-broadcast&echo',
     //'ws://sensait.dyndns.org/ws/{{arduinosensor.arduino.arduino_token}}?subscribe-broadcast&publish-broadcast&echo',
+    //':'+userPort+
     connecting: on_connecting,
     connected: on_connected,
     receive_message: receiveMessage,
