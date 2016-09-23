@@ -257,50 +257,30 @@
     // Validamos el entorno donde estamos trabajando
     //Tambien tomamos la IP dinamica para ya no moverle :3
     //##############################
-    var pageUrl = window.location.href;
-    pageUrl = pageUrl.split('//');
-    pageUrl[1] = pageUrl[1].split('.');
 
     var urlApi;
     var tokenCode ;
     var userIP;
-    var userPort = "8000";
 
-    if(pageUrl[1][0] == 'sensait'){
-      urlApi = 'http://sensait.dyndns.org:'+userPort+'/api/arduinos/{{ arduinosensor.arduino.id }}/sensors/{{ arduinosensor.id }}/data/'
+    var site_url = "{{ site_url }}";
+    var ws_url = site_url.replace("http","ws");
+    //ws_url = ws_url.replace("","");
+
+    if(site_url == 'http://sensait.dyndns.org/'){
       tokenCode = 'Token d7e7f378cdc67dcd7cec11b76e017927c3e73bc3';
-    }
-    else{
-
-      var removePort = pageUrl[1][3];
-      console.log(removePort);
-      removePort  = removePort.split("/");
-      //removePort  = removePort.split("/");
-      //removePort  = removePort.replace(":8000/dash/main/","")
-
-      userIP      = pageUrl[1][0]+'.'+pageUrl[1][1]+'.'+pageUrl[1][2]+'.'+removePort[0];
-      console.log(userIP);//192.168.253.31/dash/sensor/2/
-
-
+    }else{
       tokenCode   = 'Token 6b4f2e70ae0d435bf512897355947fe0a564972a';
-
-      urlApi  = 'http://' + userIP +':'+userPort+'/api/arduinos/{{ arduinosensor.arduino.id }}/sensors/{{ arduinosensor.id }}/data/';
-
       //Para cuando se accede desde la RED local el server
-      if( userIP == "192.168.253.31"){
+      if( site_url == "http://192.168.253.31"){
         tokenCode = 'Token d7e7f378cdc67dcd7cec11b76e017927c3e73bc3';
-        userPort = "";
-        urlApi  = 'http://' + userIP +'/api/arduinos/{{ arduinosensor.arduino.id }}/sensors/{{ arduinosensor.id }}/data/';
       }
-
-
-
+      urlApi = site_url+'api/arduinos/{{ arduinosensor.arduino.id }}/sensors/{{ arduinosensor.id }}/data/'
     }
     //##############################
 
   var canUseSocket = false;
   var ws4redis = WS4Redis({
-    uri: 'ws://'+userIP+'/ws/{{arduinosensor.arduino.arduino_token}}?subscribe-broadcast&publish-broadcast&echo',
+    uri: ws_url+'ws/{{arduinosensor.arduino.arduino_token}}?subscribe-broadcast&publish-broadcast&echo',
     //'ws://sensait.dyndns.org/ws/{{arduinosensor.arduino.arduino_token}}?subscribe-broadcast&publish-broadcast&echo',
     //':'+userPort+
     connecting: on_connecting,
@@ -342,9 +322,6 @@ function useWSData(data){
       //console.log(jso);
       console.log('Message from Websocket: ' + data);
       console.log(jso.length);
-
-      console.log(date_today);
-      console.log();
 
       if( moment(date_today).isBetween(filter_date_start, filter_date_end ) || moment(date_today).isSameOrBefore(filter_date_end )){
 
@@ -449,6 +426,8 @@ function useWSData(data){
       "autoWidth": false,
       "pageLength": 5
     });
+
+
 
     $('#limit_selector').on('change', function() {
       var limit = this.value;
@@ -570,7 +549,9 @@ function useWSData(data){
       if(query_dataLimit != "" && query_endDate != "")
         query += "&last=" + query_dataLimit;
 
-        console.log(query);
+      console.log(query);
+      console.log(urlApi+query);
+
       $.ajax({
         url: urlApi + query ,
         type: 'GET',
@@ -585,7 +566,7 @@ function useWSData(data){
         },
         success: function(data) {
           //console.log('AJAX API SUCCESS!');
-          console.log();
+          console.log(data);
           if(data.length > 0){
             dataCallBack(data);
           }

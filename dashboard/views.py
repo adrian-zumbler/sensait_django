@@ -70,9 +70,13 @@ class ArduinoSensorDetailView(DetailView):
         return queryset
 
 
-
 class DashMainListView(ListView):
     template_name = 'client/user_dashboard.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(DashMainListView, self).get_context_data(**kwargs)
+        context['site_url'] = self.request.build_absolute_uri('/')
+        return context
 
     def get_queryset(self):
         user = self.request.user
