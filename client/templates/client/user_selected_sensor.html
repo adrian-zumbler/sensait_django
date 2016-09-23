@@ -327,7 +327,7 @@ function useWSData(data){
       //console.log('Message from Websocket: ' + data);
       //console.log(jso.length);
 
-      if( moment(date_today).isBetween(filter_date_start, filter_date_end ) || moment(date_today).isSameOrBefore(filter_date_end )){
+      if( filter_type == 1  || moment(date_today).isBetween(filter_date_start, filter_date_end ) || moment(date_today).isSameOrBefore(filter_date_end ) ){
 
         for(var i= 0 ; i < jso.length ; i++){
 
