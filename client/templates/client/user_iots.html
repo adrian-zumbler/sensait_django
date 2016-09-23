@@ -92,7 +92,7 @@
             </div>
             <!-- /.box-header -->
             <div class="box-body">
-              <div class="table-responsive">
+              <div class="">
                 <table id="table_sistemas" class="table table-bordered table-striped">
                   <thead>
                     <tr>
@@ -120,11 +120,13 @@
                           <td> <span class="label label-success">{{arduino.get_estatus_display }}</span> </td>
                         {% endif %}
                         <td>
+                          {% ifnotequal sensor.description "Epoch"%}
                           <div class="btn-group">
                             <a href="/dash/sensor/{{sensor.id}}" target="_self">
                               <button  type="button" class="btn btn-success">Grafica</button>
                             </a>
                           </div>
+                          {% endifnotequal%}
                         </td>
                       </tr>
                     {% endfor %}
@@ -139,9 +141,7 @@
           </div>
           <!-- /.box -->
         </div>
-
       </div>
-
     </section>
     <!-- /.content -->
   </div>

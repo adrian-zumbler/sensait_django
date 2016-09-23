@@ -80,7 +80,7 @@ WSGI_APPLICATION = 'ws4redis.django_runserver.application'
 WS4REDIS_ALLOWED_CHANNELS = 'arduino.channels.get_allowed_channels'
 
 SESSION_ENGINE = 'redis_sessions.session'
-SESSION_REDIS_HOST = '192.168.253.32'
+
 SESSION_REDIS_PREFIX = 'session'
 
 TEMPLATES = [
@@ -194,4 +194,6 @@ if 'manto' in BASE_DIR:
     DEBUG = False
 
     ALLOWED_HOSTS = ['sensait.dyndns.org', '192.168.253.31']
+
+    SESSION_REDIS_HOST = '192.168.253.32'
 
