@@ -271,9 +271,11 @@
       tokenCode = 'Token d7e7f378cdc67dcd7cec11b76e017927c3e73bc3';
     }
     else{
+
       var removePort = pageUrl[1][3];
-      removePort  = removePort.split(":");
+      console.log(removePort);
       removePort  = removePort.split("/");
+      //removePort  = removePort.split("/");
       //removePort  = removePort.replace(":8000/dash/main/","")
 
       userIP      = pageUrl[1][0]+'.'+pageUrl[1][1]+'.'+pageUrl[1][2]+'.'+removePort[0];
