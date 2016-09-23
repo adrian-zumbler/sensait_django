@@ -32,6 +32,17 @@ class ArduinoViewSet(mixins.CreateModelMixin,
     permission_classes = (IsAuthenticated, )
     queryset = serializer_class.Meta.model.objects.all()
 
+    def get_queryset(self, arduino_pk=None):
+        queryset = self.queryset
+        # if isinstance(queryset, QuerySet):
+        #     # Ensure queryset is re-evaluated on each request.
+        #     queryset = queryset.filter(arduino__pk=arduino_pk)
+        # TODO: Filter arduino per user
+        project_id = self.request.query_params.get('project', None)
+        if project_id is not None:
+            queryset = queryset.filter(arduino__project_id=project_id)
+        return queryset
+
 
 class SensorViewSet(mixins.CreateModelMixin,
                     mixins.ListModelMixin,
