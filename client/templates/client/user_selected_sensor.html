@@ -264,6 +264,9 @@
 
     var site_url = "{{ site_url }}";
     var ws_url = site_url.replace("http","ws");
+
+    console.log(site_url);
+    console.log(ws_url);
     //ws_url = ws_url.replace("","");
 
     if(site_url == 'http://sensait.dyndns.org/'){
@@ -274,13 +277,13 @@
       if( site_url == "http://192.168.253.31"){
         tokenCode = 'Token d7e7f378cdc67dcd7cec11b76e017927c3e73bc3';
       }
-      urlApi = site_url+'api/arduinos/{{ arduinosensor.arduino.id }}/sensors/{{ arduinosensor.id }}/data/'
+      urlApi = 'http://' + site_url+'/api/arduinos/{{ arduinosensor.arduino.id }}/sensors/{{ arduinosensor.id }}/data/'
     }
     //##############################
 
   var canUseSocket = false;
   var ws4redis = WS4Redis({
-    uri: ws_url+'ws/{{arduinosensor.arduino.arduino_token}}?subscribe-broadcast&publish-broadcast&echo',
+    uri: 'http://' + ws_url+'/ws/{{arduinosensor.arduino.arduino_token}}?subscribe-broadcast&publish-broadcast&echo',
     //'ws://sensait.dyndns.org/ws/{{arduinosensor.arduino.arduino_token}}?subscribe-broadcast&publish-broadcast&echo',
     //':'+userPort+
     connecting: on_connecting,

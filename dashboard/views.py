@@ -55,7 +55,8 @@ class ArduinoSensorDetailView(DetailView):
 
         context = super(ArduinoSensorDetailView, self).get_context_data(**kwargs)
 
-        context['site_url'] = self.request.build_absolute_uri('/')
+        context['site_url'] = self.request.get_host()
+        # build_absolute_uri('/')
 
         return context
 
@@ -75,7 +76,8 @@ class DashMainListView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super(DashMainListView, self).get_context_data(**kwargs)
-        context['site_url'] = self.request.build_absolute_uri('/')
+        context['site_url'] = self.get_host()
+        # request.get_host('/')
         return context
 
     def get_queryset(self):
