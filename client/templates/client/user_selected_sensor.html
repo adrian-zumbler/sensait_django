@@ -278,7 +278,7 @@
         tokenCode = 'Token d7e7f378cdc67dcd7cec11b76e017927c3e73bc3';
       }
     }
-    
+
     urlApi = 'http://' + site_url + '/api/arduinos/{{ arduinosensor.arduino.id }}/sensors/{{ arduinosensor.id }}/data/'
     //##############################
 
@@ -324,8 +324,8 @@ function useWSData(data){
 
       var jso = JSON.parse(data);
       //console.log(jso);
-      console.log('Message from Websocket: ' + data);
-      console.log(jso.length);
+      //console.log('Message from Websocket: ' + data);
+      //console.log(jso.length);
 
       if( moment(date_today).isBetween(filter_date_start, filter_date_end ) || moment(date_today).isSameOrBefore(filter_date_end )){
 
@@ -553,9 +553,6 @@ function useWSData(data){
       if(query_dataLimit != "" && query_endDate != "")
         query += "&last=" + query_dataLimit;
 
-      console.log(query);
-      console.log(urlApi+query);
-
       $.ajax({
         url: urlApi + query ,
         type: 'GET',
@@ -570,7 +567,7 @@ function useWSData(data){
         },
         success: function(data) {
           //console.log('AJAX API SUCCESS!');
-          console.log(data);
+
           if(data.length > 0){
             dataCallBack(data);
           }
