@@ -76,7 +76,8 @@ class DashMainListView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super(DashMainListView, self).get_context_data(**kwargs)
-        context['site_url'] = self.get_host()
+
+        context['site_url'] = self.request.get_host()
         # request.get_host('/')
         return context
 

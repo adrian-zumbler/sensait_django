@@ -277,8 +277,9 @@
       if( site_url == "192.168.253.31"){
         tokenCode = 'Token d7e7f378cdc67dcd7cec11b76e017927c3e73bc3';
       }
-      urlApi = 'http://' + site_url + '/api/arduinos/{{ arduinosensor.arduino.id }}/sensors/{{ arduinosensor.id }}/data/'
     }
+    
+    urlApi = 'http://' + site_url + '/api/arduinos/{{ arduinosensor.arduino.id }}/sensors/{{ arduinosensor.id }}/data/'
     //##############################
 
   var canUseSocket = false;
