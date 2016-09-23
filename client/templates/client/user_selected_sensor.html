@@ -344,12 +344,12 @@ function useWSData(data){
             sensor_date_chart.push(d_time);
             var lastPosition = _sensors_data.length;
 
-            $('#totalRegistros').html(lastPosition);
-            $('#ultimoValor').html( _sensors_data[lastPosition]['data'] );
-
             _sensors_data.push(jso[i]);
             console.log(_sensors_data);
             console.log(lastPosition);
+
+            $('#totalRegistros').html(lastPosition);
+            $('#ultimoValor').html( _sensors_data[lastPosition]['data'] );
              //_sensors_data[lastPosition]['data'] = jso[i]['data'];
 
             dygraphs_data.push([d, _sensors_data[lastPosition]['data'], {{ arduinosensor.min_value }}, {{ arduinosensor.max_value }}]);
@@ -366,7 +366,6 @@ function useWSData(data){
               strokeWidth: 3,
               labels: ['Tiempo', 'Temperatura', 'Min', 'Max']
             });
-
 
           }else{
             console.log("ño");
@@ -404,7 +403,7 @@ function useWSData(data){
   var query_startDate   = "";
   var query_endDate     = "";
   var query_dataLimit   = "1000";
-  var filter_type       = 0 ;
+  var filter_type       = 1 ;
   var filter_registers  = query_dataLimit ;
   var filter_date_start = "" ;
   var filter_date_end   = "" ;
