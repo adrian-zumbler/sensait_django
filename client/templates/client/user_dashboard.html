@@ -233,25 +233,26 @@
   // Validamos el entorno donde estamos trabajando
   //Tambien tomamos la IP dinamica para ya no moverle :3
   //##############################
-  var pageUrl = window.location.href;
-  pageUrl = pageUrl.split('//');
-  pageUrl[1] = pageUrl[1].split('.');
 
+  var site_url = "{{ site_url }}";
+  //http://192.168.1.87:8000/dash/main/
+  console.log(site_url);
 
+  var ws_url = site_url.replace("http","ws");
   var urlApiBase;
   var tokenCode ;
 
-  if(pageUrl[1][0] == 'sensait'){
-    urlApiBase = 'http://sensait.dyndns.org:8000/api/';
+  if(site_url == 'http://sensait.dyndns.org/'){
     tokenCode = 'Token d7e7f378cdc67dcd7cec11b76e017927c3e73bc3';
+  }else{
+    tokenCode   = 'Token 6b4f2e70ae0d435bf512897355947fe0a564972a';
+    //Para cuando se accede desde la RED local el server
+    if( site_url == "http://192.168.253.31"){
+      tokenCode = 'Token d7e7f378cdc67dcd7cec11b76e017927c3e73bc3';
+    }
+    urlApiBase = site_url+'api/'
   }
-  else{
-    var removePort = pageUrl[1][3];
-    removePort = removePort.replace(":8000/dash/main/","")
-    var userIP = pageUrl[1][0]+'.'+pageUrl[1][1]+'.'+pageUrl[1][2]+'.'+removePort
-    urlApiBase = 'http://' + userIP +':8000/api/';
-    tokenCode = 'Token 6b4f2e70ae0d435bf512897355947fe0a564972a';
-  }
+
   //##############################
 
   // JQUERY para los DATA TABLES Y CALENDARIOS
