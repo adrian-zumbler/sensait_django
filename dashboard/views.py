@@ -56,7 +56,6 @@ class ArduinoSensorDetailView(DetailView):
         context = super(ArduinoSensorDetailView, self).get_context_data(**kwargs)
 
         context['site_url'] = self.request.build_absolute_uri('/')
-        print ('context', context)
 
         return context
 
