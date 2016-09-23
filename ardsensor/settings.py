@@ -191,7 +191,7 @@ if 'manto' in BASE_DIR:
 
     MEDIA_ROOT = os.path.join(BASE_DIR, '../media/')
 
-    DEBUG = False
+    DEBUG = True
 
     ALLOWED_HOSTS = ['sensait.dyndns.org', '192.168.253.31']
 
