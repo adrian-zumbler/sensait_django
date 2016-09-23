@@ -170,7 +170,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'static/media/')  # '/home/jose/dev/corpbit/
 
 if 'manto' in BASE_DIR:
     WS4REDIS_CONNECTION = {
-        'host': '192.168.253.132',
+        'host': '192.168.253.32',
         'port': 6379,
         'db': 0,
         'password': None,

@@ -51,6 +51,14 @@ class ArduinoDetailView(DetailView):
 class ArduinoSensorDetailView(DetailView):
     template_name = 'client/user_selected_sensor.html'
 
+    def get_context_data(self, **kwargs):
+
+        context = super(ArduinoSensorDetailView, self).get_context_data(**kwargs)
+
+        context['site_url'] = self.request.get_full_path()
+
+        return context
+
     def get_queryset(self):
         user = self.request.user
         queryset = ArduinoSensor.objects.none()
