@@ -149,8 +149,10 @@
                         <option>200</option>
                         <option>100</option>
                         <option>50</option>
-                        <option>Otra</option>
-                        <option>Todos</option>
+                        <option>30</option>
+                        <option>20</option>
+                        <option>10</option>
+                        <option>5</option>
                       </select>
                     </div>
                   </div>
@@ -343,6 +345,7 @@ function useWSData(data){
             var lastPosition = _sensors_data.length;
 
             $('#totalRegistros').html(lastPosition);
+            $('#ultimoValor').html( _sensors_data[lastPosition]['data'] );
 
             _sensors_data.push(jso[i]);
             console.log(_sensors_data);
