@@ -273,10 +273,13 @@
     else{
       var removePort = pageUrl[1][3];
       removePort  = removePort.split(":");
+      removePort  = removePort.split("/");
       //removePort  = removePort.replace(":8000/dash/main/","")
 
       userIP      = pageUrl[1][0]+'.'+pageUrl[1][1]+'.'+pageUrl[1][2]+'.'+removePort[0];
-      console.log(userIP);
+      console.log(userIP);//192.168.253.31/dash/sensor/2/
+
+
       tokenCode   = 'Token 6b4f2e70ae0d435bf512897355947fe0a564972a';
 
       urlApi  = 'http://' + userIP +':'+userPort+'/api/arduinos/{{ arduinosensor.arduino.id }}/sensors/{{ arduinosensor.id }}/data/';
