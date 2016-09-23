@@ -132,7 +132,7 @@ class SensorDataViewSet(mixins.ListModelMixin,
 
     def get_queryset(self, sensor_pk=None):
         queryset = self.queryset
-        length = len(queryset)
+
         if isinstance(queryset, QuerySet):
             # Ensure queryset is re-evaluated on each request.
             queryset = queryset.filter(arduino_sensor__pk=sensor_pk)
@@ -151,6 +151,7 @@ class SensorDataViewSet(mixins.ListModelMixin,
             max_time = datetime.strptime(max_time, '%Y-%m-%d %H:%M:%S')
             queryset = queryset.filter(created_at__lt=max_time)
         if last is not None:
+            length = len(queryset)
             cutoff = length - int(last)
             queryset = queryset[cutoff:]
         return queryset
