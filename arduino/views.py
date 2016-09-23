@@ -153,7 +153,8 @@ class SensorDataViewSet(mixins.ListModelMixin,
         if last is not None:
             length = len(queryset)
             cutoff = length - int(last)
-            queryset = queryset[cutoff:]
+            if cutoff > 0:
+                queryset = queryset[cutoff:]
         return queryset
 
     def paginate_queryset(self, queryset):
