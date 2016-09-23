@@ -275,16 +275,20 @@
       removePort  = removePort.split(":");
       //removePort  = removePort.replace(":8000/dash/main/","")
 
-      userIP      = pageUrl[1][0]+'.'+pageUrl[1][1]+'.'+pageUrl[1][2]+'.'+removePort[0]
+      userIP      = pageUrl[1][0]+'.'+pageUrl[1][1]+'.'+pageUrl[1][2]+'.'+removePort[0];
+      console.log(userIP);
       tokenCode   = 'Token 6b4f2e70ae0d435bf512897355947fe0a564972a';
+
+      urlApi  = 'http://' + userIP +':'+userPort+'/api/arduinos/{{ arduinosensor.arduino.id }}/sensors/{{ arduinosensor.id }}/data/';
 
       //Para cuando se accede desde la RED local el server
       if( userIP == "192.168.253.31"){
         tokenCode = 'Token d7e7f378cdc67dcd7cec11b76e017927c3e73bc3';
-        userPort = "80";
+        userPort = "";
+        urlApi  = 'http://' + userIP +'/api/arduinos/{{ arduinosensor.arduino.id }}/sensors/{{ arduinosensor.id }}/data/';
       }
 
-      urlApi  = 'http://' + userIP +':'+userPort+'/api/arduinos/{{ arduinosensor.arduino.id }}/sensors/{{ arduinosensor.id }}/data/';
+
 
     }
     //##############################
