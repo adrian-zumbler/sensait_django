@@ -40,7 +40,7 @@ class ArduinoViewSet(mixins.CreateModelMixin,
         # TODO: Filter arduino per user
         project_id = self.request.query_params.get('project', None)
         if project_id is not None:
-            queryset = queryset.filter(arduino__project_id=project_id)
+            queryset = queryset.filter(project_id=project_id)
         return queryset
 
 
