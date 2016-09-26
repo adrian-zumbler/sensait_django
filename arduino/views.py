@@ -119,7 +119,7 @@ class SensorDataViewSet(mixins.ListModelMixin,
     permission_classes = (IsAuthenticated, )
     queryset = serializer_class.Meta.model.objects.all()
 
-    def list(self, request, arduino_pk, sensor_pk,  *args, **kwargs):
+    def list(self, request, arduino_pk, sensor_pk, *args, **kwargs):
         queryset = self.filter_queryset(self.get_queryset(sensor_pk))
 
         page = self.paginate_queryset(queryset)

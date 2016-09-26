@@ -149,8 +149,10 @@
                         <option>200</option>
                         <option>100</option>
                         <option>50</option>
-                        <option>Otra</option>
-                        <option>Todos</option>
+                        <option>30</option>
+                        <option>20</option>
+                        <option>10</option>
+                        <option>5</option>
                       </select>
                     </div>
                   </div>
@@ -278,7 +280,7 @@
         tokenCode = 'Token d7e7f378cdc67dcd7cec11b76e017927c3e73bc3';
       }
     }
-    
+
     urlApi = 'http://' + site_url + '/api/arduinos/{{ arduinosensor.arduino.id }}/sensors/{{ arduinosensor.id }}/data/'
     //##############################
 
@@ -324,10 +326,10 @@ function useWSData(data){
 
       var jso = JSON.parse(data);
       //console.log(jso);
-      console.log('Message from Websocket: ' + data);
-      console.log(jso.length);
+      //console.log('Message from Websocket: ' + data);
+      //console.log(jso.length);
 
-      if( moment(date_today).isBetween(filter_date_start, filter_date_end ) || moment(date_today).isSameOrBefore(filter_date_end )){
+      if( filter_type == 1  || moment(date_today).isBetween(filter_date_start, filter_date_end ) || moment(date_today).isSameOrBefore(filter_date_end ) ){
 
         for(var i= 0 ; i < jso.length ; i++){
 
@@ -342,11 +344,12 @@ function useWSData(data){
             sensor_date_chart.push(d_time);
             var lastPosition = _sensors_data.length;
 
-            $('#totalRegistros').html(lastPosition);
-
             _sensors_data.push(jso[i]);
             console.log(_sensors_data);
             console.log(lastPosition);
+
+            $('#totalRegistros').html(lastPosition);
+            $('#ultimoValor').html( _sensors_data[lastPosition]['data'] );
              //_sensors_data[lastPosition]['data'] = jso[i]['data'];
 
             dygraphs_data.push([d, _sensors_data[lastPosition]['data'], {{ arduinosensor.min_value }}, {{ arduinosensor.max_value }}]);
@@ -363,7 +366,6 @@ function useWSData(data){
               strokeWidth: 3,
               labels: ['Tiempo', 'Temperatura', 'Min', 'Max']
             });
-
 
           }else{
             console.log("ño");
@@ -401,7 +403,7 @@ function useWSData(data){
   var query_startDate   = "";
   var query_endDate     = "";
   var query_dataLimit   = "1000";
-  var filter_type       = 0 ;
+  var filter_type       = 1 ;
   var filter_registers  = query_dataLimit ;
   var filter_date_start = "" ;
   var filter_date_end   = "" ;
@@ -553,9 +555,6 @@ function useWSData(data){
       if(query_dataLimit != "" && query_endDate != "")
         query += "&last=" + query_dataLimit;
 
-      console.log(query);
-      console.log(urlApi+query);
-
       $.ajax({
         url: urlApi + query ,
         type: 'GET',
@@ -570,7 +569,7 @@ function useWSData(data){
         },
         success: function(data) {
           //console.log('AJAX API SUCCESS!');
-          console.log(data);
+
           if(data.length > 0){
             dataCallBack(data);
           }

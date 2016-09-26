@@ -235,23 +235,21 @@
   //##############################
 
   var site_url = "{{ site_url }}";
-  //http://192.168.1.87:8000/dash/main/
-  console.log(site_url);
+  var ws_url = 'ws://' + site_url;
 
-  var ws_url = site_url.replace("http","ws");
   var urlApiBase;
   var tokenCode ;
 
-  if(site_url == 'http://sensait.dyndns.org/'){
+  if(site_url == 'sensait.dyndns.org'){
     tokenCode = 'Token d7e7f378cdc67dcd7cec11b76e017927c3e73bc3';
   }else{
     tokenCode   = 'Token 6b4f2e70ae0d435bf512897355947fe0a564972a';
     //Para cuando se accede desde la RED local el server
-    if( site_url == "http://192.168.253.31"){
+    if( site_url == "192.168.253.31"){
       tokenCode = 'Token d7e7f378cdc67dcd7cec11b76e017927c3e73bc3';
     }
-    urlApiBase = site_url+'/api/'
   }
+  urlApiBase = site_url+'/api/'
 
   //##############################
 
@@ -334,8 +332,8 @@
     actualProject = {{ project_list.first.id }} ;
     actualArduino = {{ project_list.first.arduinos.first.id }};
 
-    console.log( actualProject );
-    console.log( actualArduino );
+    //console.log( actualProject );
+    //console.log( actualArduino );
 
     _proyID = actualProject;
 
@@ -368,7 +366,7 @@
     console.log(urlApiBase + arduinosApi + actualArduino);
 
     $.ajax({
-      url: urlApiBase + arduinosApi + actualArduino + '/',
+      url: 'http://' + urlApiBase + arduinosApi + actualArduino + '/',
       type: 'GET',
       contentType: 'json/application',
       dataType: 'json',
@@ -439,7 +437,7 @@
       $('#tabs_header').html('');
 
       $.ajax({
-        url: urlApiBase + arduinosApi + actualArduino +'/sensors/'+ sensor_ID + '/data/' ,
+        url: 'http://' + urlApiBase + arduinosApi + actualArduino +'/sensors/'+ sensor_ID + '/data/' ,
         type: 'GET',
         contentType: 'json/application',
         dataType: 'json',
