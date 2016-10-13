@@ -13,14 +13,6 @@
         {{ arduino.name }}
         <small>Sistema Seleccionado</small>
       </h1>
-      <ol class="breadcrumb">
-        <li>
-          <a href="#">
-            <i class="fa fa-dashboard"></i>
-            Home</a>
-        </li>
-        <li class="active">Dashboard</li>
-      </ol>
     </section>
 
     <!-- Main content -->
@@ -38,8 +30,8 @@
                     <dd>{{ arduino.name }} </dd>
                     <dt>Ubicación</dt>
                     <dd>{{ arduino.location }} </dd>
-                    <dt>ID del IoT </dt>
-                    <dd> {{ arduino.id }} </dd>
+                    <dt>ID del Transmisor </dt>
+                    <dd> Sist-00{{ arduino.id }} </dd>
                     <dt>Versión</dt>
                     <dd> V. 0.0{{ arduino.id }} </dd>
                   </dl>
@@ -55,17 +47,10 @@
                 </div><!-- /.box-header -->
                 <div class="box-body">
                   <dl class="dl-horizontal">
-                    <dt>Cabtidad de Sensores</dt>
+                    <dt>Cantidad de Sensores</dt>
                     <dd>{{ arduino.sensors.count }} </dd>
                     <dt>Estatus</dt>
                     <dd><span class="label label-success">Correcto</span></dd>
-                    <dt>Configuración de Alertas</dt>
-                    <dd>
-                      <a href="#">
-                        <i class="fa fa-edit"></i>
-                        Configurar
-                      </a>
-                    </dd>
                   </dl>
                 </div><!-- /.box-body -->
               </div><!-- /.box -->
@@ -81,14 +66,6 @@
               <h3 class="box-title">
                 Lista de sensores
               </h3>
-              <div class="box-tools pull-right">
-                <button class="btn btn-box-tool" data-widget="collapse">
-                  <i class="fa fa-minus"></i>
-                </button>
-                <button class="btn btn-box-tool" data-widget="remove">
-                  <i class="fa fa-times"></i>
-                </button>
-              </div>
             </div>
             <!-- /.box-header -->
             <div class="box-body">
@@ -97,9 +74,9 @@
                   <thead>
                     <tr>
                       <th>Sensor ID</th>
+                      <th>Nombre Sensor</th>
                       <th>Tipo de Sensor</th>
-                      <th>Ubicación</th>
-                      <th>Ultimo Fecha</th>
+                      <th>Ultimo Update</th>
                       <th>Ultimo Valor</th>
                       <th>Estatus </th>
                       <th> </th>
@@ -108,10 +85,11 @@
                   <tbody>
 
                     {% for sensor in arduino.arduino_sensors.all %}
+                      {% if  sensor.data_key != "field1" %}
                       <tr>
                         <td> <a href="/dash/sensor/{{sensor.id}}">SENSOR-00{{sensor.index}}</a> </td>
-                        <td>{{ sensor.sensor_type.name }}</td>
                         <td>{{ sensor.description }}</td>
+                        <td>{{ sensor.sensor_type.name }}</td>
                         <td>{{ sensor.sensor_data.last.created_at }}</td>
                         <td>{{ sensor.sensor_data.last.data }}</td>
                         {% if  arduino.id|isEven == 0%}
@@ -123,12 +101,13 @@
                           {% ifnotequal sensor.description "Epoch"%}
                           <div class="btn-group">
                             <a href="/dash/sensor/{{sensor.id}}" target="_self">
-                              <button  type="button" class="btn btn-success">Grafica</button>
+                              <button  type="button" class="btn btn-success">Gráfica</button>
                             </a>
                           </div>
                           {% endifnotequal%}
                         </td>
                       </tr>
+                      {% endif %}
                     {% endfor %}
 
                   </tbody>
@@ -159,7 +138,7 @@
 
   $(function () {
     $('#table_sistemas').DataTable({
-      "paging": true,
+      "paging": false,
       "lengthChange": false,
       "searching": false,
       "ordering": true,

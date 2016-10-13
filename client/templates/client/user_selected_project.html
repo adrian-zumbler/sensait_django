@@ -13,14 +13,6 @@
         {{ project.name}}
         <small>Detalle del Proyecto</small>
       </h1>
-      <ol class="breadcrumb">
-        <li>
-          <a href="#">
-            <i class="fa fa-dashboard"></i>
-            Home</a>
-        </li>
-        <li class="active">Dashboard</li>
-      </ol>
     </section>
 
     <!-- Main content -->
@@ -40,13 +32,6 @@
               <dd> {{ project.name}} </dd>
               <dt>Fecha de implementación</dt>
               <dd>{{ project.created_at}} </dd>
-              <dt>Mantenimientos</dt>
-              <dd>0004   &nbsp;&nbsp;&nbsp;&nbsp;
-                <a href="#">
-                  <i class="fa fa-edit"></i>
-                  Ver detalle
-                </a>
-              </dd>
             </dl>
           </div><!-- /.box-body -->
         </div><!-- /.box -->
@@ -56,19 +41,12 @@
         <div class="box box-solid">
           <div class="box-header with-border">
             <i class="fa fa-adjust"></i>
-            <h3 class="box-title">Información de los IoTs</h3>
+            <h3 class="box-title">Información del transmisor</h3>
           </div><!-- /.box-header -->
           <div class="box-body">
             <dl class="dl-horizontal">
-              <dt>Sistemas - Instalados</dt>
+              <dt>Transmisores - Instalados</dt>
               <dd>  {{ project.arduinos.count}}  </dd>
-              <dt>Configuración de Alertas</dt>
-              <dd>
-                <a href="#">
-                  <i class="fa fa-edit"></i>
-                  Configurar
-                </a>
-              </dd>
             </dl>
           </div><!-- /.box-body -->
         </div><!-- /.box -->
@@ -98,9 +76,8 @@
                 <table class="table no-margin">
                   <thead>
                     <tr>
-                      <th>ID Sistema</th>
-                      <th>Sistema Nombre</th>
-                      <th>Ultima Actualización</th>
+                      <th>ID Transmisor</th>
+                      <th>Nombre Transmisor</th>
                       <th>Estatus</th>
                       <th> </th>
                     </tr>
@@ -113,7 +90,6 @@
                         <a href="/dash/iot/{{ arduino.id}}">Sist-00{{ arduino.id}}</a>
                       </td>
                       <td> {{ arduino.name }}</td>
-                      <td> {{ arduino.updated_at }}</td>
                       {% if  arduino.id|isEven == 0%}
                         <td> <span class="label label-danger">{{arduino.get_estatus_display }}</span> </td>
                       {% else %}
@@ -122,7 +98,7 @@
                       <td>
                         <div class="btn-group">
                           <a href="/dash/iot/{{arduino.id}}" target="_self">
-                            <button  type="button" class="btn btn-success">Ver</button>
+                            <button  type="button" class="btn btn-success">Ver Detalle</button>
                           </a>
                         </div>
                       </td>

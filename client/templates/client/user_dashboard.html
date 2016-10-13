@@ -18,214 +18,106 @@
 {% block main_content_wrapper %}
 
   <!-- Content Wrapper. Contains page content -->
-  <div class="content-wrapper">
+<div class="content-wrapper">
     <!-- Content Header (Page header) -->
-    <section class="content-header">
-      <h1>
-        DASHBOARD PRINCIPAL
-        <small>Control panel</small>
-      </h1>
-      <ol class="breadcrumb">
-        <li>
-          <a href="#">
-            <i class="fa fa-dashboard"></i>
-            Home</a>
-        </li>
-        <li class="active">Dashboard</li>
-      </ol>
-    </section>
+  <section class="content-header">
+    <h1>
+      RESUMEN DE TRANSMISORES
+      <small>activos</small>
+    </h1>
+  </section>
 
-    <!-- Main content -->
-    <section class="content">
+  <!-- Main content -->
+  <section class="content">
 
-      <div class="row">
+    <!-- /.Div para los transmisores y sus respectivos sensores. -->
+    <div id="transmisores" class="">
+    </div>
 
-        <div class="col-md-8">
-          <!-- TABLE: LATEST ORDERS -->
-          <div class="box box-info">
-            <div class="box-header with-border">
-              <h3 class="box-title">
-                PROYECTOS ACTIVOS
-              </h3>
-              <div class="box-tools pull-right">
-                <button class="btn btn-box-tool" data-widget="collapse">
-                  <i class="fa fa-minus"></i>
-                </button>
-                <button class="btn btn-box-tool" data-widget="remove">
-                  <i class="fa fa-times"></i>
-                </button>
-              </div>
-            </div>
-            <!-- /.box-header -->
+    <div class="row">
 
-            <div class="box-body">
-              <div id ="my_projects" class="table">
-                <table id="table_projects"  class="table no-margin">
-                  <thead>
-                    <tr>
-                      <th>ID Proyecto</th>
-                      <th>Nombre</th>
-                      <th>No. de IoTs</th>
-                      <th>Estatus</th>
-                      <th>Accion</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-
-                    {% for project in project_list %}
-                    <tr id="proy_{{project.id}}" >
-                      <td>
-                        PROY00{{project.id}}
-                      </td>
-                      <td>
-                        {{project.name}}
-                      </td>
-                      <td>
-                        {{project.arduinos.count}}
-                      </td>
-                      <td>
-                        <span class="label label-success">Correcto</span>
-                        {% comment %}
-                          {% for arduino in project.arduinos.all %}
-                            {{ arduino.id }} ,
-                            {% for sensor in arduino.arduino_sensors.all %}
-                                {{ sensor.description }} ,
-                            {% endfor %}
-                          {% endfor %}
-                        {% endcomment %}
-                      </td>
-                      <td>
-                        {%if forloop.counter0	== 0 %}
-                        <button  id="activar_{{project.id}}" type="button" class="btn btn-info">Activo</button>
-                        {% else %}
-                        <button  id="activar_{{project.id}}" type="button" class="btn btn-default">Seleccionar</button>
-                        {% endif%}
-                      </td>
-                    </tr>
-                    {% endfor %}
-
-                  </tbody>
-                </table>
-              </div>
-              <!-- /.table-responsive      <span class="label label-success">Activo</span>  -->
-            </div>
-
-
-            <!-- /.box-body -->
-            <!-- /.box-footer -->
+    <div class="col-md-12">
+      <!-- TABLE: LATEST ORDERS -->
+      <div class="box box-info">
+        <div class="box-header with-border">
+          <h3 class="box-title">
+            CAMBIAR DE PROYECTO
+          </h3>
+          <div class="box-tools pull-right">
+            <button class="btn btn-box-tool" data-widget="collapse">
+              <i class="fa fa-minus"></i>
+            </button>
+            <button class="btn btn-box-tool" data-widget="remove">
+              <i class="fa fa-times"></i>
+            </button>
           </div>
-          <!-- /.box -->
         </div>
+        <!-- /.box-header -->
 
-        <div class="col-md-4">
-          <div class="box box-info">
-            <div class="box-header with-border">
-              <h3 class="box-title">
-                <b> {{project_list.first.name}}   </b>
-                 - Sistemas
-              </h3>
-              <div class="box-tools pull-right">
-                <button class="btn btn-box-tool" data-widget="collapse">
-                  <i class="fa fa-minus"></i>
-                </button>
-                <button class="btn btn-box-tool" data-widget="remove">
-                  <i class="fa fa-times"></i>
-                </button>
-              </div>
-            </div>
-            <!-- /.box-header -->
+        <div class="box-body">
+          <div id ="my_projects" class="table">
+            <table id="table_projects"  class="table no-margin">
+              <thead>
+                <tr>
+                  <th>ID Proyecto</th>
+                  <th>Nombre</th>
+                  <th>No. Transmisores</th>
+                  <th>Accion</th>
+                </tr>
+              </thead>
+              <tbody>
 
-            <div class="box-body">
-              <div id ="my_sistemas" class="table">
-                <table id="table_sistemas"  class="table no-margin">
-                  <thead>
-                    <tr>
-                      <th>Nombre</th>
-                      <th>Accion</th>
-                    </tr>
-                  </thead>
-                  <tbody id="my_arduinos">
+                {% for project in project_list %}
+                <tr id="proy_{{project.id}}" >
+                  <td>
+                    PROY00{{project.id}}
+                  </td>
+                  <td>
+                    {{project.name}}
+                  </td>
+                  <td>
+                    {{project.arduinos.count}}
+                  </td>
+                  <td>
+                    {%if forloop.counter0	== 0 %}
+                      <button  id="activar_{{project.id}}" type="button" class="btn btn-info">Activo</button>
+                    {% else %}
+                      <button  id="activar_{{project.id}}" type="button" class="btn btn-default">Seleccionar</button>
+                    {% endif%}
+                  </td>
+                </tr>
+                {% endfor %}
 
-                  </tbody>
-                  </table>
-                </div>
-
-            <!-- /.box-body -->
-            <!-- /.box-footer -->
-            </div>
+              </tbody>
+            </table>
           </div>
+          <!-- /.table-responsive      <span class="label label-success">Activo</span>  -->
         </div>
 
 
-        <div class="col-md-12">
-          <!-- TABLE: LATEST ORDERS -->
-          <div class="box box-info">
-            <div class="box-header with-border">
-              <h3 class="box-title">
-                SENSORES DEL PROYECTO SELECCIONADO
-              </h3>
-            </div>
-            <div class="box-body">
-              <div class="nav-tabs-custom">
-              <ul class="nav nav-tabs" id="tabs_header">
-                {% comment %}
-                    {% for arduino in project_list.first.arduinos.all %}
-                      {% for sensor in arduino.arduino_sensors.all %}
-
-                      {% if forloop.counter0 == 0 %}
-                        <li class="active"><a href="#tab_{{sensor.id}}" data-toggle="tab">
-                          {{sensor.description }}
-                        </a></li>
-                      {% else %}
-                        <li><a href="#tab_{{sensor.id}}" data-toggle="tab">
-                          {{sensor.description }}
-                        </a></li>
-                      {% endif %}
-
-                      {% endfor %}
-                    {% endfor %}
-                  {% endcomment %}
-              </ul>
-
-              <div class="tab-content" id="tabs_content">
-
-
-                {% comment %}
-                  {% for arduino in project_list.first.arduinos.all %}
-                      {% for sensor in arduino.arduino_sensors.all %}
-
-                      {% if forloop.counter0 == 0 %}
-                        <div class="tab-pane active" id="tab_{{sensor.id}}"></div>
-                      {% else %}
-                        <div class="tab-pane" id="tab_{{sensor.id}}"></div>
-                      {% endif %}
-
-                      {% endfor %}
-                    {% endfor %}
-                  {% endcomment %}
-                <!-- /.tab-pane -->
-              </div>
-              <!-- /.tab-content -->
-            </div>
-            </div>
-          </div>
+        <!-- /.box-body -->
+        <!-- /.box-footer -->
       </div>
+      <!-- /.box -->
+    </div>
 
-
-
-
-    </section>
-    <!-- /.content -->
   </div>
+
+  </section>
+    <!-- /.content -->
+</div>
   <!-- /.content-wrapper -->
 
 {% endblock main_content_wrapper %}
 
 
 {% block content_js %}
+  <script type="text/javascript" src="{% static 'js/ws4redis.js'  %}"></script>
+
   <script src="{% static 'plugins/dygraphs/dygraph-combined.js' %}"></script>
   <script src="{% static 'plugins/datatables/jquery.dataTables.min.js' %}"></script>
   <script src="{% static 'plugins/datatables/dataTables.bootstrap.min.js' %}"></script>
+
   <!-- page script -->
 
   <script type="application/javascript">
@@ -275,42 +167,68 @@
 
   //##############################
 
+  //##############################
+  //      SOCKETS & SU MAGIA
+  //##############################
+
+  var canUseSocket = false;
+
+  var allSockets = [];
+
+  function createSocket(arduinoID, arduinoToken){
+    var ws4redis = WS4Redis({
+      uri: ws_url+'/ws/'+arduinoToken+'?subscribe-broadcast&publish-broadcast&echo',
+      //'ws://sensait.dyndns.org/ws/{{arduinosensor.arduino.arduino_token}}?subscribe-broadcast&publish-broadcast&echo',
+      //':'+userPort+
+      connecting: on_connecting,
+      connected: on_connected,
+      receive_message: receiveMessage,
+      disconnected: on_disconnected,
+      heartbeat_msg: {{ WS4REDIS_HEARTBEAT }}
+    });
+    allSockets.push(ws4redis);
+  }
+
+
+
+    // attach this function to an event handler on your site
+    function sendMessage() {
+      ws4redis.send_message('A message');
+    }
+
+    function on_connecting() {
+      alert('Websocket is connecting...');
+    }
+
+    function on_connected() {
+      ws4redis.send_message('Hello');
+    }
+
+    function on_disconnected(evt) {
+      alert('Websocket was disconnected: ' + JSON.stringify(evt));
+    }
+
+    // receive a message though the websocket from the server
+    function receiveMessage(msg) {
+      useWSData(msg);
+    }
+
+  //##############################
+  //  END -- SOCKETS & SU MAGIA
+  //##############################
+
   //Variable que tendra todos los registros de los sensores y su info.
-  var allData = [];
-  var _activeTab = 0 ;   //Tab seleccionada
-  var _proyID = 0 ;     //Proyecto seleccionada
-  var _sysID  = 0 ;     //Systema seleccionada
-  var _sensID = 0 ;     //Sensor seleccionada
+  var allData     = [];
+  var _activeTab  = 0 ;     //Tab seleccionada
+  var _proyID     = 0 ;     //Proyecto seleccionada
+  var _sysID      = 0 ;     //Systema seleccionada
+  var _sensID     = 0 ;     //Sensor seleccionada
 
-
-  //Objetos que tendran toda la info de los proyectos a utilizar.
-  function proyects(proyID){
-    this.ID         = proyID;
-    this.Systems    = [];
-  }
-
-  function ardSystems( sysID ){
-    this.SysID      = sysID;
-    this.Info       = {};
-    this.Sensors    = [];
-  }
-
-  function ardSensors( sensID ){
-    this.SensID     = sensID;
-    this.Info       = {};
-    this.DataObjs   = [];
-    this.DataGraph  = [];
-    this.DataByDate = {};
-    this.g          = {};
-  }
-
-
-  function ardSensorData( date ){
-    this.dataDate   = date;
-    this.epoch      = [];
-    this.dataValue  = [];
-  }
-
+  var proyectNames  = [] ;
+  {% for project in project_list %}
+    var name = '{{project.name}}';
+    proyectNames[{{project.id}}] = '{{project.name}}';
+  {% endfor %}
 
   var actualProject = ' ' ;
   var actualArduino = ' ' ;
@@ -319,54 +237,56 @@
   var sensorsApi    = 'sensors/idsensor/data/';
 
   var _sensors_data;
-  var g;  //variable para crear la grafica.
-
 
   $(document).ready(function(){
     //Utilizamos los datos iniciales de los proyectos
 
-    {% for project in project_list %}
-      allData[{{project.id}}] = (new proyects({{project.id}}));
-    {% endfor %}
-
     actualProject = {{ project_list.first.id }} ;
     actualArduino = {{ project_list.first.arduinos.first.id }};
 
-    //console.log( actualProject );
-    //console.log( actualArduino );
-
     _proyID = actualProject;
 
-    //En este arreglo se encuentra toda la información de los sistemas.
-    allData[actualProject].Systems[actualArduino] = (new ardSystems(actualArduino));
-
-
-    console.log( allData );
-    getArduinosFromAPI( actualProject );
+    console.log(proyectNames);
+    //console.log( allData );
+    getArduinosFromProject( _proyID );
   });
 
-  $("[id^=proy_]").click(function(){
-    //console.log( $(this)[0].id );
+  $("[id^=activar_]").click(function(){
+
+    console.log( $(this)[0].id );
 
     var project_selected_ID =  $(this)[0].id;
-    project_selected_ID     = project_selected_ID.replace("proy_","");
 
-    console.log( project_selected_ID );
-    //console.log( urlApiBase + arduinosApi  );
-    getArduinosFromAPI(project_selected_ID);
+    project_selected_ID     = project_selected_ID.replace("activar_","");
+
+    allSockets = [];
+
+    var idKeys = Object.keys(proyectNames);
+
+    for(var i=0; i<idKeys.length; i++){
+      console.log(idKeys[i]);
+      //$("#activar_"+idKeys[i]).removeClass('btn-default');
+      $("#activar_"+idKeys[i]).removeClass('btn-info');
+      $("#activar_"+idKeys[i]).addClass('btn-default');
+
+      $("#activar_"+idKeys[i]).html('Seleccionar');
+    }
+
+    $("#activar_"+_proyID).addClass('btn-info');
+    $("#activar_"+_proyID).html('Activo');
+
+    _proyID = project_selected_ID;
+
+    getArduinosFromProject( _proyID );
   });
-
 
 
 
   //Pedimos a la API los datos de los sistemas
-  function getArduinosFromAPI(arduino_ID){
-
-    console.log('AJAX API SUCCESS - PROYECTO SELECCIONADO ' +  arduino_ID);
-    console.log(urlApiBase + arduinosApi + actualArduino);
+  function getArduinosFromProject(proyect_ID){
 
     $.ajax({
-      url: 'http://' + urlApiBase + arduinosApi + actualArduino + '/',
+      url: 'http://' + urlApiBase + arduinosApi + '?project='+_proyID,
       type: 'GET',
       contentType: 'json/application',
       dataType: 'json',
@@ -378,8 +298,202 @@
         'Authorization': tokenCode
       },
       success: function(data) {
-        console.log('AJAX API SUCCESS - PROYECTO SELECCIONADO ' +  arduino_ID);
-        //Se hara un return con el JSON obtenido en la API
+        console.log('PROYECTO SELECCIONADO ' +  proyect_ID);
+        //console.log(data);
+        dataProjectCallBack(data);
+      },
+      error: function() {
+        console.log('Hubo un problema, solucionalo...!');
+      }
+    });
+  }
+
+  function dataProjectCallBack( data ){
+    console.log(data);
+    $('#transmisores').html(" ");
+
+    var rowData = "";
+
+    for( var i = 0; i < data.length ; i++){
+      if(data[i].sensors.length > 0 ){
+        var blocksData = " ";
+        var epochData  = " ";
+
+        for( var j = 0; j < data[i].sensors.length ; j++){
+          var description = data[i].sensors[j].description;
+          var dataKey     = data[i].sensors[j].data_key;
+          var sensID      = data[i].sensors[j].id;
+
+          if(description.toLowerCase() != 'epoch' || dataKey != 'field1'){
+            blocksData +=
+            '<div id="blocksens_'+sensID +'">'+
+              '<div class="col-sm-3 col-xs-12">'+
+                '<div class="info-box">'+
+                  '<span class="info-box-icon bg-green"><i class="fa fa-fw fa-area-chart"></i></span>'+
+                  '<div class="info-box-content">'+
+                    '<span class="info-box-text">'+
+                      description+
+                    '</span>'+
+                    '<span id=sens_'+sensID +' class="info-box-number">0'+
+                    '&#176;</span>'+
+                    '<span id=min_'+sensID +' class="info-box-text">'+
+                      'Min. 0'+
+                    '&#176;</span>'+
+                    '<span id=max_'+sensID +' class="info-box-text">'+
+                      'Max. 0'+
+                    '&#176;</span>'+
+                  '</div>'+
+                '</div>'+
+              '</div>'+
+            '</div>';
+          }
+        }
+
+        rowData +=
+        '<div id="trans_'+data[i].id +'">'+
+          '<div class="row">'+
+            '<div class="col-xs-12">'+
+              '<div class="box box-info">'+
+                '<div class="box-header with-border">'+
+                  '<h3 class="box-title">'+
+                    '<b>Proyecto:  </b>'+proyectNames[_proyID] +' --  '+
+                    '<b>Transmisor:</b>  '+data[i].name+
+                  '</h3>'+
+                '</div>'+
+                '<div class="box-body">'+
+                  '<div id="epoch_'+data[i].id +'">Ultima actualización: </div>'+
+                  '<br/>'+
+                  blocksData+
+                '</div>'+
+              '</div>'+
+            '</div>' +
+          '</div>' +
+        '</div>';
+      }else{
+
+      }
+      //getArduinosFromAPI(data[0].id);
+
+    }
+    $('#transmisores').append(rowData);
+
+    for( var i = 0; i < data.length ; i++){
+        //Tambien vamos creando los sockets
+        if(data[i].sensors.length > 0){
+          createSocket(data[i].id, data[i].arduino_token);
+          console.log(allSockets);
+        }
+
+      for( var j = 0; j < data[i].sensors.length ; j++){
+        //console.log(data[i].sensors[j]);
+        getSensorsFromAPI(data[i].project,data[i].sensors[j].id, actualArduino,data[i].sensors[j],"");
+      }
+
+      //getSensorsFromAPI(data.project,data.sensors[i].id, actualArduino, i);
+    }
+  }
+
+
+
+  function getSensorsFromAPI(proy_ID,sensor_ID, arduinoID,sens_info,query){
+
+    var passData_proyectID  = proy_ID;
+    var passData_sensorID   = sensor_ID;
+    var passData_arduinoID  = arduinoID;
+    var passData_sensInfo   = sens_info;
+
+    var sensorQuery;
+
+    if(query == "")
+      sensorQuery = "last=1";
+    /*
+    console.log("*-----------");
+    console.log(passData_proyectID);
+    console.log(passData_arduinoID);
+    console.log(passData_sensorID);
+    console.log(urlApiBase + arduinosApi + actualArduino +'/sensors/'+ sensor_ID + '/data/');
+    console.log("*-----------");
+    */
+
+    $.ajax({
+      url: 'http://' + urlApiBase + arduinosApi + actualArduino +'/sensors/'+ sensor_ID + '/data/' + "?"+sensorQuery ,
+      type: 'GET',
+      contentType: 'json/application',
+      dataType: 'json',
+      processData: false,
+      xhrFields: {
+        withCredentials: false
+      },
+      headers: {
+        'Authorization': tokenCode
+      },
+      success: function(data) {
+        dataSensorsCallBack(proy_ID,data,passData_arduinoID,passData_sensorID,passData_sensInfo);
+      },
+      error: function() {
+        console.log('Hubo un problema, SENSORES solucionalo...!');
+      }
+    });
+  }
+
+  var isFirstLoad = true;
+  function dataSensorsCallBack(proy_ID,data, arduinoID, sensID, sensInfo ){
+
+    if( data[0] !== undefined){
+      if(sensInfo.data_key != 'field1'){
+        //console.log(data);
+        var passData_proyectID  = proy_ID;
+        var passData_arduinoID  = arduinoID;
+        var passData_sensID     = sensID;
+        var passData_sensInfo   = sensInfo;
+
+        $('#sens_'+sensID).html(data[0].data+'°');
+        $('#min_'+sensID).html('Min. '+sensInfo.min_value+'°');
+        $('#max_'+sensID).html('Max. '+sensInfo.min_value+'°');
+
+      }else{
+
+        var epoch = data[0].data;
+        var d = new Date(0);
+        d.setUTCSeconds(epoch);
+
+        var day =  d.getDay() + 1;
+        var month =  d.getMonth() + 1;
+
+        var dateFormat = day +'/'+month+'/'+d.getFullYear();
+        var timeFormat = d.getHours()+':'+d.getMinutes()+':'+d.getSeconds();
+
+        $('#epoch_'+sensInfo.arduino).html('Ultima Actualización:  ' + dateFormat + '    ' + timeFormat);
+
+        canUseSocket = true; //dejemos que vivan los sockets
+      }
+    }
+    isFirstLoad = false;
+  }
+
+
+  function useWSData(msg){
+    console.log('holo');
+    console.log(msg);
+  }
+
+  //Pedimos a la API los datos de los sistemas
+  function getArduinosFromAPI(sistema_ID){
+
+    $.ajax({
+      url: 'http://' + urlApiBase + arduinosApi + sistema_ID,
+      type: 'GET',
+      contentType: 'json/application',
+      dataType: 'json',
+      processData: false,
+      xhrFields: {
+        withCredentials: false
+      },
+      headers: {
+        'Authorization': tokenCode
+      },
+      success: function(data) {
+        console.log('SISTEMA SELECCIONADO ' +  sistema_ID);
         console.log(data);
         dataArduinosCallBack(data);
       },
@@ -392,227 +506,36 @@
 
   function dataArduinosCallBack( data ){
     console.log("Llego la información ARDUINO");
-    console.log(data);
-    console.log(actualArduino);
-
-    allData[data.project].Systems[data.id].Info = data;
 
     _sysID = data.id;
-    console.log(allData);
 
+    actualArduino = data.id; //ID del arduino seleccionado
 
-    //actualArduino = data.id; //ID del arduino seleccionado
+    //Se borra el contenido de las tabs
+    $('#tabs_content').html('');
+    $('#tabs_header').html('');
 
-    $('#my_arduinos').html(" ");
-
-    //Botones para activar las graficas del SISTEMA que pertenece a ese proyecto
-    var rowData = " ";
-
-    rowData += '<tr><td>' + data.name + '</td><td><button id="activar_sist_'+actualArduino+'" type="button" class="btn btn-info">Activo</button> </td></tr>';
-
-    $('#my_arduinos').html(rowData);
-
-    //por cada sensor en el proyecto traemos su información.
     for(var i=0 ; i < data.sensors.length; i++){
       //Se llena el objeto de los datos.
-      allData[data.project].Systems[data.id].Sensors[data.sensors[i].id] = (new ardSensors(data.sensors[i].id));
-
-      getSensorsFromAPI(data.project,data.sensors[i].id, actualArduino, i, data.sensors[i]);
+      getSensorsFromAPI(data.project,data.sensors[i].id, actualArduino, i, data.sensors[i],"");
     }
   }
 
-    function getSensorsFromAPI(proy_ID,sensor_ID, arduinoID, sensID, sensorInfo){
 
-      var passData_proyectID  = proy_ID;
-      var passData_arduinoID  = arduinoID;
-      var passData_sensID     = sensor_ID;
-      var passData_SensorInfo = sensorInfo;
 
-      console.log(urlApiBase + arduinosApi + actualArduino +'/sensors/'+ sensor_ID + '/data/');
 
-      //Peticion AJAX de los datos DE LOS SENSORES
-      var allData;
-
-      $('#tabs_content').html('');
-      $('#tabs_header').html('');
-
-      $.ajax({
-        url: 'http://' + urlApiBase + arduinosApi + actualArduino +'/sensors/'+ sensor_ID + '/data/' ,
-        type: 'GET',
-        contentType: 'json/application',
-        dataType: 'json',
-        processData: false,
-        xhrFields: {
-          withCredentials: false
-        },
-        headers: {
-          'Authorization': tokenCode
-        },
-        success: function(data) {
-          //console.log('AJAX API SUCCESS! SENSORS');
-          //Se hara un return con el JSON obtenido en la API
-          //console.log(data);
-          dataSensorsCallBack(proy_ID,data,passData_arduinoID,passData_sensID, passData_SensorInfo);
-        },
-        error: function() {
-          console.log('Hubo un problema, SENSORES solucionalo...!');
-        }
-      });
+  function completeTimeFormat(hours, minutes, seconds) {
+    if (hours < 10) {
+      hours = "0" + hours;
     }
-
-    var isFirstLoad = true;
-    function dataSensorsCallBack(proy_ID,data, arduinoID, sensID, sensorInfo ){
-      //$('#ard_'+arduinoID+'_sens_'+sensID).append('holo');
-      console.log(sensorInfo);
-
-      var passData_proyectID  = proy_ID;
-      var passData_arduinoID  = arduinoID;
-      var passData_sensID     = sensID;
-      var passData_sensorInfo = sensorInfo;
-
-      allData[passData_proyectID].Systems[passData_arduinoID].Sensors[passData_sensID].Info = passData_sensorInfo;
-
-      allData[passData_proyectID].Systems[passData_arduinoID].Sensors[passData_sensID].DataObjs = data;
-
-      var isEpoch = (passData_sensorInfo.description).toLowerCase();
-      var epochName = "epoch";
-
-      //SOLO se deberan crear las graficas para cuando NO es un EPOCH
-      if(isEpoch !== epochName){
-
-        var sensID = passData_sensorInfo.id;
-        var tabID = "tab_"+ sensID;
-        var tabName = passData_sensorInfo.description;
-        var tabHead = "";
-        var tabContent = "";
-
-
-        if(isFirstLoad){
-          tabHead = '<li class="active"><a href="#'+tabID+'" data-toggle="tab">'+tabName+' - SensID='+sensID+' </a></li>';
-          _activeTab = sensID;
-          tabContent = '<div class="tab-pane active" id="'+tabID+'"><div class="pickers" id="picker_'+sensID+'"></div><br/><br/><div  id="graph_'+sensID+'"></div></div>';
-        }
-        else{
-          tabHead = '<li><a href="#'+tabID+'" data-toggle="tab">'+tabName+' - SensID='+sensID+' </a></li>';
-
-          tabContent = '<div class="tab-pane " id="'+tabID+'"><div class="pickers" id="picker_'+sensID+'"></div><br/><br/><div  id="graph_'+sensID+'"></div></div>';
-        }
-
-        $('#tabs_header').append(tabHead);
-        $('#tabs_content').append(tabContent);
-
-
-        var datePicker = "";
-        datePicker = '<button type="button" class="btn btn-default pull-left" id="daterange_'+ passData_sensorInfo.id +'"><span><i class="fa fa-calendar"></i> Selección de Fechas</span><i class="fa fa-caret-down"></i></button>';
-        $('#picker_'+sensID).append(datePicker);
-
-        createGraph(passData_proyectID,data,passData_arduinoID,passData_sensID,passData_sensorInfo);
-      }
-
-      isFirstLoad = false;
+    if (minutes < 10) {
+      minutes = "0" + minutes;
     }
-
-    function createGraph(proy_ID, data, arduinoID, sensID, sensorInfo){
-      _sensors_data = data;
-
-      var sensor_data_chart = [];
-      var sensor_date_chart = [];
-
-      var passData_proyectID  = proy_ID;
-      var passData_arduinoID  = arduinoID;
-      var passData_sensID     = sensID;
-      var passData_sensorInfo = sensorInfo;
-
-      var dygraphs_data = [];
-
-      var lastDate = "";
-
-      for (var i = 0; i < _sensors_data.length; i++) {
-        sensor_data_chart.push(_sensors_data[i]['data']);
-
-        var d = new Date(_sensors_data[i]['created_at']);
-
-        //Para completar las fechas necesarias :D
-        var d_m = d.getMonth()+'';
-        var d_d = d.getDate()+'';
-
-        if(d_m.length == 1)
-          d_m= '0'+d_m;
-
-        if(d_m.length == 1)
-          d_d= '0'+d_d;
-
-        var d_days =  d.getFullYear() + "/" + d_m + "/" + d_d;
-        console.log(d_days);
-
-
-        var d_time = completeTimeFormat(d.getHours(), d.getMinutes(), d.getSeconds());
-        sensor_date_chart.push(d_time);
-
-        if(lastDate != d_days){
-          lastDate = d_days;
-
-          allData[passData_proyectID].Systems[passData_arduinoID].Sensors[passData_sensID].DataByDate[lastDate] = (new ardSensorData(lastDate));
-        }
-
-        //Hacemos los push para tener los datos de las graficas por fechas, values y epochs.
-        allData[passData_proyectID].Systems[passData_arduinoID].Sensors[passData_sensID].DataByDate[lastDate].epoch.push(d);
-
-        allData[passData_proyectID].Systems[passData_arduinoID].Sensors[passData_sensID].DataByDate[lastDate].dataValue.push(_sensors_data[i]['data']);
-
-
-        dygraphs_data.push([d, _sensors_data[i]['data'], sensorInfo.min_value, sensorInfo.max_value]);
-      }
-      //end for datePickers
-
-      allData[passData_proyectID].Systems[passData_arduinoID].Sensors[passData_sensID].DataGraph = dygraphs_data;
-
-      //var graph_id = 'tab_'+arduinoID+'_sens_'+sensID;
-      var graph_id = 'graph_'+sensID;
-      //console.log(graph_id);
-      //console.log(g);
-
-      g = new Dygraph(document.getElementById(graph_id), dygraphs_data, {
-        drawPoints: true,
-        showRoller: true,
-
-        height: 400,
-        width: 900,
-        highlightSeriesBackgroundAlpha: 0.8,
-        fillGraph: true,
-        includeZero: false,
-        strokeWidth: 3,
-        //showRangeSelector: true,
-        labels: ['Tiempo', 'Temperatura', 'Min', 'Max']
-      });
-
-      allData[passData_proyectID].Systems[passData_arduinoID].Sensors[passData_sensID].g = g;
-
-      //Ahora creamos los callbacks para los datePickers
-
-      date_keys = Object.keys(allData[passData_proyectID].Systems[passData_arduinoID].Sensors[passData_sensID].DataByDate);
-
-      min_date = date_keys[0];
-      max_date = date_keys[date_keys.length-1];
-
-      //console.log(allData);
-      createDatePicker(sensID,min_date,max_date);
-
+    if (seconds < 10) {
+      seconds = "0" + seconds;
     }
-
-
-    function completeTimeFormat(hours, minutes, seconds) {
-      if (hours < 10) {
-        hours = "0" + hours;
-      }
-      if (minutes < 10) {
-        minutes = "0" + minutes;
-      }
-      if (seconds < 10) {
-        seconds = "0" + seconds;
-      }
-      return hours + ':' + minutes + ':' + seconds;
-    }
+    return hours + ':' + minutes + ':' + seconds;
+  }
 
 
 
@@ -635,7 +558,8 @@ function createDatePicker(sensID,min_date,max_date){
   });
 
 
-  var canUsePickerCallBack =  true;
+var canUsePickerCallBack =  true;
+
   $("[id^=daterange_]").on('apply.daterangepicker', function(ev, picker) {
 
     var sensID =  $(this)[0].id;
@@ -651,43 +575,10 @@ function createDatePicker(sensID,min_date,max_date){
       console.log(picker.endDate.format('YYYY/MM/DD'));
 
       //Aqui se manda a llamar el UPDATER de la grafica por fecha.
-      updateGraph(picker.startDate.format('YYYY/MM/DD'), picker.endDate.format('YYYY/MM/DD'));
+      //updateGraph(picker.startDate.format('YYYY/MM/DD'), picker.endDate.format('YYYY/MM/DD'));
     }
   });
 }
-
-function updateGraph(startDate, endDate){
-
-  console.log(_proyID);
-  console.log(_sysID);
-  console.log(_sensID);
-
-  console.log(allData[_proyID].Systems[_sysID].Sensors[_sensID]);
-}
-
-
-
-//Detectamos el TAB seleccionado y saber que grafica se actualizara.
-$(document).on('shown.bs.tab', 'a[data-toggle="tab"]', function (e) {
-    canUsePickerCallBack = true;
-    var tab = $(e.target);
-    var contentId = tab.attr("href");
-    var sensID =  contentId;
-
-    if (tab.parent().hasClass('active')) {
-         //console.log('the tab with the content id ' + contentId + ' is visible');
-         sensID     = sensID.replace("#tab_","");
-         _activeTab = sensID;
-         _sensID    = sensID;
-         console.log(sensID );
-    }
-});
-
-
-
-
-
-
 
 
 

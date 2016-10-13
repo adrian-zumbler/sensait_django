@@ -8,22 +8,13 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-        {{arduinosensor.arduino.name}} - {{ arduinosensor.sensor_type.name }} - {{ arduinosensor.data_key }}
-        <small>Sistema seleccionado</small>
+        <b> Sensor: </b> {{arduinosensor.arduino.name}}
+        <small>Tipo Sensor: {{ arduinosensor.sensor_type.name }}</small>
       </h1>
-      <ol class="breadcrumb">
-        <li>
-          <a href="#">
-            <i class="fa fa-dashboard"></i>
-            Home</a>
-        </li>
-        <li class="active">Dashboard</li>
-      </ol>
     </section>
 
     <!-- Main content -->
     <section class="content">
-
 
       <div class="row">
         <div class="col-md-6">
@@ -50,17 +41,64 @@
                 <dd>{{ arduinosensor.sensor_type.name }}</dd>
                 <dt># del Sensor en el sistema</dt>
                 <dd>{{ arduinosensor.index }}</dd>
-                <dt>Valor Maximo</dt>
-                <dd>{{ arduinosensor.max_value }}</dd>
-                <dt>Valor Minimo</dt>
-                <dd>{{ arduinosensor.min_value }}</dd>
+
+                {% comment %}
+                  <dt>Valor Maximo</dt>
+                  <dd>{{ arduinosensor.max_value }}</dd>
+                  <dt>Valor Minimo</dt>
+                  <dd>{{ arduinosensor.min_value }}</dd>
+                {% endcomment %}
+
               </dl>
             </div><!-- /.box-body -->
           </div><!-- /.box -->
         </div><!-- ./col -->
 
+        <div class="col-md-6">
+          <div class="box box-solid">
+            <div class="box-header with-border">
+              <i class="fa fa-adjust"></i>
+              <h3 class="box-title">Resumen de registros</h3>
+            </div><!-- /.box-header -->
+            <div class="box-body">
+              <dl class="dl-horizontal">
+                <dt>Registros totales</dt>
+                <dd id="totalRegistros">0</dd>
+
+                {% comment %}
+                  <dt>Registros con riesgo</dt>
+                  <dd id="totalConRiesgo">0</dd>
+                  <dt>Alertas Enviadas</dt>
+                  <dd id="totalAlertas">0</dd>
+                {% endcomment %}
+
+                <dt>Promedio de registros</dt>
+                <dd id="totalPromedio">0</dd>
+                <dt>Valor minimo registrado</dt>
+                <dd id="valorMinimo">0</dd>
+                <dt>Valor maximo registrado</dt>
+                <dd id="valorMaximo">0</dd>
+              </dl>
+            </div><!-- /.box-body -->
+          </div><!-- /.box -->
+        </div><!-- ./col -->
+
+
         <div class="col-lg-3 col-xs-6">
-          <!-- small box -->
+          <div class="small-box bg-green">
+            <div class="inner">
+              <h3>
+                {{ arduinosensor.min_value }}
+              </h3>
+              <p>Valor Minimo</p>
+            </div>
+            <div class="icon">
+              <i class="ion ion-stats-bars"></i>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-3 col-xs-6">
           <div class="small-box bg-green">
             <div class="inner">
               <h3 id="ultimoValor">
@@ -68,6 +106,20 @@
                 <sup style="font-size: 20px">°</sup>
               </h3>
               <p>Ultimo valor</p>
+            </div>
+            <div class="icon">
+              <i class="ion ion-stats-bars"></i>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-3 col-xs-6">
+          <div class="small-box bg-green">
+            <div class="inner">
+              <h3>
+                {{ arduinosensor.max_value }}
+              </h3>
+              <p>Valor Maximo</p>
             </div>
             <div class="icon">
               <i class="ion ion-stats-bars"></i>
@@ -84,12 +136,7 @@
             </div>
           </div>
         </div>
-        <!-- ./col -->
-        <!-- ./col -->
       </div>
-
-
-
 
       <div class="row">
         <div class="col-xs-12">
@@ -97,21 +144,18 @@
           <div class="box box-info">
             <div class="box-header with-border">
               <h3 class="box-title">
-                Grafica del Sensor - {{ arduinosensor.sensor_type.name }} - {{ arduinosensor.data_key }}
+                Gráfica del Sensor - {{ arduinosensor.sensor_type.name }}
+
               </h3>
               <div class="box-tools pull-right">
-                <button class="btn btn-box-tool" data-widget="collapse">
-                  <i class="fa fa-minus"></i>
-                </button>
-                <button class="btn btn-box-tool" data-widget="remove">
-                  <i class="fa fa-times"></i>
-                </button>
+                Ultima actualización:
+                <span id="sensor_lastupdate" class="">
+                </span>
               </div>
             </div>
             <!-- /.box-header -->
             <div class="box-body">
               <div class="row">
-
                 <div class="col-xs-4 ">
                   <div id="filter_type" class="form-group">
                     <label for="limit_selector" class=" col-xs-12 control-label">Tipo de Filtrado:</label>
@@ -174,8 +218,8 @@
         </div>
       </div>
 
+    {% comment %}
     <div class="row">
-
       <div class="col-md-6">
         <div class="box">
           <div class="box-header with-border">
@@ -208,33 +252,8 @@
         </div><!-- /.box -->
 
       </div><!-- /.col -->
-
-      <div class="col-md-6">
-        <div class="box box-solid">
-          <div class="box-header with-border">
-            <i class="fa fa-adjust"></i>
-            <h3 class="box-title">Resumen de registros</h3>
-          </div><!-- /.box-header -->
-          <div class="box-body">
-            <dl class="dl-horizontal">
-              <dt>Registros taotales</dt>
-              <dd id="totalRegistros">0</dd>
-              <dt>Registros con riesgo</dt>
-              <dd id="totalConRiesgo">0</dd>
-              <dt>Alertas Enviadas</dt>
-              <dd id="totalAlertas">0</dd>
-              <dt>Promedio</dt>
-              <dd id="totalPromedio">0</dd>
-              <dt>Valor minimo</dt>
-              <dd id="valorMinimo">0</dd>
-              <dt>Valor maximo</dt>
-              <dd id="valorMaximo">0</dd>
-            </dl>
-          </div><!-- /.box-body -->
-        </div><!-- /.box -->
-      </div><!-- ./col -->
-
     </div><!-- /.row -->
+    {% endcomment %}
 
 
 
@@ -334,6 +353,21 @@ function useWSData(data){
         for(var i= 0 ; i < jso.length ; i++){
 
           console.log(jso[i]['data']);
+          console.log(jso[i]['data_key']);
+          if(jso[i]['data_key'] == 'field1'){
+
+            var d = new Date(0);
+            d.setUTCSeconds(jso[i]['data']);
+
+            var month =  d.getMonth() + 1;
+            var dateFormat = d.getDay()+'/'+month+'/'+d.getFullYear();
+            var timeFormat = d.getHours()+':'+d.getMinutes()+':'+d.getSeconds();
+
+            $('#epoch_'+sensInfo.arduino).html('Ultima Actualización:  ' + dateFormat + '    ' + timeFormat);
+
+            $('#sensor_lastupdate').html( dateFormat + '    ' + timeFormat );
+          }
+
           if(jso[i]['arduino_sensor'] == {{arduinosensor.id}}){
 
             sensor_data_chart.push(jso[i]['data']);
@@ -345,8 +379,8 @@ function useWSData(data){
             var lastPosition = _sensors_data.length;
 
             _sensors_data.push(jso[i]);
-            console.log(_sensors_data);
-            console.log(lastPosition);
+            //console.log(_sensors_data);
+            //console.log(lastPosition);
 
             $('#totalRegistros').html(lastPosition);
             $('#ultimoValor').html( _sensors_data[lastPosition]['data'] );
@@ -376,12 +410,6 @@ function useWSData(data){
     console.log("Esperaaaa....");
   }
 }
-
-
-
-
-  //var urlApi = 'http://sensait.dyndns.org/api/arduinos/{{ arduinosensor.arduino.id }}/sensors/{{ arduinosensor.id }}/data/';
-  //var urlApi = 'http://dashboard:8000/api/arduinos/{{ arduinosensor.arduino.id }}/sensors/{{ arduinosensor.id }}/data/';
 
   var _arduino;
   var _sensors;
@@ -540,7 +568,6 @@ function useWSData(data){
 
     function getDataFromAPI(query_startDate, query_endDate, query_dataLimit){
 
-
       var query =  "?";
 
       if(query_startDate != "")
@@ -568,7 +595,6 @@ function useWSData(data){
           'Authorization': tokenCode
         },
         success: function(data) {
-          //console.log('AJAX API SUCCESS!');
 
           if(data.length > 0){
             dataCallBack(data);
@@ -667,6 +693,10 @@ function useWSData(data){
       highlightSeriesBackgroundAlpha: 0.8,
       fillGraph: true,
       includeZero: false,
+      connectSeparatedPoints:true,
+      drawGapEdgePoints:true,
+      drawPoints:true,
+      pointSize:3,
       strokeWidth: 3,
       labels: ['Tiempo', 'Temperatura', 'Min', 'Max']
     });
