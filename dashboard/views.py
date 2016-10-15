@@ -4,6 +4,7 @@ from django import forms
 from django.http import HttpResponseRedirect
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.core.urlresolvers import reverse_lazy, reverse
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 from dashboard.forms import AdminArduinoCreateForm, AdminProjectUpdateForm, \
     AdminProjectCreateForm, ArduinoSensorFormSet
@@ -13,7 +14,7 @@ from client.models import Project, Client
 
 #       CLASES PARA USUARIO/CLIENTE
 # _____________________________________________#
-class ProjectsListView(ListView):
+class ProjectsListView(LoginRequiredMixin, ListView):
     template_name = 'client/user_projects.html'
     queryset = Project.objects.all()
 
@@ -29,12 +30,12 @@ class ProjectsListView(ListView):
         return queryset
 
 
-class ProjectDetailView(DetailView):
+class ProjectDetailView(LoginRequiredMixin, DetailView):
     template_name = 'client/user_selected_project.html'
     queryset = Project.objects.all()
 
 
-class ArduinoDetailView(DetailView):
+class ArduinoDetailView(LoginRequiredMixin, DetailView):
     template_name = 'client/user_iots.html'
 
     def get_queryset(self):
@@ -48,7 +49,7 @@ class ArduinoDetailView(DetailView):
         return queryset
 
 
-class ArduinoSensorDetailView(DetailView):
+class ArduinoSensorDetailView(LoginRequiredMixin, DetailView):
     template_name = 'client/user_selected_sensor.html'
 
     def get_context_data(self, **kwargs):
@@ -71,7 +72,7 @@ class ArduinoSensorDetailView(DetailView):
         return queryset
 
 
-class DashMainListView(ListView):
+class DashMainListView(LoginRequiredMixin, ListView):
     template_name = 'client/user_dashboard.html'
 
     def get_context_data(self, **kwargs):
@@ -95,12 +96,12 @@ class DashMainListView(ListView):
 
 #       ADMIN - PROYECTOS
 # _____________________________________________#
-class AdminProjectsListView(ListView):
+class AdminProjectsListView(LoginRequiredMixin, ListView):
     template_name = 'admin/admin_projects_list.html'
     queryset = Project.objects.all()
 
 
-class AdminProjectsDetailView(DetailView):
+class AdminProjectsDetailView(LoginRequiredMixin, DetailView):
     template_name = 'admin/admin_projects_detail.html'
     queryset = Project.objects.all()
 
@@ -117,20 +118,20 @@ class AdminProjectsDetailView(DetailView):
         return context
 
 
-class AdminProjectCreateView(CreateView):
+class AdminProjectCreateView(LoginRequiredMixin, CreateView):
     form_class = AdminProjectCreateForm
     template_name = 'admin/admin_projects_create.html'
     success_url = reverse_lazy('projectsList')
 
 
-class AdminProjectsEditView(UpdateView):
+class AdminProjectsEditView(LoginRequiredMixin, UpdateView):
     form_class = AdminProjectUpdateForm
     template_name = 'admin/admin_projects_create.html'
     success_url = reverse_lazy('projectsList')
     queryset = Project.objects.all()
 
 
-class AdminProjectsDeleteView(DeleteView):
+class AdminProjectsDeleteView(LoginRequiredMixin, DeleteView):
     template_name = 'admin/admin_projects_delete.html'
     success_url = reverse_lazy('projectsList')
     queryset = Project.objects.all()
@@ -138,7 +139,7 @@ class AdminProjectsDeleteView(DeleteView):
 
 #       ADMIN - ARDUINOS
 # _____________________________________________#
-class AdminArduinoCreateView(CreateView):
+class AdminArduinoCreateView(LoginRequiredMixin, CreateView):
     form_class = AdminArduinoCreateForm
     template_name = 'admin/admin_arduino_create.html'
 
@@ -162,7 +163,7 @@ class AdminArduinoCreateView(CreateView):
         return initial
 
 
-class AdminArduinoWithSensorsUpdateView(UpdateView):
+class AdminArduinoWithSensorsUpdateView(LoginRequiredMixin, UpdateView):
     form_class = AdminArduinoCreateForm
     template_name = 'admin/admin_arduinowithsensors_update.html'
 

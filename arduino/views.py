@@ -2,8 +2,9 @@
 
 import json
 from datetime import datetime
-from django.utils import timezone
-from django.shortcuts import render
+
+from django.http import QueryDict
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import ListView, CreateView, UpdateView, DetailView, DeleteView
 from django.core.urlresolvers import reverse_lazy
 
@@ -21,7 +22,14 @@ from arduino.permissions import isArduinoPermission
 from arduino.models import Arduino, SensorType
 from .forms import SensorTypeForm
 
-from urlparse import parse_qs
+from urlparse import parse_qsl
+
+
+def parse_qs(qs, keep_blank_values=0, strict_parsing=0):
+    dict = {}
+    for name, value in parse_qsl(qs, keep_blank_values, strict_parsing):
+        dict[name] = value
+    return dict
 
 
 class ArduinoViewSet(mixins.CreateModelMixin,
@@ -190,7 +198,7 @@ class DataViewSet(mixins.CreateModelMixin,
             request_data = parse_qs(request.body)
         for k in request_data:
             a_sensor = sensors.filter(data_key=k)
-            data = {'arduino_sensor': a_sensor, 'data': request_data[k][0]}
+            data = {'arduino_sensor': a_sensor, 'data': request_data[k]}
             serializer = self.get_serializer(data=data)
             serializer.is_valid(raise_exception=True)
             self.perform_create(serializer)
@@ -203,41 +211,41 @@ class DataViewSet(mixins.CreateModelMixin,
         return Response({'message': 'data created'}, status=status.HTTP_201_CREATED)
 
 
-class AdminSensorTypeListView(ListView):
+class AdminSensorTypeListView(LoginRequiredMixin, ListView):
     template_name = 'admin/admin_sensorType_list.html'
     queryset = SensorType.objects.all()
 
 
-class AdminSensorTypeCreateView(CreateView):
+class AdminSensorTypeCreateView(LoginRequiredMixin, CreateView):
     template_name = 'admin/admin_sensorType_edit.html'
     form_class = SensorTypeForm
     success_url = reverse_lazy('sensorTypeList')
 
 
-class AdminSensorTypeDetailView(DetailView):
+class AdminSensorTypeDetailView(LoginRequiredMixin, DetailView):
     template_name = 'admin/admin_sensorType_detail.html'
     queryset = SensorType.objects.all()
 
 
-class AdminSensorTypeEditView(UpdateView):
+class AdminSensorTypeEditView(LoginRequiredMixin, UpdateView):
     template_name = 'admin/admin_sensorType_edit.html'
     form_class = SensorTypeForm
     queryset = SensorType.objects.all()
     success_url = reverse_lazy('sensorTypeList')
 
 
-class AdminSensorTypeDeleteView(DeleteView):
+class AdminSensorTypeDeleteView(LoginRequiredMixin, DeleteView):
     template_name = 'admin/admin_sensorType_delete.html'
     success_url = reverse_lazy('sensorTypeList')
     queryset = SensorType.objects.all()
 
 
-class AdminArduinoDetailView(DetailView):
+class AdminArduinoDetailView(LoginRequiredMixin, DetailView):
     template_name = 'admin/admin_arduino_detail.html'
     queryset = Arduino.objects.all()
 
 
-class AdminArduinoDeleteView(DeleteView):
+class AdminArduinoDeleteView(LoginRequiredMixin, DeleteView):
     template_name = 'admin/admin_arduino_delete.html'
     success_url = reverse_lazy('projectsDetail')
     queryset = Arduino.objects.all()

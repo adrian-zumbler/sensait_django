@@ -17,6 +17,7 @@ from django.conf.urls import url, include
 from django.contrib import admin
 from django.conf import settings
 
+from django.contrib.auth.views import logout
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.contrib.staticfiles.urls import static
 
@@ -27,7 +28,6 @@ from django.http import *
 from django.shortcuts import render_to_response, redirect
 from django.template import RequestContext
 
-from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 
 from dashboard.views import *
@@ -44,7 +44,8 @@ def login_user(request):
         if user is not None:
             if user.is_active:
                 login(request, user)
-                return HttpResponseRedirect('/dash/main')
+                response_redirect = request.GET.get('next', '/dash/main')
+                return HttpResponseRedirect(response_redirect)
     return render_to_response('system/login/login.html', context_instance=RequestContext(request))
 
 
@@ -57,7 +58,7 @@ urlpatterns = [
     url(r'^', include('ticket.urls', namespace='ticket')),
     url(r'^dash/', include('client.urls', namespace='enterprise-client')),
 
-    url(r'^logout/$', 'django.contrib.auth.views.logout', {'next_page': '/logins/'}, name="logout"),
+    url(r'^logout/$', logout, {'next': '/'}, name="logout"),
     url(r'^logins/$', login_user),
     url(r'^error/$', TemplateView.as_view(template_name='system/errors/error.html')),
 
@@ -66,8 +67,6 @@ urlpatterns = [
     url(r'^dash/projects/(?P<pk>\d+)/$', ProjectDetailView.as_view(), name="projectDetail"),
     url(r'^dash/iot/(?P<pk>\d+)/$', ArduinoDetailView.as_view(), name="arduinoDetail"),
     url(r'^dash/sensor/(?P<pk>\d+)/$', ArduinoSensorDetailView.as_view(), name="sensorDetail"),
-
-    url(r'^dash/admin/clients/$', TemplateView.as_view(template_name='admin/admin_clients.html'), name="clientsList"),
 
     url(r'^dash/admin/projects/$', AdminProjectsListView.as_view(), name="projectsList"),
     url(r'^dash/admin/projects/detail/(?P<pk>\d+)/$', AdminProjectsDetailView.as_view(), name="projectsDetail"),
