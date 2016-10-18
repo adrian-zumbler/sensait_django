@@ -22,7 +22,10 @@ def forwards_func(apps, schema_editor):
                 delta = timedelta(seconds=3)
                 for edata in esensor[0].sensor_data.all():
                     edatetime = edata.created_at
-                    epoch = int(edata.data) + 180000
+                    try:
+                        epoch = int(edata.data) + 180000
+                    except Exception as e:
+                        epoch = 0
                     SensorData.objects.filter(
                         arduino_sensor__in=sensors,
                         created_at__gt=edatetime - delta,
