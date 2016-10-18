@@ -189,8 +189,6 @@
     allSockets.push(ws4redis);
   }
 
-
-
     // attach this function to an event handler on your site
     function sendMessage() {
       ws4redis.send_message('A message');
@@ -210,6 +208,7 @@
 
     // receive a message though the websocket from the server
     function receiveMessage(msg) {
+      //console.log(msg);
       useWSData(msg);
     }
 
@@ -262,20 +261,18 @@
     allSockets = [];
 
     var idKeys = Object.keys(proyectNames);
+    _proyID = project_selected_ID;
 
     for(var i=0; i<idKeys.length; i++){
-      console.log(idKeys[i]);
-      //$("#activar_"+idKeys[i]).removeClass('btn-default');
       $("#activar_"+idKeys[i]).removeClass('btn-info');
       $("#activar_"+idKeys[i]).addClass('btn-default');
-
       $("#activar_"+idKeys[i]).html('Seleccionar');
     }
 
     $("#activar_"+_proyID).addClass('btn-info');
     $("#activar_"+_proyID).html('Activo');
 
-    _proyID = project_selected_ID;
+
 
     getArduinosFromProject( _proyID );
   });
@@ -318,13 +315,16 @@
       if(data[i].sensors.length > 0 ){
         var blocksData = " ";
         var epochData  = " ";
+        var epochID    = 0 ;
 
         for( var j = 0; j < data[i].sensors.length ; j++){
           var description = data[i].sensors[j].description;
           var dataKey     = data[i].sensors[j].data_key;
           var sensID      = data[i].sensors[j].id;
 
-          if(description.toLowerCase() != 'epoch' || dataKey != 'field1'){
+          if(dataKey === "field1"){
+            epochID = sensID;
+          }else{
             blocksData +=
             '<div id="blocksens_'+sensID +'">'+
               '<div class="col-sm-3 col-xs-12">'+
@@ -356,12 +356,12 @@
               '<div class="box box-info">'+
                 '<div class="box-header with-border">'+
                   '<h3 class="box-title">'+
-                    '<b>Proyecto:  </b>'+proyectNames[_proyID] +' --  '+
+                    '<b>Proyecto:  </b>'+proyectNames[_proyID] +' - '+
                     '<b>Transmisor:</b>  '+data[i].name+
+                    ' - <span id="epoch_'+epochID+'"> -  Ultima actualización: </span>'+
                   '</h3>'+
                 '</div>'+
                 '<div class="box-body">'+
-                  '<div id="epoch_'+data[i].id +'">Ultima actualización: </div>'+
                   '<br/>'+
                   blocksData+
                 '</div>'+
@@ -369,11 +369,8 @@
             '</div>' +
           '</div>' +
         '</div>';
-      }else{
-
       }
       //getArduinosFromAPI(data[0].id);
-
     }
     $('#transmisores').append(rowData);
 
@@ -440,41 +437,80 @@
   function dataSensorsCallBack(proy_ID,data, arduinoID, sensID, sensInfo ){
 
     if( data[0] !== undefined){
+      var passData_sensID     = sensID;
+
       if(sensInfo.data_key != 'field1'){
         //console.log(data);
         var passData_proyectID  = proy_ID;
         var passData_arduinoID  = arduinoID;
-        var passData_sensID     = sensID;
+
         var passData_sensInfo   = sensInfo;
 
         $('#sens_'+sensID).html(data[0].data+'°');
-        $('#min_'+sensID).html('Min. '+sensInfo.min_value+'°');
-        $('#max_'+sensID).html('Max. '+sensInfo.min_value+'°');
+        var max = sensInfo.max_value;
+        var min = sensInfo.min_value;
+
+        $('#min_'+sensID).html('Min. '+min.substring(0,(min.length-2))+'°');
+        $('#max_'+sensID).html('Max. '+max.substring(0,(max.length-2))+'°');
 
       }else{
 
         var epoch = data[0].data;
-        var d = new Date(0);
-        d.setUTCSeconds(epoch);
+        var epochDate = convertEpoch2Date(epoch);
 
-        var day =  d.getDay() + 1;
-        var month =  d.getMonth() + 1;
-
-        var dateFormat = day +'/'+month+'/'+d.getFullYear();
-        var timeFormat = d.getHours()+':'+d.getMinutes()+':'+d.getSeconds();
-
-        $('#epoch_'+sensInfo.arduino).html('Ultima Actualización:  ' + dateFormat + '    ' + timeFormat);
-
+        $('#epoch_'+sensID).html('Ultima Actualización:  ' + epochDate);
         canUseSocket = true; //dejemos que vivan los sockets
       }
     }
     isFirstLoad = false;
   }
 
+  function convertEpoch2Date(epochData){
+    var d = new Date(0);
+    d.setUTCSeconds(epochData);
+
+    var day =  d.getDay() + 1 +'';
+    var month =  d.getMonth() + 1 +'';
+
+    var hour    = d.getHours() +'';
+    var minutes = d.getMinutes()+'';;
+    var seconds = d.getSeconds()+'';;
+
+    //NO me gusta... pero no se me ocurre otra forma...
+    if(day.length == 1)
+      day = '0'+day;
+    if(month.length == 1)
+      month = '0'+month;
+    if(hour.length == 1)
+      hour = '0'+hour;
+    if(minutes.length == 1)
+      minutes = '0'+minutes;
+    if(seconds.length == 1)
+      seconds = '0'+seconds;
+
+    var dateFormat = day +'/'+month+'/'+d.getFullYear();
+    var timeFormat = hour+':'+minutes+':'+seconds;
+
+    return dateFormat + '               <b>' + timeFormat + '</b>';
+  }
 
   function useWSData(msg){
-    console.log('holo');
-    console.log(msg);
+    //console.log(msg);
+
+    if(canUseSocket == true ){
+      var wsData = JSON.parse(msg);
+
+      for(var i= 0 ; i < wsData.length ; i++){
+        var data = wsData[i]['data'];
+
+        if( parseInt(data) > 100000){
+          var epochDate = convertEpoch2Date(data);
+          $('#epoch_'+wsData[i]['arduino_sensor']).html('Ultima Actualización:  ' + epochDate);
+        }else{
+          $('#sens_'+wsData[i]['arduino_sensor']).html(data + " &#176;");
+        }
+      }
+    }
   }
 
   //Pedimos a la API los datos de los sistemas

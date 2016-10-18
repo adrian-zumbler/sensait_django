@@ -38,6 +38,15 @@ class ProjectDetailView(LoginRequiredMixin, DetailView):
 class ArduinoDetailView(LoginRequiredMixin, DetailView):
     template_name = 'client/user_iots.html'
 
+    def get_context_data(self, **kwargs):
+
+        context = super(ArduinoDetailView, self).get_context_data(**kwargs)
+
+        context['site_url'] = self.request.get_host()
+        # build_absolute_uri('/')
+
+        return context
+
     def get_queryset(self):
         user = self.request.user
         queryset = Arduino.objects.none()

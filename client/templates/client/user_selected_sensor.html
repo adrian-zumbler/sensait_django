@@ -1,6 +1,23 @@
 {% extends 'main_header.html' %}
 {% load staticfiles %}
 
+
+{% block content_css %}
+
+<style>
+  #graphData{
+    font-size:20px;
+  }
+  .bg-dark-green{
+    color: white;
+    background-color: #027c43 !important;
+  }
+</style>
+
+{% endblock content_css %}
+
+
+
 {% block main_content_wrapper %}
 
   <!-- Content Wrapper. Contains page content -->
@@ -8,8 +25,8 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-        <b> Sensor: </b> {{arduinosensor.arduino.name}}
-        <small>Tipo Sensor: {{ arduinosensor.sensor_type.name }}</small>
+        <b> Transmisor: </b> {{arduinosensor.arduino.name}}
+        <small>Tipo Sensor: <b>{{ arduinosensor.sensor_type.name }}</b></small>
       </h1>
     </section>
 
@@ -43,9 +60,9 @@
                 <dd>{{ arduinosensor.index }}</dd>
 
                 {% comment %}
-                  <dt>Valor Maximo</dt>
+                  <dt>Valor Máximo permitido</dt>
                   <dd>{{ arduinosensor.max_value }}</dd>
-                  <dt>Valor Minimo</dt>
+                  <dt>Valor Mínimo permitido</dt>
                   <dd>{{ arduinosensor.min_value }}</dd>
                 {% endcomment %}
 
@@ -85,12 +102,12 @@
 
 
         <div class="col-lg-3 col-xs-6">
-          <div class="small-box bg-green">
+          <div class="small-box bg-dark-green">
             <div class="inner">
-              <h3>
+              <h3 id="val_min">
                 {{ arduinosensor.min_value }}
               </h3>
-              <p>Valor Minimo</p>
+              <span>Valor Mínimo permitido</span>
             </div>
             <div class="icon">
               <i class="ion ion-stats-bars"></i>
@@ -105,7 +122,9 @@
                 {{ arduinosensor.sensor_data.last.data }}
                 <sup style="font-size: 20px">°</sup>
               </h3>
-              <p>Ultimo valor</p>
+              <span>Último valor registrado</span>
+              <br/>
+              <span>Fecha: </span><span id="dateEpoch"> Conectando...</span>
             </div>
             <div class="icon">
               <i class="ion ion-stats-bars"></i>
@@ -114,12 +133,12 @@
         </div>
 
         <div class="col-lg-3 col-xs-6">
-          <div class="small-box bg-green">
+          <div class="small-box bg-dark-green">
             <div class="inner">
-              <h3>
+              <h3 id="val_max">
                 {{ arduinosensor.max_value }}
               </h3>
-              <p>Valor Maximo</p>
+              <span>Valor Máximo permitido</span>
             </div>
             <div class="icon">
               <i class="ion ion-stats-bars"></i>
@@ -132,7 +151,7 @@
           <div class="small-box bg-aqua">
             <div class="inner">
               <h3 id="widget_Promedio">0</h3>
-              <p>Promedio <span id="widget_TotalRegistros">(0)</span> registros</p>
+              <span>Promedio <span id="widget_TotalRegistros">(0)</span> registros</span>
             </div>
           </div>
         </div>
@@ -150,6 +169,7 @@
               <div class="box-tools pull-right">
                 Ultima actualización:
                 <span id="sensor_lastupdate" class="">
+                  conectando...
                 </span>
               </div>
             </div>
@@ -204,8 +224,11 @@
 
                 <div class="col-xs-12 ">
                   <br/>
+                  <div>Información del punto de la gráfica: <span id="graphData"></span></div>
+                  <br/>
                   La siguiente grafica corresponde a: <b><span id="filter_resume"></span></b>
                   <br/><br/>
+
                 </div>
                 <br/><br/><br/><br/>
               </div>
@@ -335,11 +358,15 @@
   // receive a message though the websocket from the server
   function receiveMessage(msg) {
     useWSData(msg);
+    console.log(msg);
   }
 
 //##############################
 
 function useWSData(data){
+  console.log(data);
+  console.log(canUseSocket);
+  console.log(filter_type);
 
   if(canUseSocket == true ){
 
@@ -397,18 +424,64 @@ function useWSData(data){
               highlightSeriesBackgroundAlpha: 0.8,
               fillGraph: true,
               includeZero: false,
+              connectSeparatedPoints:true,
+              drawGapEdgePoints:true,
+              drawPoints:true,
+              pointSize:3,
               strokeWidth: 3,
-              labels: ['Tiempo', 'Temperatura', 'Min', 'Max']
+              rightGap:40,
+              legend:"always",
+              highlightCircleSize:5,
+              showRoller:true,
+              hideOverlayOnMouseOut:false,
+              labelsDiv: document.getElementById('graphData'),
+              labels: ['Tiempo', 'Valor Registrado', 'Min.', 'Max.']
             });
 
           }else{
-            console.log("ño");
+            var epoch = parseInt(jso[i]['data']);
+            if(epoch >100000){
+              var epochDate = convertEpoch2Date(epoch);
+              $('#dateEpoch').html(epochDate);
+              $('#sensor_lastupdate').html(epochDate);
+              console.log("ño");
+            }
+
           }
         }
       }
   }else{
     console.log("Esperaaaa....");
   }
+}
+
+function convertEpoch2Date(epochData){
+  var d = new Date(0);
+  d.setUTCSeconds(epochData);
+
+  var day =  d.getDay() + 1 +'';
+  var month =  d.getMonth() + 1 +'';
+
+  var hour    = d.getHours() +'';
+  var minutes = d.getMinutes()+'';;
+  var seconds = d.getSeconds()+'';;
+
+  //NO me gusta... pero no se me ocurre otra forma...
+  if(day.length == 1)
+    day = '0'+day;
+  if(month.length == 1)
+    month = '0'+month;
+  if(hour.length == 1)
+    hour = '0'+hour;
+  if(minutes.length == 1)
+    minutes = '0'+minutes;
+  if(seconds.length == 1)
+    seconds = '0'+seconds;
+
+  var dateFormat = day +'/'+month+'/'+d.getFullYear();
+  var timeFormat = hour+':'+minutes+':'+seconds;
+
+  return dateFormat + '               <b>' + timeFormat + '</b>';
 }
 
   var _arduino;
@@ -439,14 +512,23 @@ function useWSData(data){
 
     $(document).ready(function(){
 
+      //valores minimos y maximos:
+      var min = "{{ arduinosensor.min_value }}";
+      var max = "{{ arduinosensor.max_value }}";
+      $('#val_min').html(min.substring(0,(min.length-2)));
+      $('#val_max').html(max.substring(0,(max.length-2)));
+
       //ocultamos los selectores de la grafica
+      filter_type = 1;
+
       $("#filter_date").hide();
       $("#filter_limit").hide();
-       date_today = moment().format("YYYY-MM-DD");
+      date_today = moment().format("YYYY-MM-DD");
       //primera petición de datos.
       allData = getDataFromAPI("","",query_dataLimit);
 
       $("#filter_resume").html("Ultimos " + query_dataLimit + " registros" );
+
     });
 
 
@@ -684,8 +766,6 @@ function useWSData(data){
       $('#graphdiv').html('');
     }
 
-
-
     g = new Dygraph(document.getElementById("graphdiv"), dygraphs_data, {
       drawPoints: true,
       showRoller: true,
@@ -698,11 +778,21 @@ function useWSData(data){
       drawPoints:true,
       pointSize:3,
       strokeWidth: 3,
-      labels: ['Tiempo', 'Temperatura', 'Min', 'Max']
+      rightGap:40,
+      legend:"always",
+      highlightCircleSize:5,
+      showRoller:true,
+      hideOverlayOnMouseOut:false,
+      labelsDiv: document.getElementById('graphData'),
+      labels: ['Tiempo', 'Valor Registrado', 'Min.', 'Max.']
     });
 
     canUseSocket = true;
 
+  }
+
+  function graphCallBack(e,x,pts,row){
+    console.log(pts);
   }
 
   function completeTimeFormat(hours, minutes, seconds) {
