@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import json
+import time
 from datetime import datetime
 
 from django.http import QueryDict
@@ -14,6 +15,7 @@ from ws4redis.redis_store import RedisMessage
 from rest_framework import viewsets, mixins, status
 from rest_framework.permissions import IsAuthenticated, DjangoModelPermissions, AllowAny
 from rest_framework.response import Response
+from rest_framework.exceptions import APIException
 from rest_framework.request import Request
 from django.db.models.query import QuerySet
 from arduino.serializers import (ArduinoSerializer, SensorTypeSerializer,
@@ -191,13 +193,22 @@ class DataViewSet(mixins.CreateModelMixin,
             broadcast=True)
         sensors = request.arduino.arduino_sensors.all()
         ret = []
+
         try:
-            request_data = request.data
+            epoch = int(request.data['field1'])
+            request_data = request.data.exclude('field1')
         except Exception as exc:
             print(exc)
             request_data = parse_qs(request.body)
+            epoch = request_data.pop('field1')
+
+        if epoch < int(time.time()) - 200:
+            epoch += 180000
+
         for k in request_data:
             a_sensor = sensors.filter(data_key=k)
+            if not a_sensor:
+                raise APIException(detail='No se tiene registrado el sensor %s en el administrador' % k)
             data = {'arduino_sensor': a_sensor, 'data': request_data[k]}
             serializer = self.get_serializer(data=data)
             serializer.is_valid(raise_exception=True)
