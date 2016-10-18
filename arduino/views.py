@@ -23,6 +23,7 @@ from arduino.serializers import (ArduinoSerializer, SensorTypeSerializer,
 from arduino.permissions import isArduinoPermission
 from arduino.models import Arduino, SensorType
 from .forms import SensorTypeForm
+from .exceptions import StandardAPIException
 
 from urlparse import parse_qsl
 
@@ -203,13 +204,18 @@ class DataViewSet(mixins.CreateModelMixin,
             epoch = request_data.pop('field1')
 
         if epoch < int(time.time()) - 200:
-            epoch += 180000
+            epoch += 18000
 
         for k in request_data:
             a_sensor = sensors.filter(data_key=k)
             if not a_sensor:
-                raise APIException(detail='No se tiene registrado el sensor %s en el administrador' % k)
-            data = {'arduino_sensor': a_sensor, 'data': request_data[k]}
+                detail = 'No se tiene registrado el sensor %s en el administrador' % k
+                raise StandardAPIException(detail=detail)
+            data = {
+                'arduino_sensor': a_sensor,
+                'data': request_data[k],
+                'epoch': epoch
+            }
             serializer = self.get_serializer(data=data)
             serializer.is_valid(raise_exception=True)
             self.perform_create(serializer)

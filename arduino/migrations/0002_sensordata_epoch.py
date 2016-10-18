@@ -23,7 +23,7 @@ def forwards_func(apps, schema_editor):
                 for edata in esensor[0].sensor_data.all():
                     edatetime = edata.created_at
                     try:
-                        epoch = int(edata.data) + 180000
+                        epoch = int(edata.data) + 18000
                     except Exception as e:
                         epoch = 0
                     SensorData.objects.filter(
