@@ -261,20 +261,18 @@
     allSockets = [];
 
     var idKeys = Object.keys(proyectNames);
+    _proyID = project_selected_ID;
 
     for(var i=0; i<idKeys.length; i++){
-      console.log(idKeys[i]);
-      //$("#activar_"+idKeys[i]).removeClass('btn-default');
       $("#activar_"+idKeys[i]).removeClass('btn-info');
       $("#activar_"+idKeys[i]).addClass('btn-default');
-
       $("#activar_"+idKeys[i]).html('Seleccionar');
     }
 
     $("#activar_"+_proyID).addClass('btn-info');
     $("#activar_"+_proyID).html('Activo');
 
-    _proyID = project_selected_ID;
+
 
     getArduinosFromProject( _proyID );
   });
