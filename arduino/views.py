@@ -196,7 +196,7 @@ class DataViewSet(mixins.CreateModelMixin,
 
         try:
             request_data = request.data.copy()
-            epoch = int(request_data.pop('field1'))
+            epoch = int(request_data.pop('field1')[0])
         except Exception as exc:
             print(exc)
             request_data = parse_qs(request.body)
