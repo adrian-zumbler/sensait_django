@@ -10,7 +10,7 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-        {{ arduino.name }}
+        Transmisor: <b>{{ arduino.name }}</b>
         <small>Sistema Seleccionado</small>
       </h1>
     </section>
@@ -51,6 +51,15 @@
                     <dd>{{ arduino.sensors.count }} </dd>
                     <dt>Estatus</dt>
                     <dd><span class="label label-success">Correcto</span></dd>
+                    <dt>Epoch</dt>
+                    {% for sensor in arduino.arduino_sensors.all %}
+                      {% if  sensor.data_key == "field1" %}
+                        <span id="epoch_{{ sensor.id}}">
+                          {{ sensor.sensor_data.last.data }}
+                        </span>
+                      {% endif %}
+                    {% endfor %}
+
                   </dl>
                 </div><!-- /.box-body -->
               </div><!-- /.box -->
@@ -64,7 +73,15 @@
           <div class="box box-info">
             <div class="box-header with-border">
               <h3 class="box-title">
-                Lista de sensores
+                Lista de sensores        -
+
+                {% for sensor in arduino.arduino_sensors.all %}
+                  {% if  sensor.data_key == "field1" %}
+                    <span id="sensor_{{ sensor.id}}">
+                      {{ sensor.sensor_data.last.data }}
+                    </span>
+                    {% endif %}
+                  {% endfor %}
               </h3>
             </div>
             <!-- /.box-header -->
@@ -76,9 +93,7 @@
                       <th>Sensor ID</th>
                       <th>Nombre Sensor</th>
                       <th>Tipo de Sensor</th>
-                      <th>Ultimo Update</th>
                       <th>Ultimo Valor</th>
-                      <th>Estatus </th>
                       <th> </th>
                     </tr>
                   </thead>
@@ -90,13 +105,19 @@
                         <td> <a href="/dash/sensor/{{sensor.id}}">SENSOR-00{{sensor.index}}</a> </td>
                         <td>{{ sensor.description }}</td>
                         <td>{{ sensor.sensor_type.name }}</td>
-                        <td>{{ sensor.sensor_data.last.created_at }}</td>
-                        <td>{{ sensor.sensor_data.last.data }}</td>
-                        {% if  arduino.id|isEven == 0%}
-                          <td> <span class="label label-danger">{{arduino.get_estatus_display }}</span> </td>
-                        {% else %}
-                          <td> <span class="label label-success">{{arduino.get_estatus_display }}</span> </td>
-                        {% endif %}
+                        <td align="center">
+                          <div id="sensor_{{ sensor.id}}">
+                            {{ sensor.sensor_data.last.data }}
+                          </div>
+                        </td>
+
+                        {% comment %}
+                          {% if  arduino.id|isEven == 0%}
+                            <td> <span class="label label-danger">{{arduino.get_estatus_display }}</span> </td>
+                          {% else %}
+                            <td> <span class="label label-success">{{arduino.get_estatus_display }}</span> </td>
+                          {% endif %}
+                        {% endcomment %}
                         <td>
                           {% ifnotequal sensor.description "Epoch"%}
                           <div class="btn-group">
@@ -131,10 +152,31 @@
 
 
 {% block content_js %}
-  <script src="{% static 'plugins/datatables/jquery.dataTables.min.js' %}"></script>
-  <script src="{% static 'plugins/datatables/dataTables.bootstrap.min.js' %}"></script>
-  <!-- page script -->
-<script type="application/javascript">
+<script type="text/javascript" src="{% static 'js/ws4redis.js'  %}"></script>
+<script src="{% static 'plugins/datatables/jquery.dataTables.min.js' %}"></script>
+<script src="{% static 'plugins/datatables/dataTables.bootstrap.min.js' %}"></script>
+
+  <script type="application/javascript">
+
+    // Validamos el entorno donde estamos trabajando
+    //Tambien tomamos la IP dinamica para ya no moverle :3
+    //##############################
+
+    var site_url = "{{ site_url }}";
+    var ws_url = 'ws://' + site_url;
+
+    var urlApi;
+    var tokenCode ;
+
+    if(site_url == 'sensait.dyndns.org'){
+      tokenCode = 'Token d7e7f378cdc67dcd7cec11b76e017927c3e73bc3';
+    }else{
+      tokenCode   = 'Token 6b4f2e70ae0d435bf512897355947fe0a564972a';
+      //Para cuando se accede desde la RED local el server
+      if( site_url == "192.168.253.31"){
+        tokenCode = 'Token d7e7f378cdc67dcd7cec11b76e017927c3e73bc3';
+      }
+    }
 
   $(function () {
     $('#table_sistemas').DataTable({
@@ -147,6 +189,103 @@
     });
   });
 
-</script>
+
+    var canUseSocket = false;
+    var allSockets = [];
+
+    function createSocket(arduinoID, arduinoToken){
+      var ws4redis = WS4Redis({
+        uri: ws_url+'/ws/'+arduinoToken+'?subscribe-broadcast&publish-broadcast&echo',
+        //'ws://sensait.dyndns.org/ws/{{arduinosensor.arduino.arduino_token}}?subscribe-broadcast&publish-broadcast&echo',
+        //':'+userPort+
+        connecting: on_connecting,
+        connected: on_connected,
+        receive_message: receiveMessage,
+        disconnected: on_disconnected,
+        heartbeat_msg: {{ WS4REDIS_HEARTBEAT }}
+      });
+      allSockets.push(ws4redis);
+    }
+
+    // attach this function to an event handler on your site
+    function sendMessage() {
+      ws4redis.send_message('A message');
+    }
+
+    function on_connecting() {
+      alert('Websocket is connecting...');
+    }
+
+    function on_connected() {
+      ws4redis.send_message('Hello');
+    }
+
+    function on_disconnected(evt) {
+      alert('Websocket was disconnected: ' + JSON.stringify(evt));
+    }
+
+    // receive a message though the websocket from the server
+    function receiveMessage(msg) {
+      useWSData(msg);
+      //console.log(msg);
+    }
+
+    $(document).ready(function(){
+      createSocket("{{ arduino.id }}", "{{ arduino.arduino_token }}");
+      canUseSocket = true;
+    });
+
+    function useWSData(msg){
+      //console.log(msg);
+      if(canUseSocket == true ){
+        var wsData = JSON.parse(msg);
+
+        for(var i= 0 ; i < wsData.length ; i++){
+          var data = wsData[i]['data'];
+
+          if( parseInt(data) > 100000){
+            var epochDate = convertEpoch2Date(data);
+            $('#sensor_'+wsData[i]['arduino_sensor']).html('Ultima Actualización:  ' + epochDate);
+            $('#epoch_'+wsData[i]['arduino_sensor']).html(data);
+
+          }else{
+            $('#sensor_'+wsData[i]['arduino_sensor']).html(data + " &#176;");
+          }
+        }
+      }
+    }
+
+
+      function convertEpoch2Date(epochData){
+        var d = new Date(0);
+        d.setUTCSeconds(epochData);
+
+        var day =  d.getDay() + 1 +'';
+        var month =  d.getMonth() + 1 +'';
+
+        var hour    = d.getHours() +'';
+        var minutes = d.getMinutes()+'';;
+        var seconds = d.getSeconds()+'';;
+
+        //NO me gusta... pero no se me ocurre otra forma...
+        if(day.length == 1)
+          day = '0'+day;
+        if(month.length == 1)
+          month = '0'+month;
+        if(hour.length == 1)
+          hour = '0'+hour;
+        if(minutes.length == 1)
+          minutes = '0'+minutes;
+        if(seconds.length == 1)
+          seconds = '0'+seconds;
+
+
+        var dateFormat = day +'/'+month+'/'+d.getFullYear();
+        var timeFormat = hour+':'+minutes+':'+seconds;
+
+        return dateFormat + '               <b>' + timeFormat + '</b>';
+      }
+
+  </script>
 
 {% endblock content_js %}

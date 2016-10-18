@@ -335,11 +335,15 @@
   // receive a message though the websocket from the server
   function receiveMessage(msg) {
     useWSData(msg);
+    console.log(msg);
   }
 
 //##############################
 
 function useWSData(data){
+  console.log(data);
+  console.log(canUseSocket);
+  console.log(filter_type);
 
   if(canUseSocket == true ){
 
@@ -440,13 +444,16 @@ function useWSData(data){
     $(document).ready(function(){
 
       //ocultamos los selectores de la grafica
+      filter_type = 1;
+
       $("#filter_date").hide();
       $("#filter_limit").hide();
-       date_today = moment().format("YYYY-MM-DD");
+      date_today = moment().format("YYYY-MM-DD");
       //primera petición de datos.
       allData = getDataFromAPI("","",query_dataLimit);
 
       $("#filter_resume").html("Ultimos " + query_dataLimit + " registros" );
+
     });
 
 
@@ -698,6 +705,7 @@ function useWSData(data){
       drawPoints:true,
       pointSize:3,
       strokeWidth: 3,
+      rightGap:40,
       labels: ['Tiempo', 'Temperatura', 'Min', 'Max']
     });
 
