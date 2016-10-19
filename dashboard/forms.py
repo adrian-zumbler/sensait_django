@@ -63,3 +63,10 @@ ArduinoSensorFormSet = forms.modelformset_factory(
     exclude=('arduino',),
     extra=2
 )
+
+InLineArduinoSensorFormSet = forms.inlineformset_factory(
+    Arduino,
+    ArduinoSensor,
+    fields='__all__',
+    extra=2
+)

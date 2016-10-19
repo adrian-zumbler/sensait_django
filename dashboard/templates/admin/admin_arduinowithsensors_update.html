@@ -107,19 +107,23 @@
 
           {% csrf_token %}
             <div class="sensor-formset">
-              {{ sensor_formset.management_form }}
+
 
 
               {% for sform in sensor_formset %}
-
-
-
               <!-- //Ver si puedes contar el ultimo para arreglar el add sensor -->
 
 
               <div class="row">
               <div class="sensor-form" >
-                {{ sform }}
+                {% if sform.instance.pk %}{{ sform.DELETE }}{% endif %}
+                {% for field in sform %}
+
+
+                  {{ field.label_tag }}
+                    {{ field }}
+                {% endfor %}
+
 
                 {% comment %}<div class="col-xs-2">
                   <div class="form-group">
@@ -188,7 +192,7 @@
   <div class="col-xs-4 ">
     <button type="submit" class="btn btn-block btn-primary btn-lg">Guardar Cambios</button>
   </div>
-
+{{ sensor_formset.management_form }}
 </form>
 
 
@@ -226,7 +230,8 @@
       $(function() {
         $('.sensor-form').formset({
             addText: 'Agregar Sensor',
-            deleteText: 'Quitar'
+            deleteText: 'Quitar',
+            prefix: '{{ formset.prefix }}'
         });
     });
       </script>

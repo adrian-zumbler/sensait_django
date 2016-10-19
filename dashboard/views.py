@@ -7,7 +7,7 @@ from django.core.urlresolvers import reverse_lazy, reverse
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from dashboard.forms import AdminArduinoCreateForm, AdminProjectUpdateForm, \
-    AdminProjectCreateForm, ArduinoSensorFormSet
+    AdminProjectCreateForm, ArduinoSensorFormSet, InLineArduinoSensorFormSet
 from arduino.models import Arduino, ArduinoSensor
 from client.models import Project, Client
 
@@ -170,7 +170,7 @@ class AdminArduinoWithSensorsUpdateView(LoginRequiredMixin, UpdateView):
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
         form = self.get_form()
-        sensor_formset = ArduinoSensorFormSet(request.POST)
+        sensor_formset = InLineArduinoSensorFormSet(data=request.POST, instance=self.object)
         if form.is_valid() and sensor_formset.is_valid():
             return self.form_valid(form, sensor_formset)
         else:
@@ -178,10 +178,7 @@ class AdminArduinoWithSensorsUpdateView(LoginRequiredMixin, UpdateView):
 
     def form_valid(self, form, sensor_formset):
         self.object = form.save()
-        sensors = sensor_formset.save(commit=False)
-        for sensor in sensors:
-            sensor.arduino = self.object
-            sensor.save()
+        sensors = sensor_formset.save()
         return HttpResponseRedirect(self.get_success_url())
 
     def form_invalid(self, form, sensor_formset):
@@ -195,8 +192,9 @@ class AdminArduinoWithSensorsUpdateView(LoginRequiredMixin, UpdateView):
         # qs = ArduinoSensor.objects.filter(
         #     arduino=self.object
         # )  # self.object.sensors.all()
-        ctx['sensor_formset'] = ArduinoSensorFormSet(
-            queryset=self.object.arduino_sensors.all()
+        queryset = self.object.arduino_sensors.all()
+        ctx['sensor_formset'] = InLineArduinoSensorFormSet(
+            instance=self.object
         )
         return ctx
 
