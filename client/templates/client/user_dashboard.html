@@ -317,7 +317,7 @@
             epochID = sensID;
           }else{
             blocksData +=
-            '<tr>'+
+            '<tr id="row_'+sensID+'">'+
                 '<td>'+
                   description+
                 '</td>'+
@@ -336,7 +336,7 @@
                   '&#176;</span>'+
                 '</td>'+
                 '<td align="center">'+
-
+                  '<a href="/dash/sensor/'+sensID+'" target="_self"><button type="button" class="btn btn-success">Gráfica</button></a>'
                 '</td>'+
               '</tr>';
           }
@@ -473,7 +473,7 @@
   function convertEpoch2Date(epochData){
     if(parseInt(epochData)>10000){
       var d = new Date(parseInt(epochData)*1000);
-      var day =  d.getUTCDate() + 1 +'';
+      var day =  d.getUTCDate() +'';
       var month =  d.getUTCMonth() + 1 +'';
       var hour    = d.getUTCHours() +'';
       var minutes = d.getUTCMinutes()+'';;
@@ -494,8 +494,6 @@
       var dateFormat = day +'/'+month+'/'+d.getUTCFullYear();
       var timeFormat = hour+':'+minutes+':'+seconds;
 
-      console.log(dateFormat);
-      console.log(timeFormat);
       return dateFormat + '               <b>' + timeFormat + '</b>';
     }else{
       return "Formato de Fecha Invalido";
@@ -515,9 +513,15 @@
           var epochDate = convertEpoch2Date(data);
           $('#epoch_'+wsData[i]['arduino_sensor']).html('Ultima Actualización:  ' + epochDate);
         }else{
-          $('#sens_'+wsData[i]['arduino_sensor']).html(data + " &#176;");
+          if(data == '-127.00' || data == ''){
+            $('#row_'+wsData[i]['arduino_sensor']).hide();
+          }else{
+            $('#row_'+wsData[i]['arduino_sensor']).show();
+            $('#sens_'+wsData[i]['arduino_sensor']).html(data + " &#176;");
+          }
         }
       }
+
     }
   }
 

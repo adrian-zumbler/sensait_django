@@ -79,7 +79,7 @@
                 {% for sensor in arduino.arduino_sensors.all %}
                   {% if  sensor.data_key == "field1" %}
                     <span id="sensor_{{ sensor.id}}">
-
+                      Conectando...
                     </span>
                     {% endif %}
                   {% endfor %}
@@ -104,7 +104,7 @@
 
                     {% for sensor in arduino.arduino_sensors.all %}
                       {% if  sensor.data_key != "field1" %}
-                      <tr>
+                      <tr id="row_{{sensor.id}}">
                         <td> <a href="/dash/sensor/{{sensor.id}}">SENSOR-00{{sensor.index}}</a> </td>
                         <td>{{ sensor.description }}</td>
                         <td>{{ sensor.sensor_type.name }}</td>
@@ -252,14 +252,21 @@
         for(var i= 0 ; i < wsData.length ; i++){
           var data = wsData[i]['data'];
 
+          if(data == '-127.00' || data == ''){
+            $('#row_'+wsData[i]['arduino_sensor']).hide();
+          }else{
+            $('#row_'+wsData[i]['arduino_sensor']).show();
+          }
+
           if( parseInt(data) > 100000){
             var epochDate = convertEpoch2Date(data);
             $('#sensor_'+wsData[i]['arduino_sensor']).html('Ultima Actualización:  ' + epochDate);
             $('#epoch_'+wsData[i]['arduino_sensor']).html(data);
-
           }else{
             $('#sensor_'+wsData[i]['arduino_sensor']).html(data + " &#176;");
           }
+
+          row_
         }
       }
     }
@@ -267,7 +274,7 @@
       function convertEpoch2Date(epochData){
         if(parseInt(epochData)>10000){
           var d = new Date(parseInt(epochData)*1000);
-          var day =  d.getUTCDate() + 1 +'';
+          var day =  d.getUTCDate() +'';
           var month =  d.getUTCMonth() + 1 +'';
           var hour    = d.getUTCHours() +'';
           var minutes = d.getUTCMinutes()+'';;
@@ -288,8 +295,6 @@
           var dateFormat = day +'/'+month+'/'+d.getUTCFullYear();
           var timeFormat = hour+':'+minutes+':'+seconds;
 
-          console.log(dateFormat);
-          console.log(timeFormat);
           return dateFormat + '               <b>' + timeFormat + '</b>';
         }else{
           return "Formato de Fecha Invalido";

@@ -457,7 +457,7 @@ function useWSData(data){
   function convertEpoch2Date(epochData){
     if(parseInt(epochData)>10000){
       var d = new Date(parseInt(epochData)*1000);
-      var day =  d.getUTCDate() + 1 +'';
+      var day =  d.getUTCDate() +'';
       var month =  d.getUTCMonth() + 1 +'';
       var hour    = d.getUTCHours() +'';
       var minutes = d.getUTCMinutes()+'';;
@@ -477,9 +477,7 @@ function useWSData(data){
 
       var dateFormat = day +'/'+month+'/'+d.getUTCFullYear();
       var timeFormat = hour+':'+minutes+':'+seconds;
-
-      console.log(dateFormat);
-      console.log(timeFormat);
+      
       return dateFormat + '               <b>' + timeFormat + '</b>';
     }else{
       return "Formato de Fecha Invalido";
