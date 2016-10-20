@@ -10,8 +10,8 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-        {{ project.name}}
-        <small>Detalle del Proyecto</small>
+        Nombre Proyecto: <b>{{ project.name}}</b>
+        <small>Detalle de transmisores</small>
       </h1>
     </section>
 
@@ -59,7 +59,7 @@
           <div class="box box-info">
             <div class="box-header with-border">
               <h3 class="box-title">
-                Lista de Sistemas en el Proyecto
+                Lista de transmisores
               </h3>
               <div class="box-tools pull-right">
                 <button class="btn btn-box-tool" data-widget="collapse">
@@ -78,8 +78,7 @@
                     <tr>
                       <th>ID Transmisor</th>
                       <th>Nombre Transmisor</th>
-                      <th>Estatus</th>
-                      <th> </th>
+                      <th></th>
                     </tr>
                   </thead>
                   <tbody>
@@ -90,11 +89,6 @@
                         <a href="/dash/iot/{{ arduino.id}}">Sist-00{{ arduino.id}}</a>
                       </td>
                       <td> {{ arduino.name }}</td>
-                      {% if  arduino.id|isEven == 0%}
-                        <td> <span class="label label-danger">{{arduino.get_estatus_display }}</span> </td>
-                      {% else %}
-                        <td> <span class="label label-success">{{arduino.get_estatus_display }}</span> </td>
-                      {% endif %}
                       <td>
                         <div class="btn-group">
                           <a href="/dash/iot/{{arduino.id}}" target="_self">
