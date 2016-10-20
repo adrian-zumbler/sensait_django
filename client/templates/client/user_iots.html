@@ -94,7 +94,9 @@
                       <th>Sensor ID</th>
                       <th>Nombre Sensor</th>
                       <th>Tipo de Sensor</th>
+                      <th>Valor Mínimo</th>
                       <th>Ultimo Valor</th>
+                      <th>Valor Máximo</th>
                       <th> </th>
                     </tr>
                   </thead>
@@ -107,9 +109,15 @@
                         <td>{{ sensor.description }}</td>
                         <td>{{ sensor.sensor_type.name }}</td>
                         <td align="center">
+                            {{ sensor.min_value }}
+                        </td>
+                        <td align="center">
                           <div id="sensor_{{ sensor.id}}">
                             {{ sensor.sensor_data.last.data }}
                           </div>
+                        </td>
+                        <td align="center">
+                            {{ sensor.max_value }}
                         </td>
 
                         {% comment %}

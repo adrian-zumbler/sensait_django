@@ -35,21 +35,13 @@
     </div>
 
 
-  <div class="row">
+  <div id="canChangeProject" class="row">
     <div class="col-md-12">
       <div class="box box-info">
         <div class="box-header with-border">
           <h3 class="box-title">
-            CAMBIAR DE PROYECTO
+            Ver otros Proyectos
           </h3>
-          <div class="box-tools pull-right">
-            <button class="btn btn-box-tool" data-widget="collapse">
-              <i class="fa fa-minus"></i>
-            </button>
-            <button class="btn btn-box-tool" data-widget="remove">
-              <i class="fa fa-times"></i>
-            </button>
-          </div>
         </div>
         <!-- /.box-header -->
 
@@ -233,6 +225,11 @@
 
   $(document).ready(function(){
     //Utilizamos los datos iniciales de los proyectos
+    if( {{ project_list.count }} == 1){
+      $("#canChangeProject").hide();
+    }
+
+    canChangeProject
 
     actualProject = {{ project_list.first.id }} ;
     actualArduino = {{ project_list.first.arduinos.first.id }};
@@ -320,26 +317,28 @@
             epochID = sensID;
           }else{
             blocksData +=
-            '<div id="blocksens_'+sensID +'">'+
-              '<div class="col-sm-3 col-xs-12">'+
-                '<div class="info-box">'+
-                  '<span class="info-box-icon bg-green"><i class="fa fa-fw fa-area-chart"></i></span>'+
-                  '<div class="info-box-content">'+
-                    '<span class="info-box-text">'+
-                      description+
-                    '</span>'+
-                    '<span id=sens_'+sensID +' class="info-box-number">0'+
-                    '&#176;</span>'+
-                    '<span id=min_'+sensID +' class="info-box-text">'+
-                      'Min. 0'+
-                    '&#176;</span>'+
-                    '<span id=max_'+sensID +' class="info-box-text">'+
-                      'Max. 0'+
-                    '&#176;</span>'+
-                  '</div>'+
-                '</div>'+
-              '</div>'+
-            '</div>';
+            '<tr>'+
+                '<td>'+
+                  description+
+                '</td>'+
+                '<td align="center">'+
+                  '<span id=min_'+sensID +' class="info-box-text">'+
+                    '0'+
+                  '&#176;</span>'+
+                '</td>'+
+                '<td align="center">'+
+                  '<span id=sens_'+sensID +' class="info-box-number">0'+
+                  '&#176;</span>'+
+                '</td>'+
+                '<td align="center">'+
+                  '<span id=max_'+sensID +' class="info-box-text">'+
+                    '0'+
+                  '&#176;</span>'+
+                '</td>'+
+                '<td align="center">'+
+
+                '</td>'+
+              '</tr>';
           }
         }
 
@@ -356,8 +355,20 @@
                   '</h3>'+
                 '</div>'+
                 '<div class="box-body">'+
-                  '<br/>'+
-                  blocksData+
+                  '<div class="col-xs-12">'+
+                    '<table id="blocksens_'+sensID +'" class="table">'+
+                    '<thead><tr>'+
+                      '<th >Nombre Sensor</th>'+
+                      '<th align="center">Valor Minimo</th>'+
+                      '<th>Valor Actual</th>'+
+                      '<th>Valor Maximo</th>'+
+                      '<th></th>'+
+                      '</tr></thead>'+
+                      '<tbody>'+
+                      blocksData+
+                      '</tbody>'+
+                    '</table>'+
+                  '</div>'+
                 '</div>'+
               '</div>'+
             '</div>' +
@@ -444,8 +455,8 @@
         var max = sensInfo.max_value;
         var min = sensInfo.min_value;
 
-        $('#min_'+sensID).html('Min. '+min.substring(0,(min.length-2))+'°');
-        $('#max_'+sensID).html('Max. '+max.substring(0,(max.length-2))+'°');
+        $('#min_'+sensID).html(' '+min.substring(0,(min.length-2))+'°');
+        $('#max_'+sensID).html(' '+max.substring(0,(max.length-2))+'°');
 
       }else{
 
@@ -612,10 +623,31 @@ var canUsePickerCallBack =  true;
     }
   });
 }
-
-
-
-
+/*
+CUANDO ERAN BLOQUES
+  blocksData +=
+  '<div id="blocksens_'+sensID +'">'+
+    '<div class="col-sm-3 col-xs-12">'+
+      '<div class="info-box">'+
+        '<span class="info-box-icon bg-green"><i class="fa fa-fw fa-area-chart"></i></span>'+
+        '<div class="info-box-content">'+
+          '<span class="info-box-text">'+
+            description+
+          '</span>'+
+          '<span id=sens_'+sensID +' class="info-box-number">0'+
+          '&#176;</span>'+
+          '<span id=min_'+sensID +' class="info-box-text">'+
+            'Min. 0'+
+          '&#176;</span>'+
+          '<span id=max_'+sensID +' class="info-box-text">'+
+            'Max. 0'+
+          '&#176;</span>'+
+        '</div>'+
+      '</div>'+
+    '</div>'+
+  '</div>';
+}
+*/
   </script>
 
 {% endblock content_js %}
