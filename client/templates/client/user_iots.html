@@ -271,12 +271,25 @@
 
       function convertEpoch2Date(epochData){
         if(parseInt(epochData)>10000){
+          var actualDate = new Date();
+          var actualHours = actualDate.getHours();
+
           var d = new Date(parseInt(epochData)*1000);
           var day =  d.getUTCDate() +'';
           var month =  d.getUTCMonth() + 1 +'';
           var hour    = d.getUTCHours() +'';
-          var minutes = d.getUTCMinutes()+'';;
-          var seconds = d.getUTCSeconds()+'';;
+
+          if(parseInt(hour) > parseInt(actualHours)){
+            if(parseInt(hour) < 5){
+              var dif = hour - 5;
+              hour = 24 - dif;
+            }else{
+              hour = hour - 5;
+            }
+          }
+          var minutes = d.getUTCMinutes()+'';
+          var seconds = d.getUTCSeconds()+'';
+
 
           //NO me gusta... pero no se me ocurre otra forma...
           if(day.length == 1)
