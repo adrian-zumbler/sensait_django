@@ -9,18 +9,10 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-        ADMIN - SISTEMA -  DETALLE -  {{arduino.name }}
-        <small>DETALLE DEL SISTEMA </small>
+        ADMIN - DETALLE DEL TRANSMISOR: <b> {{arduino.name }}</b>
+        <small> </small>
 
       </h1>
-      <ol class="breadcrumb">
-        <li>
-          <a href="#">
-            <i class="fa fa-dashboard"></i>
-            Home</a>
-        </li>
-        <li class="active">Dashboard</li>
-      </ol>
     </section>
 
     <!-- Main content -->
@@ -31,14 +23,14 @@
       <div class="box box-solid">
         <div class="box-header with-border">
           <i class="fa fa-adjust"></i>
-          <h3 class="box-title">Información del Sistema:  <b>{{arduino.name }}</b></h3>
+          <h3 class="box-title">Información del Sistema</h3>
         </div><!-- /.box-header -->
         <div class="box-body">
           <dl class="dl-horizontal">
 
-            <dt>key del Sistema</dt>
+            <dt>Llave del Sistema</dt>
             <dd>
-              <b>{{arduino.arduino_token }} </b>
+              <h3><b>{{arduino.arduino_token }} </b></h3>
             </dd>
 
             <dt>Proyecto del Sistema</dt>
@@ -46,23 +38,21 @@
               {{arduino.project }}
             </dd>
 
-            <dt>Ubicación</dt>
+            <dt>Nombre del Sistema</dt>
             <dd>
-                {{arduino.location }}
+              {{arduino.name }}
             </dd>
-
             <dt>ID Sistema</dt>
             <dd>
                 {{arduino.id }}
             </dd>
 
-            <dt>Nombre del Sistema</dt>
+            <dt>Ubicación</dt>
             <dd>
-              {{arduino.name }}
+                {{arduino.location }}
             </dd>
 
-
-            <dt>Sensores</dt>
+            <dt>Sensores Registrados</dt>
             <dd>
                 {{arduino.sensors.count }}
             </dd>
@@ -111,46 +101,36 @@
                   <th>ID Sensor</th>
                   <th>Nombre del Sensor</th>
                   <th>Tipo de Sensor</th>
-                  <th>Tipo de Dato</th>
                   <th>Valor Maximo</th>
+                  <th>Ultimo Valor</th>
                   <th>Valor Minimo</th>
                   <th>Accion</th>
                 </tr>
               </thead>
               <tbody>
 
-                {% for sensor in arduino.sensors.all %}
+                {% for sensor in arduino.arduino_sensors.all %}
+                {% if  sensor.data_key != "field1" %}
                 <tr>
-                  <td> {{sensor.id}} </td>
-                  <td> {{sensor.name}} </td>
-                  <td> {{sensor}} </td>
-                  <td> {{sensor.sensor_type.dataType}} </td>
+                  <td> Sensor00{{sensor.id}} </td>
+                  <td> {{sensor.description}} </td>
+                  <td> {{sensor.sensor_type.name}} </td>
                   <td> {{sensor.max_value}} </td>
-                  <td> {{sensor.sensor_type.min_value}} </td>
-
+                  <td> {{ sensor.sensor_data.last.data }} </td>
+                  <td> {{sensor.min_value}} </td>
                   <td>
                     <div class="btn-group">
-                      <a href="#" target="_self">
-                        <button  type="button" class="btn btn-success">Ver Grafica</button>
+                      <a href="/dash/sensor/{{sensor.id}}" target="_self">
+                        <button  type="button" class="btn btn-success">Gráfica</button>
                       </a>
                     </div>
                   </td>
 
                 </tr>
+                {% endif %}
                 {% endfor %}
 
               </tbody>
-                <tfoot>
-                  <tr>
-                    <th>ID Sensor</th>
-                    <th>Nombre del Sensor</th>
-                    <th>Tipo de Sensor</th>
-                    <th>Tipo de Dato</th>
-                    <th>Valor Maximo</th>
-                    <th>Valor Minimo</th>
-                    <th>Accion</th>
-                  </tr>
-                </tfoot>
             </table>
           </div><!-- /.box-body -->
         </div><!-- /.box -->
@@ -159,7 +139,7 @@
 
 
 
-
+{% comment %}
   <div class="row">
     <div class="col-xs-12">
       <div class="box">
@@ -169,7 +149,7 @@
       </div>
     </div>
   </div>
-
+{% endcomment %}
 
 <!-- /.END PARA LOS ARDUINOS DEL PROYECTO -->
   </section>
@@ -187,11 +167,11 @@
 
   $(function () {
     $('#table_sensors').DataTable({
-      "paging": true,
+      "paging": false,
       "lengthChange": false,
-      "searching": true,
-      "ordering": true,
-      "info": true,
+      "searching": false,
+      "ordering": false,
+      "info": false,
       "autoWidth": false
     });
   });

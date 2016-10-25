@@ -454,48 +454,50 @@ function useWSData(data){
 }
 
 
-  function convertEpoch2Date(epochData){
-    if(parseInt(epochData)>10000){
-      var actualDate = new Date();
-      var actualHours = actualDate.getHours();
+function convertEpoch2Date(epochData){
 
-      var d = new Date(parseInt(epochData)*1000);
-      var day =  d.getUTCDate() +'';
-      var month =  d.getUTCMonth() + 1 +'';
-      var hour    = d.getUTCHours() +'';
+  if(parseInt(epochData)>10000){
+    var actualDate = new Date();
+    var actualHours = actualDate.getHours();
 
-      if(parseInt(hour) > parseInt(actualHours)){
-        if(parseInt(hour) < 5){
-          var dif = hour - 5;
-          hour = 24 - dif;
-        }else{
-          hour = hour - 5;
-        }
+    var d = new Date(parseInt(epochData)*1000);
+    var day     =  d.getDate() +'';
+    var month   =  d.getMonth() + 1 +'';
+    var hour    =  d.getHours() +'';
+    var minutes =  d.getMinutes()+'';
+    var seconds =  d.getSeconds()+'';
+
+    /*
+    if(parseInt(hour) > parseInt(actualHours)){
+      if(parseInt(hour) < 5){
+        var dif = hour - 5;
+        hour = 24 - dif;
+      }else{
+        hour = hour - 5;
       }
-      var minutes = d.getUTCMinutes()+'';
-      var seconds = d.getUTCSeconds()+'';
-
-
-      //NO me gusta... pero no se me ocurre otra forma...
-      if(day.length == 1)
-        day = '0'+day;
-      if(month.length == 1)
-        month = '0'+month;
-      if(hour.length == 1)
-        hour = '0'+hour;
-      if(minutes.length == 1)
-        minutes = '0'+minutes;
-      if(seconds.length == 1)
-        seconds = '0'+seconds;
-
-      var dateFormat = day +'/'+month+'/'+d.getUTCFullYear();
-      var timeFormat = hour+':'+minutes+':'+seconds;
-
-      return dateFormat + '               <b>' + timeFormat + '</b>';
-    }else{
-      return "Formato de Fecha Invalido";
     }
+    */
+
+    //NO me gusta... pero no se me ocurre otra forma...
+    if(day.length == 1)
+      day = '0'+day;
+    if(month.length == 1)
+      month = '0'+month;
+    if(hour.length == 1)
+      hour = '0'+hour;
+    if(minutes.length == 1)
+      minutes = '0'+minutes;
+    if(seconds.length == 1)
+      seconds = '0'+seconds;
+
+    var dateFormat = day +'/'+month+'/'+d.getFullYear();
+    var timeFormat = hour+':'+minutes+':'+seconds;
+
+    return dateFormat + '               <b>' + timeFormat + '</b>';
+  }else{
+    return "Formato de Fecha Invalido";
   }
+}
 
   var _arduino;
   var _sensors;

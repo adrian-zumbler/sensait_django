@@ -188,6 +188,11 @@
       ws4redis.send_message('Hello');
     }
 
+    function on_close(){
+      //ws4redis.onclose();
+      ws4redis.close();
+    }
+
     function on_disconnected(evt) {
       alert('Websocket was disconnected: ' + JSON.stringify(evt));
     }
@@ -250,6 +255,10 @@
 
     project_selected_ID     = project_selected_ID.replace("activar_","");
 
+    for(var i=0; i < allSockets.length; i++){
+      allSockets[i].close;
+      allSockets[i] = null;
+    }
     allSockets = [];
 
     var idKeys = Object.keys(proyectNames);
@@ -476,10 +485,13 @@
       var actualHours = actualDate.getHours();
 
       var d = new Date(parseInt(epochData)*1000);
-      var day =  d.getUTCDate() +'';
-      var month =  d.getUTCMonth() + 1 +'';
-      var hour    = d.getUTCHours() +'';
+      var day     =  d.getDate() +'';
+      var month   =  d.getMonth() + 1 +'';
+      var hour    =  d.getHours() +'';
+      var minutes =  d.getMinutes()+'';
+      var seconds =  d.getSeconds()+'';
 
+      /*
       if(parseInt(hour) > parseInt(actualHours)){
         if(parseInt(hour) < 5){
           var dif = hour - 5;
@@ -488,8 +500,7 @@
           hour = hour - 5;
         }
       }
-      var minutes = d.getUTCMinutes()+'';
-      var seconds = d.getUTCSeconds()+'';
+      */
 
       //NO me gusta... pero no se me ocurre otra forma...
       if(day.length == 1)
@@ -503,7 +514,7 @@
       if(seconds.length == 1)
         seconds = '0'+seconds;
 
-      var dateFormat = day +'/'+month+'/'+d.getUTCFullYear();
+      var dateFormat = day +'/'+month+'/'+d.getFullYear();
       var timeFormat = hour+':'+minutes+':'+seconds;
 
       return dateFormat + '               <b>' + timeFormat + '</b>';
