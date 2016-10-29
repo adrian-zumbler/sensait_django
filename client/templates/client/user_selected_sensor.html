@@ -363,91 +363,66 @@
 
 function useWSData(data){
   console.log(data);
-  console.log(canUseSocket);
-  console.log(filter_type);
 
   if(canUseSocket == true ){
 
-      var jso = JSON.parse(data);
-      //console.log(jso);
-      //console.log('Message from Websocket: ' + data);
-      //console.log(jso.length);
+    var jso = JSON.parse(data);
 
-      if( filter_type == 1  || moment(date_today).isBetween(filter_date_start, filter_date_end ) || moment(date_today).isSameOrBefore(filter_date_end ) ){
+    if( filter_type == 1  || moment(date_today).isBetween(filter_date_start, filter_date_end ) || moment(date_today).isSameOrBefore(filter_date_end ) ){
 
-        for(var i= 0 ; i < jso.length ; i++){
+      for(var i= 0 ; i < jso.length ; i++){
 
-          console.log(jso[i]['data']);
-          console.log(jso[i]['data_key']);
-          if(jso[i]['data_key'] == 'field1'){
+        if(jso[i]['arduino_sensor'] == {{arduinosensor.id}}){
 
-            var d = new Date(0);
-            d.setUTCSeconds(jso[i]['data']);
+          var epochDate = convertEpoch2Date(jso[i]['epoch']);
+          $('#epochDate').html(epochDate);
+          $('#dateEpoch').html(epochDate);
+          $('#sensor_lastupdate').html(epochDate);
 
-            var month =  d.getMonth() + 1;
-            var dateFormat = d.getDay()+'/'+month+'/'+d.getFullYear();
-            var timeFormat = d.getHours()+':'+d.getMinutes()+':'+d.getSeconds();
+          sensor_data_chart.push(jso[i]['data']);
 
-            $('#epoch_'+sensInfo.arduino).html('Ultima Actualización:  ' + dateFormat + '    ' + timeFormat);
+          var d = new Date(jso[i]['created_at']);
+          var d_days = d.getDate() + "/" + d.getMonth() + "/" + d.getFullYear();
+          var d_time = completeTimeFormat(d.getHours(), d.getMinutes(), d.getSeconds());
+          sensor_date_chart.push(d_time);
+          var lastPosition = _sensors_data.length;
 
-            $('#sensor_lastupdate').html( dateFormat + '    ' + timeFormat );
-          }
+          _sensors_data.push(jso[i]);
 
-          if(jso[i]['arduino_sensor'] == {{arduinosensor.id}}){
+          $('#totalRegistros').html(lastPosition);
+          $('#ultimoValor').html( _sensors_data[lastPosition]['data'] );
+           //_sensors_data[lastPosition]['data'] = jso[i]['data'];
 
-            sensor_data_chart.push(jso[i]['data']);
+          dygraphs_data.push([d, _sensors_data[lastPosition]['data'], {{ arduinosensor.min_value }}, {{ arduinosensor.max_value }}]);
 
-            var d = new Date(jso[i]['created_at']);
-            var d_days = d.getDate() + "/" + d.getMonth() + "/" + d.getFullYear();
-            var d_time = completeTimeFormat(d.getHours(), d.getMinutes(), d.getSeconds());
-            sensor_date_chart.push(d_time);
-            var lastPosition = _sensors_data.length;
+          g.destroy();
 
-            _sensors_data.push(jso[i]);
-            //console.log(_sensors_data);
-            //console.log(lastPosition);
+          g = new Dygraph(document.getElementById("graphdiv"), dygraphs_data, {
+            drawPoints: true,
+            showRoller: true,
+            height: 400,
+            highlightSeriesBackgroundAlpha: 0.8,
+            fillGraph: true,
+            includeZero: false,
+            connectSeparatedPoints:true,
+            drawGapEdgePoints:true,
+            drawPoints:true,
+            pointSize:3,
+            strokeWidth: 3,
+            rightGap:40,
+            legend:"always",
+            highlightCircleSize:5,
+            showRoller:true,
+            hideOverlayOnMouseOut:false,
+            labelsDiv: document.getElementById('graphData'),
+            labels: ['Tiempo', 'Valor Registrado', 'Min.', 'Max.']
+          });
 
-            $('#totalRegistros').html(lastPosition);
-            $('#ultimoValor').html( _sensors_data[lastPosition]['data'] );
-             //_sensors_data[lastPosition]['data'] = jso[i]['data'];
-
-            dygraphs_data.push([d, _sensors_data[lastPosition]['data'], {{ arduinosensor.min_value }}, {{ arduinosensor.max_value }}]);
-
-            g.destroy();
-
-            g = new Dygraph(document.getElementById("graphdiv"), dygraphs_data, {
-              drawPoints: true,
-              showRoller: true,
-              height: 400,
-              highlightSeriesBackgroundAlpha: 0.8,
-              fillGraph: true,
-              includeZero: false,
-              connectSeparatedPoints:true,
-              drawGapEdgePoints:true,
-              drawPoints:true,
-              pointSize:3,
-              strokeWidth: 3,
-              rightGap:40,
-              legend:"always",
-              highlightCircleSize:5,
-              showRoller:true,
-              hideOverlayOnMouseOut:false,
-              labelsDiv: document.getElementById('graphData'),
-              labels: ['Tiempo', 'Valor Registrado', 'Min.', 'Max.']
-            });
-
-          }else{
-            var epoch = parseInt(jso[i]['data']);
-            if(epoch >100000){
-              var epochDate = convertEpoch2Date(epoch);
-              $('#dateEpoch').html(epochDate);
-              $('#sensor_lastupdate').html(epochDate);
-              console.log("ño");
-            }
-
-          }
+        }else{
+          console.log("ño");
         }
       }
+    }
   }else{
     console.log("Esperaaaa....");
   }

@@ -55,7 +55,7 @@
                     <dd><span class="label label-success">Correcto</span></dd>
                     <dt>Epoch</dt>
                     {% for sensor in arduino.arduino_sensors.all %}
-                      {% if  sensor.data_key == "field1" %}
+                      {% if  sensor.data_key == "field2" %}
                         <span id="epoch_{{ sensor.id}}">
                           {{ sensor.sensor_data.last.data }}
                         </span>
@@ -77,8 +77,8 @@
               <h3 class="box-title">
                 Lista de sensores        -
                 {% for sensor in arduino.arduino_sensors.all %}
-                  {% if  sensor.data_key == "field1" %}
-                    <span id="sensor_{{ sensor.id}}">
+                  {% if  sensor.data_key == "field2" %}
+                    <span id="epoch_{{ sensor.id}}">
                       Conectando...
                     </span>
                     {% endif %}
@@ -236,7 +236,6 @@
     // receive a message though the websocket from the server
     function receiveMessage(msg) {
       useWSData(msg);
-      //console.log(msg);
     }
 
     $(document).ready(function(){
@@ -245,7 +244,7 @@
     });
 
     function useWSData(msg){
-      //console.log(msg);
+
       if(canUseSocket == true ){
         var wsData = JSON.parse(msg);
 
@@ -255,15 +254,11 @@
           if(data == '-127.00' || data == ''){
             $('#row_'+wsData[i]['arduino_sensor']).hide();
           }else{
-            $('#row_'+wsData[i]['arduino_sensor']).show();
-          }
+            var epochDate = convertEpoch2Date(wsData[i]['epoch']);
+            $('#epoch_'+wsData[0]['arduino_sensor']).html('Ultima Actualización:  ' + epochDate);
 
-          if( parseInt(data) > 100000){
-            var epochDate = convertEpoch2Date(data);
-            $('#sensor_'+wsData[i]['arduino_sensor']).html('Ultima Actualización:  ' + epochDate);
-            $('#epoch_'+wsData[i]['arduino_sensor']).html(data);
-          }else{
-            $('#sensor_'+wsData[i]['arduino_sensor']).html(data + " &#176;");
+            $('#row_'+wsData[i]['arduino_sensor']).show();
+            $('#sens_'+wsData[i]['arduino_sensor']).html(data + " &#176;");
           }
         }
       }

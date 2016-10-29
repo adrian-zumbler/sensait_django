@@ -305,7 +305,7 @@
   }
 
   function dataProjectCallBack( data ){
-    console.log(data);
+
     $('#transmisores').html(" ");
 
     var rowData = "";
@@ -359,7 +359,7 @@
                   '<h3 class="box-title">'+
                     '<b>Proyecto:  </b>'+proyectNames[_proyID] +' - '+
                     '<b>Transmisor:</b>  '+data[i].name+
-                    ' - <span id="epoch_'+epochID+'"> -  Ultima actualización: </span>'+
+                    ' - <span id="epoch_'+data[i].sensors[1].id+'"> -  Ultima actualización: </span>'+
                   '</h3>'+
                 '</div>'+
                 '<div class="box-body">'+
@@ -451,7 +451,7 @@
 
     if( data[0] !== undefined){
       var passData_sensID     = sensID;
-
+      
       if(sensInfo.data_key != 'field1'){
         //console.log(data);
         var passData_proyectID  = proy_ID;
@@ -466,20 +466,17 @@
         $('#min_'+sensID).html(' '+min.substring(0,(min.length-2))+'°');
         $('#max_'+sensID).html(' '+max.substring(0,(max.length-2))+'°');
 
-      }else{
-
-        var epoch = data[0].data;
+        var epoch = data[0].epoch;
         var epochDate = convertEpoch2Date(epoch);
-
         $('#epoch_'+sensID).html('Ultima Actualización:  ' + epochDate);
-        canUseSocket = true; //dejemos que vivan los sockets
+      }else{
       }
     }
+    canUseSocket = true; //dejemos que vivan los sockets
     isFirstLoad = false;
   }
 
   function convertEpoch2Date(epochData){
-
     if(parseInt(epochData)>10000){
       var actualDate = new Date();
       var actualHours = actualDate.getHours();
@@ -524,7 +521,6 @@
   }
 
   function useWSData(msg){
-    //console.log(msg);
 
     if(canUseSocket == true ){
       var wsData = JSON.parse(msg);
@@ -532,19 +528,16 @@
       for(var i= 0 ; i < wsData.length ; i++){
         var data = wsData[i]['data'];
 
-        if( parseInt(data) > 100000){
-          var epochDate = convertEpoch2Date(data);
-          $('#epoch_'+wsData[i]['arduino_sensor']).html('Ultima Actualización:  ' + epochDate);
+        if(data == '-127.00' || data == ''){
+          $('#row_'+wsData[i]['arduino_sensor']).hide();
         }else{
-          if(data == '-127.00' || data == ''){
-            $('#row_'+wsData[i]['arduino_sensor']).hide();
-          }else{
-            $('#row_'+wsData[i]['arduino_sensor']).show();
-            $('#sens_'+wsData[i]['arduino_sensor']).html(data + " &#176;");
-          }
+          var epochDate = convertEpoch2Date(wsData[i]['epoch']);
+          $('#epoch_'+wsData[0]['arduino_sensor']).html('Ultima Actualización:  ' + epochDate);
+
+          $('#row_'+wsData[i]['arduino_sensor']).show();
+          $('#sens_'+wsData[i]['arduino_sensor']).html(data + " &#176;");
         }
       }
-
     }
   }
 
