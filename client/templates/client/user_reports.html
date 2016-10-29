@@ -1,6 +1,6 @@
 {% extends 'main_header.html' %}
 {% load staticfiles %}
-
+{% load widget_tweaks %}
 {% load arduino_tags %}
 
 
@@ -33,7 +33,6 @@
           <!-- form start -->
             <form class="form-horizontal" role="form" action="" method="post">
             <div class="box-body">
-              {% comment %}
                 {% csrf_token %}
                 {% for field in form %}
                 <div class="form-group">
@@ -46,7 +45,7 @@
                     </div>
                 </div>
                 {% endfor %}
-              {% endcomment %}
+
             </div>
             <!-- /.box-body -->
             <div class="box-footer">

@@ -147,12 +147,12 @@ class ArduinoSensor(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __unicode__(self):
-        return str(self.id)
-        #return 'Arduino: {0}, Sensor: {1} ({2})'.format(
-        #    self.arduino.arduino_token,
-        #    self.sensor_type.prefix,
-        #    self.description
-        #)
+        # return str(self.id)
+        return 'Arduino: {0}, Sensor: {1} ({2})'.format(
+           self.arduino.name,
+           self.sensor_type.name,
+           self.description
+        )
 
 
 class SensorData(models.Model):

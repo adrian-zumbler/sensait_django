@@ -5,6 +5,7 @@ from django.contrib.auth.forms import UserCreationForm, User
 
 
 from .models import Enterprise, Client
+from arduino.models import Arduino
 
 
 class EnterpriseForm(forms.ModelForm):
@@ -47,5 +48,16 @@ class ClientCreationForm(UserCreationForm):
             client.enterprise = self.cleaned_data['enterprise']
             client.save()
         return client
+
+
+class ArduinoSensorCSVReportForm(forms.Form):
+    min_time = forms.CharField(max_length=10)
+    max_time = forms.CharField(max_length=10)
+
+    def __init__(self, *args, **kwargs):
+        queryset = kwargs.pop('sensor_queryset')
+        super(ArduinoSensorCSVReportForm, self).__init__(*args, **kwargs)
+        self.fields['sensor'] = forms.ModelChoiceField(queryset=queryset)
+
 
 
