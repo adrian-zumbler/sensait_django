@@ -146,26 +146,34 @@ class SensorDataViewSet(mixins.ListModelMixin,
 
         if isinstance(queryset, QuerySet):
             # Ensure queryset is re-evaluated on each request.
-            queryset = queryset.filter(arduino_sensor__pk=sensor_pk)
+            queryset = queryset.filter(
+                arduino_sensor__pk=sensor_pk
+            ).order_by('epoch')
         if not queryset:
             return queryset
+
+        # TODO: Add exceptions for integer types
         min_time = self.request.query_params.get('min_time', None)
 
         max_time = self.request.query_params.get('max_time', None)
 
         last = self.request.query_params.get('last', None)
 
+        first = self.request.query_params.get('first', None)
+
         if min_time is not None:
-            min_time = datetime.strptime(min_time, '%Y-%m-%d %H:%M:%S')
-            queryset = queryset.filter(created_at__gt=min_time)
+            # min_time = datetime.strptime(min_time, '%Y-%m-%d %H:%M:%S')
+            queryset = queryset.filter(epoch__gte=int(min_time))
         if max_time is not None:
-            max_time = datetime.strptime(max_time, '%Y-%m-%d %H:%M:%S')
-            queryset = queryset.filter(created_at__lt=max_time)
+            # max_time = datetime.strptime(max_time, '%Y-%m-%d %H:%M:%S')
+            queryset = queryset.filter(epoch__lte=int(max_time))
         if last is not None:
             length = len(queryset)
             cutoff = length - int(last)
             if cutoff > 0:
                 queryset = queryset[cutoff:]
+        if first is not None:
+            queryset = queryset[:int(first)]
         return queryset
 
     def paginate_queryset(self, queryset):
