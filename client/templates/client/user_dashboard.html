@@ -34,23 +34,14 @@
     <div id="transmisores" class="">
     </div>
 
-    <div class="row">
 
+  <div id="canChangeProject" class="row">
     <div class="col-md-12">
-      <!-- TABLE: LATEST ORDERS -->
       <div class="box box-info">
         <div class="box-header with-border">
           <h3 class="box-title">
-            CAMBIAR DE PROYECTO
+            Ver otros Proyectos
           </h3>
-          <div class="box-tools pull-right">
-            <button class="btn btn-box-tool" data-widget="collapse">
-              <i class="fa fa-minus"></i>
-            </button>
-            <button class="btn btn-box-tool" data-widget="remove">
-              <i class="fa fa-times"></i>
-            </button>
-          </div>
         </div>
         <!-- /.box-header -->
 
@@ -91,16 +82,9 @@
               </tbody>
             </table>
           </div>
-          <!-- /.table-responsive      <span class="label label-success">Activo</span>  -->
         </div>
-
-
-        <!-- /.box-body -->
-        <!-- /.box-footer -->
       </div>
-      <!-- /.box -->
-    </div>
-
+    </div><!-- /.box -->
   </div>
 
   </section>
@@ -113,6 +97,8 @@
 
 {% block content_js %}
   <script type="text/javascript" src="{% static 'js/ws4redis.js'  %}"></script>
+
+  <script src="{% static 'plugins/momentjs/moment.min.js' %}"></script>
 
   <script src="{% static 'plugins/dygraphs/dygraph-combined.js' %}"></script>
   <script src="{% static 'plugins/datatables/jquery.dataTables.min.js' %}"></script>
@@ -202,6 +188,11 @@
       ws4redis.send_message('Hello');
     }
 
+    function on_close(){
+      //ws4redis.onclose();
+      ws4redis.close();
+    }
+
     function on_disconnected(evt) {
       alert('Websocket was disconnected: ' + JSON.stringify(evt));
     }
@@ -239,6 +230,11 @@
 
   $(document).ready(function(){
     //Utilizamos los datos iniciales de los proyectos
+    if( {{ project_list.count }} == 1){
+      $("#canChangeProject").hide();
+    }
+
+    canChangeProject
 
     actualProject = {{ project_list.first.id }} ;
     actualArduino = {{ project_list.first.arduinos.first.id }};
@@ -253,11 +249,16 @@
   $("[id^=activar_]").click(function(){
 
     console.log( $(this)[0].id );
+    $('#transmisores').html("CARGANDO...");
 
     var project_selected_ID =  $(this)[0].id;
 
     project_selected_ID     = project_selected_ID.replace("activar_","");
 
+    for(var i=0; i < allSockets.length; i++){
+      allSockets[i].close;
+      allSockets[i] = null;
+    }
     allSockets = [];
 
     var idKeys = Object.keys(proyectNames);
@@ -271,8 +272,6 @@
 
     $("#activar_"+_proyID).addClass('btn-info');
     $("#activar_"+_proyID).html('Activo');
-
-
 
     getArduinosFromProject( _proyID );
   });
@@ -326,26 +325,28 @@
             epochID = sensID;
           }else{
             blocksData +=
-            '<div id="blocksens_'+sensID +'">'+
-              '<div class="col-sm-3 col-xs-12">'+
-                '<div class="info-box">'+
-                  '<span class="info-box-icon bg-green"><i class="fa fa-fw fa-area-chart"></i></span>'+
-                  '<div class="info-box-content">'+
-                    '<span class="info-box-text">'+
-                      description+
-                    '</span>'+
-                    '<span id=sens_'+sensID +' class="info-box-number">0'+
-                    '&#176;</span>'+
-                    '<span id=min_'+sensID +' class="info-box-text">'+
-                      'Min. 0'+
-                    '&#176;</span>'+
-                    '<span id=max_'+sensID +' class="info-box-text">'+
-                      'Max. 0'+
-                    '&#176;</span>'+
-                  '</div>'+
-                '</div>'+
-              '</div>'+
-            '</div>';
+            '<tr id="row_'+sensID+'">'+
+                '<td>'+
+                  description+
+                '</td>'+
+                '<td align="center">'+
+                  '<span id=min_'+sensID +' class="info-box-text">'+
+                    '0'+
+                  '&#176;</span>'+
+                '</td>'+
+                '<td align="center">'+
+                  '<span id=sens_'+sensID +' class="info-box-number">0'+
+                  '&#176;</span>'+
+                '</td>'+
+                '<td align="center">'+
+                  '<span id=max_'+sensID +' class="info-box-text">'+
+                    '0'+
+                  '&#176;</span>'+
+                '</td>'+
+                '<td align="center">'+
+                  '<a href="/dash/sensor/'+sensID+'" target="_self"><button type="button" class="btn btn-success">Gráfica</button></a>'
+                '</td>'+
+              '</tr>';
           }
         }
 
@@ -362,8 +363,20 @@
                   '</h3>'+
                 '</div>'+
                 '<div class="box-body">'+
-                  '<br/>'+
-                  blocksData+
+                  '<div class="col-xs-12">'+
+                    '<table id="blocksens_'+sensID +'" class="table">'+
+                    '<thead><tr>'+
+                      '<th >Nombre Sensor</th>'+
+                      '<th align="center">Valor Minimo</th>'+
+                      '<th>Valor Actual</th>'+
+                      '<th>Valor Maximo</th>'+
+                      '<th></th>'+
+                      '</tr></thead>'+
+                      '<tbody>'+
+                      blocksData+
+                      '</tbody>'+
+                    '</table>'+
+                  '</div>'+
                 '</div>'+
               '</div>'+
             '</div>' +
@@ -450,8 +463,8 @@
         var max = sensInfo.max_value;
         var min = sensInfo.min_value;
 
-        $('#min_'+sensID).html('Min. '+min.substring(0,(min.length-2))+'°');
-        $('#max_'+sensID).html('Max. '+max.substring(0,(max.length-2))+'°');
+        $('#min_'+sensID).html(' '+min.substring(0,(min.length-2))+'°');
+        $('#max_'+sensID).html(' '+max.substring(0,(max.length-2))+'°');
 
       }else{
 
@@ -466,32 +479,48 @@
   }
 
   function convertEpoch2Date(epochData){
-    var d = new Date(0);
-    d.setUTCSeconds(epochData);
 
-    var day =  d.getDay() + 1 +'';
-    var month =  d.getMonth() + 1 +'';
+    if(parseInt(epochData)>10000){
+      var actualDate = new Date();
+      var actualHours = actualDate.getHours();
 
-    var hour    = d.getHours() +'';
-    var minutes = d.getMinutes()+'';;
-    var seconds = d.getSeconds()+'';;
+      var d = new Date(parseInt(epochData)*1000);
+      var day     =  d.getDate() +'';
+      var month   =  d.getMonth() + 1 +'';
+      var hour    =  d.getHours() +'';
+      var minutes =  d.getMinutes()+'';
+      var seconds =  d.getSeconds()+'';
 
-    //NO me gusta... pero no se me ocurre otra forma...
-    if(day.length == 1)
-      day = '0'+day;
-    if(month.length == 1)
-      month = '0'+month;
-    if(hour.length == 1)
-      hour = '0'+hour;
-    if(minutes.length == 1)
-      minutes = '0'+minutes;
-    if(seconds.length == 1)
-      seconds = '0'+seconds;
+      /*
+      if(parseInt(hour) > parseInt(actualHours)){
+        if(parseInt(hour) < 5){
+          var dif = hour - 5;
+          hour = 24 - dif;
+        }else{
+          hour = hour - 5;
+        }
+      }
+      */
 
-    var dateFormat = day +'/'+month+'/'+d.getFullYear();
-    var timeFormat = hour+':'+minutes+':'+seconds;
+      //NO me gusta... pero no se me ocurre otra forma...
+      if(day.length == 1)
+        day = '0'+day;
+      if(month.length == 1)
+        month = '0'+month;
+      if(hour.length == 1)
+        hour = '0'+hour;
+      if(minutes.length == 1)
+        minutes = '0'+minutes;
+      if(seconds.length == 1)
+        seconds = '0'+seconds;
 
-    return dateFormat + '               <b>' + timeFormat + '</b>';
+      var dateFormat = day +'/'+month+'/'+d.getFullYear();
+      var timeFormat = hour+':'+minutes+':'+seconds;
+
+      return dateFormat + '               <b>' + timeFormat + '</b>';
+    }else{
+      return "Formato de Fecha Invalido";
+    }
   }
 
   function useWSData(msg){
@@ -507,9 +536,15 @@
           var epochDate = convertEpoch2Date(data);
           $('#epoch_'+wsData[i]['arduino_sensor']).html('Ultima Actualización:  ' + epochDate);
         }else{
-          $('#sens_'+wsData[i]['arduino_sensor']).html(data + " &#176;");
+          if(data == '-127.00' || data == ''){
+            $('#row_'+wsData[i]['arduino_sensor']).hide();
+          }else{
+            $('#row_'+wsData[i]['arduino_sensor']).show();
+            $('#sens_'+wsData[i]['arduino_sensor']).html(data + " &#176;");
+          }
         }
       }
+
     }
   }
 
@@ -615,10 +650,31 @@ var canUsePickerCallBack =  true;
     }
   });
 }
-
-
-
-
+/*
+CUANDO ERAN BLOQUES
+  blocksData +=
+  '<div id="blocksens_'+sensID +'">'+
+    '<div class="col-sm-3 col-xs-12">'+
+      '<div class="info-box">'+
+        '<span class="info-box-icon bg-green"><i class="fa fa-fw fa-area-chart"></i></span>'+
+        '<div class="info-box-content">'+
+          '<span class="info-box-text">'+
+            description+
+          '</span>'+
+          '<span id=sens_'+sensID +' class="info-box-number">0'+
+          '&#176;</span>'+
+          '<span id=min_'+sensID +' class="info-box-text">'+
+            'Min. 0'+
+          '&#176;</span>'+
+          '<span id=max_'+sensID +' class="info-box-text">'+
+            'Max. 0'+
+          '&#176;</span>'+
+        '</div>'+
+      '</div>'+
+    '</div>'+
+  '</div>';
+}
+*/
   </script>
 
 {% endblock content_js %}

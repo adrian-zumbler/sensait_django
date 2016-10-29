@@ -10,8 +10,8 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-        Transmisor: <b>{{ arduino.name }}</b>
-        <small>Sistema Seleccionado</small>
+        Nombre Transmisor: <b>{{ arduino.name }}</b>
+        <small>Transmisor Seleccionado</small>
       </h1>
     </section>
 
@@ -48,7 +48,9 @@
                 <div class="box-body">
                   <dl class="dl-horizontal">
                     <dt>Cantidad de Sensores</dt>
-                    <dd>{{ arduino.sensors.count }} </dd>
+                    <dd>{{ arduino.sensors.count | add:"-1" }} </dd>
+
+                    {% comment %}
                     <dt>Estatus</dt>
                     <dd><span class="label label-success">Correcto</span></dd>
                     <dt>Epoch</dt>
@@ -59,7 +61,7 @@
                         </span>
                       {% endif %}
                     {% endfor %}
-
+                    {% endcomment %}
                   </dl>
                 </div><!-- /.box-body -->
               </div><!-- /.box -->
@@ -74,11 +76,10 @@
             <div class="box-header with-border">
               <h3 class="box-title">
                 Lista de sensores        -
-
                 {% for sensor in arduino.arduino_sensors.all %}
                   {% if  sensor.data_key == "field1" %}
                     <span id="sensor_{{ sensor.id}}">
-                      {{ sensor.sensor_data.last.data }}
+                      Conectando...
                     </span>
                     {% endif %}
                   {% endfor %}
@@ -93,7 +94,9 @@
                       <th>Sensor ID</th>
                       <th>Nombre Sensor</th>
                       <th>Tipo de Sensor</th>
+                      <th>Valor Mínimo</th>
                       <th>Ultimo Valor</th>
+                      <th>Valor Máximo</th>
                       <th> </th>
                     </tr>
                   </thead>
@@ -101,14 +104,20 @@
 
                     {% for sensor in arduino.arduino_sensors.all %}
                       {% if  sensor.data_key != "field1" %}
-                      <tr>
+                      <tr id="row_{{sensor.id}}">
                         <td> <a href="/dash/sensor/{{sensor.id}}">SENSOR-00{{sensor.index}}</a> </td>
                         <td>{{ sensor.description }}</td>
                         <td>{{ sensor.sensor_type.name }}</td>
                         <td align="center">
+                            {{ sensor.min_value }}
+                        </td>
+                        <td align="center">
                           <div id="sensor_{{ sensor.id}}">
                             {{ sensor.sensor_data.last.data }}
                           </div>
+                        </td>
+                        <td align="center">
+                            {{ sensor.max_value }}
                         </td>
 
                         {% comment %}
@@ -243,11 +252,16 @@
         for(var i= 0 ; i < wsData.length ; i++){
           var data = wsData[i]['data'];
 
+          if(data == '-127.00' || data == ''){
+            $('#row_'+wsData[i]['arduino_sensor']).hide();
+          }else{
+            $('#row_'+wsData[i]['arduino_sensor']).show();
+          }
+
           if( parseInt(data) > 100000){
             var epochDate = convertEpoch2Date(data);
             $('#sensor_'+wsData[i]['arduino_sensor']).html('Ultima Actualización:  ' + epochDate);
             $('#epoch_'+wsData[i]['arduino_sensor']).html(data);
-
           }else{
             $('#sensor_'+wsData[i]['arduino_sensor']).html(data + " &#176;");
           }
@@ -255,17 +269,29 @@
       }
     }
 
+    function convertEpoch2Date(epochData){
 
-      function convertEpoch2Date(epochData){
-        var d = new Date(0);
-        d.setUTCSeconds(epochData);
+      if(parseInt(epochData)>10000){
+        var actualDate = new Date();
+        var actualHours = actualDate.getHours();
 
-        var day =  d.getDay() + 1 +'';
-        var month =  d.getMonth() + 1 +'';
+        var d = new Date(parseInt(epochData)*1000);
+        var day     =  d.getDate() +'';
+        var month   =  d.getMonth() + 1 +'';
+        var hour    =  d.getHours() +'';
+        var minutes =  d.getMinutes()+'';
+        var seconds =  d.getSeconds()+'';
 
-        var hour    = d.getHours() +'';
-        var minutes = d.getMinutes()+'';;
-        var seconds = d.getSeconds()+'';;
+        /*
+        if(parseInt(hour) > parseInt(actualHours)){
+          if(parseInt(hour) < 5){
+            var dif = hour - 5;
+            hour = 24 - dif;
+          }else{
+            hour = hour - 5;
+          }
+        }
+        */
 
         //NO me gusta... pero no se me ocurre otra forma...
         if(day.length == 1)
@@ -279,12 +305,14 @@
         if(seconds.length == 1)
           seconds = '0'+seconds;
 
-
         var dateFormat = day +'/'+month+'/'+d.getFullYear();
         var timeFormat = hour+':'+minutes+':'+seconds;
 
         return dateFormat + '               <b>' + timeFormat + '</b>';
+      }else{
+        return "Formato de Fecha Invalido";
       }
+    }
 
   </script>
 

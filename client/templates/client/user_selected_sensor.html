@@ -183,8 +183,10 @@
                       <select class="form-control" id="type_selector">
                         <option value="0">Seleccione una opcion</option>
                         <option value="1">No. de Registros</option>
-                        <option value="2">Rango de Tiempo</option>
-                        <option value="3">Rango de Tiempo y No. de Registros</option>
+                        {% comment %}
+                          <option value="2">Rango de Tiempo</option>
+                          <option value="3">Rango de Tiempo y No. de Registros</option>
+                        {% endcomment %}
                       </select>
                     </div>
                   </div>
@@ -277,10 +279,6 @@
       </div><!-- /.col -->
     </div><!-- /.row -->
     {% endcomment %}
-
-
-
-
 
     </section>
     <!-- /.content -->
@@ -455,33 +453,50 @@ function useWSData(data){
   }
 }
 
+
 function convertEpoch2Date(epochData){
-  var d = new Date(0);
-  d.setUTCSeconds(epochData);
 
-  var day =  d.getDay() + 1 +'';
-  var month =  d.getMonth() + 1 +'';
+  if(parseInt(epochData)>10000){
+    var actualDate = new Date();
+    var actualHours = actualDate.getHours();
 
-  var hour    = d.getHours() +'';
-  var minutes = d.getMinutes()+'';;
-  var seconds = d.getSeconds()+'';;
+    var d = new Date(parseInt(epochData)*1000);
+    var day     =  d.getDate() +'';
+    var month   =  d.getMonth() + 1 +'';
+    var hour    =  d.getHours() +'';
+    var minutes =  d.getMinutes()+'';
+    var seconds =  d.getSeconds()+'';
 
-  //NO me gusta... pero no se me ocurre otra forma...
-  if(day.length == 1)
-    day = '0'+day;
-  if(month.length == 1)
-    month = '0'+month;
-  if(hour.length == 1)
-    hour = '0'+hour;
-  if(minutes.length == 1)
-    minutes = '0'+minutes;
-  if(seconds.length == 1)
-    seconds = '0'+seconds;
+    /*
+    if(parseInt(hour) > parseInt(actualHours)){
+      if(parseInt(hour) < 5){
+        var dif = hour - 5;
+        hour = 24 - dif;
+      }else{
+        hour = hour - 5;
+      }
+    }
+    */
 
-  var dateFormat = day +'/'+month+'/'+d.getFullYear();
-  var timeFormat = hour+':'+minutes+':'+seconds;
+    //NO me gusta... pero no se me ocurre otra forma...
+    if(day.length == 1)
+      day = '0'+day;
+    if(month.length == 1)
+      month = '0'+month;
+    if(hour.length == 1)
+      hour = '0'+hour;
+    if(minutes.length == 1)
+      minutes = '0'+minutes;
+    if(seconds.length == 1)
+      seconds = '0'+seconds;
 
-  return dateFormat + '               <b>' + timeFormat + '</b>';
+    var dateFormat = day +'/'+month+'/'+d.getFullYear();
+    var timeFormat = hour+':'+minutes+':'+seconds;
+
+    return dateFormat + '               <b>' + timeFormat + '</b>';
+  }else{
+    return "Formato de Fecha Invalido";
+  }
 }
 
   var _arduino;
@@ -511,6 +526,7 @@ function convertEpoch2Date(epochData){
   var date_today;
 
     $(document).ready(function(){
+
 
       //valores minimos y maximos:
       var min = "{{ arduinosensor.min_value }}";

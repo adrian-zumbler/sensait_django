@@ -10,17 +10,9 @@
     <section class="content-header">
       <h1>
         ADMINISTRACIÓN DE SENSORES
-        <small>SENSORES ACTIVOS</small>
+        <small>Lista de sensores creados</small>
 
       </h1>
-      <ol class="breadcrumb">
-        <li>
-          <a href="#">
-            <i class="fa fa-dashboard"></i>
-            Home</a>
-        </li>
-        <li class="active">Dashboard</li>
-      </ol>
     </section>
 
 
@@ -33,11 +25,10 @@
             <table id="table_sensor" class="table table-bordered table-striped">
               <thead>
                 <tr>
-                  <th>ID Sensor</th>
+                  <th>Sensor ID</th>
                   <th>Nombre Sensor</th>
-                  <th>Fecha Creación</th>
-                  <th>Fecha Actualización</th>
-                  <th>Estatus</th>
+                  <th>Descripción</th>
+                  <th>Modelo</th>
                   <th>Accion</th>
                 </tr>
               </thead>
@@ -45,16 +36,10 @@
 
                 {% for sensor in sensortype_list %}
                 <tr>
-                  <td>{{sensor.id}}</td>
+                  <td>Sensor00{{sensor.id}}</td>
                   <td>{{sensor.name}}</td>
-                  <td> {{sensor.created_at}} </td>
-                  <td> {{sensor.updated_at}} </td>
-
-                  {% if  project.id|isEven == 0%}
-                    <td> <span class="label label-danger">{{sensor.get_estatus_display }}</span> </td>
-                  {% else %}
-                    <td> <span class="label label-success">{{sensor.get_estatus_display }}</span> </td>
-                  {% endif %}
+                  <td> {{sensor.description}} </td>
+                  <td> {{sensor.model}} </td>
 
                   <td>
                     <div class="btn-group">
@@ -69,21 +54,10 @@
                       </a>
                     </div>
                   </td>
-
                 </tr>
                 {% endfor %}
 
               </tbody>
-              <tfoot>
-                <tr>
-                  <th>ID Sensor</th>
-                  <th>Nombre Sensor</th>
-                  <th>Fecha Creación</th>
-                  <th>Fecha Actualización</th>
-                  <th>Estatus</th>
-                  <th>Accion</th>
-                </tr>
-              </tfoot>
             </table>
           </div><!-- /.box-body -->
         </div><!-- /.box -->
@@ -116,12 +90,12 @@
 
   $(function () {
     $('#table_sensor').DataTable({
-      "paging": true,
-      "lengthChange": false,
-      "searching": true,
-      "ordering": true,
-      "info": true,
-      "autoWidth": false
+      "paging": false,
+      "lengthChange": fal∫se,
+      "searching": false,
+      "ordering": false,
+      "info": false,
+      "autoWidth": true
     });
   });
 
