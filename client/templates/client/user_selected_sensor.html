@@ -183,10 +183,8 @@
                       <select class="form-control" id="type_selector">
                         <option value="0">Seleccione una opcion</option>
                         <option value="1">No. de Registros</option>
-                        {% comment %}
-                          <option value="2">Rango de Tiempo</option>
-                          <option value="3">Rango de Tiempo y No. de Registros</option>
-                        {% endcomment %}
+                        <option value="2">Rango de Tiempo</option>
+                        <option value="3">Rango de Tiempo y No. de Registros</option>
                       </select>
                     </div>
                   </div>
@@ -554,7 +552,7 @@ function convertEpoch2Date(epochData){
     //moment("12/25/1995", "MM-DD-YYYY");
     $('#daterange').daterangepicker({
       locale: {
-       format: "YYYY-MM-DD",
+       format: "MM/DD/YYYY h:mm A",
        "separator": " - ",
        applyLabel: "Aplicar",
        cancelLabel: "Cancelar",
@@ -587,24 +585,34 @@ function convertEpoch2Date(epochData){
      opens: "center",
      drops: "up",
      showWeekNumbers:true,
+     timePicker: true,
+     timePickerIncrement: 10,
      minDate: moment().subtract(40, 'days'), //moment(min_date,"YYYY-MM-DD"),
      maxDate: moment().add(1,'days'),
      startDate: moment(), //moment(min_date,"YYYY-MM-DD"),
      endDate: moment() //moment(max_date,"YYYY-MM-DD")
     },
     function (start, end) {
-      console.log(start);
-      filter_date_start = start.format('YYYY-MM-DD');
-      filter_date_end   = end.format('YYYY-MM-DD');
 
-      if(filter_type == 2 )
+      filter_date_start = start.format('YYYY-MM-DD HH:mm');
+      filter_date_end   = end.format('YYYY-MM-DD HH:mm');
+
+      console.log(filter_date_start);
+      console.log(filter_date_end);
+
+      var epoch_start   = Date.parse(filter_date_start) + "";
+      var epoch_end     = Date.parse(filter_date_end)   + "";
+
+      epoch_start = epoch_start.substring(0,(epoch_start.length-3));
+      epoch_end   = epoch_end.substring(0,(epoch_end.length-3));
+
+      if(filter_type == 2 ){
         $("#filter_resume").html("Fecha del  " + filter_date_start + " al " + filter_date_end  );
-      else {
+      }else {
         $("#filter_resume").html("Fecha del  " + filter_date_start + " al " + filter_date_end + " como maximo "+ filter_registers + " registros" );
       }
 
-      getDataFromAPI(filter_date_start,filter_date_end, filter_registers);
-
+      getDataFromAPI(epoch_start,epoch_end, filter_registers);
     });
 
     $('#type_selector').on('change', function() {
@@ -644,10 +652,10 @@ function convertEpoch2Date(epochData){
       var query =  "?";
 
       if(query_startDate != "")
-        query += "min_time=" + query_startDate + " 00:00:00";
+        query += "min_time=" + query_startDate;
 
       if(query_endDate != "")
-        query += "&max_time=" + query_endDate + " 00:00:00";
+        query += "&max_time=" + query_endDate;
 
       if(query_dataLimit != "" && query_endDate == "")
         query += "last=" + query_dataLimit;
@@ -655,6 +663,7 @@ function convertEpoch2Date(epochData){
       if(query_dataLimit != "" && query_endDate != "")
         query += "&last=" + query_dataLimit;
 
+        console.log(urlApi + query);
       $.ajax({
         url: urlApi + query ,
         type: 'GET',
