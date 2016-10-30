@@ -3,6 +3,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import ListView, CreateView, UpdateView, DetailView, DeleteView, FormView
 from django.views.generic.detail import SingleObjectMixin
 from django.core.urlresolvers import reverse_lazy
+from django.utils import timezone
 
 from .models import Enterprise, Client
 from .forms import EnterpriseForm, ClientCreationForm, ArduinoSensorCSVReportForm
@@ -120,6 +121,9 @@ class CSVReportView(SingleObjectMixin, FormView):
         #     epoch__gte=int(form.cleaned_data['min_time']),
         #     epoch__lte=int(form.cleaned_data['max_time'])
         # ).values('epoch', 'data')
-        return ExcelResponse(form.cleaned_data['sensor_data'], force_csv=True)
+        sensor_data = form.cleaned_data['sensor_data']
+        sensor_data = [{'Fecha y hora': timezone.datetime.fromtimestamp(
+            dt['epoch'], ), 'data': dt['data']} for dt in sensor_data]
+        return ExcelResponse(sensor_data, force_csv=True)
 
 
