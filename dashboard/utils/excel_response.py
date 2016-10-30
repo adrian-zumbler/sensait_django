@@ -6,7 +6,7 @@ from django.http import HttpResponse
 
 class ExcelResponse(HttpResponse):
 
-    def __init__(self, data, output_name='excel_data', headers=None,
+    def __init__(self, data, output_name='sensor_data', headers=None,
                  force_csv=False, encoding='utf8'):
 
         # Make sure we've got the right type of data to work with
