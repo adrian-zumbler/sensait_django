@@ -499,8 +499,6 @@ function convertEpoch2Date(epochData){
   var date_today;
 
     $(document).ready(function(){
-
-
       //valores minimos y maximos:
       var min = "{{ arduinosensor.min_value }}";
       var max = "{{ arduinosensor.max_value }}";
@@ -597,14 +595,14 @@ function convertEpoch2Date(epochData){
       filter_date_start = start.format('YYYY-MM-DD HH:mm');
       filter_date_end   = end.format('YYYY-MM-DD HH:mm');
 
-      console.log(filter_date_start);
-      console.log(filter_date_end);
-
       var epoch_start   = Date.parse(filter_date_start) + "";
       var epoch_end     = Date.parse(filter_date_end)   + "";
 
       epoch_start = epoch_start.substring(0,(epoch_start.length-3));
       epoch_end   = epoch_end.substring(0,(epoch_end.length-3));
+
+      console.log(epoch_start);
+      console.log(epoch_end);
 
       if(filter_type == 2 ){
         $("#filter_resume").html("Fecha del  " + filter_date_start + " al " + filter_date_end  );
