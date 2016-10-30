@@ -148,10 +148,9 @@ class ArduinoSensor(models.Model):
 
     def __unicode__(self):
         # return str(self.id)
-        return 'Arduino: {0}, Sensor: {1} ({2})'.format(
-           self.arduino.name,
-           self.sensor_type.name,
-           self.description
+        # return 'Sensor: {0} Tipo:({1})'.format( self.sensor_type.name,
+        return '{0} '.format(
+            self.description,
         )
 
 

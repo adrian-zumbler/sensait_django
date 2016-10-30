@@ -124,6 +124,4 @@ class CSVReportView(SingleObjectMixin, FormView):
         sensor_data = form.cleaned_data['sensor_data']
         sensor_data = [{'Fecha y hora': timezone.datetime.fromtimestamp(
             dt['epoch'], ), 'data': dt['data']} for dt in sensor_data]
-        return ExcelResponse(sensor_data, force_csv=True)
-
-
+        return ExcelResponse(sensor_data,output_name=form.cleaned_data['sensor'].description + '_data', force_csv=True)

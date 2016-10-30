@@ -61,12 +61,10 @@
                     <div class="col-sm-10">
                        {% render_field field class="form-control" %}
                     </div>
-                    <div class="col-sm-offset-2 col-sm-8">
-                       {{field.errors}}
-                    </div>
                 </div>
                 {% endfor %}
                 <div class="col-sm-offset-2 col-sm-8">
+                  {{form.errors}}
                   {{form.non_field_errors}}
                 </div>
             </div>
@@ -98,6 +96,13 @@
     $("#id_min_time").hide();
     $("#form_1").hide();
     $("#id_max_time").hide();
+
+    {% for sens in arduino.arduino_sensors.all %}
+      {% if  sens.data_key == "field1" %}
+        var idEpoch = {{sens.id}};
+      {% endif %}
+    {% endfor %}
+    $('#id_sensor option[value='+idEpoch+']').remove();
   });
 
 
@@ -158,8 +163,10 @@
 
     console.log(epoch_start);
     console.log(epoch_end);
+
     $("#id_min_time").val(epoch_start);
     $("#id_max_time").val(epoch_end);
   });
+
 </script>
 {% endblock content_js %}
