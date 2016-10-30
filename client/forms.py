@@ -5,7 +5,7 @@ from django.contrib.auth.forms import UserCreationForm, User
 
 
 from .models import Enterprise, Client
-from arduino.models import Arduino
+from arduino.models import Arduino, SensorData
 
 
 class EnterpriseForm(forms.ModelForm):
@@ -59,5 +59,19 @@ class ArduinoSensorCSVReportForm(forms.Form):
         super(ArduinoSensorCSVReportForm, self).__init__(*args, **kwargs)
         self.fields['sensor'] = forms.ModelChoiceField(queryset=queryset)
 
+    def is_valid(self):
+        if super(ArduinoSensorCSVReportForm, self).is_valid():
+            objs = SensorData.objects.filter(
+                arduino_sensor=self.cleaned_data['sensor'],
+                epoch__gte=int(self.cleaned_data['min_time']),
+                epoch__lte=int(self.cleaned_data['max_time'])
+            ).values('epoch', 'data')
+            if objs:
+                self.cleaned_data['sensor_data'] = objs
+            else:
+                self.add_error(None, 'No existen registros dentro de los parámetros indicados.')
+                return False
+            return True
+        return False
 
 

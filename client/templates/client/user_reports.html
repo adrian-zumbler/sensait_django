@@ -34,6 +34,9 @@
             <form class="form-horizontal" role="form" action="" method="post">
             <div class="box-body">
                 {% csrf_token %}
+                <div class="col-sm-offset-2 col-sm-8">
+                       {{form.non_field_errors}}
+                    </div>
                 {% for field in form %}
                 <div class="form-group">
                     <label for="input" class="col-sm-2 control-label">{{ field.label }}</label>

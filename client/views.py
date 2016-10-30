@@ -115,11 +115,11 @@ class CSVReportView(SingleObjectMixin, FormView):
         return super(CSVReportView, self).post(request, *args, **kwargs)
 
     def form_valid(self, form):
-        objs = SensorData.objects.filter(
-            arduino_sensor=form.cleaned_data['sensor'],
-            epoch__gte=int(form.cleaned_data['min_time']),
-            epoch__lte=int(form.cleaned_data['max_time'])
-        ).values('epoch', 'data')
-        return ExcelResponse(objs, force_csv=True)
+        # objs = SensorData.objects.filter(
+        #     arduino_sensor=form.cleaned_data['sensor'],
+        #     epoch__gte=int(form.cleaned_data['min_time']),
+        #     epoch__lte=int(form.cleaned_data['max_time'])
+        # ).values('epoch', 'data')
+        return ExcelResponse(form.cleaned_data['sensor_data'], force_csv=True)
 
 
