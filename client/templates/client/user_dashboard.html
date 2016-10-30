@@ -204,7 +204,7 @@
 
     // receive a message though the websocket from the server
     function receiveMessage(msg) {
-      //console.log(msg);
+      console.log(msg);
       useWSData(msg);
     }
 
@@ -534,6 +534,7 @@ function getSensorsFromAPI(proy_ID,sensor_ID, arduinoID,sens_info,query){
 
     if(canUseSocket == true ){
       var wsData = JSON.parse(msg);
+      console.log(wsData);
 
       for(var i= 0 ; i < wsData.length ; i++){
         var data = wsData[i]['data'];
@@ -542,7 +543,7 @@ function getSensorsFromAPI(proy_ID,sensor_ID, arduinoID,sens_info,query){
           $('#row_'+wsData[i]['arduino_sensor']).hide();
         }else{
           var epochDate = convertEpoch2Date(wsData[i]['epoch']);
-          $('#epoch_'+wsData[0]['arduino_sensor']).html('Ultima Actualización:  ' + epochDate);
+          $('#epoch_'+wsData[i]['arduino_sensor']).html('Ultima Actualización:  ' + epochDate);
 
           $('#row_'+wsData[i]['arduino_sensor']).show();
           $('#sens_'+wsData[i]['arduino_sensor']).html(data + " &#176;");
