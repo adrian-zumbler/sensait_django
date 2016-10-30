@@ -120,7 +120,7 @@ class CSVReportView(SingleObjectMixin, FormView):
             arduino_sensor=form.cleaned_data['sensor'],
             epoch__gte=int(form.cleaned_data['min_time']),
             epoch__lte=int(form.cleaned_data['max_time'])
-        )
-        return ExcelResponse(objs)
+        ).values('epoch', 'data')
+        return ExcelResponse(objs, force_csv=True)
 
 
