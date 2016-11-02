@@ -53,6 +53,12 @@ class ClientCreationForm(UserCreationForm):
 class ArduinoSensorCSVReportForm(forms.Form):
     min_time = forms.CharField(max_length=10)
     max_time = forms.CharField(max_length=10)
+    file_type = forms.ChoiceField(
+        choices=(
+            (0, 'xls'),
+            (1, 'csv')
+        )
+    )
 
     def __init__(self, *args, **kwargs):
         queryset = kwargs.pop('sensor_queryset')
@@ -66,6 +72,8 @@ class ArduinoSensorCSVReportForm(forms.Form):
                 epoch__gte=int(self.cleaned_data['min_time']),
                 epoch__lte=int(self.cleaned_data['max_time'])
             ).values('epoch', 'data')
+
+
             if objs:
                 self.cleaned_data['sensor_data'] = objs
             else:
@@ -73,5 +81,7 @@ class ArduinoSensorCSVReportForm(forms.Form):
                 return False
             return True
         return False
+
+
 
 

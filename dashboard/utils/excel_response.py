@@ -57,7 +57,7 @@ class ExcelResponse(HttpResponse):
                         cell_style = styles['default']
                     sheet.write(rowx, colx, value, style=cell_style)
             book.save(output)
-            mimetype = 'application/vnd.ms-excel'
+            content_type = 'application/vnd.ms-excel'
             file_ext = 'xls'
         else:
             for row in data:

@@ -116,12 +116,16 @@ class CSVReportView(SingleObjectMixin, FormView):
         return super(CSVReportView, self).post(request, *args, **kwargs)
 
     def form_valid(self, form):
-        # objs = SensorData.objects.filter(
-        #     arduino_sensor=form.cleaned_data['sensor'],
-        #     epoch__gte=int(form.cleaned_data['min_time']),
-        #     epoch__lte=int(form.cleaned_data['max_time'])
-        # ).values('epoch', 'data')
         sensor_data = form.cleaned_data['sensor_data']
-        sensor_data = [{'Fecha y hora': timezone.datetime.fromtimestamp(
-            dt['epoch'], ), 'data': dt['data']} for dt in sensor_data]
-        return ExcelResponse(sensor_data,output_name=form.cleaned_data['sensor'].description + '_data', force_csv=True)
+
+        sensor_data = [
+            {'Fecha': edt[0], 'Hora': edt[1], 'data': dt['data']}
+            for dt in sensor_data for edt in self.epoch2date_time(dt['epoch'])]
+        return ExcelResponse(
+            sensor_data,
+            output_name=form.cleaned_data['sensor'].description + '_data',
+            force_csv=(form.cleaned_data['file_type']) == '1')
+
+    def epoch2date_time(self, epoch):
+        datet = timezone.datetime.fromtimestamp(epoch)
+        yield [datet.date(), datet.time()]
