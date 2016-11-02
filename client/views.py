@@ -1,3 +1,4 @@
+from collections import OrderedDict
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import ListView, CreateView, UpdateView, DetailView, DeleteView, FormView
@@ -119,7 +120,7 @@ class CSVReportView(SingleObjectMixin, FormView):
         sensor_data = form.cleaned_data['sensor_data']
 
         sensor_data = [
-            {'Fecha': edt[0], 'Hora': edt[1], 'data': dt['data']}
+            OrderedDict([('Fecha', edt[0]), ('Hora', edt[1]), ('data', dt['data'])])
             for dt in sensor_data for edt in self.epoch2date_time(dt['epoch'])]
         return ExcelResponse(
             sensor_data,
