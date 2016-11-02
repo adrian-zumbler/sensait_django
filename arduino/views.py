@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import json
+import time
 from datetime import datetime
 
 from django.http import QueryDict
@@ -14,6 +15,7 @@ from ws4redis.redis_store import RedisMessage
 from rest_framework import viewsets, mixins, status
 from rest_framework.permissions import IsAuthenticated, DjangoModelPermissions, AllowAny
 from rest_framework.response import Response
+from rest_framework.exceptions import APIException
 from rest_framework.request import Request
 from django.db.models.query import QuerySet
 from arduino.serializers import (ArduinoSerializer, SensorTypeSerializer,
@@ -21,6 +23,7 @@ from arduino.serializers import (ArduinoSerializer, SensorTypeSerializer,
 from arduino.permissions import isArduinoPermission
 from arduino.models import Arduino, SensorType
 from .forms import SensorTypeForm
+from .exceptions import StandardAPIException
 
 from urlparse import parse_qsl
 
@@ -143,26 +146,34 @@ class SensorDataViewSet(mixins.ListModelMixin,
 
         if isinstance(queryset, QuerySet):
             # Ensure queryset is re-evaluated on each request.
-            queryset = queryset.filter(arduino_sensor__pk=sensor_pk)
+            queryset = queryset.filter(
+                arduino_sensor__pk=sensor_pk
+            ).order_by('epoch')
         if not queryset:
             return queryset
+
+        # TODO: Add exceptions for integer types
         min_time = self.request.query_params.get('min_time', None)
 
         max_time = self.request.query_params.get('max_time', None)
 
         last = self.request.query_params.get('last', None)
 
+        first = self.request.query_params.get('first', None)
+
         if min_time is not None:
-            min_time = datetime.strptime(min_time, '%Y-%m-%d %H:%M:%S')
-            queryset = queryset.filter(created_at__gt=min_time)
+            # min_time = datetime.strptime(min_time, '%Y-%m-%d %H:%M:%S')
+            queryset = queryset.filter(epoch__gte=int(min_time))
         if max_time is not None:
-            max_time = datetime.strptime(max_time, '%Y-%m-%d %H:%M:%S')
-            queryset = queryset.filter(created_at__lt=max_time)
+            # max_time = datetime.strptime(max_time, '%Y-%m-%d %H:%M:%S')
+            queryset = queryset.filter(epoch__lte=int(max_time))
         if last is not None:
             length = len(queryset)
             cutoff = length - int(last)
             if cutoff > 0:
                 queryset = queryset[cutoff:]
+        if first is not None:
+            queryset = queryset[:int(first)]
         return queryset
 
     def paginate_queryset(self, queryset):
@@ -191,14 +202,28 @@ class DataViewSet(mixins.CreateModelMixin,
             broadcast=True)
         sensors = request.arduino.arduino_sensors.all()
         ret = []
+
         try:
-            request_data = request.data
+            request_data = request.data.copy()
+            epoch = int(request_data.pop('field1')[0])
         except Exception as exc:
             print(exc)
             request_data = parse_qs(request.body)
+            epoch = request_data.pop('field1')
+
+        if epoch < int(time.time()) - 200:
+            epoch += 18000
+
         for k in request_data:
             a_sensor = sensors.filter(data_key=k)
-            data = {'arduino_sensor': a_sensor, 'data': request_data[k]}
+            if not a_sensor:
+                detail = 'No se tiene registrado el sensor %s en el administrador' % k
+                raise StandardAPIException(detail=detail)
+            data = {
+                'arduino_sensor': a_sensor,
+                'data': request_data[k],
+                'epoch': epoch
+            }
             serializer = self.get_serializer(data=data)
             serializer.is_valid(raise_exception=True)
             self.perform_create(serializer)

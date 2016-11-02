@@ -183,10 +183,8 @@
                       <select class="form-control" id="type_selector">
                         <option value="0">Seleccione una opcion</option>
                         <option value="1">No. de Registros</option>
-                        {% comment %}
-                          <option value="2">Rango de Tiempo</option>
-                          <option value="3">Rango de Tiempo y No. de Registros</option>
-                        {% endcomment %}
+                        <option value="2">Rango de Tiempo</option>
+                        <option value="3">Rango de Tiempo y No. de Registros</option>
                       </select>
                     </div>
                   </div>
@@ -363,91 +361,66 @@
 
 function useWSData(data){
   console.log(data);
-  console.log(canUseSocket);
-  console.log(filter_type);
 
   if(canUseSocket == true ){
 
-      var jso = JSON.parse(data);
-      //console.log(jso);
-      //console.log('Message from Websocket: ' + data);
-      //console.log(jso.length);
+    var jso = JSON.parse(data);
 
-      if( filter_type == 1  || moment(date_today).isBetween(filter_date_start, filter_date_end ) || moment(date_today).isSameOrBefore(filter_date_end ) ){
+    if( filter_type == 1  || moment(date_today).isBetween(filter_date_start, filter_date_end ) || moment(date_today).isSameOrBefore(filter_date_end ) ){
 
-        for(var i= 0 ; i < jso.length ; i++){
+      for(var i= 0 ; i < jso.length ; i++){
 
-          console.log(jso[i]['data']);
-          console.log(jso[i]['data_key']);
-          if(jso[i]['data_key'] == 'field1'){
+        if(jso[i]['arduino_sensor'] == {{arduinosensor.id}}){
 
-            var d = new Date(0);
-            d.setUTCSeconds(jso[i]['data']);
+          var epochDate = convertEpoch2Date(jso[i]['epoch']);
+          $('#epochDate').html(epochDate);
+          $('#dateEpoch').html(epochDate);
+          $('#sensor_lastupdate').html(epochDate);
 
-            var month =  d.getMonth() + 1;
-            var dateFormat = d.getDay()+'/'+month+'/'+d.getFullYear();
-            var timeFormat = d.getHours()+':'+d.getMinutes()+':'+d.getSeconds();
+          sensor_data_chart.push(jso[i]['data']);
 
-            $('#epoch_'+sensInfo.arduino).html('Ultima Actualización:  ' + dateFormat + '    ' + timeFormat);
+          var d = new Date(jso[i]['created_at']);
+          var d_days = d.getDate() + "/" + d.getMonth() + "/" + d.getFullYear();
+          var d_time = completeTimeFormat(d.getHours(), d.getMinutes(), d.getSeconds());
+          sensor_date_chart.push(d_time);
+          var lastPosition = _sensors_data.length;
 
-            $('#sensor_lastupdate').html( dateFormat + '    ' + timeFormat );
-          }
+          _sensors_data.push(jso[i]);
 
-          if(jso[i]['arduino_sensor'] == {{arduinosensor.id}}){
+          $('#totalRegistros').html(lastPosition);
+          $('#ultimoValor').html( _sensors_data[lastPosition]['data'] );
+           //_sensors_data[lastPosition]['data'] = jso[i]['data'];
 
-            sensor_data_chart.push(jso[i]['data']);
+          dygraphs_data.push([d, _sensors_data[lastPosition]['data'], {{ arduinosensor.min_value }}, {{ arduinosensor.max_value }}]);
 
-            var d = new Date(jso[i]['created_at']);
-            var d_days = d.getDate() + "/" + d.getMonth() + "/" + d.getFullYear();
-            var d_time = completeTimeFormat(d.getHours(), d.getMinutes(), d.getSeconds());
-            sensor_date_chart.push(d_time);
-            var lastPosition = _sensors_data.length;
+          g.destroy();
 
-            _sensors_data.push(jso[i]);
-            //console.log(_sensors_data);
-            //console.log(lastPosition);
+          g = new Dygraph(document.getElementById("graphdiv"), dygraphs_data, {
+            drawPoints: true,
+            showRoller: true,
+            height: 400,
+            highlightSeriesBackgroundAlpha: 0.8,
+            fillGraph: true,
+            includeZero: false,
+            connectSeparatedPoints:true,
+            drawGapEdgePoints:true,
+            drawPoints:true,
+            pointSize:3,
+            strokeWidth: 3,
+            rightGap:40,
+            legend:"always",
+            highlightCircleSize:5,
+            showRoller:true,
+            hideOverlayOnMouseOut:false,
+            labelsDiv: document.getElementById('graphData'),
+            labels: ['Tiempo', 'Valor Registrado', 'Min.', 'Max.']
+          });
 
-            $('#totalRegistros').html(lastPosition);
-            $('#ultimoValor').html( _sensors_data[lastPosition]['data'] );
-             //_sensors_data[lastPosition]['data'] = jso[i]['data'];
-
-            dygraphs_data.push([d, _sensors_data[lastPosition]['data'], {{ arduinosensor.min_value }}, {{ arduinosensor.max_value }}]);
-
-            g.destroy();
-
-            g = new Dygraph(document.getElementById("graphdiv"), dygraphs_data, {
-              drawPoints: true,
-              showRoller: true,
-              height: 400,
-              highlightSeriesBackgroundAlpha: 0.8,
-              fillGraph: true,
-              includeZero: false,
-              connectSeparatedPoints:true,
-              drawGapEdgePoints:true,
-              drawPoints:true,
-              pointSize:3,
-              strokeWidth: 3,
-              rightGap:40,
-              legend:"always",
-              highlightCircleSize:5,
-              showRoller:true,
-              hideOverlayOnMouseOut:false,
-              labelsDiv: document.getElementById('graphData'),
-              labels: ['Tiempo', 'Valor Registrado', 'Min.', 'Max.']
-            });
-
-          }else{
-            var epoch = parseInt(jso[i]['data']);
-            if(epoch >100000){
-              var epochDate = convertEpoch2Date(epoch);
-              $('#dateEpoch').html(epochDate);
-              $('#sensor_lastupdate').html(epochDate);
-              console.log("ño");
-            }
-
-          }
+        }else{
+          console.log("ño");
         }
       }
+    }
   }else{
     console.log("Esperaaaa....");
   }
@@ -526,8 +499,6 @@ function convertEpoch2Date(epochData){
   var date_today;
 
     $(document).ready(function(){
-
-
       //valores minimos y maximos:
       var min = "{{ arduinosensor.min_value }}";
       var max = "{{ arduinosensor.max_value }}";
@@ -579,7 +550,7 @@ function convertEpoch2Date(epochData){
     //moment("12/25/1995", "MM-DD-YYYY");
     $('#daterange').daterangepicker({
       locale: {
-       format: "YYYY-MM-DD",
+       format: "MM/DD/YYYY h:mm A",
        "separator": " - ",
        applyLabel: "Aplicar",
        cancelLabel: "Cancelar",
@@ -612,24 +583,34 @@ function convertEpoch2Date(epochData){
      opens: "center",
      drops: "up",
      showWeekNumbers:true,
+     timePicker: true,
+     timePickerIncrement: 10,
      minDate: moment().subtract(40, 'days'), //moment(min_date,"YYYY-MM-DD"),
      maxDate: moment().add(1,'days'),
      startDate: moment(), //moment(min_date,"YYYY-MM-DD"),
      endDate: moment() //moment(max_date,"YYYY-MM-DD")
     },
     function (start, end) {
-      console.log(start);
-      filter_date_start = start.format('YYYY-MM-DD');
-      filter_date_end   = end.format('YYYY-MM-DD');
 
-      if(filter_type == 2 )
+      filter_date_start = start.format('YYYY-MM-DD HH:mm');
+      filter_date_end   = end.format('YYYY-MM-DD HH:mm');
+
+      var epoch_start   = Date.parse(filter_date_start) + "";
+      var epoch_end     = Date.parse(filter_date_end)   + "";
+
+      epoch_start = epoch_start.substring(0,(epoch_start.length-3));
+      epoch_end   = epoch_end.substring(0,(epoch_end.length-3));
+
+      console.log(epoch_start);
+      console.log(epoch_end);
+
+      if(filter_type == 2 ){
         $("#filter_resume").html("Fecha del  " + filter_date_start + " al " + filter_date_end  );
-      else {
+      }else {
         $("#filter_resume").html("Fecha del  " + filter_date_start + " al " + filter_date_end + " como maximo "+ filter_registers + " registros" );
       }
 
-      getDataFromAPI(filter_date_start,filter_date_end, filter_registers);
-
+      getDataFromAPI(epoch_start,epoch_end, filter_registers);
     });
 
     $('#type_selector').on('change', function() {
@@ -669,10 +650,10 @@ function convertEpoch2Date(epochData){
       var query =  "?";
 
       if(query_startDate != "")
-        query += "min_time=" + query_startDate + " 00:00:00";
+        query += "min_time=" + query_startDate;
 
       if(query_endDate != "")
-        query += "&max_time=" + query_endDate + " 00:00:00";
+        query += "&max_time=" + query_endDate;
 
       if(query_dataLimit != "" && query_endDate == "")
         query += "last=" + query_dataLimit;
@@ -680,6 +661,7 @@ function convertEpoch2Date(epochData){
       if(query_dataLimit != "" && query_endDate != "")
         query += "&last=" + query_dataLimit;
 
+        console.log(urlApi + query);
       $.ajax({
         url: urlApi + query ,
         type: 'GET',

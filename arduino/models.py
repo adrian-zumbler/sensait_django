@@ -2,6 +2,7 @@
 
 from __future__ import unicode_literals
 
+from datetime import timedelta
 from django.utils import timezone
 from django.db import models
 from django.contrib.auth.models import User
@@ -146,12 +147,11 @@ class ArduinoSensor(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __unicode__(self):
-        return str(self.id)
-        #return 'Arduino: {0}, Sensor: {1} ({2})'.format(
-        #    self.arduino.arduino_token,
-        #    self.sensor_type.prefix,
-        #    self.description
-        #)
+        # return str(self.id)
+        # return 'Sensor: {0} Tipo:({1})'.format( self.sensor_type.name,
+        return '{0} '.format(
+            self.description,
+        )
 
 
 class SensorData(models.Model):
@@ -162,6 +162,24 @@ class SensorData(models.Model):
         on_delete=models.CASCADE,
     )
     data = models.CharField(max_length=255)
+    epoch = models.PositiveIntegerField(default=0)
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    def __unicode__(self):
+        return str(self.id)
+
+
+def merge_epoch_field(arduino, efield_name='field1'):
+    sensors = arduino.arduino_sensors.all()
+    esensor = sensors.filter(data_key=efield_name)
+    delta = timedelta(seconds=3)
+    for edata in esensor[0].sensor_data.all():
+        edatetime = edata.created_at
+        epoch = int(edata.data) + 180000
+        SensorData.objects.filter(
+            arduino_sensor__in=sensors,
+            created_at__gt=edatetime - delta,
+            created_at__lt=edatetime + delta
+        ).update(epoch=epoch)

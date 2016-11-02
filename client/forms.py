@@ -5,6 +5,7 @@ from django.contrib.auth.forms import UserCreationForm, User
 
 
 from .models import Enterprise, Client
+from arduino.models import Arduino, SensorData
 
 
 class EnterpriseForm(forms.ModelForm):
@@ -47,5 +48,40 @@ class ClientCreationForm(UserCreationForm):
             client.enterprise = self.cleaned_data['enterprise']
             client.save()
         return client
+
+
+class ArduinoSensorCSVReportForm(forms.Form):
+    min_time = forms.CharField(max_length=10)
+    max_time = forms.CharField(max_length=10)
+    file_type = forms.ChoiceField(
+        choices=(
+            (0, 'xls'),
+            (1, 'csv')
+        )
+    )
+
+    def __init__(self, *args, **kwargs):
+        queryset = kwargs.pop('sensor_queryset')
+        super(ArduinoSensorCSVReportForm, self).__init__(*args, **kwargs)
+        self.fields['sensor'] = forms.ModelChoiceField(queryset=queryset)
+
+    def is_valid(self):
+        if super(ArduinoSensorCSVReportForm, self).is_valid():
+            objs = SensorData.objects.filter(
+                arduino_sensor=self.cleaned_data['sensor'],
+                epoch__gte=int(self.cleaned_data['min_time']),
+                epoch__lte=int(self.cleaned_data['max_time'])
+            ).values('epoch', 'data')
+
+
+            if objs:
+                self.cleaned_data['sensor_data'] = objs
+            else:
+                self.add_error(None, 'No existen registros dentro de los parámetros indicados.')
+                return False
+            return True
+        return False
+
+
 
 

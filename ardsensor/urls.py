@@ -32,6 +32,7 @@ from django.contrib.auth import authenticate, login, logout
 
 from dashboard.views import *
 from arduino.views import *
+from client.views import CSVReportView
 
 
 def login_user(request):
@@ -65,6 +66,7 @@ urlpatterns = [
     url(r'^dash/main/$', DashMainListView.as_view(), name="main"),
     url(r'^dash/projects/$', ProjectsListView.as_view(), name="projects"),
     url(r'^dash/projects/(?P<pk>\d+)/$', ProjectDetailView.as_view(), name="projectDetail"),
+    url(r'^dash/reports/(?P<pk>\d+)/$', CSVReportView.as_view()),
     url(r'^dash/iot/(?P<pk>\d+)/$', ArduinoDetailView.as_view(), name="arduinoDetail"),
     url(r'^dash/sensor/(?P<pk>\d+)/$', ArduinoSensorDetailView.as_view(), name="sensorDetail"),
 

@@ -42,6 +42,11 @@
           <h3 class="box-title">
             Ver otros Proyectos
           </h3>
+          <div class="box-tools pull-right">
+            <button class="btn btn-box-tool" data-widget="collapse">
+              <i class="fa fa-minus"></i>
+            </button>
+          </div>
         </div>
         <!-- /.box-header -->
 
@@ -65,7 +70,7 @@
                   </td>
                   <td>
                     {{project.name}}
-                  </td>
+                </td>
                   <td>
                     {{project.arduinos.count}}
                   </td>
@@ -199,7 +204,7 @@
 
     // receive a message though the websocket from the server
     function receiveMessage(msg) {
-      //console.log(msg);
+      console.log(msg);
       useWSData(msg);
     }
 
@@ -305,7 +310,7 @@
   }
 
   function dataProjectCallBack( data ){
-    console.log(data);
+
     $('#transmisores').html(" ");
 
     var rowData = "";
@@ -359,8 +364,13 @@
                   '<h3 class="box-title">'+
                     '<b>Proyecto:  </b>'+proyectNames[_proyID] +' - '+
                     '<b>Transmisor:</b>  '+data[i].name+
-                    ' - <span id="epoch_'+epochID+'"> -  Ultima actualización: </span>'+
+                    ' - <span id="epoch_'+data[i].sensors[1].id+'"> -  Ultima actualización: </span>'+
                   '</h3>'+
+                  '<div class="box-tools pull-right">'+
+                    '<button class="btn btn-box-tool" data-widget="collapse">'+
+                      '<i class="fa fa-minus"></i>'+
+                    '</button>'+
+                  '</div>'+
                 '</div>'+
                 '<div class="box-body">'+
                   '<div class="col-xs-12">'+
@@ -405,7 +415,7 @@
 
 
 
-  function getSensorsFromAPI(proy_ID,sensor_ID, arduinoID,sens_info,query){
+function getSensorsFromAPI(proy_ID,sensor_ID, arduinoID,sens_info,query){
 
     var passData_proyectID  = proy_ID;
     var passData_sensorID   = sensor_ID;
@@ -466,20 +476,17 @@
         $('#min_'+sensID).html(' '+min.substring(0,(min.length-2))+'°');
         $('#max_'+sensID).html(' '+max.substring(0,(max.length-2))+'°');
 
-      }else{
-
-        var epoch = data[0].data;
+        var epoch = data[0].epoch;
         var epochDate = convertEpoch2Date(epoch);
-
         $('#epoch_'+sensID).html('Ultima Actualización:  ' + epochDate);
-        canUseSocket = true; //dejemos que vivan los sockets
+      }else{
       }
     }
+    canUseSocket = true; //dejemos que vivan los sockets
     isFirstLoad = false;
   }
 
   function convertEpoch2Date(epochData){
-
     if(parseInt(epochData)>10000){
       var actualDate = new Date();
       var actualHours = actualDate.getHours();
@@ -524,27 +531,24 @@
   }
 
   function useWSData(msg){
-    //console.log(msg);
 
     if(canUseSocket == true ){
       var wsData = JSON.parse(msg);
+      console.log(wsData);
 
       for(var i= 0 ; i < wsData.length ; i++){
         var data = wsData[i]['data'];
 
-        if( parseInt(data) > 100000){
-          var epochDate = convertEpoch2Date(data);
-          $('#epoch_'+wsData[i]['arduino_sensor']).html('Ultima Actualización:  ' + epochDate);
+        if(data == '-127.00' || data == ''){
+          $('#row_'+wsData[i]['arduino_sensor']).hide();
         }else{
-          if(data == '-127.00' || data == ''){
-            $('#row_'+wsData[i]['arduino_sensor']).hide();
-          }else{
-            $('#row_'+wsData[i]['arduino_sensor']).show();
-            $('#sens_'+wsData[i]['arduino_sensor']).html(data + " &#176;");
-          }
+          var epochDate = convertEpoch2Date(wsData[i]['epoch']);
+          $('#epoch_'+wsData[i]['arduino_sensor']).html('Ultima Actualización:  ' + epochDate);
+
+          $('#row_'+wsData[i]['arduino_sensor']).show();
+          $('#sens_'+wsData[i]['arduino_sensor']).html(data + " &#176;");
         }
       }
-
     }
   }
 
