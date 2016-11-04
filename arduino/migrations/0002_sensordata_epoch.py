@@ -47,7 +47,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='sensordata',
             name='epoch',
-            field=models.PositiveIntegerField(default=0),
+            field=models.PositiveIntegerField(default=0, null=True),
         ),
         migrations.RunPython(forwards_func, reverse_func),
     ]

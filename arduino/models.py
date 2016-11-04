@@ -162,7 +162,7 @@ class SensorData(models.Model):
         on_delete=models.CASCADE,
     )
     data = models.CharField(max_length=255)
-    epoch = models.PositiveIntegerField(default=0)
+    epoch = models.PositiveIntegerField(default=0, null=True)
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
