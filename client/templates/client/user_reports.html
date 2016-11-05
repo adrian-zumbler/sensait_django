@@ -21,6 +21,30 @@
     </section>
 
     <!-- Main content -->
+    <section class="content">
+      <div class="row">
+        <div class="col-xs-12">
+          <div class="box box-info">
+            <div class="box-header with-border">
+              <h3 class="box-title">
+                Resumen de Alertas
+              </h3>
+            </div>
+            <div class="box-body">
+              {{arduino.id}}<br/>
+
+
+
+              {% for sens in arduino.arduino_sensors.all %}
+                {{sens.id}}<br/>
+              {% endfor %}
+
+            </div>
+          </div>
+          </div>
+        </div>
+      </section>
+
 
   <section class="content">
     <div class="row">
@@ -31,9 +55,6 @@
               Seleccione el sensor y rango de fechas de las lecturas
             </h3>
           </div>
-          <!-- /.box-header -->
-          <!-- form start -->
-
             <form class="form-horizontal" role="form" action="" method="post">
             <div class="box-body">
                 {% csrf_token %}
@@ -78,11 +99,13 @@
         </div>
         </div><!-- /.box -->
       </div>
-    </div>
-  </section>
-    <!-- /.content -->
+    </section>
+
+
+
+
   </div>
-  <!-- /.content-wrapper -->
+
 
 {% endblock main_content_wrapper %}
 
@@ -90,7 +113,13 @@
 
 {% block content_js %}
   <script type="application/javascript">
+  var site_url = "{{ site_url }}";
+
+
   $(document).ready(function(){
+    console.log(site_url);
+
+    
 
     $("#form_0").hide();
     $("#id_min_time").hide();
@@ -103,6 +132,10 @@
       {% endif %}
     {% endfor %}
     //$('#id_sensor option[value='+idEpoch+']').remove();
+
+
+
+
   });
 
 
