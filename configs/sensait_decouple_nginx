@@ -1,4 +1,4 @@
-# /etc/nginx/site-available/sensait
+# /etc/nginx/site-available/sensait_decouple
 server {
     listen 80;
     server_name sensait.dyndns.org;
