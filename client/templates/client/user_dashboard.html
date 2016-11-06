@@ -492,7 +492,6 @@ function getSensorsFromAPI(proy_ID,sensor_ID, arduinoID,sens_info,query){
   function convertEpoch2Date(epochData){
     if(parseInt(epochData)>10000){
       var actualDate = new Date();
-      var actualHours = actualDate.getHours();
 
       var d = new Date(parseInt(epochData)*1000);
       var day     =  d.getDate() +'';
@@ -502,6 +501,7 @@ function getSensorsFromAPI(proy_ID,sensor_ID, arduinoID,sens_info,query){
       var seconds =  d.getSeconds()+'';
 
       /*
+      var actualHours = actualDate.getHours();
       if(parseInt(hour) > parseInt(actualHours)){
         if(parseInt(hour) < 5){
           var dif = hour - 5;

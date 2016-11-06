@@ -464,7 +464,7 @@ function getTodayRange(actualDate){
   //console.log(epochDateFirst);
   //console.log(epochDateLast);
 
-  return [epochDateFirst,epochDateLast];
+  return [epochDateFirst,epochDateLast,dateFormat];
 }
 
 function convertEpoch2Date(epochData){
@@ -545,6 +545,10 @@ function convertEpoch2Date(epochData){
 
     var todayDate = new Date();
     var dateRange = getTodayRange(todayDate);
+
+    date_today  = moment().format("YYYY-MM-DD");
+    date_today2 = moment().format("DD/MM/YYYY");
+
     console.log(dateRange);
 
     //valores minimos y maximos:
@@ -558,7 +562,7 @@ function convertEpoch2Date(epochData){
 
     $("#filter_date").hide();
     $("#filter_limit").hide();
-    date_today = moment().format("YYYY-MM-DD");
+
     //primera petición de datos.
     //dateRange[1]
     allData = getDataFromAPI(dateRange[0],"","");
@@ -567,9 +571,6 @@ function convertEpoch2Date(epochData){
 
 
   });
-
-
-
 
   $(tableNameID).DataTable({
     "paging": true,
@@ -580,8 +581,6 @@ function convertEpoch2Date(epochData){
     "autoWidth": false,
     "pageLength": 5
   });
-
-
 
     $('#limit_selector').on('change', function() {
       var limit = this.value;
@@ -800,12 +799,24 @@ function convertEpoch2Date(epochData){
     for (var i = 0; i < _sensors_data.length; i++) {
       sensor_data_chart.push(_sensors_data[i]['data']);
 
-      var d = new Date(_sensors_data[i]['created_at']);
-      var d_days = d.getDate() + "/" + d.getMonth() + "/" + d.getFullYear();
-      var d_time = completeTimeFormat(d.getHours(), d.getMinutes(), d.getSeconds());
-      sensor_date_chart.push(d_time);
+      var epochDate = convertEpoch2Date(_sensors_data[i]['epoch']);
+      epochDate = epochDate.replace("<b>","");
+      epochDate = epochDate.replace("</b>","");
+      epochDate = epochDate.replace("               "," ");
 
-      dygraphs_data.push([d, _sensors_data[i]['data'], {{ arduinosensor.min_value }}, {{ arduinosensor.max_value }}]);
+      var date2Compare = epochDate.split(" ");
+
+      if(moment(date2Compare[0]).isSame(date_today2,'day')){
+
+        var d = new Date(epochDate);
+        //var d_days = d.getDate() + "/" + d.getMonth() + "/" + d.getFullYear();
+        //var d_time = completeTimeFormat(d.getHours(), d.getMinutes(), d.getSeconds());
+        sensor_date_chart.push(date2Compare[1]);
+
+        dygraphs_data.push([d, _sensors_data[i]['data'], {{ arduinosensor.min_value }}, {{ arduinosensor.max_value }}]);
+
+      }
+
 
     }
 
