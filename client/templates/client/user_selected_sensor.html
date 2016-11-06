@@ -531,7 +531,7 @@ function convertEpoch2Date(epochData){
 
   var query_startDate   = "";
   var query_endDate     = "";
-  var query_dataLimit   = "1000";
+  var query_dataLimit   = "2400";
   var filter_type       = 1 ;
   var filter_registers  = query_dataLimit ;
   var filter_date_start = "" ;
@@ -565,7 +565,7 @@ function convertEpoch2Date(epochData){
 
     //primera petición de datos.
     //dateRange[1]
-    allData = getDataFromAPI(dateRange[0],"","");
+    allData = getDataFromAPI("","",query_dataLimit);
 
     $("#filter_resume").html("Ultimos " + query_dataLimit + " registros" );
 
@@ -805,18 +805,29 @@ function convertEpoch2Date(epochData){
       epochDate = epochDate.replace("               "," ");
 
       var date2Compare = epochDate.split(" ");
+      /*
+      var epochDate = convertEpoch2Date(_sensors_data[i]['epoch']);
+      epochDate = epochDate.replace("<b>","");
+      epochDate = epochDate.replace("</b>","");
+      epochDate = epochDate.replace("               "," ");
+
+      var date2Compare = epochDate.split(" ");
 
       if(moment(date2Compare[0]).isSame(date_today2,'day')){
 
         var d = new Date(epochDate);
-        //var d_days = d.getDate() + "/" + d.getMonth() + "/" + d.getFullYear();
-        //var d_time = completeTimeFormat(d.getHours(), d.getMinutes(), d.getSeconds());
         sensor_date_chart.push(date2Compare[1]);
 
         dygraphs_data.push([d, _sensors_data[i]['data'], {{ arduinosensor.min_value }}, {{ arduinosensor.max_value }}]);
-
       }
+      */
 
+      var d = new Date(_sensors_data[i]['created_at']);
+      var d_days = d.getDate() + "/" + d.getMonth() + "/" + d.getFullYear();
+      var d_time = completeTimeFormat(d.getHours(), d.getMinutes(), d.getSeconds());
+      sensor_date_chart.push(d_time);
+
+      dygraphs_data.push([d, _sensors_data[i]['data'], {{ arduinosensor.min_value }}, {{ arduinosensor.max_value }}]);
 
     }
 
