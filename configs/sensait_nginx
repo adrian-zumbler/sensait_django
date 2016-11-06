@@ -1,0 +1,26 @@
+# /etc/nginx/site-available/sensait
+server {
+    listen 80;
+    server_name sensait.dyndns.org;
+
+    location = /favicon.ico { access_log off; log_not_found off; }
+    location /static/ {
+        root /home/manto/sensait;
+    }
+
+    location /media/ {
+        root /home/manto/sensait;
+    }
+
+    location / {
+        include         uwsgi_params;
+        uwsgi_pass      unix:/home/manto/sensait/sensait.sock;
+    }
+
+    location /ws/ {
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+        proxy_pass http://unix:/home/manto/sensait/sensait_ws.sock;
+    }
+}
