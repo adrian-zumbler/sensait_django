@@ -85,6 +85,11 @@ class CSVReportView(SingleObjectMixin, FormView):
     form_class = ArduinoSensorCSVReportForm
     template_name = 'client/user_reports.html'
 
+    def get_context_data(self, **kwargs):
+        context = super(CSVReportView, self).get_context_data(**kwargs)
+        context['site_url'] = self.request.get_host()
+        return context
+
     def get_queryset(self):
 
         if self.request.user.is_superuser:
