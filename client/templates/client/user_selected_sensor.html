@@ -560,7 +560,8 @@ function convertEpoch2Date(epochData){
     $("#filter_limit").hide();
     date_today = moment().format("YYYY-MM-DD");
     //primera petición de datos.
-    allData = getDataFromAPI(dateRange[0],dateRange[1],"");
+    //dateRange[1]
+    allData = getDataFromAPI(dateRange[0],"","");
 
     $("#filter_resume").html("Ultimos " + query_dataLimit + " registros" );
 
