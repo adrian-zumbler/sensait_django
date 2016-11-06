@@ -55,10 +55,10 @@
             <table id="table_projects"  class="table no-margin">
               <thead>
                 <tr>
-                  <th>ID Proyecto</th>
-                  <th>Nombre</th>
+                  <th>Proyecto ID</th>
+                  <th>Nombre Proyecto </th>
                   <th>No. Transmisores</th>
-                  <th>Accion</th>
+                  <th></th>
                 </tr>
               </thead>
               <tbody>
@@ -143,17 +143,16 @@
     "paging": false,
     "lengthChange": false,
     "searching": false,
-    "ordering": true,
+    "ordering": false,
     "info":false,
   });
 
-
-  $('#table_sistemas').DataTable({
-    "paging": true,
+  $("[id^='blocksens_']").DataTable({
+    "paging": false,
     "lengthChange": false,
     "searching": false,
-    "ordering": true,
-    "info":true,
+    "ordering": false,
+    "info":false,
   });
 
   //##############################
@@ -310,7 +309,8 @@
   }
 
   function dataProjectCallBack( data ){
-
+    console.log("holo");
+    console.log(data);
     $('#transmisores').html(" ");
 
     var rowData = "";
@@ -326,6 +326,9 @@
           var dataKey     = data[i].sensors[j].data_key;
           var sensID      = data[i].sensors[j].id;
 
+          if(dataKey === "field2")
+            epochID = sensID;
+
           if(dataKey === "field1"){
             epochID = sensID;
           }else{
@@ -334,16 +337,16 @@
                 '<td>'+
                   description+
                 '</td>'+
-                '<td align="center">'+
+                '<td align="">'+
                   '<span id=min_'+sensID +' class="info-box-text">'+
                     '0'+
                   '&#176;</span>'+
                 '</td>'+
-                '<td align="center">'+
+                '<td align="">'+
                   '<span id=sens_'+sensID +' class="info-box-number">0'+
                   '&#176;</span>'+
                 '</td>'+
-                '<td align="center">'+
+                '<td align="">'+
                   '<span id=max_'+sensID +' class="info-box-text">'+
                     '0'+
                   '&#176;</span>'+
@@ -364,7 +367,7 @@
                   '<h3 class="box-title">'+
                     '<b>Proyecto:  </b>'+proyectNames[_proyID] +' - '+
                     '<b>Transmisor:</b>  '+data[i].name+
-                    ' - <span id="epoch_'+data[i].sensors[1].id+'"> -  Ultima actualización: </span>'+
+                    ' - <span id="epoch_'+epochID+'"> -  Ultima actualización: </span>'+
                   '</h3>'+
                   '<div class="box-tools pull-right">'+
                     '<button class="btn btn-box-tool" data-widget="collapse">'+
@@ -376,10 +379,10 @@
                   '<div class="col-xs-12">'+
                     '<table id="blocksens_'+sensID +'" class="table">'+
                     '<thead><tr>'+
-                      '<th >Nombre Sensor</th>'+
-                      '<th align="center">Valor Minimo</th>'+
+                      '<th>Nombre Sensor</th>'+
+                      '<th>Valor Mínimo</th>'+
                       '<th>Valor Actual</th>'+
-                      '<th>Valor Maximo</th>'+
+                      '<th>Valor Máximo</th>'+
                       '<th></th>'+
                       '</tr></thead>'+
                       '<tbody>'+
