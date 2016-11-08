@@ -71,7 +71,7 @@ class ArduinoSensorCSVReportForm(forms.Form):
                 arduino_sensor=self.cleaned_data['sensor'],
                 epoch__gte=int(self.cleaned_data['min_time']),
                 epoch__lte=int(self.cleaned_data['max_time'])
-            ).values('epoch', 'data')
+            ).order_by('epoch').values('epoch', 'data')
 
 
             if objs:
