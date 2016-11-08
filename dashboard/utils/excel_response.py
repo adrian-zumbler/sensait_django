@@ -1,4 +1,5 @@
 import datetime
+from decimal import Decimal
 
 from django.db.models.query import QuerySet
 from django.http import HttpResponse
@@ -54,6 +55,11 @@ class ExcelResponse(HttpResponse):
                     elif isinstance(value, datetime.time):
                         cell_style = styles['time']
                     else:
+                        # turning non dates, datetimes and times to decimal
+                        try:
+                            value = Decimal(value)
+                        except:
+                            pass
                         cell_style = styles['default']
                     sheet.write(rowx, colx, value, style=cell_style)
             book.save(output)
