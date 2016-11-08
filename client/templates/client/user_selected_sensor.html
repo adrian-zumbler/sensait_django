@@ -12,6 +12,10 @@
     color: white;
     background-color: #027c43 !important;
   }
+  #graphdiv{
+    background-color: #f0f0f0 !important;
+  }
+
 </style>
 
 {% endblock content_css %}
@@ -204,17 +208,14 @@
                     <label for="limit_selector" class=" col-xs-12 control-label">Ultimos Registros</label>
                     <div class="col-xs-6">
                       <select class="form-control" id="limit_selector">
-                        <option>1000</option>
-                        <option>750</option>
-                        <option>500</option>
-                        <option>400</option>
+                        <option>2400</option>
+                        <option>1200</option>
+                        <option>600</option>
                         <option>300</option>
-                        <option>250</option>
-                        <option>200</option>
-                        <option>100</option>
-                        <option>50</option>
+                        <option>150</option>
+                        <option>75</option>
                         <option>30</option>
-                        <option>20</option>
+                        <option>15</option>
                         <option>10</option>
                         <option>5</option>
                       </select>
@@ -531,7 +532,7 @@ function convertEpoch2Date(epochData){
 
   var query_startDate   = "";
   var query_endDate     = "";
-  var query_dataLimit   = "1000";
+  var query_dataLimit   = "2400";
   var filter_type       = 1 ;
   var filter_registers  = query_dataLimit ;
   var filter_date_start = "" ;
@@ -568,8 +569,6 @@ function convertEpoch2Date(epochData){
     allData = getDataFromAPI("","",query_dataLimit);
 
     $("#filter_resume").html("Ultimos " + query_dataLimit + " registros" );
-
-
   });
 
   $(tableNameID).DataTable({
@@ -797,37 +796,41 @@ function convertEpoch2Date(epochData){
     _sensors_data = data;
 
     for (var i = 0; i < _sensors_data.length; i++) {
-      sensor_data_chart.push(_sensors_data[i]['data']);
 
-      var epochDate = convertEpoch2Date(_sensors_data[i]['epoch']);
-      epochDate = epochDate.replace("<b>","");
-      epochDate = epochDate.replace("</b>","");
-      epochDate = epochDate.replace("               "," ");
+      if(_sensors_data[i]['data'] != "-127.00") {
+        sensor_data_chart.push(_sensors_data[i]['data']);
 
-      var date2Compare = epochDate.split(" ");
-      /*
-      var epochDate = convertEpoch2Date(_sensors_data[i]['epoch']);
-      epochDate = epochDate.replace("<b>","");
-      epochDate = epochDate.replace("</b>","");
-      epochDate = epochDate.replace("               "," ");
+        var epochDate = convertEpoch2Date(_sensors_data[i]['epoch']);
+        epochDate = epochDate.replace("<b>","");
+        epochDate = epochDate.replace("</b>","");
+        epochDate = epochDate.replace("               "," ");
 
-      var date2Compare = epochDate.split(" ");
+        var date2Compare = epochDate.split(" ");
+        /*
+        var epochDate = convertEpoch2Date(_sensors_data[i]['epoch']);
+        epochDate = epochDate.replace("<b>","");
+        epochDate = epochDate.replace("</b>","");
+        epochDate = epochDate.replace("               "," ");
 
-      if(moment(date2Compare[0]).isSame(date_today2,'day')){
+        var date2Compare = epochDate.split(" ");
 
-        var d = new Date(epochDate);
-        sensor_date_chart.push(date2Compare[1]);
+        if(moment(date2Compare[0]).isSame(date_today2,'day')){
+
+          var d = new Date(epochDate);
+          sensor_date_chart.push(date2Compare[1]);
+
+          dygraphs_data.push([d, _sensors_data[i]['data'], {{ arduinosensor.min_value }}, {{ arduinosensor.max_value }}]);
+        }
+        */
+
+        var d = new Date(_sensors_data[i]['created_at']);
+        var d_days = d.getDate() + "/" + d.getMonth() + "/" + d.getFullYear();
+        var d_time = completeTimeFormat(d.getHours(), d.getMinutes(), d.getSeconds());
+        sensor_date_chart.push(d_time);
 
         dygraphs_data.push([d, _sensors_data[i]['data'], {{ arduinosensor.min_value }}, {{ arduinosensor.max_value }}]);
       }
-      */
 
-      var d = new Date(_sensors_data[i]['created_at']);
-      var d_days = d.getDate() + "/" + d.getMonth() + "/" + d.getFullYear();
-      var d_time = completeTimeFormat(d.getHours(), d.getMinutes(), d.getSeconds());
-      sensor_date_chart.push(d_time);
-
-      dygraphs_data.push([d, _sensors_data[i]['data'], {{ arduinosensor.min_value }}, {{ arduinosensor.max_value }}]);
 
     }
 
@@ -837,29 +840,34 @@ function convertEpoch2Date(epochData){
       $('#graphdiv').html('');
     }
 
-    g = new Dygraph(document.getElementById("graphdiv"), dygraphs_data, {
-      drawPoints: true,
-      showRoller: true,
-      height: 400,
-      highlightSeriesBackgroundAlpha: 0.8,
-      fillGraph: true,
-      includeZero: false,
-      connectSeparatedPoints:true,
-      drawGapEdgePoints:true,
-      drawPoints:true,
-      pointSize:3,
-      strokeWidth: 3,
-      rightGap:40,
-      legend:"always",
-      highlightCircleSize:5,
-      showRoller:true,
-      hideOverlayOnMouseOut:false,
-      labelsDiv: document.getElementById('graphData'),
-      labels: ['Tiempo', 'Valor Registrado', 'Min.', 'Max.']
-    });
+    if(dygraphs_data.length != 0 ){
+      g = new Dygraph(document.getElementById("graphdiv"), dygraphs_data, {
+        drawPoints: true,
+        showRoller: true,
+        height: 400,
+        highlightSeriesBackgroundAlpha:1,
+        fillGraph: false,
+        includeZero: false,
+        connectSeparatedPoints:true,
+        drawGapEdgePoints:true,
+        drawPoints:true,
+        pointSize:3,
+        strokeWidth:3,
+        rightGap:40,
+        legend:"always",
+        highlightCircleSize:5,
+        showRoller:true,
+        hideOverlayOnMouseOut:false,
+        labelsDiv: document.getElementById('graphData'),
+        labels: ['Tiempo', 'Valor Registrado', 'Min.', 'Max.'],
+        colors:['#f7a508','#c22721','#929423']
+      });
 
-    canUseSocket = true;
+      canUseSocket = true;
 
+    }else{
+      $('#graphdiv').html(' No se encontraron registros validos.');
+    }
   }
 
   function graphCallBack(e,x,pts,row){

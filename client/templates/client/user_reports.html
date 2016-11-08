@@ -13,7 +13,7 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-        <b>Lecturas del transmisor:</b> {{arduino.name}}
+        <b>Descargar lecturas del transmisor:</b> {{arduino.name}}
         <small>
           <b>Proyecto:</b> {{arduino.project}}
         </small>
@@ -21,7 +21,7 @@
     </section>
 
     <!-- Main content -->
-    <section class="content">
+    <section class="content hidden">
       <div class="row">
         <div class="col-xs-12">
           <div class="box box-info">
@@ -52,7 +52,7 @@
         <div class="box box-info">
           <div class="box-header with-border">
             <h3 class="box-title">
-              Seleccione el sensor y rango de fechas de las lecturas
+              Seleccione el sensor y rango de fechas de las lecturas para descargar
             </h3>
           </div>
             <form class="form-horizontal" role="form" action="" method="post">
@@ -119,7 +119,7 @@
   $(document).ready(function(){
     console.log(site_url);
 
-    
+
 
     $("#form_0").hide();
     $("#id_min_time").hide();

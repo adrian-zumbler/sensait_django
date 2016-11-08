@@ -32,8 +32,6 @@
                     <dd>{{ arduino.location }} </dd>
                     <dt>ID del Transmisor </dt>
                     <dd> Sist-00{{ arduino.id }} </dd>
-                    <dt>Versión</dt>
-                    <dd> V. 0.0{{ arduino.id }} </dd>
                   </dl>
                 </div><!-- /.box-body -->
               </div><!-- /.box -->
@@ -104,20 +102,26 @@
 
                     {% for sensor in arduino.arduino_sensors.all %}
                       {% if  sensor.data_key != "field1" %}
-                      <tr id="row_{{sensor.id}}">
+
+                        {% if  sensor.sensor_data.last.data|floatformat:2  == "-127.00" %}
+                          <tr id="row_{{sensor.id}}" class="hidden">
+                        {% else %}
+                          <tr id="row_{{sensor.id}}">
+                        {% endif %}
+
                         <td> <a href="/dash/sensor/{{sensor.id}}">SENSOR-00{{sensor.index}}</a> </td>
                         <td>{{ sensor.description }}</td>
                         <td>{{ sensor.sensor_type.name }}</td>
                         <td align="center">
-                            {{ sensor.min_value }}
+                            {{ sensor.min_value|floatformat:2 }}
                         </td>
                         <td align="center">
                           <div id="sensor_{{ sensor.id}}">
-                            {{ sensor.sensor_data.last.data }}
+                            {{ sensor.sensor_data.last.data|floatformat:2 }}
                           </div>
                         </td>
                         <td align="center">
-                            {{ sensor.max_value }}
+                            {{ sensor.max_value|floatformat:2 }}
                         </td>
 
                         {% comment %}
