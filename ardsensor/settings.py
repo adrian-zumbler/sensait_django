@@ -105,9 +105,21 @@ TEMPLATES = [
 ]
 
 
+EMAIL_HOST = 'mail.sensait.com'
 
+EMAIL_PORT = 465
 
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_HOST_USER = 'alertas@sensait.com'
+
+EMAIL_HOST_PASSWORD = 'Y4bfaJ^P'
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
+#EMAIL_USE_TLS = True
+
+EMAIL_USE_SSL = True
+
+# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 # Database
 # https://docs.djangoproject.com/en/1.9/ref/settings/#databases
