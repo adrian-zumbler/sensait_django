@@ -12,9 +12,13 @@ def state_consumer(message):
     #     message=message.content['message'],
     # )
     # Broadcast to listening sockets
-    Group("arduino-%s" % arduino_token).send({
-        "text": message.content['state'],
-    })
+    state = message.content['state']
+    try:
+        Group("arduino-%s" % arduino_token).send({
+            "text": state,
+        })
+    except Exception as e:
+        raise e
 
 # Connected to websocket.connect
 @channel_session
