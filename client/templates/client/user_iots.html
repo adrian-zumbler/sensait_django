@@ -208,7 +208,8 @@
 
     function createSocket(arduinoID, arduinoToken){
       var ws4redis = WS4Redis({
-        uri: ws_url+'/ws/'+arduinoToken+'?subscribe-broadcast&publish-broadcast&echo',
+        uri: ws_url+'/ws/arduino/'+arduinoToken,
+        //uri: ws_url+'/ws/'+arduinoToken+'?subscribe-broadcast&publish-broadcast&echo',
         //'ws://sensait.dyndns.org/ws/{{arduinosensor.arduino.arduino_token}}?subscribe-broadcast&publish-broadcast&echo',
         //':'+userPort+
         connecting: on_connecting,
@@ -240,6 +241,7 @@
     // receive a message though the websocket from the server
     function receiveMessage(msg) {
       useWSData(msg);
+      console.log(msg)
     }
 
     $(document).ready(function(){

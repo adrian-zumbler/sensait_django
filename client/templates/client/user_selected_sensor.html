@@ -325,7 +325,8 @@
 
   var canUseSocket = false;
   var ws4redis = WS4Redis({
-    uri: ws_url+'/ws/{{arduinosensor.arduino.arduino_token}}?subscribe-broadcast&publish-broadcast&echo',
+    uri: ws_url+'/ws/arduino/{{arduinosensor.arduino.arduino_token}}',
+    //uri: ws_url+'/ws/{{arduinosensor.arduino.arduino_token}}?subscribe-broadcast&publish-broadcast&echo',
     //'ws://sensait.dyndns.org/ws/{{arduinosensor.arduino.arduino_token}}?subscribe-broadcast&publish-broadcast&echo',
     //':'+userPort+
     connecting: on_connecting,
@@ -400,21 +401,22 @@ function useWSData(data){
             drawPoints: true,
             showRoller: true,
             height: 400,
-            highlightSeriesBackgroundAlpha: 0.8,
-            fillGraph: true,
+            highlightSeriesBackgroundAlpha:1,
+            fillGraph: false,
             includeZero: false,
             connectSeparatedPoints:true,
             drawGapEdgePoints:true,
             drawPoints:true,
             pointSize:3,
-            strokeWidth: 3,
+            strokeWidth:3,
             rightGap:40,
             legend:"always",
             highlightCircleSize:5,
             showRoller:true,
             hideOverlayOnMouseOut:false,
             labelsDiv: document.getElementById('graphData'),
-            labels: ['Tiempo', 'Valor Registrado', 'Min.', 'Max.']
+            labels: ['Tiempo', 'Valor Registrado', 'Min.', 'Max.'],
+            colors:['#f7a508','#c22721','#929423']
           });
 
         }else{
