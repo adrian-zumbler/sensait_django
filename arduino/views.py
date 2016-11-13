@@ -27,6 +27,8 @@ from .exceptions import StandardAPIException
 
 from urlparse import parse_qsl
 
+from channels import Channel
+
 
 def parse_qs(qs, keep_blank_values=0, strict_parsing=0):
     dict = {}
@@ -229,9 +231,14 @@ class DataViewSet(mixins.CreateModelMixin,
             self.perform_create(serializer)
             ret.append(serializer.data)
 
-        message = RedisMessage(json.dumps(ret))
-        # and somewhere else
-        redis_publisher.publish_message(message)
+        # message = RedisMessage(json.dumps(ret))
+        # # and somewhere else
+        # redis_publisher.publish_message(message)
+
+        Channel("arduino-state").send({
+                "arduino_token": request.arduino.arduino_token,
+                "state": json.dumps(ret),
+            })
 
         return Response({'message': 'data created'}, status=status.HTTP_201_CREATED)
 
