@@ -472,7 +472,6 @@ function getSensorsFromAPI(proy_ID,sensor_ID, arduinoID,sens_info,query){
 
         var passData_sensInfo   = sensInfo;
 
-
         $('#sens_'+sensID).html(Number(data[0].data).toFixed(2)+'°');
         var max = sensInfo.max_value;
         var min = sensInfo.min_value;

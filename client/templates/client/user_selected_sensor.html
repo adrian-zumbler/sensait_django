@@ -65,7 +65,7 @@
 
                 {% comment %}
                   <dt>Valor Máximo permitido</dt>
-                  <dd>{{ arduinosensor.max_value }}</dd>
+                  <dd>{{ arduinosensor.max_value }} {{ arduinosensor.sensor_type.subfix}}</dd>
                   <dt>Valor Mínimo permitido</dt>
                   <dd>{{ arduinosensor.min_value }}</dd>
                 {% endcomment %}
@@ -109,7 +109,7 @@
           <div class="small-box bg-dark-green">
             <div class="inner">
               <h3 id="val_min">
-                {{ arduinosensor.min_value }}
+                {{ arduinosensor.min_value }}{{ arduinosensor.sensor_type.subfix }}
               </h3>
               <span>Valor Mínimo permitido</span>
             </div>
@@ -123,8 +123,7 @@
           <div class="small-box bg-green">
             <div class="inner">
               <h3 id="ultimoValor">
-                {{ arduinosensor.sensor_data.last.data }}
-                <sup style="font-size: 20px">°</sup>
+                {{ arduinosensor.sensor_data.last.data }}{{ arduinosensor.sensor_type.subfix }}
               </h3>
               <span>Último valor registrado</span>
               <br/>
@@ -140,7 +139,7 @@
           <div class="small-box bg-dark-green">
             <div class="inner">
               <h3 id="val_max">
-                {{ arduinosensor.max_value }}
+                {{ arduinosensor.max_value }}{{ arduinosensor.sensor_type.subfix }}
               </h3>
               <span>Valor Máximo permitido</span>
             </div>
@@ -558,7 +557,12 @@ function convertEpoch2Date(epochData){
     var min = "{{ arduinosensor.min_value }}";
     var max = "{{ arduinosensor.max_value }}";
     $('#val_min').html(min.substring(0,(min.length-2)));
+    $('#val_min').append('{{ arduinosensor.sensor_type.subfix }}');
+
     $('#val_max').html(max.substring(0,(max.length-2)));
+    $('#val_max').append('{{ arduinosensor.sensor_type.subfix }}');
+
+
 
     //ocultamos los selectores de la grafica
     filter_type = 1;
@@ -774,11 +778,11 @@ function convertEpoch2Date(epochData){
       $('#totalRegistros').html(totalRegistros);
       $('#totalConRiesgo').html('000');
       $('#totalAlertas').html('000');
-      $('#totalPromedio').html(promedio.toFixed(2));
-      $('#valorMinimo').html(valorMinimo);
-      $('#valorMaximo').html(valorMaximo);
+      $('#totalPromedio').html(promedio.toFixed(2)+'{{ arduinosensor.sensor_type.subfix}}');
+      $('#valorMinimo').html(valorMinimo+'{{ arduinosensor.sensor_type.subfix}}');
+      $('#valorMaximo').html(valorMaximo+'{{ arduinosensor.sensor_type.subfix}}');
 
-      $('#widget_Promedio').html(promedio.toFixed(2));
+      $('#widget_Promedio').html(promedio.toFixed(2)+'{{ arduinosensor.sensor_type.subfix}}');
       $('#widget_TotalRegistros').html(totalRegistros);
 
       createGraph(data);

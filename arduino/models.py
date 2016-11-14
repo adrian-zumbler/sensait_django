@@ -44,6 +44,13 @@ class SensorType(models.Model):
         unique=True,
         default=''
     )
+    subfix = models.CharField(
+        verbose_name='Subfijo',
+        max_length=2,
+        unique=True,
+        blank=True,
+        null=True
+    )
     description = models.CharField(
         verbose_name='Descripción',
         max_length=255,

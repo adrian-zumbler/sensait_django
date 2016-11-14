@@ -113,15 +113,18 @@
                         <td>{{ sensor.description }}</td>
                         <td>{{ sensor.sensor_type.name }}</td>
                         <td align="center">
-                            {{ sensor.min_value|floatformat:2 }}
+                            {{ sensor.min_value|floatformat:2 }} {{ sensor.sensor_type.subfix}}
                         </td>
                         <td align="center">
-                          <div id="sensor_{{ sensor.id}}">
-                            {{ sensor.sensor_data.last.data|floatformat:2 }}
-                          </div>
+                          <span id="sensor_{{ sensor.id}}">
+                            {{ sensor.sensor_data.last.data|floatformat:2 }} 
+                          </span>
+                          <span id="subfix_{{ sensor.id}}">
+                            {{ sensor.sensor_type.subfix}}
+                          </span>
                         </td>
                         <td align="center">
-                            {{ sensor.max_value|floatformat:2 }}
+                            {{ sensor.max_value|floatformat:2 }} {{ sensor.sensor_type.subfix}}
                         </td>
 
                         {% comment %}
@@ -264,7 +267,7 @@
             $('#epoch_'+wsData[0]['arduino_sensor']).html('Ultima Actualización:  ' + epochDate);
 
             $('#row_'+wsData[i]['arduino_sensor']).show();
-            $('#sens_'+wsData[i]['arduino_sensor']).html(data + " &#176;");
+            $('#sens_'+wsData[i]['arduino_sensor']).html(Number(data).toFixed(2));
           }
         }
       }
