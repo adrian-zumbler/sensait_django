@@ -13,7 +13,7 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-        <b>Descargar lecturas del transmisor:</b> {{arduino.name}}
+        <b>Descargar historico de lecturas:</b> {{arduino.name}}
         <small>
           <b>Proyecto:</b> {{arduino.project}}
         </small>
@@ -52,7 +52,7 @@
         <div class="box box-info">
           <div class="box-header with-border">
             <h3 class="box-title">
-              Seleccione el sensor y rango de fechas de las lecturas para descargar
+              Seleccione el sensor y rango de fechas de las lecturas a descargar
             </h3>
           </div>
             <form class="form-horizontal" role="form" action="" method="post">
@@ -60,7 +60,7 @@
                 {% csrf_token %}
                 <div class="form-group">
                   <label for="input" class="col-sm-2 control-label">
-                    Fechas de las lecturas:
+                    Fechas de lectura:
                   </label>
                   <div class="col-sm-10">
                    <button type="button" class="btn btn-default pull-left"  id="daterange">
@@ -118,9 +118,7 @@
 
   $(document).ready(function(){
     console.log(site_url);
-
-
-
+    
     $("#form_0").hide();
     $("#id_min_time").hide();
     $("#form_1").hide();
@@ -132,10 +130,6 @@
       {% endif %}
     {% endfor %}
     //$('#id_sensor option[value='+idEpoch+']').remove();
-
-
-
-
   });
 
 
