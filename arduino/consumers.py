@@ -41,4 +41,4 @@ def ws_connect(message, arduino_token):
 # Connected to websocket.disconnect
 @channel_session
 def ws_disconnect(message):
-    Group("arduino-%s" % message.channel_session['arduino_id']).discard(message.reply_channel)
+    Group("arduino-%s" % message.channel_session['arduino_token']).discard(message.reply_channel)
