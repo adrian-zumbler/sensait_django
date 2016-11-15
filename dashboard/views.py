@@ -88,6 +88,7 @@ class DashMainListView(LoginRequiredMixin, ListView):
         context = super(DashMainListView, self).get_context_data(**kwargs)
 
         context['site_url'] = self.request.get_host()
+        context['holo'] = self.request.get_host()
         # request.get_host('/')
         return context
 
