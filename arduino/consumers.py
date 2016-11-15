@@ -1,6 +1,6 @@
 # In consumers.py
 from channels import Channel, Group
-from channels.sessions import channel_session
+from channels.sessions import channel_session, enforce_ordering
 
 
 # Connected to chat-messages
@@ -21,6 +21,7 @@ def state_consumer(message):
         raise e
 
 # Connected to websocket.connect
+@enforce_ordering(slight=True)
 @channel_session
 def ws_connect(message, arduino_token):
     # Work out room name from path (ignore slashes)
@@ -39,6 +40,10 @@ def ws_connect(message, arduino_token):
 #     })
 
 # Connected to websocket.disconnect
+@enforce_ordering(slight=True)
 @channel_session
 def ws_disconnect(message):
-    Group("arduino-%s" % message.channel_session['arduino_token']).discard(message.reply_channel)
+    try:
+        Group("arduino-%s" % message.channel_session['arduino_token']).discard(message.reply_channel)
+    except Exception as e:
+        print(e)
