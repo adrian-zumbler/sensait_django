@@ -45,9 +45,8 @@ class SensorType(models.Model):
         default=''
     )
     subfix = models.CharField(
-        verbose_name='Subfijo',
+        verbose_name='Sufijo',
         max_length=2,
-        unique=True,
         blank=True,
         null=True
     )
