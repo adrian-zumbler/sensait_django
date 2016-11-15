@@ -193,7 +193,9 @@
     }
 
     function on_close(){
-      //ws4redis.onclose();
+      console.log("close socket")
+      ws4redis.onclose();
+      ws4redis.on_close();
       ws4redis.close();
     }
 
@@ -262,7 +264,10 @@
     project_selected_ID     = project_selected_ID.replace("activar_","");
 
     for(var i=0; i < allSockets.length; i++){
+      allSockets[i].on_close;
+      allSockets[i].onclose;
       allSockets[i].close;
+
       allSockets[i] = null;
     }
     allSockets = [];

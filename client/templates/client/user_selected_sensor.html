@@ -380,9 +380,10 @@ function useWSData(data){
 
           sensor_data_chart.push(jso[i]['data']);
 
-          var d = new Date(jso[i]['created_at']);
+          var d = new Date(parseInt(jso[i]['epoch'])*1000);
           var d_days = d.getDate() + "/" + d.getMonth() + "/" + d.getFullYear();
           var d_time = completeTimeFormat(d.getHours(), d.getMinutes(), d.getSeconds());
+
           sensor_date_chart.push(d_time);
           var lastPosition = _sensors_data.length;
 
@@ -436,6 +437,10 @@ function getTodayRange(actualDate){
   var minutes =  actualDate.getMinutes()+'';
   var seconds =  actualDate.getSeconds()+'';
 
+  var time24hrs = moment().subtract(24,"h");
+  console.log(time24hrs);
+
+
   if(day.length == 1)
     day = '0'+day;
   if(month.length == 1)
@@ -474,7 +479,7 @@ function convertEpoch2Date(epochData){
   if(parseInt(epochData)>10000){
     var actualDate = new Date();
 
-    var d = new Date(parseInt(epochData)*1000);
+    var d       =  new Date(parseInt(epochData)*1000);
     var day     =  d.getDate() +'';
     var month   =  d.getMonth() + 1 +'';
     var hour    =  d.getHours() +'';
@@ -545,24 +550,25 @@ function convertEpoch2Date(epochData){
 
   $(document).ready(function(){
 
-    var todayDate = new Date();
-    var dateRange = getTodayRange(todayDate);
+    //var todayDate = new Date();
+    //var dateRange = getTodayRange(todayDate);
+    //console.log(dateRange);
+
+    var todayDate   = moment().unix();
+    var today24Ago  = moment().subtract(24,"h").unix();
 
     date_today  = moment().format("YYYY-MM-DD");
     date_today2 = moment().format("DD/MM/YYYY");
 
-    console.log(dateRange);
-
     //valores minimos y maximos:
     var min = "{{ arduinosensor.min_value }}";
     var max = "{{ arduinosensor.max_value }}";
+
     $('#val_min').html(min.substring(0,(min.length-2)));
     $('#val_min').append('{{ arduinosensor.sensor_type.subfix }}');
 
     $('#val_max').html(max.substring(0,(max.length-2)));
     $('#val_max').append('{{ arduinosensor.sensor_type.subfix }}');
-
-
 
     //ocultamos los selectores de la grafica
     filter_type = 1;
@@ -572,9 +578,9 @@ function convertEpoch2Date(epochData){
 
     //primera petición de datos.
     //dateRange[1]
-    allData = getDataFromAPI("","",query_dataLimit);
+    allData = getDataFromAPI(today24Ago,todayDate,query_dataLimit);
 
-    $("#filter_resume").html("Ultimos " + query_dataLimit + " registros" );
+    $("#filter_resume").html("Ultimas 24 horas - " + convertEpoch2Date(today24Ago) + " " + convertEpoch2Date(todayDate)   );
   });
 
   $(tableNameID).DataTable({
@@ -757,19 +763,22 @@ function convertEpoch2Date(epochData){
       var tmpValue=0;
 
       for(var i=0; i < data.length ; i++){
-        tmpValue = parseInt(data[i]['data']);
-        tmpPromedio += tmpValue;
 
-        if(i == 0){
-          valorMinimo = tmpValue;
-          valorMaximo = tmpValue;
+        if(parseInt(data[i]['epoch']) > 100000 ){
+          tmpValue = parseInt(data[i]['data']);
+          tmpPromedio += tmpValue;
+
+          if(i == 0){
+            valorMinimo = tmpValue;
+            valorMaximo = tmpValue;
+          }
+
+          if( tmpValue < valorMinimo   )
+            valorMinimo = tmpValue;
+
+          if( tmpValue > valorMaximo )
+            valorMaximo = tmpValue;
         }
-
-        if( tmpValue < valorMinimo   )
-          valorMinimo = tmpValue;
-
-        if( tmpValue > valorMaximo )
-          valorMaximo = tmpValue;
       }
 
       promedio = tmpPromedio/totalRegistros;
@@ -784,6 +793,7 @@ function convertEpoch2Date(epochData){
 
       $('#widget_Promedio').html(promedio.toFixed(2)+'{{ arduinosensor.sensor_type.subfix}}');
       $('#widget_TotalRegistros').html(totalRegistros);
+
 
       createGraph(data);
     }
@@ -803,15 +813,9 @@ function convertEpoch2Date(epochData){
 
     for (var i = 0; i < _sensors_data.length; i++) {
 
-      if(_sensors_data[i]['data'] != "-127.00") {
+      if(_sensors_data[i]['data'] != "-127.00" && parseInt(_sensors_data[i]['epoch']) > 100000) {
         sensor_data_chart.push(_sensors_data[i]['data']);
 
-        var epochDate = convertEpoch2Date(_sensors_data[i]['epoch']);
-        epochDate = epochDate.replace("<b>","");
-        epochDate = epochDate.replace("</b>","");
-        epochDate = epochDate.replace("               "," ");
-
-        var date2Compare = epochDate.split(" ");
         /*
         var epochDate = convertEpoch2Date(_sensors_data[i]['epoch']);
         epochDate = epochDate.replace("<b>","");
@@ -828,10 +832,10 @@ function convertEpoch2Date(epochData){
           dygraphs_data.push([d, _sensors_data[i]['data'], {{ arduinosensor.min_value }}, {{ arduinosensor.max_value }}]);
         }
         */
-
-        var d = new Date(_sensors_data[i]['created_at']);
+        var d = new Date(parseInt(_sensors_data[i]['epoch'])*1000);
         var d_days = d.getDate() + "/" + d.getMonth() + "/" + d.getFullYear();
         var d_time = completeTimeFormat(d.getHours(), d.getMinutes(), d.getSeconds());
+
         sensor_date_chart.push(d_time);
 
         dygraphs_data.push([d, _sensors_data[i]['data'], {{ arduinosensor.min_value }}, {{ arduinosensor.max_value }}]);
