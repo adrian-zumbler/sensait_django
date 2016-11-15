@@ -202,6 +202,17 @@ if 'manto' in BASE_DIR:
         'password': None,
     }
 
+    CHANNEL_LAYERS = {
+        "default": {
+            # "BACKEND": "asgiref.inmemory.ChannelLayer",
+            "BACKEND": "asgi_redis.RedisChannelLayer",
+            "CONFIG": {
+                "hosts": [("192.168.253.32", 6379)],
+            },
+            "ROUTING": "ardsensor.routing.channel_routing",
+        },
+    }
+
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
