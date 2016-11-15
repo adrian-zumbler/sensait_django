@@ -167,7 +167,7 @@
 
   function createSocket(arduinoID, arduinoToken){
     var ws4redis = WS4Redis({
-      uri: ws_url+'/ws/'+arduinoToken+'?subscribe-broadcast&publish-broadcast&echo',
+      uri: ws_url+'/ws/arduino/'+arduinoToken,
       //'ws://sensait.dyndns.org/ws/{{arduinosensor.arduino.arduino_token}}?subscribe-broadcast&publish-broadcast&echo',
       //':'+userPort+
       connecting: on_connecting,
@@ -472,7 +472,7 @@ function getSensorsFromAPI(proy_ID,sensor_ID, arduinoID,sens_info,query){
 
         var passData_sensInfo   = sensInfo;
 
-        $('#sens_'+sensID).html(data[0].data+'°');
+        $('#sens_'+sensID).html(Number(data[0].data).toFixed(2)+'°');
         var max = sensInfo.max_value;
         var min = sensInfo.min_value;
 
@@ -482,6 +482,10 @@ function getSensorsFromAPI(proy_ID,sensor_ID, arduinoID,sens_info,query){
         var epoch = data[0].epoch;
         var epochDate = convertEpoch2Date(epoch);
         $('#epoch_'+sensID).html('Ultima Actualización:  ' + epochDate);
+
+        if(Number(data[0].data).toFixed(2) == "-127.00" )
+          $('#row_'+sensID).hide();
+
       }else{
       }
     }
@@ -549,7 +553,7 @@ function getSensorsFromAPI(proy_ID,sensor_ID, arduinoID,sens_info,query){
           $('#epoch_'+wsData[i]['arduino_sensor']).html('Ultima Actualización:  ' + epochDate);
 
           $('#row_'+wsData[i]['arduino_sensor']).show();
-          $('#sens_'+wsData[i]['arduino_sensor']).html(data + " &#176;");
+          $('#sens_'+wsData[i]['arduino_sensor']).html(Number(data).toFixed(2) + " &#176;");
         }
       }
     }

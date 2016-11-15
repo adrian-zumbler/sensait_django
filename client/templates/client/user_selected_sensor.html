@@ -65,7 +65,7 @@
 
                 {% comment %}
                   <dt>Valor Máximo permitido</dt>
-                  <dd>{{ arduinosensor.max_value }}</dd>
+                  <dd>{{ arduinosensor.max_value }} {{ arduinosensor.sensor_type.subfix}}</dd>
                   <dt>Valor Mínimo permitido</dt>
                   <dd>{{ arduinosensor.min_value }}</dd>
                 {% endcomment %}
@@ -109,7 +109,7 @@
           <div class="small-box bg-dark-green">
             <div class="inner">
               <h3 id="val_min">
-                {{ arduinosensor.min_value }}
+                {{ arduinosensor.min_value }}{{ arduinosensor.sensor_type.subfix }}
               </h3>
               <span>Valor Mínimo permitido</span>
             </div>
@@ -123,8 +123,7 @@
           <div class="small-box bg-green">
             <div class="inner">
               <h3 id="ultimoValor">
-                {{ arduinosensor.sensor_data.last.data }}
-                <sup style="font-size: 20px">°</sup>
+                {{ arduinosensor.sensor_data.last.data }}{{ arduinosensor.sensor_type.subfix }}
               </h3>
               <span>Último valor registrado</span>
               <br/>
@@ -140,7 +139,7 @@
           <div class="small-box bg-dark-green">
             <div class="inner">
               <h3 id="val_max">
-                {{ arduinosensor.max_value }}
+                {{ arduinosensor.max_value }}{{ arduinosensor.sensor_type.subfix }}
               </h3>
               <span>Valor Máximo permitido</span>
             </div>
@@ -325,7 +324,8 @@
 
   var canUseSocket = false;
   var ws4redis = WS4Redis({
-    uri: ws_url+'/ws/{{arduinosensor.arduino.arduino_token}}?subscribe-broadcast&publish-broadcast&echo',
+    uri: ws_url+'/ws/arduino/{{arduinosensor.arduino.arduino_token}}',
+    //uri: ws_url+'/ws/{{arduinosensor.arduino.arduino_token}}?subscribe-broadcast&publish-broadcast&echo',
     //'ws://sensait.dyndns.org/ws/{{arduinosensor.arduino.arduino_token}}?subscribe-broadcast&publish-broadcast&echo',
     //':'+userPort+
     connecting: on_connecting,
@@ -400,21 +400,22 @@ function useWSData(data){
             drawPoints: true,
             showRoller: true,
             height: 400,
-            highlightSeriesBackgroundAlpha: 0.8,
-            fillGraph: true,
+            highlightSeriesBackgroundAlpha:1,
+            fillGraph: false,
             includeZero: false,
             connectSeparatedPoints:true,
             drawGapEdgePoints:true,
             drawPoints:true,
             pointSize:3,
-            strokeWidth: 3,
+            strokeWidth:3,
             rightGap:40,
             legend:"always",
             highlightCircleSize:5,
             showRoller:true,
             hideOverlayOnMouseOut:false,
             labelsDiv: document.getElementById('graphData'),
-            labels: ['Tiempo', 'Valor Registrado', 'Min.', 'Max.']
+            labels: ['Tiempo', 'Valor Registrado', 'Min.', 'Max.'],
+            colors:['#f7a508','#c22721','#929423']
           });
 
         }else{
@@ -556,7 +557,12 @@ function convertEpoch2Date(epochData){
     var min = "{{ arduinosensor.min_value }}";
     var max = "{{ arduinosensor.max_value }}";
     $('#val_min').html(min.substring(0,(min.length-2)));
+    $('#val_min').append('{{ arduinosensor.sensor_type.subfix }}');
+
     $('#val_max').html(max.substring(0,(max.length-2)));
+    $('#val_max').append('{{ arduinosensor.sensor_type.subfix }}');
+
+
 
     //ocultamos los selectores de la grafica
     filter_type = 1;
@@ -772,11 +778,11 @@ function convertEpoch2Date(epochData){
       $('#totalRegistros').html(totalRegistros);
       $('#totalConRiesgo').html('000');
       $('#totalAlertas').html('000');
-      $('#totalPromedio').html(promedio.toFixed(2));
-      $('#valorMinimo').html(valorMinimo);
-      $('#valorMaximo').html(valorMaximo);
+      $('#totalPromedio').html(promedio.toFixed(2)+'{{ arduinosensor.sensor_type.subfix}}');
+      $('#valorMinimo').html(valorMinimo+'{{ arduinosensor.sensor_type.subfix}}');
+      $('#valorMaximo').html(valorMaximo+'{{ arduinosensor.sensor_type.subfix}}');
 
-      $('#widget_Promedio').html(promedio.toFixed(2));
+      $('#widget_Promedio').html(promedio.toFixed(2)+'{{ arduinosensor.sensor_type.subfix}}');
       $('#widget_TotalRegistros').html(totalRegistros);
 
       createGraph(data);

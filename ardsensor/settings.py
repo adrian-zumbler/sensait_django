@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'dashboard',
     'widget_tweaks',
     'ws4redis',
+    'channels',
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -84,6 +85,17 @@ WS4REDIS_ALLOWED_CHANNELS = 'arduino.channels.get_allowed_channels'
 SESSION_ENGINE = 'redis_sessions.session'
 
 SESSION_REDIS_PREFIX = 'session'
+
+CHANNEL_LAYERS = {
+    "default": {
+        #"BACKEND": "asgiref.inmemory.ChannelLayer",
+        "BACKEND": "asgi_redis.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("localhost", 6379)],
+        },
+        "ROUTING": "ardsensor.routing.channel_routing",
+    },
+}
 
 TEMPLATES = [
     {

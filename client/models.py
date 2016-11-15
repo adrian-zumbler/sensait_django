@@ -29,9 +29,24 @@ class Enterprise(models.Model):
         (5, 'Fin de Relación')
     )
 
-    name = models.CharField(verbose_name='Nombre', max_length=55)
+    name = models.CharField(
+        verbose_name='Nombre',
+        max_length=55
+    )
+    nombre_fiscal = models.CharField(
+        verbose_name='Nombre Fiscal',
+        max_length=55,
+        blank=True,
+        null=True
+    )
+    rfc = models.CharField(
+        verbose_name='RFC',
+        max_length=18,
+        blank=True,
+        null=True
+    )
     direction = models.CharField(
-        verbose_name='Dirección',
+        verbose_name='Dirección Fiscal',
         max_length=255,
         default=''
     )
@@ -39,6 +54,12 @@ class Enterprise(models.Model):
         verbose_name='Ciudad-Estado',
         max_length=55,
         default=''
+    )
+    cp = models.CharField(
+        verbose_name='Código Postal',
+        max_length=8,
+        blank=True,
+        null=True
     )
     phone_number_1 = models.CharField(
         verbose_name='Teléfono',
@@ -51,6 +72,7 @@ class Enterprise(models.Model):
         blank=True,
         null=True
     )
+
     estatus = models.PositiveSmallIntegerField(verbose_name='Estatus', choices=ESTATUS_CHOICES, default=1)
 
     def __unicode__(self):
@@ -117,11 +139,25 @@ class Project(models.Model):
         (7, 'Activo'),
         (8, 'Alerta')
     )
+    PROJECT_CHOICES = (
+        (1, 'Demo'),
+        (2, 'Laboratorio'),
+        (3, 'Clinica'),
+        (4, 'Hospital')
+    )
 
     enterprise = models.ForeignKey(Enterprise, related_name='projects')
     clients = models.ManyToManyField(Client, related_name='projects', blank=True) # ForeignKey(Client, related_name='projects', blank=True, null=True)
     name = models.CharField(max_length=255)
+    nombre_encargado = models.CharField(
+        verbose_name='Nombre Encargado',
+        max_length=55,
+        blank=True,
+        null=True
+    )
     estatus = models.PositiveSmallIntegerField(verbose_name='Estatus', choices=ESTATUS_CHOICES, default=1)
+
+    project_type = models.PositiveSmallIntegerField(verbose_name='Tipo', choices=PROJECT_CHOICES, default=1)
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
