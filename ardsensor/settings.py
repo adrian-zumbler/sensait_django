@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'widget_tweaks',
     'ws4redis',
     'channels',
+    'utils',
 ]
 
 MIDDLEWARE_CLASSES = [
