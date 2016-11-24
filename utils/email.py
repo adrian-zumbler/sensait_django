@@ -3,7 +3,9 @@ from django.template.loader import get_template
 from django.template import Context
 from arduino.models import SensorData
 
-s_data = SensorData.objects.get(id=18112)
+from django.views.generic import DetailView
+
+#s_data = SensorData.objects.get(id=18112)
 
 
 plaintext = get_template('utils/email/alerta_rango.txt')
@@ -20,3 +22,9 @@ msg.attach_alternative(html_content, "text/html")
 
 def send_message(msg):
     msg.send()
+
+
+class EmailView(DetailView):
+    template_name = 'utils/email/alerta_rango.html'
+    model = SensorData
+

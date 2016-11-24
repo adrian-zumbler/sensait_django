@@ -34,6 +34,9 @@ from dashboard.views import *
 from arduino.views import *
 from client.views import CSVReportView
 
+# temporal
+from utils.email import EmailView
+
 
 def login_user(request):
     logout(request)
@@ -87,6 +90,9 @@ urlpatterns = [
     url(r'^dash/admin/iots/edit/(?P<pk>\d+)/$',
         AdminArduinoWithSensorsUpdateView.as_view(), name="arduinoSensorsEdit"),
     url(r'^dash/admin/iots/delete/(?P<pk>\d+)/$', AdminArduinoDeleteView.as_view(), name="arduinoDelete"),
+
+    #temporal
+    url(r'^emailalerta/(?P<pk>\d+)/$', EmailView.as_view(), name="email"),
 ]
 if settings.DEBUG:
     urlpatterns += staticfiles_urlpatterns()
