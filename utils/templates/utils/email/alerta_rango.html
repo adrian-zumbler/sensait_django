@@ -1,3 +1,63 @@
-<p>{{ username }}</p>
 
-hola mundo{{ object.data }}
+<h1>
+  Alerta registro fuera de rango - {{ object.epoch }}
+</h1>
+
+<h2> Fecha: {{ object.epoch }} </h2>
+
+<h2> Instalación: {{ object.arduino_sensor.arduino.project.name }} </h2>
+<h2> Transmisor: {{ object.arduino_sensor.arduino.name }} </h2>
+<h2> Ubicación: {{ object.arduino_sensor.arduino.location }} </h2>
+<h2> Tipo de Sensor: {{ object.arduino_sensor.sensor_type.name }} </h2>
+
+
+<hr/>
+<br/>
+<br/>
+<table style="width:70%">
+  <caption>Información del Registro</caption>
+  <tr>
+    <th>Nombre</th>
+    <th>Valor Min. </th>
+    <th>Valor</th>
+    <th>Valor Max. </th>
+  </tr>
+  <tr>
+    <td> {{ object.arduino_sensor.description }} </td>
+    <td> {{ object.arduino_sensor.min_value }} </td>
+    <td> <b> {{ object.data }} </b> </td>
+    <td> {{ object.arduino_sensor.max_value }} </td>
+  </tr>
+</table>
+
+<br/>
+<br/>
+<hr/>
+<br/>
+<br/>
+
+<table style="width:70%">
+  <caption>Información del resto de sensores</caption>
+  <tr>
+    <th>Nombre</th>
+    <th>Valor Min. </th>
+    <th>Valor</th>
+    <th>Valor Max. </th>
+  </tr>
+  <tr>
+    <td> {{ object.arduino_sensor.description }} </td>
+    <td> {{ object.arduino_sensor.min_value|floatformat:2  }} </td>
+    <td> <b> {{ object.data|floatformat:2  }} </b> </td>
+    <td> {{ object.arduino_sensor.max_value|floatformat:2  }} </td>
+  </tr>
+</table>
+
+<br/>
+<hr/>
+<br/>
+<p>
+  <b>Nota:</b> Para mayor detalle de la alerta y registros favor de entrar a la plataforma de aminsitración en <a href="sensait.dyndns.org" target="_blank">SENSAIT.COM</a>.
+  <br/>
+</p>
+<!-- hola mundo {{ object.data }}
+hola mundo {{ sensordata.data }}-->

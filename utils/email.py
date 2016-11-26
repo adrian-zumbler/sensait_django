@@ -7,11 +7,10 @@ from django.views.generic import DetailView
 
 #s_data = SensorData.objects.get(id=18112)
 
-
 plaintext = get_template('utils/email/alerta_rango.txt')
 htmly = get_template('utils/email/alerta_rango.html')
 
-d = Context({ 'username': 'my user' })
+d = Context({'username': 'my user'})
 
 subject, from_email, to = 'hello', 'alertas@esensait.com', 'olimpuz@gmail.com'
 text_content = plaintext.render(d)
@@ -27,4 +26,3 @@ def send_message(msg):
 class EmailView(DetailView):
     template_name = 'utils/email/alerta_rango.html'
     model = SensorData
-
