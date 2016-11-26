@@ -180,14 +180,14 @@ class SensorData(models.Model):
 class AlertData(models.Model):
     arduino = models.ForeignKey(
         Arduino,
-        related_name='arduino_sensors',
+        # related_name='arduino_sensors',
         # to_field='arduino_token',
         on_delete=models.CASCADE
     )
     arduino_sensor = models.ForeignKey(
         ArduinoSensor,
-        related_name='sensor_data',
-        related_query_name='sensor_data',
+        # related_name='sensor_data',
+        # related_query_name='sensor_data',
         on_delete=models.CASCADE,
     )
     data = models.CharField(max_length=255)
@@ -196,13 +196,13 @@ class AlertData(models.Model):
 class AlertDataToSend(models.Model):
     arduino_sensor = models.ForeignKey(
         ArduinoSensor,
-        related_name='sensor_data',
-        related_query_name='sensor_data',
+        # related_name='sensor_data',
+        # related_query_name='sensor_data',
         on_delete=models.CASCADE,
     )
     data = models.CharField(max_length=255)
     epoch = models.PositiveIntegerField(default=0, null=True)
-    list_data = models.CommaSeparatedIntegerField(blank=True, null=True)
+    list_data = models.CommaSeparatedIntegerField(max_length=569, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     flag = models.BooleanField(default=True)
