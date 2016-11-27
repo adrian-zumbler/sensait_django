@@ -42,28 +42,15 @@ def state_consumer(message):
         raise e
 
 
-# Connected to websocket.connect
-# @enforce_ordering(slight=True)
 # @channel_session
 def ws_connect(message, arduino_token):
-    # Work out room name from path (ignore slashes)
-    # arduino_token = message.content['path'].strip("/")
-    # Save room in session and add us to the group
-    # message.channel_session['arduino_token'] = arduino_token
     Group("arduino-%s" % arduino_token).add(message.reply_channel)
 
-# Connected to websocket.receive
-# @channel_session
-# def ws_message(message):
-#     # Stick the message onto the processing queue
-#     Channel("arduino-messages").send({
-#         "arduino_id": message.channel_session['arduino_id'],
-#         "message": message['text'],
-#     })
+
+def ws_keepalive(message, arduino_token):
+    Group("arduino-%s" % arduino_token).add(message.reply_channel)
 
 
-# Connected to websocket.disconnect
-# @enforce_ordering(slight=True)
 # @channel_session
 def ws_disconnect(message, arduino_token):
     try:
