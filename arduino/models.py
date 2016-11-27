@@ -185,10 +185,14 @@ class SensorData(models.Model):
     class Meta:
         get_latest_by = "epoch"
 
-    def is_in_alert(self):
+    def is_out_of_range(self):
+        if self.data == '-127':
+            return False
+
         if self.arduino_sensor.max_value < Decimal(self.data) \
                 or self.arduino_sensor.min_value > Decimal(self.data):
             return True
+
         return False
 
 
@@ -218,7 +222,7 @@ class SensorAlert(models.Model):
                 .render({'sensoralert': self, 'sensordata': instance, 'object': instance})
             email = EmailSend(
                 from_email='alertas@esensait.com',
-                to='olimpuz@gmail.com',
+                to='joseangel.epzarce@gmail.com',
                 subject='Hola',
                 text_content=text_content,
                 html_content=html_content,
@@ -241,12 +245,12 @@ class EmailSend(models.Model):
         get_latest_by = "sended_at"
 
     def send(self):
-        msg = EmailMultiAlternatives(
-            self.subject,
-            self.text_content,
-            self.from_email,
-            [self.to])
-        msg.attach_alternative(self.html_content, "text/html")
+        # msg = EmailMultiAlternatives(
+        #     self.subject,
+        #     self.text_content,
+        #     self.from_email,
+        #     [self.to])
+        # msg.attach_alternative(self.html_content, "text/html")
        # msg.send()
 
         self_dict = model_to_dict(self)

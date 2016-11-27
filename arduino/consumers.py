@@ -12,7 +12,7 @@ def post_save_sensordata(message):
     data = message.content['sensordata']
     data = SensorData.objects.get(id=data['id'])
     sensor = data.arduino_sensor
-    if data.is_in_alert():
+    if data.is_out_of_range():
         sensor_alert, created = SensorAlert.objects.get_or_create(
             arduino=sensor.arduino,
             sensor=sensor,
