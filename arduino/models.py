@@ -15,6 +15,7 @@ import uuid
 from channels import Channel
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django.forms.models import model_to_dict
 
 
 def sensortype_files_name(instance, filename):
@@ -191,26 +192,11 @@ class SensorData(models.Model):
         return False
 
 
-# class AlertDataToSend(models.Model):
-#     arduino_sensor = models.ForeignKey(
-#         ArduinoSensor,
-#         # related_name='sensor_data',
-#         # related_query_name='sensor_data',
-#         on_delete=models.CASCADE,
-#     )
-#     data = models.CharField(max_length=255)
-#     epoch = models.PositiveIntegerField(default=0, null=True)
-#     list_data = models.CommaSeparatedIntegerField(max_length=569, blank=True, null=True)
-#     created_at = models.DateTimeField(auto_now_add=True)
-#     updated_at = models.DateTimeField(auto_now=True)
-#     flag = models.BooleanField(default=True)
-#     # Se necesita guardar a que users se le envio?
-
-
+# Se necesita guardar a que users se le envio?
 class SensorAlert(models.Model):
     arduino = models.ForeignKey(Arduino, on_delete=models.CASCADE, related_name='alerts')
     sensor = models.ForeignKey(ArduinoSensor, on_delete=models.CASCADE, related_name='alerts')
-    sensor_data = models.ManyToManyField(SensorData, through='AlertData')
+    sensor_data = models.ManyToManyField(SensorData)
     email_sends = models.ManyToManyField('EmailSend', related_name='email_sends')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -218,18 +204,21 @@ class SensorAlert(models.Model):
     active = models.BooleanField(default=True)
 
     def alert_action(self, instance):
-        latest_email_send = self.email_sends.latest()
-        # laest_sensor_data = self.sensor_data.latest()
+
+        try:
+            latest_email_send = self.email_sends.latest()
+        except EmailSend.DoesNotExist:
+            latest_email_send = None
 
         now = timezone.now()
-        if not latest_email_send or latest_email_send.sended_at >= now - timedelta(minutes=5):
+        if True:  # not latest_email_send or latest_email_send.sended_at <= now - timedelta(minutes=5):
             text_content = get_template('utils/email/alerta_rango.txt') \
                 .render({'sensoralert': self, 'sensordata': instance, 'object': instance})
             html_content = get_template('utils/email/alerta_rango.html') \
                 .render({'sensoralert': self, 'sensordata': instance, 'object': instance})
             email = EmailSend(
                 from_email='alertas@esensait.com',
-                to='olimpuz@gmail.com',
+                to='joseangel.epzarce@gmail.com',
                 subject='Hola',
                 text_content=text_content,
                 html_content=html_content,
@@ -237,11 +226,6 @@ class SensorAlert(models.Model):
             email.save()
             email.send()
             self.email_sends.add(email)
-
-
-class AlertData(models.Model):
-    alert = models.ForeignKey(SensorAlert, on_delete=models.CASCADE)
-    data = models.ForeignKey(SensorData, on_delete=models.CASCADE)
 
 
 class EmailSend(models.Model):
@@ -263,8 +247,11 @@ class EmailSend(models.Model):
             self.from_email,
             [self.to])
         msg.attach_alternative(self.html_content, "text/html")
+       # msg.send()
+
+        self_dict = model_to_dict(self)
         Channel("send-email").send({
-            "email_message": msg
+            "email_send": self_dict
         })
 
 
@@ -284,16 +271,25 @@ def merge_epoch_field(arduino, efield_name='field1'):
 
 @receiver(post_save, sender=SensorData)
 def post_save_sensordata(sender, instance, **kwargs):
-    # if instance.is_in_alert():
-    #     sensor_alert = SensorAlert.objects.get_or_create(
-    #         active=True
-    #     )
-    #     sensor_alert.sensor_data.add(instance)
-    #     sensor_alert.alert_action(instance)
-    # else:
-    #     SensorAlert.objects.filter(
-    #         active=True
-    #     ).update(active=False)
-    Channel("post-save-sensordata").send({
-        "sensordata": instance
-    })
+    data = instance
+    sensor = data.arduino_sensor
+    if data.is_in_alert():
+        sensor_alert, created = SensorAlert.objects.get_or_create(
+            arduino=sensor.arduino,
+            sensor=sensor,
+            active=True
+        )
+        sensor_alert.sensor_data.add(data)
+        sensor_alert.alert_action(data)
+    else:
+        SensorAlert.objects.filter(
+            arduino=sensor.arduino,
+            sensor=sensor,
+            active=True
+        ).update(active=False, finished_at=timezone.now())
+
+    instance_dict = model_to_dict(instance)
+    a = 1
+    # Channel("post-save-sensordata").send({
+    #     "sensordata": instance_dict
+    # })

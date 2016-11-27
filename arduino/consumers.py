@@ -2,6 +2,7 @@
 from channels import Channel, Group
 from arduino.models import SensorAlert
 from django.utils import timezone
+from django.core.mail import EmailMultiAlternatives
 from channels.sessions import channel_session, enforce_ordering
 
 
@@ -25,7 +26,14 @@ def post_save_sensordata(message):
 
 
 def send_email(message):
-    msg = message.content['email_message']
+    emailsend = message.content['email_send']
+
+    msg = EmailMultiAlternatives(
+        emailsend['subject'],
+        emailsend['text_content'],
+        emailsend['from_email'],
+        [emailsend['to']])
+    msg.attach_alternative(emailsend['html_content'], "text/html")
     msg.send()
 
 
