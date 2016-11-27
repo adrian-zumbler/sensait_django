@@ -218,7 +218,7 @@ class SensorAlert(models.Model):
                 .render({'sensoralert': self, 'sensordata': instance, 'object': instance})
             email = EmailSend(
                 from_email='alertas@esensait.com',
-                to='joseangel.epzarce@gmail.com',
+                to='olimpuz@gmail.com',
                 subject='Hola',
                 text_content=text_content,
                 html_content=html_content,
