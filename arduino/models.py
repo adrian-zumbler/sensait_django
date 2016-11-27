@@ -211,7 +211,7 @@ class SensorAlert(models.Model):
             latest_email_send = None
 
         now = timezone.now()
-        if True:  # not latest_email_send or latest_email_send.sended_at <= now - timedelta(minutes=5):
+        if not latest_email_send or latest_email_send.sended_at <= now - timedelta(minutes=5):
             text_content = get_template('utils/email/alerta_rango.txt') \
                 .render({'sensoralert': self, 'sensordata': instance, 'object': instance})
             html_content = get_template('utils/email/alerta_rango.html') \
@@ -271,25 +271,7 @@ def merge_epoch_field(arduino, efield_name='field1'):
 
 @receiver(post_save, sender=SensorData)
 def post_save_sensordata(sender, instance, **kwargs):
-    data = instance
-    sensor = data.arduino_sensor
-    if data.is_in_alert():
-        sensor_alert, created = SensorAlert.objects.get_or_create(
-            arduino=sensor.arduino,
-            sensor=sensor,
-            active=True
-        )
-        sensor_alert.sensor_data.add(data)
-        sensor_alert.alert_action(data)
-    else:
-        SensorAlert.objects.filter(
-            arduino=sensor.arduino,
-            sensor=sensor,
-            active=True
-        ).update(active=False, finished_at=timezone.now())
-
     instance_dict = model_to_dict(instance)
-    a = 1
-    # Channel("post-save-sensordata").send({
-    #     "sensordata": instance_dict
-    # })
+    Channel("post-save-sensordata").send({
+        "sensordata": instance_dict
+    })

@@ -8,5 +8,5 @@ channel_routing = [
     route("websocket.keepalive", ws_keepalive, path=r"^/ws/arduino/(?P<arduino_token>[a-zA-Z0-9_]+)$"),
     route("arduino-state", state_consumer),
     route('send-email', send_email),
-    route('post-send-sensordata', post_save_sensordata)
+    route('post-save-sensordata', post_save_sensordata)
 ]

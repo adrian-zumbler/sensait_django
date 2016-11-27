@@ -5,12 +5,15 @@ from django.utils import timezone
 from django.core.mail import EmailMultiAlternatives
 from channels.sessions import channel_session, enforce_ordering
 
+from arduino.models import SensorData
+
 
 def post_save_sensordata(message):
     data = message.content['sensordata']
+    data = SensorData.objects.get(id=data['id'])
     sensor = data.arduino_sensor
     if data.is_in_alert():
-        sensor_alert = SensorAlert.objects.get_or_create(
+        sensor_alert, created = SensorAlert.objects.get_or_create(
             arduino=sensor.arduino,
             sensor=sensor,
             active=True
