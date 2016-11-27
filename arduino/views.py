@@ -97,8 +97,8 @@ class ArduinoSensorViewSet(mixins.CreateModelMixin,
 
 
 class ArduinoDataViewSet(mixins.ListModelMixin,
-                        mixins.RetrieveModelMixin,
-                        viewsets.GenericViewSet):
+                         mixins.RetrieveModelMixin,
+                         viewsets.GenericViewSet):
     serializer_class = SensorDataSerializer
     permission_classes = (IsAuthenticated, )
     queryset = serializer_class.Meta.model.objects.all()
@@ -246,6 +246,7 @@ class BulkDataViewSet(DataViewSet):
     @staticmethod
     def publish_data(request, ret):
         pass
+
 
 class AdminSensorTypeListView(LoginRequiredMixin, ListView):
     template_name = 'admin/admin_sensorType_list.html'

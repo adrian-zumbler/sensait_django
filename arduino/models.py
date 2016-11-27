@@ -2,12 +2,19 @@
 
 from __future__ import unicode_literals
 
+from decimal import Decimal
 from datetime import timedelta
 from django.utils import timezone
 from django.db import models
 from django.contrib.auth.models import User
+from django.template.loader import get_template
+from django.core.mail import EmailMultiAlternatives
 from client.models import Client, Project as ProjectC
 import uuid
+
+from channels import Channel
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 
 def sensortype_files_name(instance, filename):
@@ -20,7 +27,6 @@ def sensortype_files_name(instance, filename):
 
 
 class SensorType(models.Model):
-
     BOOLEAN = 0
     DECIMAL = 1
     INTEGER = 2
@@ -83,7 +89,6 @@ class SensorType(models.Model):
 
 
 class Arduino(models.Model):
-
     ESTATUS_CHOICES = (
         (1, 'Diseño'),
         (2, 'Construcción'),
@@ -176,37 +181,91 @@ class SensorData(models.Model):
     def __unicode__(self):
         return str(self.id)
 
+    class Meta:
+        get_latest_by = "epoch"
 
-class AlertData(models.Model):
-    arduino = models.ForeignKey(
-        Arduino,
-        # related_name='arduino_sensors',
-        # to_field='arduino_token',
-        on_delete=models.CASCADE
-    )
-    arduino_sensor = models.ForeignKey(
-        ArduinoSensor,
-        # related_name='sensor_data',
-        # related_query_name='sensor_data',
-        on_delete=models.CASCADE,
-    )
-    data = models.CharField(max_length=255)
+    def is_in_alert(self):
+        if self.arduino_sensor.max_value < Decimal(self.data) \
+                or self.arduino_sensor.min_value > Decimal(self.data):
+            return True
+        return False
 
 
-class AlertDataToSend(models.Model):
-    arduino_sensor = models.ForeignKey(
-        ArduinoSensor,
-        # related_name='sensor_data',
-        # related_query_name='sensor_data',
-        on_delete=models.CASCADE,
-    )
-    data = models.CharField(max_length=255)
-    epoch = models.PositiveIntegerField(default=0, null=True)
-    list_data = models.CommaSeparatedIntegerField(max_length=569, blank=True, null=True)
+# class AlertDataToSend(models.Model):
+#     arduino_sensor = models.ForeignKey(
+#         ArduinoSensor,
+#         # related_name='sensor_data',
+#         # related_query_name='sensor_data',
+#         on_delete=models.CASCADE,
+#     )
+#     data = models.CharField(max_length=255)
+#     epoch = models.PositiveIntegerField(default=0, null=True)
+#     list_data = models.CommaSeparatedIntegerField(max_length=569, blank=True, null=True)
+#     created_at = models.DateTimeField(auto_now_add=True)
+#     updated_at = models.DateTimeField(auto_now=True)
+#     flag = models.BooleanField(default=True)
+#     # Se necesita guardar a que users se le envio?
+
+
+class SensorAlert(models.Model):
+    arduino = models.ForeignKey(Arduino, on_delete=models.CASCADE, related_name='alerts')
+    sensor = models.ForeignKey(ArduinoSensor, on_delete=models.CASCADE, related_name='alerts')
+    sensor_data = models.ManyToManyField(SensorData, through='AlertData')
+    email_sends = models.ManyToManyField('EmailSend', related_name='email_sends')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    flag = models.BooleanField(default=True)
-    # Se necesita guardar a que users se le envio?
+    finished_at = models.DateTimeField(null=True)
+    active = models.BooleanField(default=True)
+
+    def alert_action(self, instance):
+        latest_email_send = self.email_sends.latest()
+        # laest_sensor_data = self.sensor_data.latest()
+
+        now = timezone.now()
+        if not latest_email_send or latest_email_send.sended_at >= now - timedelta(minutes=5):
+            text_content = get_template('utils/email/alerta_rango.txt') \
+                .render({'sensoralert': self, 'sensordata': instance, 'object': instance})
+            html_content = get_template('utils/email/alerta_rango.html') \
+                .render({'sensoralert': self, 'sensordata': instance, 'object': instance})
+            email = EmailSend(
+                from_email='alertas@esensait.com',
+                to='olimpuz@gmail.com',
+                subject='Hola',
+                text_content=text_content,
+                html_content=html_content,
+            )
+            email.save()
+            email.send()
+            self.email_sends.add(email)
+
+
+class AlertData(models.Model):
+    alert = models.ForeignKey(SensorAlert, on_delete=models.CASCADE)
+    data = models.ForeignKey(SensorData, on_delete=models.CASCADE)
+
+
+class EmailSend(models.Model):
+    from_email = models.CharField(max_length=510)
+    to = models.CharField(max_length=510)
+    subject = models.CharField(max_length=55)
+    text_content = models.TextField()
+    html_content = models.TextField()
+
+    sended_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        get_latest_by = "sended_at"
+
+    def send(self):
+        msg = EmailMultiAlternatives(
+            self.subject,
+            self.text_content,
+            self.from_email,
+            [self.to])
+        msg.attach_alternative(self.html_content, "text/html")
+        Channel("send-email").send({
+            "email_message": msg
+        })
 
 
 def merge_epoch_field(arduino, efield_name='field1'):
@@ -221,3 +280,20 @@ def merge_epoch_field(arduino, efield_name='field1'):
             created_at__gt=edatetime - delta,
             created_at__lt=edatetime + delta
         ).update(epoch=epoch)
+
+
+@receiver(post_save, sender=SensorData)
+def post_save_sensordata(sender, instance, **kwargs):
+    # if instance.is_in_alert():
+    #     sensor_alert = SensorAlert.objects.get_or_create(
+    #         active=True
+    #     )
+    #     sensor_alert.sensor_data.add(instance)
+    #     sensor_alert.alert_action(instance)
+    # else:
+    #     SensorAlert.objects.filter(
+    #         active=True
+    #     ).update(active=False)
+    Channel("post-save-sensordata").send({
+        "sensordata": instance
+    })
