@@ -1,6 +1,7 @@
 # In consumers.py
+import json
 from channels import Channel, Group
-from arduino.models import SensorAlert
+from arduino.models import ArduinoAlert
 from django.utils import timezone
 from django.core.mail import EmailMultiAlternatives
 from channels.sessions import channel_session, enforce_ordering
@@ -13,19 +14,57 @@ def post_save_sensordata(message):
     data = SensorData.objects.get(id=data['id'])
     sensor = data.arduino_sensor
     if data.is_out_of_range():
-        sensor_alert, created = SensorAlert.objects.get_or_create(
+        arduino_alert, created = ArduinoAlert.objects.get_or_create(
             arduino=sensor.arduino,
-            sensor=sensor,
+            # sensor=sensor,
             active=True
         )
-        sensor_alert.sensor_data.add(data)
-        sensor_alert.alert_action(data)
+        if sensor not in arduino_alert.sensors_in_alert.all():
+                arduino_alert.sensors_in_alert.add(sensor)
+        arduino_alert.sensor_data.add(data)
+        arduino_alert.alert_action(data)
     else:
-        SensorAlert.objects.filter(
-            arduino=sensor.arduino,
-            sensor=sensor,
-            active=True
-        ).update(active=False, finished_at=timezone.now())
+        arduino_alerts = sensor.arduino.alerts.filter(active=True)
+        for alert in arduino_alerts:
+            if sensor in alert.sensors_in_alert.all():
+                alert.sensors_in_alert.remove(sensor)
+            if not alert.sensors_in_alert.all().exists():
+                alert.active = False
+                alert.finished_at = timezone.now()
+                alert.save()
+
+
+def arduino_alert(message):
+    data_list = [SensorData.objects.get(id=data['id'])
+                 for data in json.loads(message.content['data_list'])]
+    arduino = data_list[0].arduino_sensor.arduino
+    arduino_active_alerts = arduino.alerts.filter(active=True)
+    for data in data_list:
+        sensor = data.arduino_sensor
+        if data.is_out_of_range():
+            arduino_alert, created = ArduinoAlert.objects.get_or_create(
+                arduino=sensor.arduino,
+                active=True
+            )
+            if sensor not in arduino_alert.sensors_in_alert.all():
+                    arduino_alert.sensors_in_alert.add(sensor)
+            arduino_alert.sensor_data.add(data)
+        else:
+            for alert in arduino_active_alerts:
+                if sensor in alert.sensors_in_alert.all():
+                    alert.sensors_in_alert.remove(sensor)
+                if not alert.sensors_in_alert.all().exists():
+                    alert.active = False
+                    alert.finished_at = timezone.now()
+                    alert.save()
+
+    # Si quedan alertas activas ejecuta accion
+    try:
+        arduino_active_alerts.latest(
+            field_name='created_at'
+        ).alert_action()
+    except Exception:
+        pass
 
 
 def send_email(message):

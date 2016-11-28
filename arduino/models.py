@@ -101,7 +101,7 @@ class Arduino(models.Model):
 
     project = models.ForeignKey(ProjectC, related_name="arduinos")
     name = models.CharField(max_length=255)
-    arduino_token = models.CharField(max_length=20, unique=True)
+    arduino_token = models.CharField(max_length=80, unique=True)
     location = models.CharField(max_length=255)
     sensors = models.ManyToManyField(SensorType, through='ArduinoSensor')
     available_sensors = models.SmallIntegerField(default=1)
@@ -186,40 +186,42 @@ class SensorData(models.Model):
         get_latest_by = "epoch"
 
     def is_out_of_range(self):
-        if self.data == '-127':
+        if self.data == '-127.00':
             return False
 
         if self.arduino_sensor.max_value < Decimal(self.data) \
                 or self.arduino_sensor.min_value > Decimal(self.data):
+            print('data out of range:', self.data)
             return True
 
         return False
 
 
 # Se necesita guardar a que users se le envio?
-class SensorAlert(models.Model):
+class ArduinoAlert(models.Model):
     arduino = models.ForeignKey(Arduino, on_delete=models.CASCADE, related_name='alerts')
-    sensor = models.ForeignKey(ArduinoSensor, on_delete=models.CASCADE, related_name='alerts')
+    # sensor = models.ForeignKey(ArduinoSensor, on_delete=models.CASCADE, related_name='alerts')
+    sensors_in_alert = models.ManyToManyField(ArduinoSensor)
     sensor_data = models.ManyToManyField(SensorData)
-    email_sends = models.ManyToManyField('EmailSend', related_name='email_sends')
+    email_sends = models.ManyToManyField('EmailSend')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     finished_at = models.DateTimeField(null=True)
     active = models.BooleanField(default=True)
 
-    def alert_action(self, instance):
+    def alert_action(self):
 
         try:
             latest_email_send = self.email_sends.latest()
         except EmailSend.DoesNotExist:
             latest_email_send = None
 
-        now = timezone.now()
-        if not latest_email_send or latest_email_send.sended_at <= now - timedelta(minutes=5):
+        delta = timezone.now() - timedelta(minutes=5)
+        if not latest_email_send or latest_email_send.sended_at <= delta:
             text_content = get_template('utils/email/alerta_rango.txt') \
-                .render({'sensoralert': self, 'sensordata': instance, 'object': instance})
+                .render({'arduinoalert': self})
             html_content = get_template('utils/email/alerta_rango.html') \
-                .render({'sensoralert': self, 'sensordata': instance, 'object': instance})
+                .render({'arduinoalert': self})
             email = EmailSend(
                 from_email='alertas@esensait.com',
                 to='joseangel.epzarce@gmail.com',
@@ -273,9 +275,9 @@ def merge_epoch_field(arduino, efield_name='field1'):
         ).update(epoch=epoch)
 
 
-@receiver(post_save, sender=SensorData)
-def post_save_sensordata(sender, instance, **kwargs):
-    instance_dict = model_to_dict(instance)
-    Channel("post-save-sensordata").send({
-        "sensordata": instance_dict
-    })
+# @receiver(post_save, sender=SensorData)
+# def post_save_sensordata(sender, instance, **kwargs):
+#     instance_dict = model_to_dict(instance)
+#     Channel("post-save-sensordata").send({
+#         "sensordata": instance_dict
+#     })

@@ -227,15 +227,14 @@ class DataViewSet(mixins.CreateModelMixin,
             serializer.is_valid(raise_exception=True)
             self.perform_create(serializer)
             ret.append(serializer.data)
-
-
         self.publish_data(request, ret)
-
-
         return Response({'message': 'data created'}, status=status.HTTP_201_CREATED)
 
     @staticmethod
     def publish_data(request, ret):
+        Channel('arduino-alert').send({
+            'data_list': json.dumps(ret)
+        })
         Channel("arduino-state").send({
             "arduino_token": request.arduino.arduino_token,
             "state": json.dumps(ret),

@@ -42,7 +42,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'client',
-    'corsheaders',
+    #'corsheaders',
     'bootstrapform',
     'markdown_deux',
     'helpdesk',
@@ -136,12 +136,21 @@ EMAIL_USE_SSL = True
 
 # Database
 # https://docs.djangoproject.com/en/1.9/ref/settings/#databases
-
+#
 DATABASES = {
-    'default': {
+    'default0': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    },
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'sensait',
+        'USER': 'postgres',
+        'PASSWORD': 'postgres',
+        'HOST': '127.0.0.1',
+        'PORT': '',
     }
+
 }
 
 # Password validation
