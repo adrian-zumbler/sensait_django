@@ -20,30 +20,87 @@
       </h1>
     </section>
 
-    <!-- Main content -->
-    <section class="content hidden">
-      <div class="row">
-        <div class="col-xs-12">
-          <div class="box box-info">
-            <div class="box-header with-border">
-              <h3 class="box-title">
-                Resumen de Alertas
-              </h3>
-            </div>
-            <div class="box-body">
-              {{arduino.id}}<br/>
+  <!-- Main content -->
+  <section class="content">
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="box box-info">
+          <div class="box-header with-border">
+            <h3 class="box-title">
+              Resumen de Alertas
+            </h3>
+          </div>
+          <div class="box-body">
+            <h4>Alertas Activas</h4><br/>
+            {% for sensor in arduino.alerts.all %}
+              {% if sensor.active ==  True%}
+                {{ sensor.sensor.description}}<br/>
+                {{ sensor.sensor.max_value}}<br/>
+                {{ sensor.sensor.min_value}}<br/>
+                {{ sensor.created_at}}<br/>
+                {{ sensor.finished_at}}<br/>
+                {{ sensor.active}}<br/>
+              {% endif %}
+              <hr/>
+            {% endfor %}
+            <h4>Historico de Alertas</h4><br/>
+            {% for sensor in arduino.alerts.all %}
+              {% if sensor.active ==  False %}
+                {{ sensor.sensor.description}}<br/>
+                {{ sensor.sensor.max_value}}<br/>
+                {{ sensor.sensor.min_value}}<br/>
+                {{ sensor.created_at}}<br/>
+                {{ sensor.finished_at}}<br/>
+                {{ sensor.active}}<br/>
+              {% endif %}
+              <hr/>
+            {% endfor %}
+
+
+            <br/>
+            <h4>Sensor</h4><br/>
+
+            <br/>
+
+            <h4> Registros de la alerta</h4><br/>
+            {% for alert in arduino.alerts.all %}
+              {{ alert.sensor_data.all }}<br/>
+              {% for data in alert.sensor_data.all %}
+                {{ data.data}}<br/>
+                {{ data.epoch}}<br/>
+              {% endfor %}
+              <hr/>
+            {% endfor %}
+
+            <br/><br/>
 
 
 
+            <h4> Alertas enviadas al mail</h4><br/>
+            {% for alert in arduino.alerts.all %}
+              {{ alert.email_sends.all }}<br/>
+
+              {% for email in alert.email_sends.all %}
+                {{ email.to}}<br/>
+              {% endfor %}
+              <hr/>
+            {% endfor %}
+            <br/>
+
+
+
+
+
+            {% comment %}
               {% for sens in arduino.arduino_sensors.all %}
                 {{sens.id}}<br/>
               {% endfor %}
-
-            </div>
-          </div>
+            {% endcomment %}
           </div>
         </div>
-      </section>
+        </div>
+      </div>
+    </section>
 
 
   <section class="content">
@@ -118,7 +175,7 @@
 
   $(document).ready(function(){
     console.log(site_url);
-    
+
     $("#form_0").hide();
     $("#id_min_time").hide();
     $("#form_1").hide();
