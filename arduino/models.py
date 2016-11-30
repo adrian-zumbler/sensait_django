@@ -217,7 +217,7 @@ class ArduinoAlert(models.Model):
             latest_email_send = None
 
         delta = timezone.now() - timedelta(minutes=5)
-        if not latest_email_send or latest_email_send.sended_at <= delta:
+        if False and (not latest_email_send or latest_email_send.sended_at <= delta):
             text_content = get_template('utils/email/alerta_rango.txt') \
                 .render({'arduinoalert': self})
             html_content = get_template('utils/email/alerta_rango.html') \
