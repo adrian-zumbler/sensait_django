@@ -243,4 +243,3 @@ if 'manto' in BASE_DIR:
     ALLOWED_HOSTS = ['sensait.dyndns.org', '192.168.253.31']
 
     SESSION_REDIS_HOST = '192.168.253.32'
-

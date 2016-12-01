@@ -13,14 +13,6 @@
         Admin - Sistema - Detalle
         <small>Detalle del Sistema</small>
       </h1>
-      <ol class="breadcrumb">
-        <li>
-          <a href="#">
-            <i class="fa fa-dashboard"></i>
-            Home</a>
-        </li>
-        <li class="active">Dashboard</li>
-      </ol>
     </section>
 
     <!-- Main content -->
@@ -104,98 +96,38 @@
         </div><!-- /.box-header -->
 
         <!-- form start  {{form}} -->
-
+        <div class="box-body">
           {% csrf_token %}
             <div class="sensor-formset">
-
-
-
               {% for sform in sensor_formset %}
-              <!-- //Ver si puedes contar el ultimo para arreglar el add sensor -->
+                <div class="col-xs-12">
+                  <div class="sensor-form" >
+                    {% if sform.instance.pk %}{{ sform.DELETE }}{% endif %}
 
+                    {% for field in sform %}
+                    <div class="form-group">
+                      {{ field.label_tag }}
+                      {{ field }}
+                    </div>
+                    {% endfor %}
 
-              <div class="row">
-              <div class="sensor-form" >
-                {% if sform.instance.pk %}{{ sform.DELETE }}{% endif %}
-                {% for field in sform %}
-
-
-                  {{ field.label_tag }}
-                    {{ field }}
-                {% endfor %}
-
-
-                {% comment %}<div class="col-xs-2">
-                  <div class="form-group">
-                    <label for="sensor_type">Tipo Sensor:</label>
-                    {% render_field sform.sensor_type class="form-control" %}
-                    <label for="sensor_type_error">{{ sform.sensor_type.errors }}</label>
                   </div>
+                  <br/><hr/><br/><br/>
                 </div>
-
-                <div class="col-xs-2">
-                  <div class="form-group">
-                    <label for="sensor_type">Valor Maximo:</label>
-                    {% render_field sform.max_value class="form-control" %}
-                    <label for="sensor_type_error">{{ sform.sensor_type.errors }}</label>
-                  </div>
-                </div>
-
-                <div class="col-xs-2">
-                  <div class="form-group">
-                    <label for="sensor_type">Valor Minimo:</label>
-                    {% render_field sform.min_value class="form-control" %}
-                    <label for="sensor_type_error">{{ sform.sensor_type.errors }}</label>
-                  </div>
-                </div>
-
-                <div class="col-xs-2">
-                  <div class="form-group">
-                    <label for="description">Descripcion:</label>
-                    {% render_field sform.description class="form-control" %}
-                    <label for="sensor_type_error">{{ sform.description.errors }}</label>
-                  </div>
-                </div>
-
-                <div class="col-xs-1">
-                  <div class="form-group">
-                    <label for="index">Indice: </label>
-                    {% render_field sform.index class="form-control" %}
-                    <label for="sensor_type_error">{{ sform.index.errors }}</label>
-                  </div>
-                </div>
-
-                <div class="col-xs-1">
-                  <div class="form-group">
-                    <label for="datakey">Data Key:</label>
-                    {% render_field sform.data_key class="form-control" %}
-                    <label for="sensor_type_error">{{ sform.data_key.errors }}</label>
-                  </div>
-                </div>{% endcomment %}
-
-              </div>
-              </div>
 
               {% endfor %}
             </div>
-
           </div>
-          <div class="box-footer">
-
-          </div>
-
+        </div>
+      </div>
     </div>
-  </div>
 
 <div class="row">
-
   <div class="col-xs-4 ">
     <button type="submit" class="btn btn-block btn-primary btn-lg">Guardar Cambios</button>
   </div>
-{{ sensor_formset.management_form }}
+  {{ sensor_formset.management_form }}
 </form>
-
-
 
   <div class="col-xs-4 col-xs-offset-2">
       <a href="{% url 'projectsList' %}">
@@ -203,13 +135,7 @@
       </a>
   </div>
 
-
-
 </div>
-
-
-
-
 </section>
     <!-- /.content -->
   </div>
@@ -238,3 +164,53 @@
 
 
   {% endblock content_js %}
+
+    {% comment %}
+      <div class="col-xs-2">
+        <div class="form-group">
+          <label for="sensor_type">Tipo Sensor:</label>
+          {% render_field sform.sensor_type class="form-control" %}
+          <label for="sensor_type_error">{{ sform.sensor_type.errors }}</label>
+        </div>
+      </div>
+
+      <div class="col-xs-2">
+        <div class="form-group">
+          <label for="sensor_type">Valor Maximo:</label>
+          {% render_field sform.max_value class="form-control" %}
+          <label for="sensor_type_error">{{ sform.sensor_type.errors }}</label>
+        </div>
+      </div>
+
+      <div class="col-xs-2">
+        <div class="form-group">
+          <label for="sensor_type">Valor Minimo:</label>
+          {% render_field sform.min_value class="form-control" %}
+          <label for="sensor_type_error">{{ sform.sensor_type.errors }}</label>
+        </div>
+      </div>
+
+      <div class="col-xs-2">
+        <div class="form-group">
+          <label for="description">Descripcion:</label>
+          {% render_field sform.description class="form-control" %}
+          <label for="sensor_type_error">{{ sform.description.errors }}</label>
+        </div>
+      </div>
+
+      <div class="col-xs-1">
+        <div class="form-group">
+          <label for="index">Indice: </label>
+          {% render_field sform.index class="form-control" %}
+          <label for="sensor_type_error">{{ sform.index.errors }}</label>
+        </div>
+      </div>
+
+      <div class="col-xs-1">
+        <div class="form-group">
+          <label for="datakey">Data Key:</label>
+          {% render_field sform.data_key class="form-control" %}
+          <label for="sensor_type_error">{{ sform.data_key.errors }}</label>
+        </div>
+      </div>
+    {% endcomment %}

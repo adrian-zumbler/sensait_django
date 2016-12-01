@@ -3,6 +3,25 @@
 {% load widget_tweaks %}
 {% load arduino_tags %}
 
+{% block content_css %}
+
+<style>
+  #graphData{
+    font-size:20px;
+  }
+  .bg-dark-green{
+    color: white;
+    background-color: #027c43 !important;
+  }
+  #graphdiv{
+    display:block;
+    background-color: #f0f0f0 !important;
+  }
+
+</style>
+
+{% endblock content_css %}
+
 
 {% block main_content_wrapper %}
 
@@ -13,94 +32,178 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-        <b>Descargar historico de lecturas:</b> {{arduino.name}}
-        <small>
-          <b>Proyecto:</b> {{arduino.project}}
-        </small>
+        <b>Alertas e Historico de lecturas</b>
+          <small>
+            <b>Transmisor</b>
+          </small>
+          <b>{{arduino.name}}</b>
       </h1>
     </section>
 
   <!-- Main content -->
   <section class="content">
     <div class="row">
-      <div class="col-xs-12">
+
+      <div class="col-xs-12" id="block_alerts_active">
+        <div class="box box-danger">
+          <div class="box-header with-border">
+            <h3 class="box-title">
+              ALERTAS EN PROGRESO
+            </h3>
+            <div class="box-tools pull-right">
+              <button class="btn btn-box-tool" data-widget="collapse">
+                <i class="fa fa-minus"></i>
+              </button>
+            </div>
+          </div>
+          <div class="box-body">
+
+            <div class="table">
+              <table id="table_alerts_active" class="table table-bordered table-striped">
+                <thead>
+                  <tr>
+                    <th>Nombre Sensor</th>
+                    <th>Fecha alerta generada</th>
+                    <th>Fecha alerta finalizada</th>
+                    <th>Último valor de alerta registrado</th>
+                    <th>Última fecha de alerta registrada</th>
+                    <th># Registros fuera de rango</th>
+                    <th>Acciones</th>
+                  </tr>
+                </thead>
+                <tbody>
+
+                {% for alert in arduino.alerts.all %}
+                  {% if alert.active ==  True and alert.sensor_data.last.data != '-127.00' %}
+                  <tr>
+                    <td>
+                      {{ alert.created_at}}
+                    </td>
+                    <td>
+                      <b>{{ alert.sensor_data.last.arduino_sensor.description}}
+                      </b>
+                    </td>
+                    <td>
+                      {{ alert.finished_at}}
+                    </td>
+                    <td align="center">
+                      Min. {{ alert.sensor_data.last.arduino_sensor.min_value}}{{ alert.sensor_data.last.arduino_sensor.sensor_type.subfix}}
+                      <br/>
+                      <b>Valor:
+                        {{ alert.sensor_data.last.data}}{{ alert.sensor_data.last.arduino_sensor.sensor_type.subfix}}
+                      </b>
+                      <br/>
+                      Max. {{ alert.sensor_data.last.arduino_sensor.max_value}}{{ alert.sensor_data.last.arduino_sensor.sensor_type.subfix}}
+                    </td>
+                    <td align="center">
+                      <div class="epoch2Date_{{ alert.sensor_data.last.id}}">
+                      {{ alert.sensor_data.last.epoch}}
+                      </div>
+                    </td>
+                    <td align="center">
+                      {{ alert.sensor_data.all.count }}
+                      <div class="hidden" id="sensor_{{ alert.sensor_data.last.arduino_sensor.id}}" class="" align="center">
+                        api/arduinos/{{ alert.sensor_data.last.arduino_sensor.arduino.id}}/sensors/{{ alert.sensor_data.last.arduino_sensor.id}}/data/?min_time={{ alert.sensor_data.first.epoch}}&max_time={{ alert.sensor_data.last.epoch}}
+                      </div>
+                    </td>
+                    <td  align="center">
+                      <div class="btn-group">
+                        <div id="detalle_{{ alert.sensor_data.last.arduino_sensor.id}}" class="btn btn-success">Grafica</div>
+                      </div>
+                    </td>
+                  </tr>
+                  {% endif %}
+                {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+
+
+      <div class="col-xs-12" id="block_alerts_inactive">
         <div class="box box-info">
           <div class="box-header with-border">
             <h3 class="box-title">
-              Resumen de Alertas
+              HISTORICO DE ALERTAS
             </h3>
+            <div class="box-tools pull-right">
+              <button class="btn btn-box-tool" data-widget="collapse">
+                <i class="fa fa-minus"></i>
+              </button>
+            </div>
           </div>
           <div class="box-body">
-            <h4>Alertas Activas</h4><br/>
-            {% for sensor in arduino.alerts.all %}
-              {% if sensor.active ==  True%}
-                {{ sensor.sensor.description}}<br/>
-                {{ sensor.sensor.max_value}}<br/>
-                {{ sensor.sensor.min_value}}<br/>
-                {{ sensor.created_at}}<br/>
-                {{ sensor.finished_at}}<br/>
-                {{ sensor.active}}<br/>
-              {% endif %}
-              <hr/>
-            {% endfor %}
-            <h4>Historico de Alertas</h4><br/>
-            {% for sensor in arduino.alerts.all %}
-              {% if sensor.active ==  False %}
-                {{ sensor.sensor.description}}<br/>
-                {{ sensor.sensor.max_value}}<br/>
-                {{ sensor.sensor.min_value}}<br/>
-                {{ sensor.created_at}}<br/>
-                {{ sensor.finished_at}}<br/>
-                {{ sensor.active}}<br/>
-              {% endif %}
-              <hr/>
-            {% endfor %}
+            <div class="table">
+              <table id="table_alerts_inactive" class="table table-bordered table-striped">
+                <thead>
+                  <tr>
+                    <th>Nombre Sensor</th>
+                    <th>Fecha alerta generada</th>
+                    <th>Fecha alerta finalizada</th>
+                    <th>Último valor de alerta registrado</th>
+                    <th>Última fecha de alerta registrada</th>
+                    <th># Registros fuera de rango</th>
+                    <th>Acciones</th>
+                  </tr>
+                </thead>
+                <tbody>
 
-
-            <br/>
-            <h4>Sensor</h4><br/>
-
-            <br/>
-
-            <h4> Registros de la alerta</h4><br/>
-            {% for alert in arduino.alerts.all %}
-              {{ alert.sensor_data.all }}<br/>
-              {% for data in alert.sensor_data.all %}
-                {{ data.data}}<br/>
-                {{ data.epoch}}<br/>
-              {% endfor %}
-              <hr/>
-            {% endfor %}
-
-            <br/><br/>
-
-
-
-            <h4> Alertas enviadas al mail</h4><br/>
-            {% for alert in arduino.alerts.all %}
-              {{ alert.email_sends.all }}<br/>
-
-              {% for email in alert.email_sends.all %}
-                {{ email.to}}<br/>
-              {% endfor %}
-              <hr/>
-            {% endfor %}
-            <br/>
-
-
-
-
-
-            {% comment %}
-              {% for sens in arduino.arduino_sensors.all %}
-                {{sens.id}}<br/>
-              {% endfor %}
-            {% endcomment %}
+                {% for alert in arduino.alerts.all %}
+                  {% if alert.active ==  False and alert.sensor_data.last.data != '-127.00' %}
+                  <tr>
+                    <td>
+                      {{ alert.created_at}}
+                    </td>
+                    <td>
+                      <b>{{ alert.sensor_data.last.arduino_sensor.description}}
+                      </b>
+                    </td>
+                    <td>
+                      {{ alert.finished_at}}
+                    </td>
+                    <td align="center">
+                      Min. {{ alert.sensor_data.last.arduino_sensor.min_value}}{{ alert.sensor_data.last.arduino_sensor.sensor_type.subfix}}
+                      <br/>
+                      <b>Valor:
+                        {{ alert.sensor_data.last.data}}{{ alert.sensor_data.last.arduino_sensor.sensor_type.subfix}}
+                      </b>
+                      <br/>
+                      Max. {{ alert.sensor_data.last.arduino_sensor.max_value}}{{ alert.sensor_data.last.arduino_sensor.sensor_type.subfix}}
+                      <div id="minmax_{{ alert.sensor_data.last.arduino_sensor.id}}" class="hidden">
+                        {{ alert.sensor_data.last.arduino_sensor.min_value}}_
+                        {{ alert.sensor_data.last.arduino_sensor.max_value}}
+                      </div>
+                    </td>
+                    <td align="center">
+                      <div class="epoch2Date_{{ alert.sensor_data.last.id}}">
+                      {{ alert.sensor_data.last.epoch}}
+                      </div>
+                    </td>
+                    <td align="center">
+                      {{ alert.sensor_data.all.count }}
+                      <div class="hidden" id="sensor_{{ alert.sensor_data.last.arduino_sensor.id}}" class="" align="center">
+                        api/arduinos/{{ alert.sensor_data.last.arduino_sensor.arduino.id}}/sensors/{{ alert.sensor_data.last.arduino_sensor.id}}/data/?min_time={{ alert.sensor_data.first.epoch| add:-600 }}&max_time={{ alert.sensor_data.last.epoch| add:600}}
+                      </div>
+                    </td>
+                    <td  align="center">
+                      <div class="btn-group">
+                        <div id="detalle_{{ alert.sensor_data.last.arduino_sensor.id}}" class="btn btn-success">Grafica</div>
+                      </div>
+                    </td>
+                  </tr>
+                  {% endif %}
+                {% endfor %}
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
-        </div>
-      </div>
-    </section>
+    </div>
+  </section>
 
 
   <section class="content">
@@ -161,19 +264,79 @@
 
 
 
-  </div>
+    <div class="modal fade modal-gray" id="detalle_grafica">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+            <h4 class="modal-title">Grafica de comportamiento de la ALERTA</h4>
+          </div>
+          <div class="modal-body">
+            <div>Información del punto de la gráfica: <span id="graphData"></span></div>
+            <br/><br/><br/>
+            <div id="graphdiv"></div>
+          </div>
+        </div>
+      </div>
+    </div>
 
+</div>
 
 {% endblock main_content_wrapper %}
 
 
 
 {% block content_js %}
+<script src="{% static 'plugins/dygraphs/dygraph-combined.js' %}"></script>
+<script src="{% static 'plugins/datatables/jquery.dataTables.min.js' %}"></script>
+<script src="{% static 'plugins/datatables/dataTables.bootstrap.min.js' %}"></script>
   <script type="application/javascript">
-  var site_url = "{{ site_url }}";
 
+  $('#verDetalle').on('shown.bs.modal', function () {
+    $('#myInput').focus()
+  });
+
+  var site_url = "{{ site_url }}";
+  var ws_url = 'ws://' + site_url;
+  var urlApi = 'http://' + site_url + '/';
+
+  console.log(site_url);
+  console.log(ws_url);
+  //ws_url = ws_url.replace("","");
+
+  if(site_url == 'sensait.dyndns.org'){
+    tokenCode = 'Token d7e7f378cdc67dcd7cec11b76e017927c3e73bc3';
+  }else{
+    tokenCode   = 'Token 6b4f2e70ae0d435bf512897355947fe0a564972a';
+    //Para cuando se accede desde la RED local el server
+    if( site_url == "192.168.253.31"){
+      tokenCode = 'Token d7e7f378cdc67dcd7cec11b76e017927c3e73bc3';
+    }
+  }
+
+
+  $(function () {
+    $('#table_alerts_inactive').DataTable({
+      "paging": true,
+      "lengthChange": false,
+      "searching": false,
+      "ordering": true,
+      "info": false,
+      "autoWidth": false
+    });
+
+    $('#table_alerts_active').DataTable({
+      "paging": true,
+      "lengthChange": false,
+      "searching": false,
+      "ordering": true,
+      "info": false,
+      "autoWidth": false
+    });
+  });
 
   $(document).ready(function(){
+    countAlerts();
     console.log(site_url);
 
     $("#form_0").hide();
@@ -187,7 +350,200 @@
       {% endif %}
     {% endfor %}
     //$('#id_sensor option[value='+idEpoch+']').remove();
+
+    $( "[class^=epoch2Date_]" ).each(function() {
+      var div_ID = $(this).attr('class');
+      $('.'+div_ID).html(convertEpoch2Date( $( this ).text() ));
+    });
+
+
   });
+
+  function convertEpoch2Date(epochData){
+    if(parseInt(epochData)>10000){
+      var actualDate = new Date();
+
+      var d = new Date(parseInt(epochData)*1000);
+      var day     =  d.getDate() +'';
+      var month   =  d.getMonth() + 1 +'';
+      var hour    =  d.getHours() +'';
+      var minutes =  d.getMinutes()+'';
+      var seconds =  d.getSeconds()+'';
+
+      //NO me gusta... pero no se me ocurre otra forma...
+      if(day.length == 1)
+        day = '0'+day;
+      if(month.length == 1)
+        month = '0'+month;
+      if(hour.length == 1)
+        hour = '0'+hour;
+      if(minutes.length == 1)
+        minutes = '0'+minutes;
+      if(seconds.length == 1)
+        seconds = '0'+seconds;
+
+      var dateFormat = day +'/'+month+'/'+d.getFullYear();
+      var timeFormat = hour+':'+minutes+':'+seconds;
+
+      return dateFormat + '               <b>' + timeFormat + '</b>';
+    }else{
+      return "Formato de Fecha Invalido";
+    }
+  }
+
+  function countAlerts(){
+    var alert_active    = 0;
+    var alert_inactive  = 0;
+
+    {% for alert in arduino.alerts.all %}
+      {% if alert.active ==  True %}
+        alert_active++;
+      {% else %}
+        alert_inactive++;
+      {% endif %}
+    {% endfor %}
+
+    if(alert_active == 0 )
+      $('#block_alerts_active').hide();
+
+    if(alert_inactive == 0 )
+      $('#block_alerts_inactive').hide();
+  }
+
+  $("[id^=detalle_]").click(function(){
+
+    $('#detalle_grafica').modal('show');
+
+    var click_ID = $(this)[0].id;
+    click_ID = click_ID.split("_");
+    click_ID = click_ID[1];
+
+    var queryText = $('#sensor_'+click_ID).text();
+    queryText = queryText.trim();
+    queryText = queryText.replace(" ","");
+
+    getDataFromAPI(queryText ,click_ID );
+  });
+
+
+  function getDataFromAPI(query, sensor_ID){
+
+    console.log(urlApi + query);
+    $.ajax({
+      url: urlApi + query ,
+      type: 'GET',
+      contentType: 'json/application',
+      dataType: 'json',
+      processData: false,
+      xhrFields: {
+        withCredentials: false
+      },
+      headers: {
+        'Authorization': tokenCode
+      },
+      success: function(data) {
+        if(data.length > 0){
+          dataCallBack(data,sensor_ID);
+        }
+        else{
+          if(g != null ){
+            g.destroy();
+            g = null;
+          }
+          $('#graphdiv').html("Lo sentimos, no se encontraron registros con ese filtro aplicado, favor de especificar otro. ");
+        }
+      },
+      error: function() {
+        console.log('boo!');
+      }
+    });
+  }
+
+  function dataCallBack(data,sensor_ID){
+    console.log(data);
+    createGraph(data,sensor_ID);
+  }
+
+  var g ; // variable de la grafica
+  var sensor_data_chart = [];
+  var sensor_date_chart = [];
+  var dygraphs_data = [];
+
+  function createGraph(data, sensor_ID) {
+    _sensors_data = null;
+    sensor_data_chart = [];
+    sensor_date_chart = [];
+    dygraphs_data =  [];
+
+    _sensors_data = data;
+
+    console.log("data");
+    console.log(data);
+
+    for (var i = 0; i < _sensors_data.length; i++) {
+
+      if(_sensors_data[i]['data'] != "-127.00" && parseInt(_sensors_data[i]['epoch']) > 100000) {
+        sensor_data_chart.push(_sensors_data[i]['data']);
+
+        var d = new Date(parseInt(_sensors_data[i]['epoch'])*1000);
+        var d_days = d.getDate() + "/" + d.getMonth() + "/" + d.getFullYear();
+        var d_time = completeTimeFormat(d.getHours(), d.getMinutes(), d.getSeconds());
+
+        sensor_date_chart.push(d_time);
+
+        var minMax = $('#minmax_'+sensor_ID).text();
+        minMax = minMax.trim();
+        minMax = minMax.replace(/\n|\r/g, "");
+        minMax = minMax.replace(" ","");
+        minMax = minMax.replace("                       ","");
+        minMax = minMax.split("_");
+        minMax[0] = Number(minMax[0]).toFixed(2)+"";
+        minMax[1] = Number(minMax[1]).toFixed(2)+"";
+
+        dygraphs_data.push([d, _sensors_data[i]['data'], minMax[0], minMax[1]]);
+      }
+    }
+
+    if(g != null ){
+      g.destroy();
+      g = null;
+      $('#graphdiv').html('');
+    }
+    //console.log(dygraphs_data);
+
+    if(dygraphs_data.length != 0 ){
+      g = new Dygraph(document.getElementById("graphdiv"), dygraphs_data, {
+        drawPoints: true,
+        showRoller: true,
+        height: 500,
+        width:800,
+        highlightSeriesBackgroundAlpha:1,
+        fillGraph: false,
+        includeZero: false,
+        connectSeparatedPoints:true,
+        drawGapEdgePoints:true,
+        drawPoints:true,
+        pointSize:3,
+        strokeWidth:3,
+        rightGap:20,
+        legend:"always",
+        highlightCircleSize:5,
+        showRoller:true,
+        hideOverlayOnMouseOut:false,
+        labelsDiv: document.getElementById('graphData'),
+        labels: ['Tiempo', 'Valor Registrado', 'Min.', 'Max.'],
+        colors:['#f7a508','#c22721','#929423']
+      });
+
+      canUseSocket = true;
+
+
+
+    }else{
+      $('#graphdiv').html(' No se encontraron registros validos.');
+    }
+  }
+
 
 
   $('#daterange').daterangepicker({
@@ -252,5 +608,17 @@
     $("#id_max_time").val(epoch_end);
   });
 
+  function completeTimeFormat(hours, minutes, seconds) {
+    if (hours < 10) {
+      hours = "0" + hours;
+    }
+    if (minutes < 10) {
+      minutes = "0" + minutes;
+    }
+    if (seconds < 10) {
+      seconds = "0" + seconds;
+    }
+    return hours + ':' + minutes + ':' + seconds;
+  }
 </script>
 {% endblock content_js %}

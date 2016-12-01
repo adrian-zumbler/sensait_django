@@ -511,18 +511,6 @@ function getSensorsFromAPI(proy_ID,sensor_ID, arduinoID,sens_info,query){
       var minutes =  d.getMinutes()+'';
       var seconds =  d.getSeconds()+'';
 
-      /*
-      var actualHours = actualDate.getHours();
-      if(parseInt(hour) > parseInt(actualHours)){
-        if(parseInt(hour) < 5){
-          var dif = hour - 5;
-          hour = 24 - dif;
-        }else{
-          hour = hour - 5;
-        }
-      }
-      */
-
       //NO me gusta... pero no se me ocurre otra forma...
       if(day.length == 1)
         day = '0'+day;

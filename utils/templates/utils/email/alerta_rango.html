@@ -1,19 +1,53 @@
 
+<style>
+  html{
+    font-family:Arial;
+  }
+  p{
+    font-size:18px;
+     line-height: 30px;
+  }
+</style>
+
 <h1>
-  Alerta registro fuera de rango - {{ object.epoch }}
+  Alerta registro fuera de rango - {{ object.data |floatformat:2}}{{ object.arduino_sensor.sensor_type.subfix }} - {{ object.created_at }}
 </h1>
 
-<h2> Fecha: {{ object.epoch }} </h2>
+<p>
+Apreciable (nombre del encargado del laboratorio) el dispositivo <b>Sensait CORE</b> ha registrado temperaturas fuera de rango de operación, por favor verifique que el (nombreDelRefrigerador) esté funcionando correctamente.
+</p>
 
-<h2> Instalación: {{ object.arduino_sensor.arduino.project.name }} </h2>
-<h2> Transmisor: {{ object.arduino_sensor.arduino.name }} </h2>
-<h2> Ubicación: {{ object.arduino_sensor.arduino.location }} </h2>
-<h2> Tipo de Sensor: {{ object.arduino_sensor.sensor_type.name }} </h2>
+<h2> Detalle de la incidencia </h2>
+<p>
+  Fecha: {{ object.created_at }}<br/>
+  Tipo de Sensor:<b>  {{ object.arduino_sensor.sensor_type.name }} </b><br/>
+  Nombre del  Sensor:<b> {{ object.arduino_sensor.description }} </b><br/>
+  <h2> Lectura Registrada: <b> {{ object.data|floatformat:2 }}{{ object.arduino_sensor.sensor_type.subfix }} </b></h2> <br/>
+  Valor Minimo: <b> {{ object.arduino_sensor.min_value|floatformat:2 }}{{ object.arduino_sensor.sensor_type.subfix }} </b> <br/>
+  Valor Minimo: <b> {{ object.arduino_sensor.max_value |floatformat:2}}{{ object.arduino_sensor.sensor_type.subfix }} </b> <br/>
+  <br/><br/><br/>
 
 
+  Instalación: <b> {{ object.arduino_sensor.arduino.project.name }}</b><br/>
+  Transmisor: <b> {{ object.arduino_sensor.arduino.name }} </b><br/>
+  Ubicación:<b>  {{ object.arduino_sensor.arduino.location }} </b><br/>
+  Refrigerador:<b> {{ object.arduino_sensor.description }} </b><br/>
+</p>
+<p>
+Puede ver mas información de esta alerta dando click <a href="http://sensait.dyndns.org/dash/reports/{{ object.arduino_sensor.arduino.id }}/" target="_blank">aqui</a>
+<br/>
+<br/>
+
+Quedamos a sus órdenes para cualquier duda o comentario.
+Sensait Soporte
+
+</p>
+
+<!--
 <hr/>
 <br/>
 <br/>
+
 <table style="width:70%">
   <caption>Información del Registro</caption>
   <tr>
@@ -35,22 +69,7 @@
 <hr/>
 <br/>
 <br/>
-
-<table style="width:70%">
-  <caption>Información del resto de sensores</caption>
-  <tr>
-    <th>Nombre</th>
-    <th>Valor Min. </th>
-    <th>Valor</th>
-    <th>Valor Max. </th>
-  </tr>
-  <tr>
-    <td> {{ object.arduino_sensor.description }} </td>
-    <td> {{ object.arduino_sensor.min_value|floatformat:2  }} </td>
-    <td> <b> {{ object.data|floatformat:2  }} </b> </td>
-    <td> {{ object.arduino_sensor.max_value|floatformat:2  }} </td>
-  </tr>
-</table>
+-->
 
 <br/>
 <hr/>
