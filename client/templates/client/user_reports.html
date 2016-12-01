@@ -94,6 +94,10 @@
                       </b>
                       <br/>
                       Max. {{ alert.sensor_data.last.arduino_sensor.max_value}}{{ alert.sensor_data.last.arduino_sensor.sensor_type.subfix}}
+                      <div id="minmax_{{ alert.sensor_data.last.arduino_sensor.id}}" class="hidden">
+                        {{ alert.sensor_data.last.arduino_sensor.min_value}}_
+                        {{ alert.sensor_data.last.arduino_sensor.max_value}}
+                      </div>
                     </td>
                     <td align="center">
                       <div class="epoch2Date_{{ alert.sensor_data.last.id}}">
@@ -103,7 +107,7 @@
                     <td align="center">
                       {{ alert.sensor_data.all.count }}
                       <div class="hidden" id="sensor_{{ alert.sensor_data.last.arduino_sensor.id}}" class="" align="center">
-                        api/arduinos/{{ alert.sensor_data.last.arduino_sensor.arduino.id}}/sensors/{{ alert.sensor_data.last.arduino_sensor.id}}/data/?min_time={{ alert.sensor_data.first.epoch}}&max_time={{ alert.sensor_data.last.epoch}}
+                        api/arduinos/{{ alert.sensor_data.last.arduino_sensor.arduino.id}}/sensors/{{ alert.sensor_data.last.arduino_sensor.id}}/data/?min_time={{ alert.sensor_data.first.epoch| add:-600 }}&max_time={{ alert.sensor_data.last.epoch| add:600}}
                       </div>
                     </td>
                     <td  align="center">
