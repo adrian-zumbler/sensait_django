@@ -73,7 +73,21 @@
             <div class="form-group">
               <label for="sistema_location">Ubicación:</label>
               {% render_field form.location class="form-control" %}
-              <label for="sensor_type_error">{{ form.location.errors }}</label>
+              <label for="sensor_location_error">{{ form.location.errors }}</label>
+            </div>
+          </div>
+          <div class="col-xs-12">
+            <div class="form-group">
+              <label for="sistema_alertas_time">Tiempo entre envio de alertas:</label>
+              {% render_field form.delta_time_alerts class="form-control" %}
+              <label for="sistema_alertas_time_error">{{ form.delta_time_alerts.errors }}</label>
+            </div>
+          </div>
+          <div class="col-xs-12">
+            <div class="form-group">
+              <label for="sistema_alertas">Correo Alertas:</label>
+              {% render_field form.correos_alertas class="form-control" %}
+              <label for="sensor_alertas_error">{{ form.correos_alertas.errors }}</label>
             </div>
           </div>
         </div><!-- /.box-body -->

@@ -114,6 +114,10 @@ class Arduino(models.Model):
         blank=True,
         null=True
     )
+    delta_time_alerts = models.PositiveSmallIntegerField(
+        verbose_name='Tiempo entre envio de alertas',
+        default=5
+    )
     # objects = ArduinoManager()
 
     def __unicode__(self):
