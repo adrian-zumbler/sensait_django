@@ -288,7 +288,7 @@ class ArduinoAlert(models.Model):
         except EmailSend.DoesNotExist:
             latest_email_send = None
 
-        delta = timezone.now() - timedelta(minutes=5)
+        delta = timezone.now() - timedelta(minutes=self.arduino.delta_time_alerts)
         if self.arduino.correos_alertas \
                 and (not latest_email_send or latest_email_send.sended_at <= delta):
             text_content = get_template('utils/email/alerta_rango.txt') \
