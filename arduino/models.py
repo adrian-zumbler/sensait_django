@@ -131,10 +131,10 @@ class Arduino(models.Model):
 
 
 class SensorEquipment(models.Model):
-    arduino_sensor = models.ForeignKey(
-        ArduinoSensor,
-        related_name='sensor_data',
-        related_query_name='sensor_data',
+    project = models.ForeignKey(
+        ProjectC,
+        related_name='equipments',
+        related_query_name='equipments',
         on_delete=models.CASCADE,
     )
     equipment_name = models.CharField(
@@ -196,6 +196,11 @@ class ArduinoSensor(models.Model):
     )
     sensor_type = models.ForeignKey(
         SensorType,
+        on_delete=models.CASCADE
+    )
+    equipment = models.ForeignKey(
+        SensorEquipment,
+        related_name='sensors',
         on_delete=models.CASCADE
     )
     description = models.CharField(max_length=255)
