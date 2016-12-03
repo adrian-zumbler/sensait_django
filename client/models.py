@@ -150,7 +150,7 @@ class Project(models.Model):
     clients = models.ManyToManyField(Client, related_name='projects', blank=True) # ForeignKey(Client, related_name='projects', blank=True, null=True)
     name = models.CharField(max_length=255)
     nombre_encargado = models.CharField(
-        verbose_name='Nombre Encargado',
+        verbose_name='Nombre Responsable',
         max_length=55,
         blank=True,
         null=True

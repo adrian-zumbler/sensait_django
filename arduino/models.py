@@ -106,10 +106,14 @@ class Arduino(models.Model):
     sensors = models.ManyToManyField(SensorType, through='ArduinoSensor')
     available_sensors = models.SmallIntegerField(default=1)
     estatus = models.PositiveSmallIntegerField(verbose_name='Estatus', choices=ESTATUS_CHOICES, default=1)
-
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-
+    correos_alertas = models.CharField(
+        verbose_name='Correos para alertas',
+        max_length=255,
+        blank=True,
+        null=True
+    )
     # objects = ArduinoManager()
 
     def __unicode__(self):
@@ -124,6 +128,63 @@ class Arduino(models.Model):
             self.arduino_token = token
         # self.objects.filter(arduino_id=self.arduino_id)
         super(Arduino, self).save(force_insert, force_update, using, update_fields)
+
+
+class SensorEquipment(models.Model):
+    arduino_sensor = models.ForeignKey(
+        ArduinoSensor,
+        related_name='sensor_data',
+        related_query_name='sensor_data',
+        on_delete=models.CASCADE,
+    )
+    equipment_name = models.CharField(
+        verbose_name='Nombre Refrigerador',
+        max_length=255,
+        blank=True,
+        null=True
+    )
+    equipment_model = models.CharField(
+        verbose_name='Modelo Refrigerador',
+        max_length=255,
+        blank=True,
+        null=True
+    )
+    equipment_brand = models.CharField(
+        verbose_name='Marca Refrigerador',
+        max_length=255,
+        blank=True,
+        null=True
+    )
+    equipment_buydate = models.CharField(
+        verbose_name='Fecha de Compra',
+        max_length=255,
+        blank=True,
+        null=True
+    )
+    equipment_serial = models.CharField(
+        verbose_name='No. Serie',
+        max_length=255,
+        blank=True,
+        null=True
+    )
+    equipment_size = models.CharField(
+        verbose_name='Medidas del equipo',
+        max_length=255,
+        blank=True,
+        null=True
+    )
+    equipment_comments = models.CharField(
+        verbose_name='Comentarios del equipo',
+        max_length=255,
+        blank=True,
+        null=True
+    )
+    equipment_notes = models.CharField(
+        verbose_name='Notas Adicionales',
+        max_length=255,
+        blank=True,
+        null=True
+    )
 
 
 class ArduinoSensor(models.Model):
