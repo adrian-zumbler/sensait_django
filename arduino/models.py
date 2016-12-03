@@ -201,7 +201,9 @@ class ArduinoSensor(models.Model):
     equipment = models.ForeignKey(
         SensorEquipment,
         related_name='sensors',
-        on_delete=models.CASCADE
+        on_delete=models.CASCADE,
+        blank=True,
+        null=True
     )
     description = models.CharField(max_length=255)
     index = models.PositiveSmallIntegerField()
