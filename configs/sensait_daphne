@@ -7,6 +7,7 @@ After=network.target
 WorkingDirectory=/home/manto/sensait/sensait_django
 # Environment=/home/manto/.venvs/snsaitchannels/bin
 ExecStart=/home/manto/.venvs/snsaitchannels/bin/daphne -u /home/manto/sensait/daphne.sock ardsensor.asgi:channel_layer
+ExecStop=
 Restart=always
 KillSignal=SIGQUIT
 Type=forking
