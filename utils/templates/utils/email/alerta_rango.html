@@ -10,7 +10,7 @@
 </style>
 
 <h1>
-  Alerta registro fuera de rango - {{ object.data |floatformat:2}}{{ object.arduino_sensor.sensor_type.subfix }} - {{ object.created_at }}
+  Alerta registro fuera de rango - {{  arduinoalert.sensor_data.last.data |floatformat:2}}{{ arduinoalert.sensor_data.last.arduino_sensor.sensor_type.subfix }} - {{ arduinoalert.created_at }}
 </h1>
 
 <p>
@@ -19,19 +19,19 @@ Apreciable (nombre del encargado del laboratorio) el dispositivo <b>Sensait CORE
 
 <h2> Detalle de la incidencia </h2>
 <p>
-  Fecha: {{ object.created_at }}<br/>
-  Tipo de Sensor:<b>  {{ object.arduino_sensor.sensor_type.name }} </b><br/>
-  Nombre del  Sensor:<b> {{ object.arduino_sensor.description }} </b><br/>
-  <h2> Lectura Registrada: <b> {{ object.data|floatformat:2 }}{{ object.arduino_sensor.sensor_type.subfix }} </b></h2> <br/>
-  Valor Minimo: <b> {{ object.arduino_sensor.min_value|floatformat:2 }}{{ object.arduino_sensor.sensor_type.subfix }} </b> <br/>
-  Valor Minimo: <b> {{ object.arduino_sensor.max_value |floatformat:2}}{{ object.arduino_sensor.sensor_type.subfix }} </b> <br/>
+  Fecha: {{ arduinoalert.created_at }}<br/>
+  Tipo de Sensor:<b>  {{ arduinoalert.sensor_data.last.arduino_sensor.sensor_type.name }}</b><br/>
+  Nombre del  Sensor:<b> {{ arduinoalert.sensor_data.last.arduino_sensor.description }} </b><br/>
+  <h2> Lectura Registrada: <b> {{  arduinoalert.sensor_data.last.data |floatformat:2}}{{ arduinoalert.sensor_data.last.arduino_sensor.sensor_type.subfix }} </b></h2> <br/>
+  Valor Minimo: <b> {{  arduinoalert.sensor_data.last.arduino_sensor.min_value |floatformat:2}}{{ arduinoalert.sensor_data.last.arduino_sensor.sensor_type.subfix }} </b> <br/>
+  Valor Minimo: <b> {{  arduinoalert.sensor_data.last.arduino_sensor.max_value |floatformat:2}}{{ arduinoalert.sensor_data.last.arduino_sensor.sensor_type.subfix }} </b> <br/>
   <br/><br/><br/>
 
 
-  Instalación: <b> {{ object.arduino_sensor.arduino.project.name }}</b><br/>
-  Transmisor: <b> {{ object.arduino_sensor.arduino.name }} </b><br/>
-  Ubicación:<b>  {{ object.arduino_sensor.arduino.location }} </b><br/>
-  Refrigerador:<b> {{ object.arduino_sensor.description }} </b><br/>
+  Instalación: <b> {{ arduinoalert.sensor_data.last.arduino_sensor.arduino.project.name }}</b><br/>
+  Transmisor: <b> {{ arduinoalert.sensor_data.last.arduino_sensor.arduino.name }} </b><br/>
+  Ubicación:<b>  {{ arduinoalert.sensor_data.last.arduino_sensor.arduino.location }} </b><br/>
+  Refrigerador:<b> {{ arduinoalert.sensor_data.last.arduino_sensor.description }} </b><br/>
 </p>
 <p>
 Puede ver mas información de esta alerta dando click <a href="http://sensait.dyndns.org/dash/reports/{{ object.arduino_sensor.arduino.id }}/" target="_blank">aqui</a>
