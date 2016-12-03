@@ -28,4 +28,4 @@ def send_message(msg):
 
 class EmailView(DetailView):
     template_name = 'utils/email/alerta_rango.html'
-    model = SensorData
+    model = ArduinoAlert
