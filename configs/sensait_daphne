@@ -5,11 +5,11 @@ After=syslog.target
 
 [Service]
 WorkingDirectory=/home/manto/sensait/sensait_django
-#Environment=/home/manto/.venvs/snsaitchannels/bin
+Environment=/home/manto/.venvs/snsaitchannels/bin
 ExecStart=/home/manto/.venvs/snsaitchannels/bin/daphne -u /home/manto/sensait/daphne.sock ardsensor.asgi:channel_layer
 Restart=always
 KillSignal=SIGQUIT
-Type=notify
+Type=forking
 StandardError=syslog
 NotifyAccess=all
 
