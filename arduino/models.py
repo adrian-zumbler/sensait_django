@@ -298,7 +298,7 @@ class ArduinoAlert(models.Model):
             email = EmailSend(
                 from_email='alertas@esensait.com',
                 to=self.arduino.correos_alertas,
-                subject='Alerta Sensait - El equipo %s detecto una lectura fuera de rango.' + self.arduino.name,
+                subject='Alerta Sensait - El equipo %s detectó una lectura fuera de rango.' % self.arduino.name,
                 text_content=text_content,
                 html_content=html_content,
             )
