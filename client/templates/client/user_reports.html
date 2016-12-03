@@ -300,6 +300,12 @@
     $('#myInput').focus()
   });
 
+
+  var g ; // variable de la grafica
+  var sensor_data_chart = [];
+  var sensor_date_chart = [];
+  var dygraphs_data = [];
+
   var site_url = "{{ site_url }}";
   var ws_url = 'ws://' + site_url;
   var urlApi = 'http://' + site_url + '/';
@@ -418,6 +424,16 @@
 
     $('#detalle_grafica').modal('show');
 
+    console.log(g);
+    g = null;
+    $('#graphdiv').html('');
+
+    if(g != null ){
+      g.destroy();
+      g = null;
+      $('#graphdiv').html('');
+    }
+
     var click_ID = $(this)[0].id;
     click_ID = click_ID.split("_");
     click_ID = click_ID[1];
@@ -450,7 +466,7 @@
           dataCallBack(data,sensor_ID);
         }
         else{
-          if(g != null ){
+          if(g != null || typeof g == 'undefined'){
             g.destroy();
             g = null;
           }
@@ -465,13 +481,13 @@
 
   function dataCallBack(data,sensor_ID){
     console.log(data);
+    sensor_data_chart = [];
+    sensor_date_chart = [];
+    dygraphs_data =  [];
+    _sensors_data = "";
     createGraph(data,sensor_ID);
   }
 
-  var g ; // variable de la grafica
-  var sensor_data_chart = [];
-  var sensor_date_chart = [];
-  var dygraphs_data = [];
 
   function createGraph(data, sensor_ID) {
     _sensors_data = null;
