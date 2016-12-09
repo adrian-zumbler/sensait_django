@@ -1,5 +1,5 @@
 server {
-    server_name 192.168.1.67;
+    server_name sensait.dyndns.org;
     listen 80;
 
     location = /favicon.ico { access_log off; log_not_found off; }
