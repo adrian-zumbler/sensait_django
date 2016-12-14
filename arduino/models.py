@@ -326,7 +326,7 @@ class EmailSend(models.Model):
         #     self.from_email,
         #     [self.to])
         # msg.attach_alternative(self.html_content, "text/html")
-       # msg.send()
+        # msg.send()
 
         self_dict = model_to_dict(self)
         Channel("send-email").send({

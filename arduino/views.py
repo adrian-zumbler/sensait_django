@@ -21,8 +21,8 @@ from django.db.models.query import QuerySet
 from arduino.serializers import (ArduinoSerializer, SensorTypeSerializer,
                                  ArduinoSensorSerializer, SensorDataSerializer)
 from arduino.permissions import isArduinoPermission
-from arduino.models import Arduino, SensorType
-from .forms import SensorTypeForm
+from arduino.models import Arduino, SensorType, SensorEquipment
+from .forms import SensorTypeForm, SensorEquipmentForm
 from .exceptions import StandardAPIException
 
 from urlparse import parse_qsl
@@ -274,6 +274,35 @@ class AdminSensorTypeDeleteView(LoginRequiredMixin, DeleteView):
     template_name = 'admin/admin_sensorType_delete.html'
     success_url = reverse_lazy('sensorTypeList')
     queryset = SensorType.objects.all()
+
+
+class AdminSensorEquipmentListView(LoginRequiredMixin, ListView):
+    template_name = 'admin/admin_sensorEquipment_list.html'
+    queryset = SensorEquipment.objects.all()
+
+
+class AdminSensorEquipmentCreateView(LoginRequiredMixin, CreateView):
+    template_name = 'admin/admin_sensorEquipment_edit.html'
+    form_class = SensorEquipmentForm
+    success_url = reverse_lazy('sensorEquipmentList')
+
+
+class AdminSensorEquipmentDetailView(LoginRequiredMixin, DetailView):
+    template_name = 'admin/admin_sensorEquipment_detail.html'
+    queryset = SensorEquipment.objects.all()
+
+
+class AdminSensorEquipmentEditView(LoginRequiredMixin, UpdateView):
+    template_name = 'admin/admin_sensorEquipment_edit.html'
+    form_class = SensorEquipmentForm
+    queryset = SensorEquipment.objects.all()
+    success_url = reverse_lazy('sensorEquipmentList')
+
+
+class AdminSensorEquipmentDeleteView(LoginRequiredMixin, DeleteView):
+    template_name = 'admin/admin_sensorEquipment_delete.html'
+    success_url = reverse_lazy('sensorEquipmentList')
+    queryset = SensorEquipment.objects.all()
 
 
 class AdminArduinoDetailView(LoginRequiredMixin, DetailView):

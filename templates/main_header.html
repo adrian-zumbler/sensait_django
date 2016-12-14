@@ -287,7 +287,7 @@
       <li class="treeview">
         <a href="#">
           <i class="fa fa-laptop"></i>
-          <span>Proyectos</span>
+          <span>PROYECTOS</span>
           <i class="fa fa-angle-left pull-right"></i>
         </a>
         <ul class="treeview-menu" style="display: none;">
@@ -324,6 +324,9 @@
           </ul>
         </li>
 
+
+        <li class="header">SENSORES & EQUIPOS</li>
+
         <li class="treeview">
           <a href="#">
             <i class="fa fa-laptop"></i>
@@ -335,9 +338,19 @@
             <li><a href="{% url 'sensorTypeNew' %}"><i class="fa fa-laptop"></i> <span>Nuevo sensor</span></a></li>
           </ul>
         </li>
+        <li class="treeview">
+          <a href="#">
+            <i class="fa fa-laptop"></i>
+            <span>EQUIPOS</span>
+            <i class="fa fa-angle-left pull-right"></i>
+          </a>
+          <ul class="treeview-menu" style="display: none;">
+            <li><a href="{% url 'sensorEquipmentList' %}"><i class="fa fa-laptop"></i> <span>Lista de Equipos</span></a></li>
+            <li><a href="{% url 'sensorEquipmentNew' %}"><i class="fa fa-laptop"></i> <span>Nuevo Equipo</span></a></li>
+          </ul>
+        </li>
 
-
-        <li class="header">Soporte</li>
+        <li class="header">SOPORTE</li>
         <li class="treeview">
           <a href="#">
             <i class="fa fa-laptop"></i>
@@ -359,8 +372,8 @@
         <li class="header">CLIENTES</li>
         <li><a href="{% url 'projects' %}"><i class="fa fa-laptop"></i> <span>Proyectos</span></a></li>
       {% endif %}
-      <li class="header">Sesion</li>
-      <li><a href="http://sensait.dyndns.org" target="_self"><i class="fa fa-laptop"></i> <span>Cerrar Sesión</span></a></li>
+      <li class="header">SESIÓN</li>
+      <li><a href="http://sensait.dyndns.org" target="_self"><i class="fa fa-laptop"></i> <span>CERRAR SESIÓN</span></a></li>
     </ul>
   </section>
   <!-- /.sidebar -->
