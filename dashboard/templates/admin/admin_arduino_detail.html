@@ -101,10 +101,10 @@
                   <th>ID Sensor</th>
                   <th>Nombre del Sensor</th>
                   <th>Tipo de Sensor</th>
-                  <th>Valor Maximo</th>
-                  <th>Ultimo Valor</th>
-                  <th>Valor Minimo</th>
-                  <th>Accion</th>
+                  <th>Valor Mínimo</th>
+                  <th>Último Valor</th>
+                  <th>Valor Máximo</th>
+                  <th>Acción</th>
                 </tr>
               </thead>
               <tbody>
@@ -115,9 +115,9 @@
                   <td> Sensor00{{sensor.id}} </td>
                   <td> {{sensor.description}} </td>
                   <td> {{sensor.sensor_type.name}} </td>
-                  <td> {{sensor.max_value}} </td>
-                  <td> {{ sensor.sensor_data.last.data }} </td>
                   <td> {{sensor.min_value}} </td>
+                  <td> {{ sensor.sensor_data.last.data }} </td>
+                  <td> {{sensor.max_value}} </td>
                   <td>
                     <div class="btn-group">
                       <a href="/dash/sensor/{{sensor.id}}" target="_self">

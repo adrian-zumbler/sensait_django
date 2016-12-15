@@ -279,7 +279,7 @@
 
 
       <li class="header">MENU PRINCIPAL </li>
-      <li><a href="{% url 'main' %}"><i class="fa fa-book"></i> <span>Inicio</span></a></li>
+      <li><a href="{% url 'main' %}"><i class="fa fa-book"></i> <span>INICIO</span></a></li>
 
       {% if not request.user.client %}
 
@@ -300,14 +300,25 @@
         <li class="treeview">
           <a href="#">
             <i class="fa fa-laptop"></i>
-            <span>CLIENTES & USUARIOS</span>
+            <span>CLIENTES</span>
             <i class="fa fa-angle-left pull-right"></i>
           </a>
           <ul class="treeview-menu" style="display: none;">
             <li><a href="{% url 'enterprise-client:enterprise-list' %}"><i class="fa fa-laptop"></i> <span>Lista de Clientes</span></a></li>
+            <li><a href="{% url 'enterprise-client:enterprise-add' %}"><i class="fa fa-laptop"></i> <span>Agregar Cliente</span></a></li>
+
+
+          </ul>
+        </li>
+        <li class="treeview">
+          <a href="#">
+            <i class="fa fa-laptop"></i>
+            <span>USUARIOS</span>
+            <i class="fa fa-angle-left pull-right"></i>
+          </a>
+          <ul class="treeview-menu" style="display: none;">
             <li><a href="{% url 'enterprise-client:client-list' %}"><i class="fa fa-laptop"></i> <span>Lista de Usuarios</span></a></li>
             <li><a href="{% url 'enterprise-client:client-add' %}"><i class="fa fa-laptop"></i> <span>Agregar Usuario</span></a></li>
-            <li><a href="{% url 'enterprise-client:enterprise-add' %}"><i class="fa fa-laptop"></i> <span>Agregar Cliente</span></a></li>
           </ul>
         </li>
 
@@ -362,7 +373,16 @@
             <li><a href="{% url 'ticket:ticket-add' %}"><i class="fa fa-laptop"></i> <span>Nuevo Ticket</span></a></li>
           </ul>
         </li>
-
+        <li class="treeview">
+          <a href="#">
+            <i class="fa fa-laptop"></i>
+            <span>STATUS</span>
+            <i class="fa fa-angle-left pull-right"></i>
+          </a>
+          <ul class="treeview-menu" style="display: none;">
+            <li><a href="{% url 'sensorEquipmentList' %}"><i class="fa fa-laptop"></i> <span>Status general</span></a></li>
+          </ul>
+        </li>
 
 
 
@@ -384,10 +404,16 @@
 {% block main_footer %}
 
   <footer class="main-footer">
+    <strong> Panthea ADU </strong> Todos los Derechos Reservados ® 2015-2016 &nbsp;&nbsp;&nbsp;&nbsp;
+    <strong> Contacto: </strong>  soporte@sensait.com
+    &nbsp;&nbsp; &nbsp;&nbsp;
+    33+1380-0634 33+1380-0635
+    &nbsp;&nbsp; &nbsp;&nbsp;
+    Volcan Peña Nevada #2345 Zapopan, Jalisco, México.
     <div class="pull-right hidden-xs">
-      <b>Version</b> 0.1.11
+      <b>Version</b> 0.0.10
     </div>
-    <strong> Panthea ADU </strong> Todos los Derechos Reservados ® 2015-2016
+
   </footer>
 
 {% endblock %}
