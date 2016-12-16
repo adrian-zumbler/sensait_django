@@ -1,0 +1,57 @@
+{% extends 'main_header.html' %}
+{% load staticfiles %}
+{% load arduino_tags %}
+
+{% block main_content_wrapper %}
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <h1>
+        ADMINISTRACIÓN DE EQUIPOS ASIGNADOS EN LOS SENSORES
+        <small>BORRAR EQUIPO {{sensorequipment.equipment_name}} </small>
+
+      </h1>
+
+    </section>
+
+    <!-- Main content -->
+<section class="content">
+  <div class="row">
+    <div class="col-xs-8">
+      <div class="box box-primary">
+        <div class="box-header with-border">
+          <h3 class="box-title">Al presionar <b>BORRAR</b> se eliminara todo registro relacionado. <b>¿Estas seguro? </b></h3>
+        </div><!-- /.box-header -->
+        <form role="form" action="" method="post">
+          {% csrf_token %}
+          {{form}}
+          <div class="box-footer">
+            <a href="#">
+              <a href="{% url 'sensorEquipmentList' %}" class="btn btn-default">Regresar</a>
+              <button type="submit" class="btn btn-danger">Borrar</button>
+            </a>
+          </div>
+        </form>
+      </div><!-- /.box -->
+    </div>
+  </div>
+
+
+
+  </section>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+
+{% endblock main_content_wrapper %}
+
+{% block content_js %}
+  <!-- page script -->
+<script type="application/javascript">
+
+
+</script>
+
+{% endblock content_js %}

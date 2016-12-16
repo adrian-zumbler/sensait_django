@@ -36,7 +36,85 @@
 
     <!-- Main content -->
     <section class="content">
+      <div class="row">
+        <div class="col-xs-12">
+          <!-- TABLE: LATEST ORDERS -->
+          <div class="box box-info">
+            <div class="box-header with-border">
+              <h3 class="box-title">
+                Gráfica del Sensor - {{ arduinosensor.sensor_type.name }}
 
+              </h3>
+              <div class="box-tools pull-right">
+                Ultima actualización:
+                <span id="sensor_lastupdate" class="">
+                  conectando...
+                </span>
+              </div>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+              <div class="row">
+                <div class="col-xs-4 ">
+                  <div id="filter_type" class="form-group">
+                    <label for="limit_selector" class=" col-xs-12 control-label">Tipo de Filtrado:</label>
+                    <div class="col-xs-8">
+                      <select class="form-control" id="type_selector">
+                        <option value="0">Seleccione una opcion</option>
+                        <option value="1">No. de Registros</option>
+                        <option value="2">Rango de Tiempo</option>
+                        <option value="3">Rango de Tiempo y No. de Registros</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-xs-4 ">
+                  <div id="filter_date" class="form-group">
+                    <label for="date_selector" class=" control-label">Seleccione fechas:</label>
+                    <div class="">
+                      <button type="button" class="btn btn-default pull-left" id="daterange"><span><i class="fa fa-calendar"></i> Selección de Fechas</span><i class="fa fa-caret-down"></i></button>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-xs-4 ">
+                  <div id="filter_limit" class="form-group">
+                    <label for="limit_selector" class=" col-xs-12 control-label">Ultimos Registros</label>
+                    <div class="col-xs-6">
+                      <select class="form-control" id="limit_selector">
+                        <option>2400</option>
+                        <option>1200</option>
+                        <option>600</option>
+                        <option>300</option>
+                        <option>150</option>
+                        <option>75</option>
+                        <option>30</option>
+                        <option>15</option>
+                        <option>10</option>
+                        <option>5</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-xs-12 ">
+                  <br/>
+                  <div>Información del punto de la gráfica: <span id="graphData"></span></div>
+                  <br/>
+                </div>
+                <br/><br/><br/><br/>
+              </div>
+
+              <div id="graphdiv"></div>
+              <br/>
+              Ésta gráfica corresponde a: <b><span id="filter_resume"></span></b>
+            </div>
+            <!-- /.box-body -->
+          </div>
+          <!-- /.box -->
+        </div>
+      </div>
       <div class="row">
         <div class="col-md-6">
           <div class="box box-solid">
@@ -74,6 +152,9 @@
             </div><!-- /.box-body -->
           </div><!-- /.box -->
         </div><!-- ./col -->
+
+
+
 
         <div class="col-md-6">
           <div class="box box-solid">
@@ -160,86 +241,7 @@
         </div>
       </div>
 
-      <div class="row">
-        <div class="col-xs-12">
-          <!-- TABLE: LATEST ORDERS -->
-          <div class="box box-info">
-            <div class="box-header with-border">
-              <h3 class="box-title">
-                Gráfica del Sensor - {{ arduinosensor.sensor_type.name }}
 
-              </h3>
-              <div class="box-tools pull-right">
-                Ultima actualización:
-                <span id="sensor_lastupdate" class="">
-                  conectando...
-                </span>
-              </div>
-            </div>
-            <!-- /.box-header -->
-            <div class="box-body">
-              <div class="row">
-                <div class="col-xs-4 ">
-                  <div id="filter_type" class="form-group">
-                    <label for="limit_selector" class=" col-xs-12 control-label">Tipo de Filtrado:</label>
-                    <div class="col-xs-8">
-                      <select class="form-control" id="type_selector">
-                        <option value="0">Seleccione una opcion</option>
-                        <option value="1">No. de Registros</option>
-                        <option value="2">Rango de Tiempo</option>
-                        <option value="3">Rango de Tiempo y No. de Registros</option>
-                      </select>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="col-xs-4 ">
-                  <div id="filter_date" class="form-group">
-                    <label for="date_selector" class=" control-label">Seleccione fechas:</label>
-                    <div class="">
-                      <button type="button" class="btn btn-default pull-left" id="daterange"><span><i class="fa fa-calendar"></i> Selección de Fechas</span><i class="fa fa-caret-down"></i></button>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="col-xs-4 ">
-                  <div id="filter_limit" class="form-group">
-                    <label for="limit_selector" class=" col-xs-12 control-label">Ultimos Registros</label>
-                    <div class="col-xs-6">
-                      <select class="form-control" id="limit_selector">
-                        <option>2400</option>
-                        <option>1200</option>
-                        <option>600</option>
-                        <option>300</option>
-                        <option>150</option>
-                        <option>75</option>
-                        <option>30</option>
-                        <option>15</option>
-                        <option>10</option>
-                        <option>5</option>
-                      </select>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="col-xs-12 ">
-                  <br/>
-                  <div>Información del punto de la gráfica: <span id="graphData"></span></div>
-                  <br/>
-                  La siguiente grafica corresponde a: <b><span id="filter_resume"></span></b>
-                  <br/><br/>
-
-                </div>
-                <br/><br/><br/><br/>
-              </div>
-
-              <div id="graphdiv"></div>
-            </div>
-            <!-- /.box-body -->
-          </div>
-          <!-- /.box -->
-        </div>
-      </div>
 
     {% comment %}
     <div class="row">
@@ -387,6 +389,8 @@ function useWSData(data){
           sensor_date_chart.push(d_time);
           var lastPosition = _sensors_data.length;
 
+
+          //VALIDAR RANGOS DE -127 y MAYORES A 191581239123 error de float
           _sensors_data.push(jso[i]);
 
           $('#totalRegistros').html(lastPosition);
@@ -813,7 +817,7 @@ function convertEpoch2Date(epochData){
 
     for (var i = 0; i < _sensors_data.length; i++) {
 
-      if(_sensors_data[i]['data'] != "-127.00" && parseInt(_sensors_data[i]['epoch']) > 100000) {
+      if(_sensors_data[i]['data'] != "-127.00" && parseInt(_sensors_data[i]['epoch']) > 100000 && parseInt(_sensors_data[i]['data']) < 2000) {
         sensor_data_chart.push(_sensors_data[i]['data']);
 
         /*

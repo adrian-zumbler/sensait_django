@@ -12,7 +12,6 @@ from arduino.models import Arduino, SensorData
 from dashboard.utils.excel_response import ExcelResponse
 
 
-
 class EnterpriseListView(LoginRequiredMixin, ListView):
     template_name = 'admin/admin_enterprise_list.html'
     queryset = Enterprise.objects.all()

@@ -279,35 +279,52 @@
 
 
       <li class="header">MENU PRINCIPAL </li>
-      <li><a href="{% url 'main' %}"><i class="fa fa-book"></i> <span>Inicio</span></a></li>
+      <li><a href="{% url 'main' %}"><i class="fa fa-book"></i> <span>INICIO</span></a></li>
 
       {% if not request.user.client %}
 
       <li class="header">PROYECTOS</li>
+      <li><a href="{% url 'projects' %}"><i class="fa fa-laptop"></i> <span>
+        MIS PROYECTOS
+      </span></a></li>
+      {% comment %}
       <li class="treeview">
         <a href="#">
           <i class="fa fa-laptop"></i>
-          <span>Proyectos</span>
+          <span>PROYECTOS</span>
           <i class="fa fa-angle-left pull-right"></i>
         </a>
+
         <ul class="treeview-menu" style="display: none;">
-          <li><a href="{% url 'projects' %}"><i class="fa fa-laptop"></i> <span>Lista de Proyectos</span></a></li>
+
         </ul>
       </li>
+      {% endcomment %}
 
 
         <li class="header">ADMIN</li>
         <li class="treeview">
           <a href="#">
             <i class="fa fa-laptop"></i>
-            <span>CLIENTES & USUARIOS</span>
+            <span>CLIENTES</span>
             <i class="fa fa-angle-left pull-right"></i>
           </a>
           <ul class="treeview-menu" style="display: none;">
             <li><a href="{% url 'enterprise-client:enterprise-list' %}"><i class="fa fa-laptop"></i> <span>Lista de Clientes</span></a></li>
+            <li><a href="{% url 'enterprise-client:enterprise-add' %}"><i class="fa fa-laptop"></i> <span>Agregar Cliente</span></a></li>
+
+
+          </ul>
+        </li>
+        <li class="treeview">
+          <a href="#">
+            <i class="fa fa-laptop"></i>
+            <span>USUARIOS</span>
+            <i class="fa fa-angle-left pull-right"></i>
+          </a>
+          <ul class="treeview-menu" style="display: none;">
             <li><a href="{% url 'enterprise-client:client-list' %}"><i class="fa fa-laptop"></i> <span>Lista de Usuarios</span></a></li>
             <li><a href="{% url 'enterprise-client:client-add' %}"><i class="fa fa-laptop"></i> <span>Agregar Usuario</span></a></li>
-            <li><a href="{% url 'enterprise-client:enterprise-add' %}"><i class="fa fa-laptop"></i> <span>Agregar Cliente</span></a></li>
           </ul>
         </li>
 
@@ -324,6 +341,9 @@
           </ul>
         </li>
 
+
+        <li class="header">SENSORES & EQUIPOS</li>
+
         <li class="treeview">
           <a href="#">
             <i class="fa fa-laptop"></i>
@@ -335,9 +355,19 @@
             <li><a href="{% url 'sensorTypeNew' %}"><i class="fa fa-laptop"></i> <span>Nuevo sensor</span></a></li>
           </ul>
         </li>
+        <li class="treeview">
+          <a href="#">
+            <i class="fa fa-laptop"></i>
+            <span>EQUIPOS</span>
+            <i class="fa fa-angle-left pull-right"></i>
+          </a>
+          <ul class="treeview-menu" style="display: none;">
+            <li><a href="{% url 'sensorEquipmentList' %}"><i class="fa fa-laptop"></i> <span>Lista de Equipos</span></a></li>
+            <li><a href="{% url 'sensorEquipmentNew' %}"><i class="fa fa-laptop"></i> <span>Nuevo Equipo</span></a></li>
+          </ul>
+        </li>
 
-
-        <li class="header">Soporte</li>
+        <li class="header">SOPORTE</li>
         <li class="treeview">
           <a href="#">
             <i class="fa fa-laptop"></i>
@@ -349,7 +379,16 @@
             <li><a href="{% url 'ticket:ticket-add' %}"><i class="fa fa-laptop"></i> <span>Nuevo Ticket</span></a></li>
           </ul>
         </li>
-
+        <li class="treeview">
+          <a href="#">
+            <i class="fa fa-laptop"></i>
+            <span>STATUS</span>
+            <i class="fa fa-angle-left pull-right"></i>
+          </a>
+          <ul class="treeview-menu" style="display: none;">
+            <li><a href="{% url 'sensorEquipmentList' %}"><i class="fa fa-laptop"></i> <span>Status general</span></a></li>
+          </ul>
+        </li>
 
 
 
@@ -359,8 +398,8 @@
         <li class="header">CLIENTES</li>
         <li><a href="{% url 'projects' %}"><i class="fa fa-laptop"></i> <span>Proyectos</span></a></li>
       {% endif %}
-      <li class="header">Sesion</li>
-      <li><a href="http://sensait.dyndns.org" target="_self"><i class="fa fa-laptop"></i> <span>Cerrar Sesión</span></a></li>
+      <li class="header">SESIÓN</li>
+      <li><a href="http://sensait.dyndns.org" target="_self"><i class="fa fa-laptop"></i> <span>CERRAR SESIÓN</span></a></li>
     </ul>
   </section>
   <!-- /.sidebar -->
@@ -371,10 +410,16 @@
 {% block main_footer %}
 
   <footer class="main-footer">
+    <strong> Panthea ADU </strong> Todos los Derechos Reservados ® 2015-2016 &nbsp;&nbsp;&nbsp;&nbsp;
+    <strong> Contacto: </strong>  soporte@sensait.com
+    &nbsp;&nbsp; &nbsp;&nbsp;
+    33+1380-0634 33+1380-0635
+    &nbsp;&nbsp; &nbsp;&nbsp;
+    Volcan Peña Nevada #2345 Zapopan, Jalisco, México.
     <div class="pull-right hidden-xs">
-      <b>Version</b> 0.1.11
+      <b>Version</b> 0.0.10
     </div>
-    <strong> Panthea ADU </strong> Todos los Derechos Reservados ® 2015-2016
+
   </footer>
 
 {% endblock %}
