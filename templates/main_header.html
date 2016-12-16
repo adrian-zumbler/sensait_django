@@ -284,16 +284,22 @@
       {% if not request.user.client %}
 
       <li class="header">PROYECTOS</li>
+      <li><a href="{% url 'projects' %}"><i class="fa fa-laptop"></i> <span>
+        MIS PROYECTOS
+      </span></a></li>
+      {% comment %}
       <li class="treeview">
         <a href="#">
           <i class="fa fa-laptop"></i>
           <span>PROYECTOS</span>
           <i class="fa fa-angle-left pull-right"></i>
         </a>
+
         <ul class="treeview-menu" style="display: none;">
-          <li><a href="{% url 'projects' %}"><i class="fa fa-laptop"></i> <span>Lista de Proyectos</span></a></li>
+
         </ul>
       </li>
+      {% endcomment %}
 
 
         <li class="header">ADMIN</li>

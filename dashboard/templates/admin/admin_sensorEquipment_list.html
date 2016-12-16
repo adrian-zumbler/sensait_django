@@ -9,7 +9,7 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-        ADMINISTRACIÓN DE EQUIPOS ASIGNADOS CON LOS SENSORES
+        ADMINISTRACIÓN DE EQUIPOS ASIGNADOS EN LOS SENSORES
         <small>Lista de equipos creados</small>
 
       </h1>
@@ -20,26 +20,28 @@
   <section class="content">
     <div class="row">
       <div class="col-xs-12">
+        {{equipment}}
         <div class="box">
           <div class="box-body">
             <table id="table_sensor" class="table table-bordered table-striped">
               <thead>
                 <tr>
-                  <th>Sensor ID</th>
-                  <th>Nombre Sensor</th>
-                  <th>Descripción</th>
+                  <th>Equipo ID</th>
+                  <th>Nombre Equipo</th>
                   <th>Modelo</th>
+                  <th>Marca</th>
                   <th>Accion</th>
                 </tr>
               </thead>
               <tbody>
-                {{equipments}}
+
+
                 {% for equipment in sensorequipment_list %}
                 <tr>
-                  <td>Sensor00{{equipment.id}}</td>
-                  <td>{{equipment.name}}</td>
-                  <td> {{equipment.model}} </td>
-                  <td> {{sensor.model}} </td>
+                  <td>Equipo00{{equipment.id}}</td>
+                  <td>{{equipment.equipment_name}}</td>
+                  <td> {{equipment.equipment_model}} </td>
+                  <td> {{equipment.equipment_brand}} </td>
 
                   <td>
                     <div class="btn-group">
@@ -69,7 +71,7 @@
       <div class="col-xs-12">
         <div class="box">
           <a href= "{% url 'sensorEquipmentNew' %} " target="_self">
-            <button class="btn btn-block btn-info btn-lg">Agregar Equipo</button>
+            <button class="btn btn-block btn-info btn-lg">Crear nuevo Equipo</button>
           </a>
         </div>
       </div>
