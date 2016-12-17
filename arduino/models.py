@@ -100,16 +100,22 @@ class Arduino(models.Model):
     )
 
     project = models.ForeignKey(ProjectC, related_name="arduinos")
-    name = models.CharField(max_length=255)
+    name = models.CharField(max_length=255, verbose_name='Nombre del Transmisor')
+    modelo_transmisor = models.CharField(
+        verbose_name='Modelo del transmisor',
+        max_length=255,
+        blank=True,
+        null=True
+    )
     arduino_token = models.CharField(max_length=80, unique=True)
-    location = models.CharField(max_length=255)
+    location = models.CharField(max_length=255, verbose_name='Ubicación Fisica del Transmisor')
     sensors = models.ManyToManyField(SensorType, through='ArduinoSensor')
     available_sensors = models.SmallIntegerField(default=1)
     estatus = models.PositiveSmallIntegerField(verbose_name='Estatus', choices=ESTATUS_CHOICES, default=1)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     correos_alertas = models.CharField(
-        verbose_name='Correos para alertas',
+        verbose_name='Correos para alertas (Separados por , )',
         max_length=255,
         blank=True,
         null=True
