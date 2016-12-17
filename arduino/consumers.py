@@ -63,7 +63,7 @@ def arduino_alert(message):
         arduino_active_alerts.latest(
             field_name='created_at'
         ).alert_action()
-    except Exception:
+    except Exception as e:
         pass
 
 

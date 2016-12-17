@@ -310,7 +310,7 @@ class ArduinoAlert(models.Model):
 class EmailSend(models.Model):
     from_email = models.CharField(max_length=510)
     to = models.CharField(max_length=510)
-    subject = models.CharField(max_length=55)
+    subject = models.CharField(max_length=255)
     text_content = models.TextField()
     html_content = models.TextField()
 
