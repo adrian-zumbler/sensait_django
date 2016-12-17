@@ -66,7 +66,7 @@
                     <th>Fecha alerta generada</th>
                     <th>Fecha alerta finalizada</th>
                     <th>Último valor de alerta registrado</th>
-                    <th>Última fecha de alerta registrada</th>
+                    <th>Última fecha del valor registrado</th>
                     <th># Registros fuera de rango</th>
                     <th>Acciones</th>
                   </tr>
@@ -77,11 +77,11 @@
                   {% if alert.active ==  True and alert.sensor_data.last.data != '-127.00' %}
                   <tr>
                     <td>
-                      {{ alert.created_at}}
+
+                      <b>{{ alert.sensor_data.last.arduino_sensor.description}}</b>
                     </td>
                     <td>
-                      <b>{{ alert.sensor_data.last.arduino_sensor.description}}
-                      </b>
+                      {{ alert.created_at}}
                     </td>
                     <td>
                       {{ alert.finished_at}}
@@ -149,7 +149,7 @@
                     <th>Fecha alerta generada</th>
                     <th>Fecha alerta finalizada</th>
                     <th>Último valor de alerta registrado</th>
-                    <th>Última fecha de alerta registrada</th>
+                    <th>Última fecha del valor registrado</th>
                     <th># Registros fuera de rango</th>
                     <th>Acciones</th>
                   </tr>
@@ -160,11 +160,11 @@
                   {% if alert.active ==  False and alert.sensor_data.last.data != '-127.00' %}
                   <tr>
                     <td>
-                      {{ alert.created_at}}
+
+                      <b>{{ alert.sensor_data.last.arduino_sensor.description}}</b>
                     </td>
                     <td>
-                      <b>{{ alert.sensor_data.last.arduino_sensor.description}}
-                      </b>
+                      {{ alert.created_at}}
                     </td>
                     <td>
                       {{ alert.finished_at}}
@@ -365,8 +365,6 @@
       var div_ID = $(this).attr('class');
       $('.'+div_ID).html(convertEpoch2Date( $( this ).text() ));
     });
-
-
   });
 
   function convertEpoch2Date(epochData){
@@ -499,9 +497,10 @@
 
     console.log("data");
     console.log(data);
+    console.log(_sensors_data);
 
     for (var i = 0; i < _sensors_data.length; i++) {
-
+      console.log(_sensors_data);
       if(_sensors_data[i]['data'] != "-127.00" && parseInt(_sensors_data[i]['epoch']) > 100000) {
         sensor_data_chart.push(_sensors_data[i]['data']);
 
@@ -556,8 +555,6 @@
       });
 
       canUseSocket = true;
-
-
 
     }else{
       $('#graphdiv').html(' No se encontraron registros validos.');

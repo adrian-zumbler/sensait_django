@@ -100,16 +100,22 @@ class Arduino(models.Model):
     )
 
     project = models.ForeignKey(ProjectC, related_name="arduinos")
-    name = models.CharField(max_length=255)
+    name = models.CharField(max_length=255, verbose_name='Nombre del Transmisor')
+    modelo_transmisor = models.CharField(
+        verbose_name='Modelo del transmisor',
+        max_length=255,
+        blank=True,
+        null=True
+    )
     arduino_token = models.CharField(max_length=80, unique=True)
-    location = models.CharField(max_length=255)
+    location = models.CharField(max_length=255, verbose_name='Ubicación Fisica del Transmisor')
     sensors = models.ManyToManyField(SensorType, through='ArduinoSensor')
     available_sensors = models.SmallIntegerField(default=1)
     estatus = models.PositiveSmallIntegerField(verbose_name='Estatus', choices=ESTATUS_CHOICES, default=1)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     correos_alertas = models.CharField(
-        verbose_name='Correos para alertas',
+        verbose_name='Correos para alertas (Separados por , )',
         max_length=255,
         blank=True,
         null=True
@@ -139,22 +145,23 @@ class SensorEquipment(models.Model):
         ProjectC,
         related_name='equipments',
         related_query_name='equipments',
+        verbose_name='Projecto Relacionado',
         on_delete=models.CASCADE,
     )
     equipment_name = models.CharField(
-        verbose_name='Nombre Refrigerador',
+        verbose_name='Nombre Equipo',
         max_length=255,
         blank=True,
         null=True
     )
     equipment_model = models.CharField(
-        verbose_name='Modelo Refrigerador',
+        verbose_name='Modelo',
         max_length=255,
         blank=True,
         null=True
     )
     equipment_brand = models.CharField(
-        verbose_name='Marca Refrigerador',
+        verbose_name='Marca',
         max_length=255,
         blank=True,
         null=True
@@ -166,19 +173,37 @@ class SensorEquipment(models.Model):
         null=True
     )
     equipment_serial = models.CharField(
-        verbose_name='No. Serie',
+        verbose_name='Número de Serie',
         max_length=255,
         blank=True,
         null=True
     )
     equipment_size = models.CharField(
-        verbose_name='Medidas del equipo',
+        verbose_name='Dimensiones Fisicas',
+        max_length=255,
+        blank=True,
+        null=True
+    )
+    equipment_capacity = models.CharField(
+        verbose_name='Capacidad',
+        max_length=50,
+        blank=True,
+        null=True
+    )
+    equipment_operativerange = models.CharField(
+        verbose_name='Rango Operativo',
+        max_length=255,
+        blank=True,
+        null=True
+    )
+    equipment_exclusas = models.CharField(
+        verbose_name='Exclusas',
         max_length=255,
         blank=True,
         null=True
     )
     equipment_comments = models.CharField(
-        verbose_name='Comentarios del equipo',
+        verbose_name='Sitio web del Equipo',
         max_length=255,
         blank=True,
         null=True

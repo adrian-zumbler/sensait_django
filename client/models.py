@@ -51,7 +51,7 @@ class Enterprise(models.Model):
         default=''
     )
     city = models.CharField(
-        verbose_name='Ciudad-Estado',
+        verbose_name='Colonia / Ciudad / Estado',
         max_length=55,
         default=''
     )
@@ -68,6 +68,12 @@ class Enterprise(models.Model):
     )
     phone_number_2 = models.CharField(
         verbose_name='Teléfono 2',
+        max_length=20,
+        blank=True,
+        null=True
+    )
+    email_contact = models.CharField(
+        verbose_name='Correo de contacto',
         max_length=20,
         blank=True,
         null=True
@@ -151,6 +157,24 @@ class Project(models.Model):
     name = models.CharField(max_length=255)
     nombre_encargado = models.CharField(
         verbose_name='Nombre Responsable',
+        max_length=100,
+        blank=True,
+        null=True
+    )
+    cedula_encargado = models.CharField(
+        verbose_name='Cédula Profesional',
+        max_length=55,
+        blank=True,
+        null=True
+    )
+    correo_encargado = models.CharField(
+        verbose_name='Correo Encargado',
+        max_length=150,
+        blank=True,
+        null=True
+    )
+    telefono_encargado = models.CharField(
+        verbose_name='Telefono Encargado',
         max_length=55,
         blank=True,
         null=True
