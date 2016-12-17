@@ -74,7 +74,7 @@ def send_email(message):
         emailsend['subject'],
         emailsend['text_content'],
         emailsend['from_email'],
-        [emailsend['to']])
+        emailsend['to'].split(","))
     msg.attach_alternative(emailsend['html_content'], "text/html")
     msg.send()
 
