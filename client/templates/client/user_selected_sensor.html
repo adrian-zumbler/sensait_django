@@ -12,6 +12,18 @@
     color: white;
     background-color: #027c43 !important;
   }
+  .bg-yellow{
+    color: white;
+    background-color: #f7a508 !important;
+  }
+  .bg-red{
+    color: white;
+    background-color: #929423 !important;
+  }
+  .bg-green-min{
+    color: white;
+    background-color: #c22721 !important;
+  }
   #graphdiv{
     background-color: #f0f0f0 !important;
   }
@@ -115,6 +127,54 @@
           <!-- /.box -->
         </div>
       </div>
+
+
+      <div class="row">
+
+        <div class="col-lg-4 col-xs-6">
+          <div class="small-box bg-green-min">
+            <div class="inner">
+              <h3 id="val_min">
+                {{ arduinosensor.min_value }}{{ arduinosensor.sensor_type.subfix }}
+              </h3>
+              <span>Valor Mínimo permitido</span>
+            </div>
+            <div class="icon">
+              <i class="ion ion-stats-bars"></i>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-4 col-xs-6">
+          <div class="small-box bg-yellow">
+            <div class="inner">
+              <h3 id="ultimoValor">
+                {{ arduinosensor.sensor_data.last.data }}{{ arduinosensor.sensor_type.subfix }}
+              </h3>
+              <span>Último valor registrado</span><span id="dateEpoch"> Conectando...</span>
+            </div>
+            <div class="icon">
+              <i class="ion ion-stats-bars"></i>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-4 col-xs-6">
+          <div class="small-box bg-red">
+            <div class="inner">
+              <h3 id="val_max">
+                {{ arduinosensor.max_value }}{{ arduinosensor.sensor_type.subfix }}
+              </h3>
+              <span>Valor Máximo permitido</span>
+            </div>
+            <div class="icon">
+              <i class="ion ion-stats-bars"></i>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
       <div class="row">
         <div class="col-md-6">
           <div class="box box-solid">
@@ -154,8 +214,6 @@
         </div><!-- ./col -->
 
 
-
-
         <div class="col-md-6">
           <div class="box box-solid">
             <div class="box-header with-border">
@@ -184,61 +242,6 @@
             </div><!-- /.box-body -->
           </div><!-- /.box -->
         </div><!-- ./col -->
-
-
-        <div class="col-lg-3 col-xs-6">
-          <div class="small-box bg-dark-green">
-            <div class="inner">
-              <h3 id="val_min">
-                {{ arduinosensor.min_value }}{{ arduinosensor.sensor_type.subfix }}
-              </h3>
-              <span>Valor Mínimo permitido</span>
-            </div>
-            <div class="icon">
-              <i class="ion ion-stats-bars"></i>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-lg-3 col-xs-6">
-          <div class="small-box bg-green">
-            <div class="inner">
-              <h3 id="ultimoValor">
-                {{ arduinosensor.sensor_data.last.data }}{{ arduinosensor.sensor_type.subfix }}
-              </h3>
-              <span>Último valor registrado</span>
-              <br/>
-              <span>Fecha: </span><span id="dateEpoch"> Conectando...</span>
-            </div>
-            <div class="icon">
-              <i class="ion ion-stats-bars"></i>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-lg-3 col-xs-6">
-          <div class="small-box bg-dark-green">
-            <div class="inner">
-              <h3 id="val_max">
-                {{ arduinosensor.max_value }}{{ arduinosensor.sensor_type.subfix }}
-              </h3>
-              <span>Valor Máximo permitido</span>
-            </div>
-            <div class="icon">
-              <i class="ion ion-stats-bars"></i>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-lg-3 col-xs-6">
-          <!-- small box -->
-          <div class="small-box bg-aqua">
-            <div class="inner">
-              <h3 id="widget_Promedio">0</h3>
-              <span>Promedio <span id="widget_TotalRegistros">(0)</span> registros</span>
-            </div>
-          </div>
-        </div>
       </div>
 
 
@@ -279,6 +282,7 @@
       </div><!-- /.col -->
     </div><!-- /.row -->
     {% endcomment %}
+
 
     </section>
     <!-- /.content -->
@@ -792,8 +796,8 @@ function convertEpoch2Date(epochData){
       $('#totalConRiesgo').html('000');
       $('#totalAlertas').html('000');
       $('#totalPromedio').html(promedio.toFixed(2)+'{{ arduinosensor.sensor_type.subfix}}');
-      $('#valorMinimo').html(valorMinimo+'{{ arduinosensor.sensor_type.subfix}}');
-      $('#valorMaximo').html(valorMaximo+'{{ arduinosensor.sensor_type.subfix}}');
+      $('#valorMinimo').html(valorMinimo.toFixed(2)+'{{ arduinosensor.sensor_type.subfix}}');
+      $('#valorMaximo').html(valorMaximo.toFixed(2)+'{{ arduinosensor.sensor_type.subfix}}');
 
       $('#widget_Promedio').html(promedio.toFixed(2)+'{{ arduinosensor.sensor_type.subfix}}');
       $('#widget_TotalRegistros').html(totalRegistros);

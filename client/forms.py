@@ -73,7 +73,6 @@ class ArduinoSensorCSVReportForm(forms.Form):
                 epoch__lte=int(self.cleaned_data['max_time'])
             ).order_by('epoch').values('epoch', 'data')
 
-
             if objs:
                 self.cleaned_data['sensor_data'] = objs
             else:
@@ -81,7 +80,3 @@ class ArduinoSensorCSVReportForm(forms.Form):
                 return False
             return True
         return False
-
-
-
-

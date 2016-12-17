@@ -139,22 +139,23 @@ class SensorEquipment(models.Model):
         ProjectC,
         related_name='equipments',
         related_query_name='equipments',
+        verbose_name='Projecto Relacionado',
         on_delete=models.CASCADE,
     )
     equipment_name = models.CharField(
-        verbose_name='Nombre Refrigerador',
+        verbose_name='Nombre Equipo',
         max_length=255,
         blank=True,
         null=True
     )
     equipment_model = models.CharField(
-        verbose_name='Modelo Refrigerador',
+        verbose_name='Modelo',
         max_length=255,
         blank=True,
         null=True
     )
     equipment_brand = models.CharField(
-        verbose_name='Marca Refrigerador',
+        verbose_name='Marca',
         max_length=255,
         blank=True,
         null=True
@@ -166,19 +167,37 @@ class SensorEquipment(models.Model):
         null=True
     )
     equipment_serial = models.CharField(
-        verbose_name='No. Serie',
+        verbose_name='Número de Serie',
         max_length=255,
         blank=True,
         null=True
     )
     equipment_size = models.CharField(
-        verbose_name='Medidas del equipo',
+        verbose_name='Dimensiones Fisicas',
+        max_length=255,
+        blank=True,
+        null=True
+    )
+    equipment_capacity = models.CharField(
+        verbose_name='Capacidad',
+        max_length=50,
+        blank=True,
+        null=True
+    )
+    equipment_operativerange = models.CharField(
+        verbose_name='Rango Operativo',
+        max_length=255,
+        blank=True,
+        null=True
+    )
+    equipment_exclusas = models.CharField(
+        verbose_name='Exclusas',
         max_length=255,
         blank=True,
         null=True
     )
     equipment_comments = models.CharField(
-        verbose_name='Comentarios del equipo',
+        verbose_name='Sitio web del Equipo',
         max_length=255,
         blank=True,
         null=True
