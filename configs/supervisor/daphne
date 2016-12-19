@@ -13,8 +13,7 @@ echo "Starting $NAME as `whoami`"
 
 # Activate the virtual environment
 cd $DJANGODIR
-workon sensait_channels
-# source ../bin/activate
+source /home/manto/.venvs/sensait_channels/bin/activate
 export DJANGO_SETTINGS_MODULE=$DJANGO_SETTINGS_MODULE
 export PYTHONPATH=$DJANGODIR:$PYTHONPATH
 
@@ -24,6 +23,4 @@ test -d $RUNDIR || mkdir -p $RUNDIR
 
 # Start your Django Unicorn
 # Programs meant to be run under supervisor should not daemonize themselves (do not use --daemon)
-exec /home/manto/.venvs/sensait_channels/bin/daphne \
-  -u $SOCKFILE \
-  ${DJANGO_ASGI_MODULE}:channel_layer
+exec daphne -u $SOCKFILE ${DJANGO_ASGI_MODULE}:channel_layer
