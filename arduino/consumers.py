@@ -63,7 +63,7 @@ def arduino_alert(message):
         arduino_active_alerts.latest(
             field_name='created_at'
         ).alert_action()
-    except Exception:
+    except Exception as e:
         pass
 
 
@@ -74,7 +74,7 @@ def send_email(message):
         emailsend['subject'],
         emailsend['text_content'],
         emailsend['from_email'],
-        [emailsend['to']])
+        emailsend['to'].split(","))
     msg.attach_alternative(emailsend['html_content'], "text/html")
     msg.send()
 

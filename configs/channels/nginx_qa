@@ -1,13 +1,15 @@
 upstream app_servers {
 
-        server 192.168.253.203:81;
+        # server 127.0.0.1:8081;
 
-        server unix:/home/manto/sensait/daphne.sock ;
+        server unix:/home/manto/sensait/run/daphne.sock ;
 }
 
+
 server {
+
+    listen 81;
     server_name sensait.dyndns.org;
-    listen 80;
 
     location = /favicon.ico { access_log off; log_not_found off; }
     location /static/ {

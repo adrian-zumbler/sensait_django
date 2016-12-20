@@ -87,6 +87,7 @@ class CSVReportView(SingleObjectMixin, FormView):
     def get_context_data(self, **kwargs):
         context = super(CSVReportView, self).get_context_data(**kwargs)
         context['site_url'] = self.request.get_host()
+        context['alert'] = self.get_object().alerts.filter(active=True).last() or None
         return context
 
     def get_queryset(self):

@@ -9,7 +9,7 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('arduino', '0012_arduino_delta_time_alerts'),
+        ('arduino', '0013_auto_20161217_1252'),
     ]
 
     operations = [
