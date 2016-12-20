@@ -1,0 +1,51 @@
+upstream app_servers {
+        server 127.0.0.1:9000;
+        # server 127.0.0.1:8081;
+
+        server unix:/home/manto/sensait/run/daphne.sock ;
+}
+
+
+server {
+
+    listen 81;
+    server_name sensait.dyndns.org;
+
+    location = /favicon.ico { access_log off; log_not_found off; }
+    location /static/ {
+        root /home/manto/sensait;
+    }
+
+    location /media/ {
+        root /home/manto/sensait;
+    }
+
+    location / {
+
+
+        # HTTP 1.1 support
+        proxy_http_version 1.1;
+        proxy_buffering off;
+        proxy_set_header Host $http_host;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection $http_proxy_connection;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $http_proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $http_proxy_x_forwarded_proto;
+
+        proxy_pass http://app_servers;
+    }
+    location /ws/ {
+        # HTTP 1.1 support
+        proxy_http_version 1.1;
+        proxy_buffering off;
+        proxy_set_header Host $http_host;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $http_proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $http_proxy_x_forwarded_proto;
+
+        proxy_pass http://app_servers;
+    }
+}
