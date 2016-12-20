@@ -215,6 +215,9 @@ class SensorEquipment(models.Model):
         null=True
     )
 
+    def __unicode__(self):
+        return self.equipment_name
+
 
 class ArduinoSensor(models.Model):
     arduino = models.ForeignKey(
@@ -358,8 +361,6 @@ class ArduinoAlert(models.Model):
                 arduino_sensor=sensor_safe_alert
             )
             yield sensor_safe_alert
-
-
 
 
 class EmailSend(models.Model):
