@@ -155,8 +155,9 @@
                   </tr>
                 </thead>
                 <tbody>
-                {% if alert %}
-                  {% for sensor_alert in alert.sensor_alerts %}
+                {% if inactive_alerts %}
+                  {% for alert in inactive_alerts %}
+                  {% for sensor_alert in alert.sensor_safe_alerts %}
 
                   <tr>
                     <td>
@@ -199,6 +200,7 @@
                       </div>
                     </td>
                   </tr>
+                  {% endfor %}
                   {% endfor %}
                 {% endif %}
                 </tbody>
