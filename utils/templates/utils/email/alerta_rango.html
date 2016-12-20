@@ -10,12 +10,23 @@
 </style>
 
 <h1>
-  Alerta registro fuera de rango - {{  arduinoalert.sensor_data.last.data |floatformat:2}}{{ arduinoalert.sensor_data.last.arduino_sensor.sensor_type.subfix }} - {{ arduinoalert.created_at }}
+  ¡Alerta de registro fuera de rango!: {{  arduinoalert.sensor_data.last.data |floatformat:2}}{{ arduinoalert.sensor_data.last.arduino_sensor.sensor_type.subfix }}<br/> Fecha: {{ arduinoalert.created_at }}
 </h1>
 
 <p>
-Apreciable (nombre del encargado del laboratorio) el dispositivo <b>Sensait CORE</b> ha registrado temperaturas fuera de rango de operación, por favor verifique que el (nombreDelRefrigerador) esté funcionando correctamente.
+Apreciable <b>{{ arduinoalert.sensor_data.last.arduino_sensor.arduino.project.nombre_encargado }}</b> el dispositivo <b>Sensait CORE {{ arduinoalert.sensor_data.last.arduino_sensor.arduino.name }}</b> ha registrado temperaturas fuera de rango de operación, por favor verifique que el equipo <b> {{ arduinoalert.sensor_data.last.arduino_sensor.equipment.equipment_name }} </b> esté funcionando o cerrado correctamente.
 </p>
+
+
+{{arduinoalert.sensors_in_alert.count}}
+
+
+
+{% for sensor_alert in arduinoalert.sensors_in_alert.objects.all %}
+  {{sensor_alert}}
+  sensor in alerts
+  <hr/>
+{% endfor %}
 
 <h2> Detalle de la incidencia </h2>
 <p>
