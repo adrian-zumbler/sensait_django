@@ -331,6 +331,36 @@ class ArduinoAlert(models.Model):
             email.send()
             self.email_sends.add(email)
 
+    def sensor_alerts(self):
+        for sensor_alert in self.sensors_in_alert.all():
+            sensor_alert.data = self.sensor_data.filter(
+                arduino_sensor=sensor_alert
+            )
+            sensor_alert.finished_at = '---'
+            yield sensor_alert
+
+        for sensor_alert in self.sensor_safe_alerts():
+            yield sensor_alert
+
+    def sensor_safe_alerts(self):
+        safe_data = self.sensor_data.exclude(
+            arduino_sensor__in=self.sensors_in_alert.all()
+        )
+        while safe_data:
+            sensor_safe_alert = safe_data[0].arduino_sensor
+            sensor_safe_alert.data = safe_data.filter(
+                arduino_sensor=sensor_safe_alert
+            )
+
+            sensor_safe_alert.finished_at = sensor_safe_alert.data.last().epoch
+
+            safe_data = safe_data.exclude(
+                arduino_sensor=sensor_safe_alert
+            )
+            yield sensor_safe_alert
+
+
+
 
 class EmailSend(models.Model):
     from_email = models.CharField(max_length=510)

@@ -72,52 +72,52 @@
                   </tr>
                 </thead>
                 <tbody>
+                {% if alert %}
+                  {% for sensor_alert in alert.sensor_alerts %}
 
-                {% for alert in arduino.alerts.all %}
-                  {% if alert.active ==  True and alert.sensor_data.last.data != '-127.00' %}
                   <tr>
                     <td>
 
-                      <b>{{ alert.sensor_data.last.arduino_sensor.description}}</b>
+                      <b>{{ sensor_alert.description}}</b>
                     </td>
                     <td>
-                      {{ alert.created_at}}
+                      {{ sensor_alert.data.first.epoch }}
                     </td>
                     <td>
-                      {{ alert.finished_at}}
+                      {{ sensor_alert.finished_at }}
                     </td>
                     <td align="center">
-                      Min. {{ alert.sensor_data.last.arduino_sensor.min_value}}{{ alert.sensor_data.last.arduino_sensor.sensor_type.subfix}}
+                      Min. {{ sensor_alert.min_value}}{{ sensor_alert.sensor_type.subfix}}
                       <br/>
                       <b>Valor:
-                        {{ alert.sensor_data.last.data}}{{ alert.sensor_data.last.arduino_sensor.sensor_type.subfix}}
+                        {{ sensor_alert.data.last.data}}{{ sensor_alert.sensor_type.subfix}}
                       </b>
                       <br/>
-                      Max. {{ alert.sensor_data.last.arduino_sensor.max_value}}{{ alert.sensor_data.last.arduino_sensor.sensor_type.subfix}}
-                      <div id="minmax_{{ alert.sensor_data.last.arduino_sensor.id}}" class="hidden">
-                        {{ alert.sensor_data.last.arduino_sensor.min_value}}_
-                        {{ alert.sensor_data.last.arduino_sensor.max_value}}
+                      Max. {{ sensor_alert.max_value}}{{ sensor_alert.sensor_type.subfix}}
+                      <div id="minmax_{{ sensor_alert.id}}" class="hidden">
+                        {{ sensor_alert.min_value}}_
+                        {{ sensor_alert.max_value}}
                       </div>
                     </td>
                     <td align="center">
-                      <div class="epoch2Date_{{ alert.sensor_data.last.id}}">
-                      {{ alert.sensor_data.last.epoch}}
+                      <div class="epoch2Date_{{ sensor_alert.data.last.id}}">
+                      {{ sensor_alert.data.last.epoch}}
                       </div>
                     </td>
                     <td align="center">
-                      {{ alert.sensor_data.all.count }}
-                      <div class="hidden" id="sensor_{{ alert.sensor_data.last.arduino_sensor.id}}" class="" align="center">
-                        api/arduinos/{{ alert.sensor_data.last.arduino_sensor.arduino.id}}/sensors/{{ alert.sensor_data.last.arduino_sensor.id}}/data/?min_time={{ alert.sensor_data.first.epoch| add:-600 }}&max_time={{ alert.sensor_data.last.epoch| add:600}}
+                      {{ sensor_alert.data.count }}
+                      <div class="hidden" id="sensor_{{ sensor_alert.id}}" class="" align="center">
+                        api/arduinos/{{ alert.arduino.id}}/sensors/{{ sensor_alert.id}}/data/?min_time={{ sensor_alert.data.first.epoch| add:-600 }}&max_time={{ sensor_alert.data.last.epoch| add:600}}
                       </div>
                     </td>
                     <td  align="center">
                       <div class="btn-group">
-                        <div id="detalle_{{ alert.sensor_data.last.arduino_sensor.id}}" class="btn btn-success">Grafica</div>
+                        <div id="detalle_{{ sensor_alert.id}}" class="btn btn-success">Grafica</div>
                       </div>
                     </td>
                   </tr>
-                  {% endif %}
-                {% endfor %}
+                  {% endfor %}
+                {% endif %}
                 </tbody>
               </table>
             </div>
@@ -155,52 +155,52 @@
                   </tr>
                 </thead>
                 <tbody>
+                {% if alert %}
+                  {% for sensor_alert in alert.sensor_alerts %}
 
-                {% for alert in arduino.alerts.all %}
-                  {% if alert.active ==  False and alert.sensor_data.last.data != '-127.00' %}
                   <tr>
                     <td>
 
-                      <b>{{ alert.sensor_data.last.arduino_sensor.description}}</b>
+                      <b>{{ sensor_alert.description}}</b>
                     </td>
                     <td>
-                      {{ alert.created_at}}
+                      {{ sensor_alert.data.first.epoch }}
                     </td>
                     <td>
-                      {{ alert.finished_at}}
+                      {{ sensor_alert.finished_at }}
                     </td>
                     <td align="center">
-                      Min. {{ alert.sensor_data.last.arduino_sensor.min_value}}{{ alert.sensor_data.last.arduino_sensor.sensor_type.subfix}}
+                      Min. {{ sensor_alert.min_value}}{{ sensor_alert.sensor_type.subfix}}
                       <br/>
                       <b>Valor:
-                        {{ alert.sensor_data.last.data}}{{ alert.sensor_data.last.arduino_sensor.sensor_type.subfix}}
+                        {{ sensor_alert.data.last.data}}{{ sensor_alert.sensor_type.subfix}}
                       </b>
                       <br/>
-                      Max. {{ alert.sensor_data.last.arduino_sensor.max_value}}{{ alert.sensor_data.last.arduino_sensor.sensor_type.subfix}}
-                      <div id="minmax_{{ alert.sensor_data.last.arduino_sensor.id}}" class="hidden">
-                        {{ alert.sensor_data.last.arduino_sensor.min_value}}_
-                        {{ alert.sensor_data.last.arduino_sensor.max_value}}
+                      Max. {{ sensor_alert.max_value}}{{ sensor_alert.sensor_type.subfix}}
+                      <div id="minmax_{{ sensor_alert.id}}" class="hidden">
+                        {{ sensor_alert.min_value}}_
+                        {{ sensor_alert.max_value}}
                       </div>
                     </td>
                     <td align="center">
-                      <div class="epoch2Date_{{ alert.sensor_data.last.id}}">
-                      {{ alert.sensor_data.last.epoch}}
+                      <div class="epoch2Date_{{ sensor_alert.data.last.id}}">
+                      {{ sensor_alert.data.last.epoch}}
                       </div>
                     </td>
                     <td align="center">
-                      {{ alert.sensor_data.all.count }}
-                      <div class="hidden" id="sensor_{{ alert.sensor_data.last.arduino_sensor.id}}" class="" align="center">
-                        api/arduinos/{{ alert.sensor_data.last.arduino_sensor.arduino.id}}/sensors/{{ alert.sensor_data.last.arduino_sensor.id}}/data/?min_time={{ alert.sensor_data.first.epoch| add:-600 }}&max_time={{ alert.sensor_data.last.epoch| add:600}}
+                      {{ sensor_alert.data.count }}
+                      <div class="hidden" id="sensor_{{ sensor_alert.id}}" class="" align="center">
+                        api/arduinos/{{ alert.arduino.id}}/sensors/{{ sensor_alert.id}}/data/?min_time={{ sensor_alert.data.first.epoch| add:-600 }}&max_time={{ sensor_alert.data.last.epoch| add:600}}
                       </div>
                     </td>
                     <td  align="center">
                       <div class="btn-group">
-                        <div id="detalle_{{ alert.sensor_data.last.arduino_sensor.id}}" class="btn btn-success">Grafica</div>
+                        <div id="detalle_{{ sensor_alert.id}}" class="btn btn-success">Grafica</div>
                       </div>
                     </td>
                   </tr>
-                  {% endif %}
-                {% endfor %}
+                  {% endfor %}
+                {% endif %}
                 </tbody>
               </table>
             </div>
