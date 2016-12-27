@@ -1,3 +1,4 @@
+{% load arduino_tags %}
 
 <style>
   html{
@@ -10,25 +11,44 @@
 </style>
 
 <h1>
-  ¡Alerta de registro fuera de rango!: {{  arduinoalert.sensor_data.last.data |floatformat:2}}{{ arduinoalert.sensor_data.last.arduino_sensor.sensor_type.subfix }}<br/> Fecha: {{ arduinoalert.created_at }}
+  ¡Alerta de registro fuera de rango!: {{  arduinoalert.sensor_data.last.data |floatformat:2}} {{ arduinoalert.sensor_data.last.arduino_sensor.sensor_type.subfix }}<br/> Fecha: {{ arduinoalert.sensor_data.last.epoch | epochDate }}
 </h1>
 
 <p>
 Apreciable <b>{{ arduinoalert.sensor_data.last.arduino_sensor.arduino.project.nombre_encargado }}</b> el dispositivo <b>Sensait CORE {{ arduinoalert.sensor_data.last.arduino_sensor.arduino.name }}</b> ha registrado temperaturas fuera de rango de operación, por favor verifique que el equipo <b> {{ arduinoalert.sensor_data.last.arduino_sensor.equipment.equipment_name }} </b> esté funcionando o cerrado correctamente.
 </p>
 
-
 {{arduinoalert.sensors_in_alert.count}}
 
 
 
-{% for sensor_alert in arduinoalert.sensors_in_alert.objects.all %}
-  {{sensor_alert}}
-  sensor in alerts
-  <hr/>
+<p>
+  Fecha de Inicio de alerta: {{ arduinoalert.created_at }}<br/>
+  Ultima actualización de alerta: {{ arduinoalert.updated_at }}<br/>
+  Valores recibidos fuera de Rango : {{ arduinoalert.sensor_data.count }}<br/>
+</p>
+
+
+<h2> Detalle de la Incidencia: </h2>
+
+{% for sensor_alert in arduinoalert.sensors_in_alert.all %}
+
+  Transmisor: {{sensor_alert.arduino.name}} <br/>
+  ID: {{sensor_alert.sensor_type.id}} <br/>
+  Tipo de Sensor: {{sensor_alert.sensor_type.name}} <br/>
+  Nombre de Sensor: {{sensor_alert.sensor_type.name}} <br/>
+  Equipo: {{sensor_alert.equipment.equipment_name}} <br/>
+  <b>Valor Registrado: {{sensor_alert.equipment.equipment_name}} </b><br/>
+  <br/>
 {% endfor %}
 
-<h2> Detalle de la incidencia </h2>
+{% for sensor_data in arduinoalert.sensor_data.all %}
+  {{ sensor_data.arduino_sensor.sensor_type.id }} -  {{ sensor_data.arduino_sensor.sensor_type.name }} -
+  {{ sensor_data.data }}<br/>
+{% endfor %}
+
+
+
 <p>
   Fecha: {{ arduinoalert.created_at }}<br/>
   Tipo de Sensor:<b>  {{ arduinoalert.sensor_data.last.arduino_sensor.sensor_type.name }}</b><br/>
@@ -42,7 +62,7 @@ Apreciable <b>{{ arduinoalert.sensor_data.last.arduino_sensor.arduino.project.no
   Instalación: <b> {{ arduinoalert.sensor_data.last.arduino_sensor.arduino.project.name }}</b><br/>
   Transmisor: <b> {{ arduinoalert.sensor_data.last.arduino_sensor.arduino.name }} </b><br/>
   Ubicación:<b>  {{ arduinoalert.sensor_data.last.arduino_sensor.arduino.location }} </b><br/>
-  Refrigerador:<b> {{ arduinoalert.sensor_data.last.arduino_sensor.description }} </b><br/>
+  Equipo:<b> {{ arduinoalert.sensor_data.last.arduino_sensor.description }} </b><br/>
 </p>
 <p>
 Puede ver mas información de esta alerta dando click <a href="http://sensait.dyndns.org/dash/reports/{{ object.arduino_sensor.arduino.id }}/" target="_blank">aqui</a>
