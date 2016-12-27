@@ -11,7 +11,7 @@
 </style>
 
 <h1>
-  ¡Alerta de registro fuera de rango!: {{  arduinoalert.sensor_data.last.data |floatformat:2}} {{ arduinoalert.sensor_data.last.arduino_sensor.sensor_type.subfix }}<br/> Fecha: {{ arduinoalert.sensor_data.last.epoch | epochDate }}
+  ¡Alerta de registro fuera de rango!: {{  arduinoalert.sensor_data.last.data |floatformat:2}} {{ arduinoalert.sensor_data.last.arduino_sensor.sensor_type.subfix }}<br/> Fecha: {{ arduinoalert.sensor_data.last.epoch | epoch2Date }}
 </h1>
 
 <p>

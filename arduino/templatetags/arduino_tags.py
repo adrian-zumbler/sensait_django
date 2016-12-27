@@ -14,8 +14,8 @@ def order_by(queryset, order):
     return queryset.order_by(order)
 
 
-@register.filter(name="epochDate")
-def epochDate(epoch):
+@register.filter(name="epoch2Date")
+def epoch2Date(epoch):
     print epoch
-    # return datetime.fromtimestamp(float(epoch)).strftime('%Y-%m-%d %H:%M:%S')
+    return datetime.fromtimestamp(epoch).strftime('%Y-%m-%d %H:%M:%S')
     # return datetime.utcfromtimestamp(float(epoch)).strftime('%Y-%m-%dT%H:%M:%SZ')
