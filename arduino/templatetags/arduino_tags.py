@@ -17,5 +17,10 @@ def order_by(queryset, order):
 @register.filter(name="epoch2Date")
 def epoch2Date(epoch):
     print epoch
-    return datetime.fromtimestamp(epoch).strftime('%Y-%m-%d %H:%M:%S')
+    try:
+        # assume, that timestamp is given in seconds with decimal point
+        ts = float(epoch)
+    except ValueError:
+        return None
+    return datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
     # return datetime.utcfromtimestamp(float(epoch)).strftime('%Y-%m-%dT%H:%M:%SZ')
