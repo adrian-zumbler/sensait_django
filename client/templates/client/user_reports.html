@@ -83,7 +83,7 @@
                       {{ sensor_alert.data.first.epoch|epoch2Date }}
                     </td>
                     <td>
-                      {{ sensor_alert.finished_at}}
+                      {{ sensor_alert.finished_at|epoch2Date }}
                     </td>
                     <td align="center">
                       Min. {{ sensor_alert.min_value|floatformat:2}}{{ sensor_alert.sensor_type.subfix}}
@@ -100,7 +100,7 @@
                     </td>
                     <td align="center">
                       <div class="epoch2Date_{{ sensor_alert.data.last.id}}">
-                      {{ sensor_alert.data.last.epoch|epoch2Date }}
+                      {{ sensor_alert.data.last.epoch}}
                       </div>
                     </td>
                     <td align="center">
@@ -163,7 +163,7 @@
                       {{ sensor_alert.data.first.epoch|epoch2Date }}
                     </td>
                     <td>
-                      {{ sensor_alert.finished_at }}
+                      {{ sensor_alert.finished_at|epoch2Date }}
                     </td>
                     <td align="center">
                       Min. {{ sensor_alert.min_value|floatformat:2}}{{ sensor_alert.sensor_type.subfix}}
@@ -365,7 +365,10 @@
   });
 
   function convertEpoch2Date(epochData){
-    if(parseInt(epochData)>10000){
+
+    epochData = epochData.trim();
+
+    if(parseInt(epochData) > 10000 ){
       var actualDate = new Date();
 
       var d = new Date(parseInt(epochData)*1000);

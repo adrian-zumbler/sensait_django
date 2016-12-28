@@ -1,6 +1,6 @@
 from django import template
-from datetime import datetime, time
-from time import time, strftime
+from datetime import datetime
+
 register = template.Library()
 
 
@@ -21,6 +21,5 @@ def epoch2Date(epoch):
         # assume, that timestamp is given in seconds with decimal point
         ts = float(epoch)
     except ValueError:
-        return None
-    return datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
-    # return datetime.utcfromtimestamp(float(epoch)).strftime('%Y-%m-%dT%H:%M:%SZ')
+        return "En proceso..."
+    return datetime.fromtimestamp(ts).strftime('%d/%m/%Y %H:%M:%S')
