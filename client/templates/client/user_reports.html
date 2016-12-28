@@ -42,13 +42,13 @@
 
   <!-- Main content -->
   <section class="content">
-    <div class="row">
 
+    <div class="row">
       <div class="col-xs-12" id="block_alerts_active">
         <div class="box box-danger">
           <div class="box-header with-border">
             <h3 class="box-title">
-              ALERTAS EN PROGRESO
+              ALERTAS ACTIVAS EN PROGRESO
             </h3>
             <div class="box-tools pull-right">
               <button class="btn btn-box-tool" data-widget="collapse">
@@ -75,28 +75,27 @@
                 {% if alert %}
                   {% for sensor_alert in alert.sensor_alerts %}
 
-                  <tr>
+                  <tr id="alert_{{alert.id}}">
                     <td>
-
                       <b>{{ sensor_alert.description}}</b>
                     </td>
                     <td>
-                      {{ sensor_alert.data.first.epoch }}
+                      {{ sensor_alert.data.first.epoch|epoch2Date }}
                     </td>
                     <td>
-                      {{ sensor_alert.finished_at }}
+                      {{ sensor_alert.finished_at|epoch2Date }}
                     </td>
                     <td align="center">
-                      Min. {{ sensor_alert.min_value}}{{ sensor_alert.sensor_type.subfix}}
+                      Min. {{ sensor_alert.min_value|floatformat:2}}{{ sensor_alert.sensor_type.subfix}}
                       <br/>
                       <b>Valor:
-                        {{ sensor_alert.data.last.data}}{{ sensor_alert.sensor_type.subfix}}
+                        {{ sensor_alert.data.last.data|floatformat:2}}{{ sensor_alert.sensor_type.subfix}}
                       </b>
                       <br/>
-                      Max. {{ sensor_alert.max_value}}{{ sensor_alert.sensor_type.subfix}}
+                      Max. {{ sensor_alert.max_value|floatformat:2}}{{ sensor_alert.sensor_type.subfix}}
                       <div id="minmax_{{ sensor_alert.id}}" class="hidden">
-                        {{ sensor_alert.min_value}}_
-                        {{ sensor_alert.max_value}}
+                        {{ sensor_alert.min_value|floatformat:2}}_
+                        {{ sensor_alert.max_value|floatformat:2}}
                       </div>
                     </td>
                     <td align="center">
@@ -124,8 +123,6 @@
           </div>
         </div>
       </div>
-
-
 
 
       <div class="col-xs-12" id="block_alerts_inactive">
@@ -158,34 +155,32 @@
                 {% if inactive_alerts %}
                   {% for alert in inactive_alerts %}
                   {% for sensor_alert in alert.sensor_safe_alerts %}
-
-                  <tr>
+                  <tr id="alert_{{alert.id}}">
                     <td>
-
                       <b>{{ sensor_alert.description}}</b>
                     </td>
                     <td>
-                      {{ sensor_alert.data.first.epoch }}
+                      {{ sensor_alert.data.first.epoch|epoch2Date }}
                     </td>
                     <td>
-                      {{ sensor_alert.finished_at }}
+                      {{ sensor_alert.finished_at|epoch2Date }}
                     </td>
                     <td align="center">
-                      Min. {{ sensor_alert.min_value}}{{ sensor_alert.sensor_type.subfix}}
+                      Min. {{ sensor_alert.min_value|floatformat:2}}{{ sensor_alert.sensor_type.subfix}}
                       <br/>
                       <b>Valor:
-                        {{ sensor_alert.data.last.data}}{{ sensor_alert.sensor_type.subfix}}
+                        {{ sensor_alert.data.last.data|floatformat:2}}{{ sensor_alert.sensor_type.subfix}}
                       </b>
                       <br/>
-                      Max. {{ sensor_alert.max_value}}{{ sensor_alert.sensor_type.subfix}}
+                      Max. {{ sensor_alert.max_value|floatformat:2}}{{ sensor_alert.sensor_type.subfix}}
                       <div id="minmax_{{ sensor_alert.id}}" class="hidden">
-                        {{ sensor_alert.min_value}}_
-                        {{ sensor_alert.max_value}}
+                        {{ sensor_alert.min_value|floatformat:2}}_
+                        {{ sensor_alert.max_value|floatformat:2}}
                       </div>
                     </td>
                     <td align="center">
                       <div class="epoch2Date_{{ sensor_alert.data.last.id}}">
-                      {{ sensor_alert.data.last.epoch}}
+                      {{ sensor_alert.data.last.epoch }}
                       </div>
                     </td>
                     <td align="center">
@@ -370,7 +365,10 @@
   });
 
   function convertEpoch2Date(epochData){
-    if(parseInt(epochData)>10000){
+
+    epochData = epochData.trim();
+
+    if(parseInt(epochData) > 10000 ){
       var actualDate = new Date();
 
       var d = new Date(parseInt(epochData)*1000);
