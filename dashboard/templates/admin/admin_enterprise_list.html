@@ -9,8 +9,8 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-        ADMINISTRACIÓN DE CLIENTES
-        <small>Listado de Clientes dados de alta en el sistema</small>
+        ADMINISTRACIÓN DE EMPRESAS / CLIENTES
+        <small>Listado de Empresas dados de alta en el sistema</small>
       </h1>
     </section>
 
@@ -21,13 +21,13 @@
       <div class="col-xs-12">
         <div class="box">
           <div class="box-header">
-            <h3 class="box-title">Lista de Clientes registradas</h3>
+            <h3 class="box-title">Lista de Empresas registradas</h3>
           </div>
           <div class="box-body">
             <table id="table_projects" class="table table-bordered table-striped">
               <thead>
                 <tr>
-                  <th>Cliente ID</th>
+                  <th>Empresa ID</th>
                   <th>Nombre</th>
                   <th>Ciudad</th>
                   <th>Estatus</th>
@@ -38,7 +38,7 @@
 
                 {% for enterprise in enterprise_list %}
                 <tr>
-                  <td> Cliente00{{enterprise.id}} </td>
+                  <td> Empresa00{{enterprise.id}} </td>
                   <td> {{enterprise.name}} </td>
                   <td> {{enterprise.city }} </td>
                   <td> {{enterprise.get_estatus_display }} </td>

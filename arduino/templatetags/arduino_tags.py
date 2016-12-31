@@ -16,7 +16,6 @@ def order_by(queryset, order):
 
 @register.filter(name="epoch2Date")
 def epoch2Date(epoch):
-    print epoch
     try:
         # assume, that timestamp is given in seconds with decimal point
         ts = float(epoch)
