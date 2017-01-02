@@ -101,11 +101,35 @@ class DashMainListView(LoginRequiredMixin, ListView):
         elif user.is_staff:
             queryset = Project.objects.all()
 
-        return queryset
+        return queryset.order_by('-created_at')
 
+
+class SystemStatusListView(LoginRequiredMixin, ListView):
+    template_name = 'admin/admin_systemstatus.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(SystemStatusListView, self).get_context_data(**kwargs)
+
+        context['site_url'] = self.request.get_host()
+        context['holo'] = self.request.get_host()
+        # request.get_host('/')
+        return context
+
+    def get_queryset(self):
+        user = self.request.user
+        queryset = Project.objects.none()
+        if hasattr(user, 'client'):
+            client = user.client
+            queryset = client.projects.all()
+        elif user.is_staff:
+            queryset = Project.objects.all()
+
+        return queryset.order_by('-created_at')
 
 #       ADMIN - PROYECTOS
 # _____________________________________________#
+
+
 class AdminProjectsListView(LoginRequiredMixin, ListView):
     template_name = 'admin/admin_projects_list.html'
     queryset = Project.objects.all()

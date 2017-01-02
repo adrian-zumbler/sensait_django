@@ -10,37 +10,49 @@
   }
 </style>
 
-<h1>
-  ¡Alerta! El sensor <b>{{arduinoalert.sensor_data.last.arduino_sensor.description}}</b>
-  Registro un valor fuera de rango de: <b>{{  arduinoalert.sensor_data.last.data |floatformat:2}}{{ arduinoalert.sensor_data.last.arduino_sensor.sensor_type.subfix }}</b> el día {{ arduinoalert.sensor_data.last.epoch | epoch2Date }}
-</h1>
+{% if arduinoalert.sensors_in_alert.count == 1 %}
+  <h1>
+    ¡Alerta! Se encuentra <b>{{arduinoalert.sensors_in_alert.count}}</b> sensor con registros fuera de rango.
+  </h1>
+{% else %}
+  <h1>
+    ¡Alerta! Se encuentran <b>{{arduinoalert.sensors_in_alert.count}}</b> sensores con registros fuera de rango.
+  </h1>
+{% endif %}
 
 <p>
 Apreciable <b>{{ arduinoalert.sensor_data.last.arduino_sensor.arduino.project.nombre_encargado }}</b> el dispositivo <b>Sensait CORE {{ arduinoalert.sensor_data.last.arduino_sensor.arduino.name }}</b> ha registrado temperaturas fuera de rango de operación, por favor verifique que el equipo <b> {{ arduinoalert.sensor_data.last.arduino_sensor.equipment.equipment_name }} </b> esté funcionando o cerrado correctamente.
 </p>
 
-<h2>Sensores en Alerta: </h2>
+<ul>
+  {% for sensor_alert in arduinoalert.sensor_alerts %}
+    <li>
+      <span>
+        Sensor: <b>{{sensor_alert.description}}</b>
+        Ultimo Valor Registrado: <b>{{ sensor_alert.data.last.data |floatformat:2}}{{ sensor_alert.sensor_type.subfix}}</b>
+        Fecha de Envio: <b>{{sensor_alert.data.last.epoch | epoch2Date }}</b>
+      </span>
+    </li><br/>
+  {% endfor %}
+</ul>
 
-{% for sensor_alert in arduinoalert.sensors_in_alert.all %}
+<h2>Detalle de los Sensores en Alerta: </h2>
+
+{% for sensor_alert in arduinoalert.sensor_alerts %}
   <p>
   Nombre de Sensor: <b>{{sensor_alert.description}}</b> <br/>
   Tipo de Sensor: <b>{{sensor_alert.sensor_type.name}}</b> <br/>
   Equipo: <b>{{sensor_alert.equipment.equipment_name}}</b> <br/>
-
-  </p>
-{% endfor %}
-<br/>
-<h2>Ultimo valor registrado: </h2>
-<p>
-
-  <h3> Lectura Registrada: <b> {{  arduinoalert.sensor_data.last.data |floatformat:2}}{{ arduinoalert.sensor_data.last.arduino_sensor.sensor_type.subfix }} </b></h3>
-  Nombre del  Sensor:<b> {{ arduinoalert.sensor_data.last.arduino_sensor.description }} </b><br/>
+  Ultimo Dato: <b>{{ sensor_alert.data.last.data |floatformat:2}}{{ sensor_alert.sensor_type.subfix}}</b> <br/>
   Valor Minimo: <b> {{  arduinoalert.sensor_data.last.arduino_sensor.min_value |floatformat:2}}{{ arduinoalert.sensor_data.last.arduino_sensor.sensor_type.subfix }} </b> <br/>
   Valor Minimo: <b> {{  arduinoalert.sensor_data.last.arduino_sensor.max_value |floatformat:2}}{{ arduinoalert.sensor_data.last.arduino_sensor.sensor_type.subfix }} </b> <br/>
-</p>
+  Fecha: <b>{{sensor_alert.data.last.epoch | epoch2Date }}</b> <br/>
+  </p>
+{% endfor %}
+
 <br/>
 
-<h2>Detalle de la Alerta: </h2>
+<h2>Información de la Alerta: </h2>
 <p>
   Fecha de Inicio de alerta: <b>{{ arduinoalert.created_at }}</b><br/>
   Ultima actualización de alerta: <b>{{ arduinoalert.updated_at }}</b><br/>
@@ -50,66 +62,23 @@ Apreciable <b>{{ arduinoalert.sensor_data.last.arduino_sensor.arduino.project.no
   Transmisor: <b> {{ arduinoalert.sensor_data.last.arduino_sensor.arduino.name }} </b><br/>
   Ubicación:<b>  {{ arduinoalert.sensor_data.last.arduino_sensor.arduino.location }} </b><br/>
   Equipo:<b> {{ arduinoalert.sensor_data.last.arduino_sensor.equipment.equipment_name }} </b>
-  <br/></b>
+  <br/>
+  </b>
 </p>
-<br/><br/>
 
-
-
-<!---
-<h2> Valores Registrados: </h2>
-{% for sensor_data in arduinoalert.sensor_data.all %}
-  {{ sensor_data.arduino_sensor.sensor_type.id }} -  {{ sensor_data.arduino_sensor.sensor_type.name }} -
-  {{ sensor_data.data }}<br/>
-  {{ sensor_data.arduino_sensor.arduino.sensors.count }} <br/>
-{% endfor %}
--->
-
-
-
+<br/>
 <p>
-Puede ver mas información de esta alerta dando click <a href="http://sensait.dyndns.org/dash/reports/{{ arduinoalert.id }}/" target="_blank">aqui</a>
+Puede ver mas información de esta alerta dando click <a href="http://sensait.dyndns.org/dash/reports/{{ arduinoalert.sensor_data.last.arduino_sensor.arduino.id }}/" target="_blank">aqui</a>
 <br/>
 <br/>
 
 Quedamos a sus órdenes para cualquier duda o comentario.
 Sensait Soporte
-
 </p>
 
-<!--
 <hr/>
-<br/>
-<br/>
-
-<table style="width:70%">
-  <caption>Información del Registro</caption>
-  <tr>
-    <th>Nombre</th>
-    <th>Valor Min. </th>
-    <th>Valor</th>
-    <th>Valor Max. </th>
-  </tr>
-  <tr>
-    <td> {{ object.arduino_sensor.description }} </td>
-    <td> {{ object.arduino_sensor.min_value }} </td>
-    <td> <b> {{ object.data }} </b> </td>
-    <td> {{ object.arduino_sensor.max_value }} </td>
-  </tr>
-</table>
-
-<br/>
-<br/>
-<hr/>
-<br/>
-<br/>
--->
-
-<br/>
-<hr/>
-<br/>
 <p>
-  <b>Nota:</b> Para mayor detalle de la alerta y registros favor de entrar a la plataforma de aminsitración en <a href="sensait.dyndns.org" target="_blank">SENSAIT.COM</a>.
+  <b>Nota:</b> Para mayor detalle de la alerta y registros favor de entrar a la plataforma de adminsitración en <a href="sensait.dyndns.org" target="_blank">SENSAIT.COM</a>.
   <br/>
 </p>
 <!-- hola mundo {{ object.data }}

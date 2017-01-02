@@ -67,6 +67,7 @@ urlpatterns = [
     url(r'^error/$', TemplateView.as_view(template_name='system/errors/error.html')),
 
     url(r'^dash/main/$', DashMainListView.as_view(), name="main"),
+    url(r'^dash/status/$', SystemStatusListView.as_view(), name="main"),
     url(r'^dash/projects/$', ProjectsListView.as_view(), name="projects"),
     url(r'^dash/projects/(?P<pk>\d+)/$', ProjectDetailView.as_view(), name="projectDetail"),
     url(r'^dash/reports/(?P<pk>\d+)/$', CSVReportView.as_view()),
