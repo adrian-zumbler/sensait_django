@@ -54,6 +54,7 @@ class ArduinoSensorCSVReportForm(forms.Form):
     min_time = forms.CharField(max_length=10)
     max_time = forms.CharField(max_length=10)
     file_type = forms.ChoiceField(
+        label='Tipo de archivo',
         choices=(
             (0, 'xls'),
             (1, 'csv')

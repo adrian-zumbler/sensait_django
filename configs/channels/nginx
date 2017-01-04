@@ -1,6 +1,6 @@
 upstream app_servers {
 
-        server 192.168.253.203:81;
+        #server 192.168.253.203:81;
 
         server unix:/home/manto/sensait/daphne.sock ;
 }
