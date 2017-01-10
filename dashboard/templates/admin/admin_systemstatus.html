@@ -72,7 +72,7 @@
                         {{transmisor.arduino_token}}
                       </td>
                       <td>
-                        {{transmisor.sensors.count}}
+                        {{transmisor.sensor_data}}
                       </td>
                       <td id="{{transmisor.id}}">
                         Data
@@ -230,7 +230,10 @@
 
     {% for project in project_list %}
       {% for transmisor in project.arduinos.all %}
-        console.log(" {{transmisor.name}}");
+
+        {% for sensor in transmisor.sensors.all %}
+          console.log(" {{sensor.id}}");
+        {% endfor %}
       {% endfor %}
     {% endfor %}
 

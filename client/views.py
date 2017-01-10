@@ -8,7 +8,7 @@ from django.utils import timezone
 
 from .models import Enterprise, Client
 from .forms import EnterpriseForm, ClientCreationForm, ArduinoSensorCSVReportForm
-from arduino.models import Arduino, SensorData
+from arduino.models import Arduino, SensorData, ArduinoAlert
 from dashboard.utils.excel_response import ExcelResponse
 
 
@@ -78,6 +78,16 @@ class ClientDeleteView(LoginRequiredMixin, DeleteView):
     template_name = 'admin/admin_client_delete.html'
     success_url = reverse_lazy('enterprise-client:client-list')
     queryset = Client.objects.all()
+
+
+class ArduinoAlertDetailView(LoginRequiredMixin, DetailView):
+    template_name = 'client/user_alert_detail.html'
+    queryset = ArduinoAlert.objects.all()
+
+    def get_context_data(self, **kwargs):
+        context = super(ArduinoAlertDetailView, self).get_context_data(**kwargs)
+        context['site_url'] = self.request.get_host()
+        return context
 
 
 class CSVReportView(SingleObjectMixin, FormView):
