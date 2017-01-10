@@ -1,12 +1,12 @@
 {% extends 'main_header.html' %}
 {% load staticfiles %}
-
+{% load i18n %}
 {% load arduino_tags %}
 
 
 {% block main_content_wrapper %}
 
-
+{% language 'es' %}
 
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
@@ -68,14 +68,13 @@
           </div>
           <!-- /.box -->
         </div>
-
       </div>
 
     </section>
     <!-- /.content -->
   </div>
   <!-- /.content-wrapper -->
-
+{% endlanguage %}
 {% endblock main_content_wrapper %}
 
 
