@@ -2,20 +2,28 @@
 {% load staticfiles %}
 {% load widget_tweaks %}
 {% load arduino_tags %}
+{% load i18n %}
 
 {% block content_css %}
 
 <style>
   #graphData{
     font-size:20px;
+    display:block;
   }
+
   .bg-dark-green{
     color: white;
     background-color: #027c43 !important;
   }
+
   #graphdiv{
     display:block;
     background-color: #f0f0f0 !important;
+  }
+
+  canvas{
+    display:block;
   }
 
 </style>
@@ -25,7 +33,7 @@
 
 {% block main_content_wrapper %}
 
-
+{% language 'es' %}
 
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
@@ -64,6 +72,20 @@
           </div><!-- /.box-body -->
         </div><!-- /.box -->
       </div><!-- ./col -->
+      <div class="row">
+        <div class="col-xs-6">
+          <div class="box box-info">
+            <div class="box-header with-border">
+              <h3 class="box-title">
+                Descargar registros de la alerta
+              </h3>
+            </div>
+            <div class="box-body">
+              WIP - Descarga de registros en alerta del SENSOR 
+            </div>
+          </div>
+          </div>
+        </div>
     </div>
 
     <div class="row">
@@ -99,7 +121,7 @@
         <div class="box box-danger">
           <div class="box-header with-border">
             <h3 class="box-title">
-              Sensor: <b>{{ sensor_alert.description}}</b> <br/>
+              Sensor Seleccionado: <b><span id="sensor_name"></span></b> <br/>
             </h3>
             <div class="box-tools pull-right">
               <button class="btn btn-box-tool" data-widget="collapse">
@@ -113,12 +135,13 @@
           </div>
         </div>
       </div>
+
     </div>
   </div>
 </div>
 
   <div class="row">
-    <div class="col-xs-12" id="block_alerts_active">
+    <div class="col-xs-8" id="block_alerts_active">
       <div class="box box-danger">
         <div class="box-header with-border">
           <h3 class="box-title">
@@ -199,26 +222,51 @@
         </div>
       </div>
     </div>
+    <div class="col-xs-4" id="">
+      <div class="box box-danger">
+        <div class="box-header with-border">
+          <h3 class="box-title">
+            Registros Fuera de Rango
+          </h3>
+          <div class="box-tools pull-right">
+            <button class="btn btn-box-tool" data-widget="collapse">
+              <i class="fa fa-minus"></i>
+            </button>
+          </div>
+        </div>
+        <div class="box-body">
+          <table id="table_data" class="table table-bordered table-striped">
+            <thead>
+              <tr>
+                <th>Fecha</th>
+                <th>Valor</th>
+              </tr>
+            </thead>
+
+              {% for sensor_alert in arduinoalert.sensor_alerts %}
+                <tbody id="data_{{sensor_alert.id}}">
+                  {% for data_values in sensor_alert.data.all %}
+                  <tr>
+                    <td>
+                      {{ data_values.epoch|epoch2Date }}
+                    </td>
+                    <td>
+                      {{ data_values.data }}
+                    </td>
+                  </tr>
+                {% endfor %}
+                </tbody>
+              {% endfor %}
+
+          </table>
+        </div>
+      </div>
+    </div>
   </div>
 </section>
 
-<section class="content">
-  <div class="row">
-    <div class="col-xs-12">
-      <div class="box box-info">
-        <div class="box-header with-border">
-          <h3 class="box-title">
-            Descargar registros de la alerta
-          </h3>
-        </div>
-
-      </div>
-      </div><!-- /.box -->
-    </div>
-  </section>
-
 </div>
-
+{% endlanguage %}
 {% endblock main_content_wrapper %}
 
 
@@ -275,10 +323,22 @@
       "info": false,
       "autoWidth": false
     });
+
+    $('#table_data').DataTable({
+      "paging": true,
+      "lengthChange": false,
+      "searching": false,
+      "ordering": false,
+      "info": false,
+      "autoWidth": false
+    });
+
   });
 
 
-  var query_sensors = [];
+  var query_sensors   = [];
+  var sensors_ids     = [];
+  var sensors_names   = [];
 
   $(document).ready(function(){
 
@@ -288,8 +348,14 @@
       var query = "api/arduinos/{{ sensor_alert.arduino.id}}/sensors/{{ sensor_alert.id}}/data/?min_time={{ sensor_alert.data.first.epoch| add:-2000 }}&max_time={{ sensor_alert.data.last.epoch| add:2000}}";
 
       query_sensors["{{ sensor_alert.id}}"] = query;
+      $("#data_{{ sensor_alert.id}}").hide();
+
+      sensors_ids.push("{{ sensor_alert.id}}");
+      sensors_names["{{ sensor_alert.id}}"] = "{{ sensor_alert.description}}";
 
       {% if forloop.counter0 == 0 %}
+        $("#data_{{ sensor_alert.id}}").show();
+        $("#sensor_name").html("{{ sensor_alert.description}}");
         getDataFromAPI(query, "{{ sensor_alert.id}}");
       {% endif %}
 
@@ -382,6 +448,12 @@
     var click_ID = $(this)[0].id;
     click_ID = click_ID.split("_");
     click_ID = click_ID[1];
+
+    for(var i=0; i<sensors_ids.length;i++)
+      $("#data_"+sensors_ids[i]).hide();
+
+    $("#data_"+click_ID).show();
+    $("#sensor_name").html(""+sensors_names[click_ID]);
 
     getDataFromAPI(query_sensors[click_ID] ,click_ID );
   });

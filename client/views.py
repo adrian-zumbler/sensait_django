@@ -109,7 +109,7 @@ class CSVReportView(SingleObjectMixin, FormView):
             self.queryset = Arduino.objects.filter(
                 project__clients__user=self.request.user
             )
-        return self.queryset.order_by('-created_at')
+        return self.queryset.order_by('created_at')
 
     def get_form_kwargs(self):
 
