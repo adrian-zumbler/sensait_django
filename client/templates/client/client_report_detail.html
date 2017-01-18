@@ -1,0 +1,216 @@
+{% extends 'main_header.html' %}
+{% load staticfiles %}
+{% load arduino_tags %}
+
+{% block main_content_wrapper %}
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <h1>
+        CLIENT REPORT DETAIL
+        <small> </small>
+
+      </h1>
+    </section>
+
+    <!-- Main content -->
+<section class="content">
+
+      <div class="box box-solid">
+        <div class="box-header with-border">
+          <i class="fa fa-adjust"></i>
+          <h3 class="box-title">Información del cliente:  {{enterprise.name }}</h3>
+        </div><!-- /.box-header -->
+        <div class="box-body">
+          <div class="row">
+            <div class="col-xs-8">
+          <dl class="dl-horizontal">
+
+            <dt>Cliente:</dt>
+            <dd>
+                {{enterprise.name}}
+            </dd>
+            <dt>Dirección:</dt>
+            <dd>
+              {{enterprise.direction}}
+            </dd>
+            <dt>Ciudad:</dt>
+            <dd>  {{enterprise.city}} </dd>
+            <dt>Télefono de contacto #1</dt>
+            <dd>{{enterprise.phone_number_1}}</dd>
+            <dt>Télefono de contacto #2</dt>
+            <dd>{{enterprise.phone_number_2}}</dd>
+            <dt>Sitio web:</dt>
+            <dd>   </dd>
+            <dt>Mapa de la empresa:</dt>
+            <dd>
+              <a href="https://goo.gl/maps/vtgW1R9woGL2" target="_blank"> Ver en mapa</a>
+            </dd>
+
+            <dt>Estatus de la empresa:</dt>
+            <dd><b>
+              {{enterprise.get_estatus_display}}
+            </b></dd>
+
+          </dl>
+          </div><!-- /.box-body -->
+            <div class="col-xs-4">
+              <img src="http://placehold.it/180x180&amp;text=LOGO" alt="company logo">
+            </div>
+          </div><!-- /.box -->
+        </div>
+    </div><!-- /.row -->
+
+
+<!-- /.CRUD PARA LOS ARDUINOS DEL PROYECTO -->
+  <div class="row">
+    <div class="col-xs-6 ">
+      <div class="box box-solid">
+        <div class="box-header with-border">
+          <i class="fa fa-adjust"></i>
+          <h3 class="box-title">Lista de Usuarios del Cliente: <b>{{enterprise.name }}</b> </h3>
+        </div><!-- /.box-header -->
+        <div class="box-body">
+
+
+          <table id="table_clients" class="table table-bordered table-striped">
+            <thead>
+              <tr>
+                <th>ID USUARIO</th>
+                <th>Username</th>
+                <th># Proyectos</th>
+                <th>Accion</th>
+              </tr>
+            </thead>
+            <tbody>
+                {% for client in enterprise.clients.all %}
+              <tr>
+                <td> {{ client.id }} </td>
+                <td> {{ client.user.username }} </td>
+                <td>  {{ client.projects.count }} </td>
+                <td>
+                  <div class="btn-group">
+                    <a href="{% url 'enterprise-client:client-detail' pk=client.id %}" target="_self">
+                      <button  type="button" class="btn btn-success">Ver</button>
+                    </a>
+                    <a href="{% url 'enterprise-client:client-update' pk=client.id %}" target="_self">
+                      <button  type="button" class="btn btn-info">Editar</button>
+                    </a>
+                    <a href="{% url 'enterprise-client:client-delete' pk=client.id %}" target="_self">
+                      <button type="button" class="btn btn-danger">Borrar</button>
+                    </a>
+                  </div>
+                </td>
+              </tr>
+                {% endfor %}
+            </tbody>
+              <tfoot>
+                <tr>
+                  <th>ID USUARIO</th>
+                  <th>Username</th>
+                  <th># Proyectos</th>
+                  <th>Accion</th>
+                </tr>
+              </tfoot>
+          </table>
+        </div><!-- /.box-body -->
+      </div><!-- /.box -->
+    </div>
+    <div class="col-xs-6 ">
+      <div class="box box-solid">
+        <div class="box-header with-border">
+          <i class="fa fa-adjust"></i>
+          <h3 class="box-title">Lista de PROYECTOS del Cliente: <b>{{enterprise.name }}</b> </h3>
+        </div><!-- /.box-header -->
+        <div class="box-body">
+
+          <table id="table_projects" class="table table-bordered table-striped">
+            <thead>
+              <tr>
+                <th>ID PROYECTO</th>
+                <th>Nombre</th>
+                <th># de Sistemas </th>
+                <th>Accion</th>
+              </tr>
+            </thead>
+            <tbody>
+                {% for project in enterprise.projects.all %}
+              <tr>
+                <td> {{ project.id }} </td>
+                <td> {{ project.name }} </td>
+                <td>  {{ project.arduinos.count }} </td>
+                <td>
+                  <div class="btn-group">
+                    <a href="{% url 'adminArduinoDetail' pk=project.id %}" target="_self">
+                      <button  type="button" class="btn btn-success">Ver</button>
+                    </a>
+                    <a href="{% url 'arduinoSensorsEdit' pk=project.id %}" target="_self">
+                      <button  type="button" class="btn btn-info">Editar</button>
+                    </a>
+                    <a href="{% url 'arduinoDelete' pk=project.id %}" target="_self">
+                      <button type="button" class="btn btn-danger">Borrar</button>
+                    </a>
+                  </div>
+                </td>
+              </tr>
+                {% endfor %}
+
+
+            </tbody>
+              <tfoot>
+                <tr>
+                  <th>ID PROYECTO</th>
+                  <th>Nombre</th>
+                  <th># de Sistemas </th>
+                  <th>Accion</th>
+                </tr>
+              </tfoot>
+          </table>
+        </div><!-- /.box-body -->
+      </div><!-- /.box -->
+    </div>
+  </div>
+
+<!-- /.END PARA LOS ARDUINOS DEL PROYECTO -->
+</section>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+
+{% endblock main_content_wrapper %}
+
+{% block content_js %}
+  <script src="{% static 'plugins/datatables/jquery.dataTables.min.js' %}"></script>
+  <script src="{% static 'plugins/datatables/dataTables.bootstrap.min.js' %}"></script>
+  <!-- page script -->
+<script type="application/javascript">
+
+  $(function () {
+    $('#table_projects').DataTable({
+      "paging": true,
+      "lengthChange": false,
+      "searching": true,
+      "ordering": true,
+      "info": true,
+      "autoWidth": false
+    });
+
+    $('#table_clients').DataTable({
+      "paging": true,
+      "lengthChange": false,
+      "searching": true,
+      "ordering": true,
+      "info": true,
+      "autoWidth": false
+    });
+
+
+
+
+  });
+
+</script>
+
+{% endblock content_js %}
