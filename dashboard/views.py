@@ -251,7 +251,12 @@ class ReportListView(LoginRequiredMixin, ListView):
 class ReportCreateView(LoginRequiredMixin, CreateView):
     template_name = 'client/client_report_edit.html'
     form_class = ReportForm
-    success_url = reverse_lazy('dashboard-client:reports-list')
+
+    def get_success_url(self):
+        return reverse_lazy(
+            'dashboard-client:reports-list',
+            kwargs={'sensor_pk': self.kwargs['sensor_pk']}
+        )
 
     def form_valid(self, form):
         self.object = form.save(commit=False)
@@ -270,7 +275,12 @@ class ReportUpdateView(LoginRequiredMixin, UpdateView):
     template_name = 'client/client_report_edit.html'
     form_class = ReportForm
     queryset = Report.objects.all()
-    success_url = reverse_lazy('dashboard-client:reports-list')
+
+    def get_success_url(self):
+        return reverse_lazy(
+            'dashboard-client:reports-list',
+            kwargs={'sensor_pk': self.kwargs['sensor_pk']}
+        )
 
 
 class ReportDeleteView(LoginRequiredMixin, DeleteView):
