@@ -55,7 +55,7 @@ class AdminSensorCreateForm(forms.ModelForm):
 class ReportForm(forms.ModelForm):
     class Meta:
         model = Report
-        exclude = ['file']
+        exclude = ['sensor', 'file']
 
 
 class AdminInlineArduinoSensorCreateForm(forms.ModelForm):
