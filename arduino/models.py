@@ -424,7 +424,7 @@ class Report(models.Model):
         default=1)
     fecha_inicial = models.PositiveIntegerField()
     fecha_final = models.PositiveIntegerField()
-    file = models.FileField(upload_to=report_files_name)
+    archivo = models.FileField(upload_to=report_files_name)
 
     created_at = models.DateTimeField(auto_now_add=True)
 

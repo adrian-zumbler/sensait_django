@@ -253,6 +253,9 @@ class ReportCreateView(LoginRequiredMixin, CreateView):
     form_class = ReportForm
     success_url = reverse_lazy('report-client:report-list')
 
+    def form_valid(self, form):
+        return super(ReportCreateView, self).form_valid(form)
+
 
 class ReportDetailView(LoginRequiredMixin, DetailView):
     template_name = 'client/client_report_detail.html'
