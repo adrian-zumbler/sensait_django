@@ -7,8 +7,8 @@ from django.core.urlresolvers import reverse_lazy, reverse
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from dashboard.forms import AdminArduinoCreateForm, AdminProjectUpdateForm, \
-    AdminProjectCreateForm, ArduinoSensorFormSet, InLineArduinoSensorFormSet
-from arduino.models import Arduino, ArduinoSensor
+    AdminProjectCreateForm, ArduinoSensorFormSet, InLineArduinoSensorFormSet, ReportForm
+from arduino.models import Arduino, ArduinoSensor, Report
 from client.models import Project, Client
 
 
@@ -241,3 +241,33 @@ class AdminArduinoWithSensorsUpdateView(LoginRequiredMixin, UpdateView):
         qs = Arduino.objects.all()
 
         return qs
+
+
+class ReportListView(LoginRequiredMixin, ListView):
+    template_name = 'client/client_report_list.html'
+    queryset = Report.objects.all()
+
+
+class ReportCreateView(LoginRequiredMixin, CreateView):
+    template_name = 'client/client_report_edit.html'
+    form_class = ReportForm
+    success_url = reverse_lazy('report-client:report-list')
+
+
+class ReportDetailView(LoginRequiredMixin, DetailView):
+    template_name = 'client/client_report_detail.html'
+    queryset = Report.objects.all()
+
+
+class ReportUpdateView(LoginRequiredMixin, UpdateView):
+    template_name = 'client/client_report_edit.html'
+    form_class = ReportForm
+    queryset = Report.objects.all()
+    success_url = reverse_lazy('report-client:report-list')
+
+
+class ReportDeleteView(LoginRequiredMixin, DeleteView):
+    template_name = 'client/client_report_delete.html'
+    success_url = reverse_lazy('report-client:report-list')
+    queryset = Report.objects.all()
+

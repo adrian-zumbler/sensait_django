@@ -390,6 +390,48 @@ class EmailSend(models.Model):
         })
 
 
+def report_files_name(instance, filename):
+    today = timezone.now()
+    today_path = today.strftime('%Y/%m/%d')
+    return '/'.join([
+        'report',
+        today_path,
+        'report_sensor-',
+        str(instance.sensor.id),
+        '-' + str(instance.created_at)])
+
+
+class Report(models.Model):
+    REPORTES_TIPO = (
+        (1, 'Reporte de Registros'),
+        (2, 'Reporte de Alertas')
+    )
+
+    ARCHIVO_TIPO = (
+        (1, 'PDF'),
+        (2, 'CSV'),
+        (3, 'XLSX')
+    )
+
+    sensor = models.ForeignKey(ArduinoSensor)
+    tipo_archivo = models.PositiveSmallIntegerField(
+        verbose_name='Tipo de Archivo',
+        choices=ARCHIVO_TIPO,
+        default=1)
+    tipo_reporte = models.PositiveSmallIntegerField(
+        verbose_name='Tipo de Reporte',
+        choices=REPORTES_TIPO,
+        default=1)
+    fecha_inicial = models.PositiveIntegerField()
+    fecha_final = models.PositiveIntegerField()
+    file = models.FileField(upload_to=report_files_name)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __unicode__(self):
+        return self.id
+
+
 def merge_epoch_field(arduino, efield_name='field1'):
     sensors = arduino.arduino_sensors.all()
     esensor = sensors.filter(data_key=efield_name)
@@ -403,10 +445,3 @@ def merge_epoch_field(arduino, efield_name='field1'):
             created_at__lt=edatetime + delta
         ).update(epoch=epoch)
 
-
-# @receiver(post_save, sender=SensorData)
-# def post_save_sensordata(sender, instance, **kwargs):
-#     instance_dict = model_to_dict(instance)
-#     Channel("post-save-sensordata").send({
-#         "sensordata": instance_dict
-#     })

@@ -2,6 +2,7 @@ from django import forms
 
 from arduino.models import Arduino, SensorType, ArduinoSensor
 from client.models import Project, Client
+from arduino.models import Report
 from django.forms.utils import ErrorList
 
 class AdminProjectCreateForm(forms.ModelForm):
@@ -49,6 +50,12 @@ class AdminSensorCreateForm(forms.ModelForm):
     class Meta:
         model = Arduino
         fields = '__all__'
+
+
+class ReportForm(forms.ModelForm):
+    class Meta:
+        model = Report
+        exclude = ['file']
 
 
 class AdminInlineArduinoSensorCreateForm(forms.ModelForm):

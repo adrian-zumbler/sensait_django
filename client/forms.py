@@ -81,3 +81,4 @@ class ArduinoSensorCSVReportForm(forms.Form):
                 return False
             return True
         return False
+

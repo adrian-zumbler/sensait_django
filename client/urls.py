@@ -11,6 +11,7 @@ urlpatterns = [
     url(r'^admin/enterprises/detail/(?P<pk>\d+)/$', EnterpriseDetailView.as_view(), name='enterprise-detail'),
     url(r'^admin/enterprises/edit/(?P<pk>\d+)/$', EnterpriseUpdateView.as_view(), name='enterprise-update'),
     url(r'^admin/enterprises/delete/(?P<pk>\d+)/$', EnterpriseDeleteView.as_view(), name='enterprise-delete'),
+
     url(r'^admin/clients/$', ClientListView.as_view(), name='client-list'),
     url(r'^admin/clients/add/$', ClientCreateView.as_view(), name='client-add'),
     url(r'^admin/clients/detail/(?P<pk>\d+)/$', ClientDetailView.as_view(), name='client-detail'),
