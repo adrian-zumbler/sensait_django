@@ -284,7 +284,7 @@
       {% if not request.user.client %}
 
       <li class="header">PROYECTOS</li>
-      <li><a href="{% url 'projects' %}"><i class="fa fa-laptop"></i> <span>
+      <li><a href="{% url 'dashboard-client:projects' %}"><i class="fa fa-laptop"></i> <span>
         MIS PROYECTOS
       </span></a></li>
       {% comment %}
@@ -380,12 +380,12 @@
           </ul>
         </li>
 
-        <li><a href="{% url 'status' %}"><i class="fa fa-laptop"></i> <span>STATUS GENERAL</span></a></li>
+        <li><a href="{% url 'dashboard-client:status' %}"><i class="fa fa-laptop"></i> <span>STATUS GENERAL</span></a></li>
 
       {% else %}
 
         <li class="header">CLIENTES</li>
-        <li><a href="{% url 'projects' %}"><i class="fa fa-laptop"></i> <span>Proyectos</span></a></li>
+        <li><a href="{% url 'dashboard-client:projects' %}"><i class="fa fa-laptop"></i> <span>Proyectos</span></a></li>
       {% endif %}
       <li class="header">SESIÓN</li>
       <li><a href="http://sensait.dyndns.org" target="_self"><i class="fa fa-laptop"></i> <span>CERRAR SESIÓN</span></a></li>

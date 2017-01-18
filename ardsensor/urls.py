@@ -60,20 +60,15 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^', include('arduino.urls', namespace='arduino', app_name='arduino')),
     url(r'^', include('ticket.urls', namespace='ticket')),
+
+    url(r'^', include('dashboard.urls', namespace='dashboard-client')),
+
     url(r'^dash/', include('client.urls', namespace='enterprise-client')),
 
+    url(r'^dash/main/$', DashMainListView.as_view(), name="main"),
     url(r'^logout/$', logout, {'next': '/'}, name="logout"),
     url(r'^logins/$', login_user),
     url(r'^error/$', TemplateView.as_view(template_name='system/errors/error.html')),
-
-    url(r'^dash/main/$', DashMainListView.as_view(), name="main"),
-    url(r'^dash/status/$', SystemStatusListView.as_view(), name="status"),
-    url(r'^dash/projects/$', ProjectsListView.as_view(), name="projects"),
-    url(r'^dash/projects/(?P<pk>\d+)/$', ProjectDetailView.as_view(), name="projectDetail"),
-    url(r'^dash/reports/(?P<pk>\d+)/$', CSVReportView.as_view()),
-    url(r'^dash/alerts/(?P<pk>\d+)/$', ArduinoAlertDetailView.as_view()),
-    url(r'^dash/iot/(?P<pk>\d+)/$', ArduinoDetailView.as_view(), name="arduinoDetail"),
-    url(r'^dash/sensor/(?P<pk>\d+)/$', ArduinoSensorDetailView.as_view(), name="sensorDetail"),
 
     url(r'^dash/admin/projects/$', AdminProjectsListView.as_view(), name="projectsList"),
     url(r'^dash/admin/projects/detail/(?P<pk>\d+)/$', AdminProjectsDetailView.as_view(), name="projectsDetail"),
