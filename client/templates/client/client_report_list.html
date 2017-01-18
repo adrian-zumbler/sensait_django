@@ -1,16 +1,18 @@
 {% extends 'main_header.html' %}
 {% load staticfiles %}
 {% load arduino_tags %}
+{% load i18n %}
 
 
 {% block main_content_wrapper %}
+  {% language 'es' %}
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
         CLIENT REPORT LIST
-        <small>Listado de Empresas dados de alta en el sistema</small>
+        <small>Reportes del sensor </small>
       </h1>
     </section>
 
@@ -21,42 +23,31 @@
       <div class="col-xs-12">
         <div class="box">
           <div class="box-header">
-            <h3 class="box-title">Lista de Empresas registradas</h3>
+            <h3 class="box-title">Lista de Reportes del sensor  </h3>
           </div>
           <div class="box-body">
-            <table id="table_projects" class="table table-bordered table-striped">
+            <table id="table_reports" class="table table-bordered table-striped">
               <thead>
                 <tr>
-                  <th>Empresa ID</th>
-                  <th>Nombre</th>
-                  <th>Ciudad</th>
-                  <th>Estatus</th>
-                  <th>Accion</th>
+                  <th>ID Reporte</th>
+                  <th>Fecha Creación</th>
+                  <th>Tipo Reporte</th>
+                  <th>Fechas del Reporte</th>
+                  <th>Descargar</th>
                 </tr>
               </thead>
               <tbody>
 
-                {% for enterprise in enterprise_list %}
+                {% for report in report_list %}
                 <tr>
-                  <td> Empresa00{{enterprise.id}} </td>
-                  <td> {{enterprise.name}} </td>
-                  <td> {{enterprise.city }} </td>
-                  <td> {{enterprise.get_estatus_display }} </td>
+                  <td> Reporte00{{report.id}} </td>
+                  <td> {{report.created_at}} </td>
+                  <td> {{report.get_tipo_archivo_display }} </td>
+                  <td> Fecha Inicial: <b>{{report.fecha_inicial | epoch2Date }} </b> <br/> Fecha Final: <b>{{report.fecha_final | epoch2Date }}</b></td>
                   <td>
-                    <div class="btn-group">
-                      <a href="/dash/admin/enterprises/detail/{{enterprise.id}}" target="_self">
-                        <button  type="button" class="btn btn-success">Ver</button>
-                      </a>
-                      <a href="/dash/admin/enterprises/edit/{{enterprise.id}}" target="_self">
-                        <button  type="button" class="btn btn-info">Editar</button>
-                      </a>
-                      <a href="/dash/admin/enterprises/delete/{{enterprise.id}}" target="_self">
-                        <button type="button" class="btn btn-danger">Borrar</button>
-                      </a>
-                      <a href="/dash/admin/enterprises/edit/{{enterprise.id}}" target="_self">
-                        <button type="button" class="btn btn-warning">Contactos</button>
-                      </a>
-                    </div>
+                    <a href="{{report.archivo }}" target="_self">
+                      <button type="button" class="btn btn-warning">Descargar</button>
+                    </a>
                   </td>
                 </tr>
                 {% endfor %}
@@ -72,8 +63,8 @@
     <div class="row">
       <div class="col-xs-12">
         <div class="box">
-          <a href="{% url 'enterprise-client:enterprise-add' %}">
-            <button class="btn btn-block btn-info btn-lg">Agregar Cliente</button>
+          <a href="{% url 'dashboard-client:reports-add' sensor_pk=report_list.last.sensor.id  %}">
+            <button class="btn btn-block btn-info btn-lg">Crear Reporte</button>
           </a>
         </div>
       </div>
@@ -84,6 +75,7 @@
   <!-- /.content -->
 </div>
 <!-- /.content-wrapper -->
+{% endlanguage %}
 {% endblock main_content_wrapper %}
 
 
@@ -94,13 +86,16 @@
 <script type="application/javascript">
 
   $(function () {
-    $('#table_projects').DataTable({
-      "paging": false,
+    $('#table_reports').DataTable({
+      "paging": true,
       "lengthChange": false,
-      "searching": false,
+      "searching": true,
       "ordering": true,
       "info": false,
-      "autoWidth": true
+      "autoWidth": true,
+      "oLanguage": {
+        "sSearch": "Buscar:"
+      }
     });
   });
 

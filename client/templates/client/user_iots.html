@@ -117,7 +117,7 @@
                         </td>
                         <td align="center">
                           <span id="sensor_{{ sensor.id}}">
-                            {{ sensor.sensor_data.last.data|floatformat:2 }} 
+                            {{ sensor.sensor_data.last.data|floatformat:2 }}
                           </span>
                           <span id="subfix_{{ sensor.id}}">
                             {{ sensor.sensor_type.subfix}}
@@ -139,6 +139,9 @@
                           <div class="btn-group">
                             <a href="/dash/sensor/{{sensor.id}}" target="_self">
                               <button  type="button" class="btn btn-success">Gráfica</button>
+                            </a>
+                            <a href="/dash/{{sensor.id}}/reports/" target="_self">
+                              <button  type="button" class="btn btn-success">Reportes</button>
                             </a>
                           </div>
                           {% endifnotequal%}

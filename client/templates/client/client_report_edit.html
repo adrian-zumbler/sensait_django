@@ -8,27 +8,9 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-        CLIENT REPORT EDIT
+        CLIENT REPORT EDIT & ADD
         <small>Control de Empresas</small>
       </h1>
-      {% comment %}
-      <ol class="breadcrumb">
-        <li>
-          <a href="#">
-            <i class="fa fa-dashboard"></i>
-            Home</a>
-        </li>
-        <li class="active">
-          <a href="#" target="_self">
-            Lista de Empresas
-          </a>
-        </li>
-        {% if form.initial %}
-          <li class="active"> Empresa: <b>{{enterprise.name }}</b></li>
-        {% else %}
-        {% endif %}
-      </ol>
-      {% endcomment %}
     </section>
 
     <!-- Main content -->
@@ -38,7 +20,7 @@
         <div class="col-xs-12">
           <div class="box box-info">
             <div class="box-header with-border">
-              <h3 class="box-title">{% if form.initial %} Editar {% else %} Crear {% endif %} Empresa</h3>
+              <h3 class="box-title">{% if form.initial %} Editar {% else %} Crear {% endif %} Reporte</h3>
             </div>
             <!-- /.box-header -->
             <!-- form start -->
@@ -59,10 +41,10 @@
               </div>
               <!-- /.box-body -->
               <div class="box-footer">
-                <a href="{% url 'enterprise-client:enterprise-list' %}" class="btn btn-default">Regresar</a>
+                <a href="{% url 'dashboard-client:reports-list' sensor_pk=27%}" class="btn btn-default">Regresar</a>
                 <button type="submit" class="btn btn-primary">
                   {% if form.initial %} Editar {% else %} Crear {% endif %}
-                  Empresa
+                  Reporte
                 </button>
               </div>
               <!-- /.box-footer -->

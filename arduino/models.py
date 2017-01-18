@@ -444,4 +444,3 @@ def merge_epoch_field(arduino, efield_name='field1'):
             created_at__gt=edatetime - delta,
             created_at__lt=edatetime + delta
         ).update(epoch=epoch)
-
