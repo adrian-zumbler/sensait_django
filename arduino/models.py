@@ -431,6 +431,9 @@ class Report(models.Model):
     def __unicode__(self):
         return self.id
 
+    class Meta:
+        ordering = ['-created_at']
+
 
 def merge_epoch_field(arduino, efield_name='field1'):
     sensors = arduino.arduino_sensors.all()
