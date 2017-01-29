@@ -47,7 +47,7 @@
                   <td> {{report.get_tipo_archivo_display }} </td>
                   <td> Fecha Inicial: <b>{{report.fecha_inicial | epoch2Date }} </b> <br/> Fecha Final: <b>{{report.fecha_final | epoch2Date }}</b></td>
                   <td>
-                    <a href="{{report.archivo }}" target="_self">
+                    <a href="{{report.archivo.url }}" target="_self">
                       <button type="button" class="btn btn-warning">Descargar</button>
                     </a>
                   </td>

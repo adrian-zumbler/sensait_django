@@ -1,15 +1,19 @@
-from django.shortcuts import render
+
+from io import BytesIO
 
 from django import forms
+from django.core.files import File
 from django.http import HttpResponseRedirect
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.core.urlresolvers import reverse_lazy, reverse
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.conf import settings
 
 from dashboard.forms import AdminArduinoCreateForm, AdminProjectUpdateForm, \
     AdminProjectCreateForm, ArduinoSensorFormSet, InLineArduinoSensorFormSet, ReportForm
 from arduino.models import Arduino, ArduinoSensor, Report
 from client.models import Project, Client
+from ardsensor.printing import ReportPrint
 
 
 #       CLASES PARA USUARIO/CLIENTE
@@ -260,10 +264,21 @@ class ReportCreateView(LoginRequiredMixin, CreateView):
 
     def form_valid(self, form):
         self.object = form.save(commit=False)
+
         self.object.sensor_id = self.kwargs['sensor_pk']
+
+        # buffer = BytesIO()
+        #
+        # report = ReportPrint(buffer, 'Letter')
+        #
+        #
+        #
+        # report.print_sensor_data(self.object)
+        #
+        # self.object.archivo.save('myfile.pdf', File(buffer))
+
         self.object.save()
         return HttpResponseRedirect(self.get_success_url())
-        #return super(ReportCreateView, self).form_valid(form)
 
 
 class ReportDetailView(LoginRequiredMixin, DetailView):

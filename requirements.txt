@@ -24,6 +24,7 @@ Pillow==3.3.0
 psycopg2==2.6.2
 pytz==2016.4
 redis==2.10.5
+reportlab==3.3.0
 simplejson==3.8.2
 six==1.10.0
 Twisted==16.5.0

@@ -4,12 +4,16 @@ from __future__ import unicode_literals
 
 from decimal import Decimal
 from datetime import timedelta
+from io import BytesIO
+
 from django.utils import timezone
+from django.core.files import File
 from django.db import models
 from django.contrib.auth.models import User
 from django.template.loader import get_template
-from django.core.mail import EmailMultiAlternatives
+
 from client.models import Client, Project as ProjectC
+from ardsensor.printing import ReportPrint
 import uuid
 
 from channels import Channel
@@ -376,14 +380,6 @@ class EmailSend(models.Model):
         get_latest_by = "sended_at"
 
     def send(self):
-        # msg = EmailMultiAlternatives(
-        #     self.subject,
-        #     self.text_content,
-        #     self.from_email,
-        #     [self.to])
-        # msg.attach_alternative(self.html_content, "text/html")
-        # msg.send()
-
         self_dict = model_to_dict(self)
         Channel("send-email").send({
             "email_send": self_dict
@@ -396,9 +392,11 @@ def report_files_name(instance, filename):
     return '/'.join([
         'report',
         today_path,
-        'report_sensor-',
         str(instance.sensor.id),
-        '-' + str(instance.created_at)])
+        'report_sensor-' + '-' + str(instance.fecha_inicial) + 'to' + str(instance.fecha_final)]
+    )
+
+
 
 
 class Report(models.Model):
@@ -424,15 +422,40 @@ class Report(models.Model):
         default=1)
     fecha_inicial = models.PositiveIntegerField()
     fecha_final = models.PositiveIntegerField()
-    archivo = models.FileField(upload_to=report_files_name)
 
     created_at = models.DateTimeField(auto_now_add=True)
+
+    archivo = models.FileField(upload_to=report_files_name)
+
+    class Meta:
+        ordering = ['-created_at']
 
     def __unicode__(self):
         return self.id
 
-    class Meta:
-        ordering = ['-created_at']
+    def sensor_data(self):
+        return  self.sensor.sensor_data.filter(
+            epoch__range=[self.fecha_inicial, self.fecha_final]
+        )
+
+    def create_update_file(self):
+
+        buff = BytesIO()
+        report = ReportPrint(buff, 'Letter')
+        report.print_sensor_data(self)
+
+        # Save the file but don't save the model to avoid
+        # loop with self.save method
+        self.archivo.save('tmp_name.pdf', File(buff), save=False)
+
+    def save(self, force_insert=False, force_update=False, using=None,
+             update_fields=None):
+
+        # Create the file befor saveing
+        self.create_update_file()
+        return super(Report, self).save(
+            force_insert=False, force_update=False,
+            using=None, update_fields=None)
 
 
 def merge_epoch_field(arduino, efield_name='field1'):
