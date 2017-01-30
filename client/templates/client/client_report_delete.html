@@ -1,32 +1,24 @@
 {% extends 'main_header.html' %}
 {% load staticfiles %}
 {% load arduino_tags %}
+{% load i18n %}
+
+
 
 {% block main_content_wrapper %}
 
+{% language 'es' %}
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-        CLIENT REPORT DELETE
-        <small>BORRADO DE EMPRESA</small>
+        BORRADO DE REPORTE:
+        <b>
+          {{report.get_tipo_reporte_display }}
+        </b>
 
       </h1>
-      <ol class="breadcrumb">
-        <li>
-          <a href="#">
-            <i class="fa fa-dashboard"></i>
-            Home</a>
-        </li>
-        <li class="active">
-          <a href="#" target="_self">
-            Lista de Empresas
-          </a>
-        </li>
-        <li class="active"> Empresa  <b>{{enterprise.name }}</b></li>
-
-      </ol>
     </section>
 
     <!-- Main content -->
@@ -36,18 +28,17 @@
       <div class="box box-primary">
         <div class="box-header with-border">
           <h3 class="box-title">
-            <b> IMPORTANTE:</b>
+            <b> IMPORTANTE:</b> Fecha de creación del reporte {{report.created_at }}
           </h3>
         </div><!-- /.box-header -->
         <!-- form start -->
-        <h1 class="color_red">Estas a punto de borrar la empresa y su información:</h1>
-
-        <h2>Empresa:      <b> {{enterprise.name}} </b> </h2>
-
+        <h3 class="color_red">
+          Estas a punto de borrar este reporte
+        </h3>
         </br>
-        <b><h4>
+        <b><h1>
           ¿Estas seguro?
-        </h4> </b>
+        </h1> </b>
 
         <form role="form" action="" method="post">
           {% csrf_token %}
@@ -56,7 +47,7 @@
 
           <div class="box-footer">
             <a href="#">
-              <a href="{% url 'enterprise-client:enterprise-list' %}" class="btn btn-info">Cancelar</a>
+              <a href="{% url 'dashboard-client:reports-list' sensor_pk=report.sensor.id %}" class="btn btn-info">Cancelar</a>
             </a>
             <a href="#">
               <button type="submit" class="btn btn-danger">Borrar</button>
@@ -71,7 +62,7 @@
     <!-- /.content -->
   </div>
   <!-- /.content-wrapper -->
-
+{% endlanguage %}
 {% endblock main_content_wrapper %}
 
 {% block content_js %}

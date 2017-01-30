@@ -45,10 +45,14 @@
                   <td> Reporte00{{report.id}} </td>
                   <td> {{report.created_at}} </td>
                   <td> {{report.get_tipo_archivo_display }} </td>
-                  <td> Fecha Inicial: <b>{{report.fecha_inicial | epoch2Date }} </b> <br/> Fecha Final: <b>{{report.fecha_final | epoch2Date }}</b></td>
+                  <td> Fecha Inicial: <b>{{report.fecha_inicial | epoch2Date }} </b> <br/> Fecha Final: <b>{{report.fecha_final | epoch2Date }}</b>
+                  </td>
                   <td>
-                    <a href="{{report.archivo.url }}" target="_self">
+                    <a href="{{report.archivo.url }}" target="_blank">
                       <button type="button" class="btn btn-warning">Descargar</button>
+                    </a>
+                    <a href="{% url 'dashboard-client:reports-delete' sensor_pk=report.sensor.id pk=report.id  %}">
+                      <button class="btn btn-info">Borrar</button>
                     </a>
                   </td>
                 </tr>
@@ -65,9 +69,11 @@
     <div class="row">
       <div class="col-xs-12">
         <div class="box">
-          <a href="{% url 'dashboard-client:reports-add' sensor_pk=report_list.last.sensor.id  %}">
-            <button class="btn btn-block btn-info btn-lg">Crear Reporte</button>
-          </a>
+          {% if report_list.count > 0 %}
+            <a href="{% url 'dashboard-client:reports-add' sensor_pk=report_list.last.sensor.id  %}">
+              <button class="btn btn-block btn-info btn-lg">Crear Reporte</button>
+            </a>
+          {% endif %}
         </div>
       </div>
     </div>
