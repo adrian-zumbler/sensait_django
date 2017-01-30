@@ -393,7 +393,7 @@ def report_files_name(instance, filename):
         'report',
         today_path,
         str(instance.sensor.id),
-        'report_sensor-' + '-' + str(instance.fecha_inicial) + 'to' + str(instance.fecha_final)]
+        'report_sensor-' + '-' + str(instance.fecha_inicial) + 'to' + str(instance.fecha_final) + '.pdf']
     )
 
 
