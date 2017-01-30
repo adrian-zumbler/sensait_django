@@ -3,7 +3,7 @@
 from __future__ import unicode_literals
 
 from decimal import Decimal
-from datetime import timedelta
+from datetime import timedelta, datetime
 from io import BytesIO
 
 from django.utils import timezone
@@ -393,10 +393,8 @@ def report_files_name(instance, filename):
         'report',
         today_path,
         str(instance.sensor.id),
-        'report_sensor-' + '-' + str(instance.fecha_inicial) + 'to' + str(instance.fecha_final) + '.pdf']
+        'Reporte' + '-' + datetime.fromtimestamp(instance.fecha_inicial).strftime('%d-%m-%Y') + '_' + datetime.fromtimestamp(instance.fecha_final).strftime('%d-%m-%Y') + '.pdf']
     )
-
-
 
 
 class Report(models.Model):
@@ -434,7 +432,7 @@ class Report(models.Model):
         return self.id
 
     def sensor_data(self):
-        return  self.sensor.sensor_data.filter(
+        return self.sensor.sensor_data.filter(
             epoch__range=[self.fecha_inicial, self.fecha_final]
         )
 

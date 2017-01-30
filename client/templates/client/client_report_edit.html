@@ -3,12 +3,23 @@
 {% load widget_tweaks %}
 
 
+{% block content_css %}
+
+<style>
+  #id_fecha_inicial, #id_fecha_final{
+    display:none;
+  }
+</style>
+
+{% endblock content_css %}
+
+
 {% block main_content_wrapper %}
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-        CREAR REPORTE DEL SENSOR <b>{{report_list.last.sensor}}</b>
+        CREAR REPORTE DEL SENSOR
         <small></small>
       </h1>
     </section>
@@ -28,22 +39,42 @@
               <div class="box-body">
                   {% csrf_token %}
                   {% for field in form %}
+
+
+
                   <div class="form-group">
                       <label for="inputEmail3" class="col-sm-2 control-label">{{ field.label }}</label>
                       <div class="col-sm-10">
                          {% render_field field class="form-control" %}
+
+                         {% if field.label == "Fecha inicial" %}
+                           <div class="">
+                             <button type="button" class="btn btn-default pull-left" id="cal_fecha_inicial"><span><i class="fa fa-calendar"></i> Selección {{field.label}}</span><i class="fa fa-caret-down"></i></button>
+                           </div>
+                         {% endif %}
+
+                         {% if field.label == "Fecha final" %}
+                           <div class="">
+                             <button type="button" class="btn btn-default pull-left" id="cal_fecha_final"><span><i class="fa fa-calendar"></i> Selección {{field.label}}</span><i class="fa fa-caret-down"></i></button>
+                           </div>
+                         {% endif %}
+
                       </div>
                       <div class="col-sm-offset-2 col-sm-8">
                          {{field.errors}}
                       </div>
                   </div>
+
+
+
+
                   {% endfor %}
               </div>
               <!-- /.box-body -->
               <div class="box-footer">
-                <a href="{% url 'dashboard-client:reports-list' sensor_pk=27%}" class="btn btn-default">Regresar</a>
+                <a href="{% url 'dashboard-client:reports-list' sensor_pk=27 %}" class="btn btn-default">Regresar</a>
                 <button type="submit" class="btn btn-primary">
-                  {% if form.initial %} Editar {% else %} Crear {% endif %}
+                  {% if form.initial %} Editar {% else %} Generar {% endif %}
                   Reporte
                 </button>
               </div>
@@ -55,16 +86,118 @@
       </div>
 
     </section>
-    <!-- /.content -->
     </div>
-    <!-- /.content-wrapper -->
-
-
-
-
 </div>
 {% endblock main_content_wrapper %}
+
+
 {% block content_js %}
 
+<script type="application/javascript">
+
+  $('#cal_fecha_inicial').daterangepicker({
+    locale: {
+     format: "MM/DD/YYYY h:mm A",
+     "separator": " - ",
+     applyLabel: "Aplicar",
+     cancelLabel: "Cancelar",
+     fromLabel: "Del",
+     toLabel: "Al",
+     daysOfWeek: [
+          "Dom",
+          "Lun",
+          "Mar",
+          "Mie",
+          "Jue",
+          "Vie",
+          "Sab"
+      ],
+      monthNames: [
+        "Enero",
+        "Febrero",
+        "Marzo",
+        "Abril",
+        "Mayo",
+        "Junio",
+        "Julio",
+        "Agosto",
+        "Septiembre",
+        "Octubre",
+        "Noviembre",
+        "Diciembre"
+      ],
+   },
+   singleDatePicker:true,
+   opens: "center",
+   drops: "down",
+   showWeekNumbers:true,
+   timePicker: true,
+   timePickerIncrement: 10,
+   minDate: moment().subtract(1, 'year'),
+   maxDate: moment().add(1,'days'),
+   startDate: moment(), //moment(min_date,"YYYY-MM-DD"),
+   endDate: moment() //moment(max_date,"YYYY-MM-DD")
+  },
+  function (start, end) {
+    filter_date_start = start.format('YYYY-MM-DD HH:mm');
+    var epoch_start   = Date.parse(filter_date_start) + "";
+    epoch_start = epoch_start.substring(0,(epoch_start.length-3));
+    //console.log(epoch_start);
+    $('#id_fecha_inicial').val(epoch_start);
+  });
+
+
+  $('#cal_fecha_final').daterangepicker({
+    locale: {
+     format: "MM/DD/YYYY h:mm A",
+     "separator": " - ",
+     applyLabel: "Aplicar",
+     cancelLabel: "Cancelar",
+     fromLabel: "Del",
+     toLabel: "Al",
+     daysOfWeek: [
+          "Dom",
+          "Lun",
+          "Mar",
+          "Mie",
+          "Jue",
+          "Vie",
+          "Sab"
+      ],
+      monthNames: [
+        "Enero",
+        "Febrero",
+        "Marzo",
+        "Abril",
+        "Mayo",
+        "Junio",
+        "Julio",
+        "Agosto",
+        "Septiembre",
+        "Octubre",
+        "Noviembre",
+        "Diciembre"
+      ],
+   },
+   singleDatePicker:true,
+   opens: "center",
+   drops: "down",
+   showWeekNumbers:true,
+   timePicker: true,
+   timePickerIncrement: 10,
+   minDate: moment().subtract(1, 'year'),
+   maxDate: moment().add(1,'days'),
+   startDate: moment(), //moment(min_date,"YYYY-MM-DD"),
+   endDate: moment() //moment(max_date,"YYYY-MM-DD")
+  },
+  function (start, end) {
+    filter_date_start = start.format('YYYY-MM-DD HH:mm');
+    var epoch_start   = Date.parse(filter_date_start) + "";
+    epoch_start = epoch_start.substring(0,(epoch_start.length-3));
+    //console.log(epoch_start);
+    $('#id_fecha_final').val(epoch_start);
+  });
+
+</script>
 
 {% endblock content_js %}
