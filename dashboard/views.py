@@ -264,19 +264,7 @@ class ReportCreateView(LoginRequiredMixin, CreateView):
 
     def form_valid(self, form):
         self.object = form.save(commit=False)
-
         self.object.sensor_id = self.kwargs['sensor_pk']
-
-        # buffer = BytesIO()
-        #
-        # report = ReportPrint(buffer, 'Letter')
-        #
-        #
-        #
-        # report.print_sensor_data(self.object)
-        #
-        # self.object.archivo.save('myfile.pdf', File(buffer))
-
         self.object.save()
         return HttpResponseRedirect(self.get_success_url())
 
