@@ -91,7 +91,7 @@ class ReportPrint:
         styles.add(ParagraphStyle(name='centered', alignment=TA_CENTER))
 
         # Titulo de la seccion
-        elements.append(Paragraph('Reporte get Tipo de re' + str(report_instance.tipo_reporte), styles['Heading1']))
+        elements.append(Paragraph('Reporte get Tipo de reporte' + str(report_instance.tipo_reporte), styles['Heading1']))
 
         elements.append(Paragraph('El siguiente reporte abarca el periodo de tiempo de: ' + datetime.fromtimestamp(report_instance.fecha_inicial).strftime('%d/%m/%Y %H:%M:%S') + " al " + datetime.fromtimestamp(report_instance.fecha_final).strftime('%d/%m/%Y %H:%M:%S'), styles['Heading2']))
 
@@ -118,16 +118,15 @@ class ReportPrint:
         totalRegistros = 0
 
         for num, data in enumerate(report_instance.sensor_data(), start=0):
-            totalRegistros = num
-            promedioRegistros += float(data.data)
-            if float(data.data) > float(max_value) or float(min_value) > float(data.data):
-                totalAlertas += 1
+            if float(data.data) < -127.00:
+                totalRegistros = num
+                promedioRegistros += float(data.data)
+                if float(data.data) > float(max_value) or float(min_value) > float(data.data):
+                    totalAlertas += 1
 
         elements.append(Paragraph('Promedio' + str(promedioRegistros / totalRegistros), styles['Normal']))
         elements.append(Paragraph('Total Registros' + str(totalRegistros), styles['Normal']))
         elements.append(Paragraph('Total Alertas' + str(totalAlertas), styles['Normal']))
-
-
 
         # Tabla de ejemplo
         main_table = []
@@ -141,14 +140,15 @@ class ReportPrint:
         table_data.append(("Fecha y Hora", "Valor Registrado", "Estatus"))
         sensorStatus = "Correcto"
         for num, data in enumerate(report_instance.sensor_data(), start=0):
-            if float(data.data) > float(max_value) or float(min_value) > float(data.data):
-                sensorStatus = "Alerta"
-            else:
-                sensorStatus = "Correcto"
-            if num % 2 == 0:
-                dataTable_L.append((datetime.fromtimestamp(data.epoch).strftime('%d/%m/%Y %H:%M:%S'), data.data, sensorStatus))
-            else:
-                dataTable_R.append((datetime.fromtimestamp(data.epoch).strftime('%d/%m/%Y %H:%M:%S'), data.data, sensorStatus))
+            if float(data.data) < -127.00:
+                if float(data.data) > float(max_value) or float(min_value) > float(data.data):
+                    sensorStatus = "Alerta"
+                else:
+                    sensorStatus = "Correcto"
+                if num % 2 == 0:
+                    dataTable_L.append((datetime.fromtimestamp(data.epoch).strftime('%d/%m/%Y %H:%M:%S'), data.data, sensorStatus))
+                else:
+                    dataTable_R.append((datetime.fromtimestamp(data.epoch).strftime('%d/%m/%Y %H:%M:%S'), data.data, sensorStatus))
 
         if len(dataTable_L) > len(dataTable_R):
             total = len(dataTable_L) - len(dataTable_R)

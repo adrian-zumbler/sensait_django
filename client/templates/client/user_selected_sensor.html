@@ -41,8 +41,11 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-        <b> Transmisor: </b> {{arduinosensor.arduino.name}}
-        <small>Tipo Sensor: <b>{{ arduinosensor.sensor_type.name }}</b></small>
+        <b> Sensor: </b> {{arduinosensor}}
+        <small>
+          Transmisor: <b>{{arduinosensor.arduino.name}}</b>
+          Tipo Sensor: <b>{{ arduinosensor.sensor_type.name }}</b>
+        </small>
       </h1>
     </section>
 
@@ -377,7 +380,7 @@ function useWSData(data){
 
       for(var i= 0 ; i < jso.length ; i++){
 
-        if(jso[i]['arduino_sensor'] == {{arduinosensor.id}}){
+        if(jso[i]['arduino_sensor'] == {{arduinosensor.id}} && jso[i]['data'] != "-127.00"){
 
           var epochDate = convertEpoch2Date(jso[i]['epoch']);
           $('#epochDate').html(epochDate);
@@ -606,7 +609,7 @@ function convertEpoch2Date(epochData){
       filter_registers = limit;
 
       if(filter_type == 1 ){
-        $("#filter_resume").html("Ultimos " + limit + " registros." );
+        $("#filter_resume").html("Ultimos " + limit + " registros guardados en el sistema." );
         getDataFromAPI("","", filter_registers);
       }
       else {
@@ -654,7 +657,7 @@ function convertEpoch2Date(epochData){
      showWeekNumbers:true,
      timePicker: true,
      timePickerIncrement: 10,
-     minDate: moment().subtract(40, 'days'), //moment(min_date,"YYYY-MM-DD"),
+     minDate: moment().subtract(6, 'months'), //moment(min_date,"YYYY-MM-DD"),
      maxDate: moment().add(1,'days'),
      startDate: moment(), //moment(min_date,"YYYY-MM-DD"),
      endDate: moment() //moment(max_date,"YYYY-MM-DD")
@@ -695,7 +698,7 @@ function convertEpoch2Date(epochData){
         if(type == 1){
           $("#filter_date").hide();
           $("#filter_limit").show();
-          $("#filter_resume").html("Ultimos " + filter_registers + " registros." );
+          $("#filter_resume").html("Ultimos " + filter_registers + " valores registrados en el sistema." );
           getDataFromAPI("","", filter_registers);
         }else if (type == 2) {
           $("#filter_date").show();
@@ -765,16 +768,18 @@ function convertEpoch2Date(epochData){
     }
 
     function dataCallBack(data){
-      totalRegistros = data.length;
-
+      //No es real por los valores de -127
+      //totalRegistros = data.length;
+      totalRegistros = 0;
       var tmpPromedio=0;
       var tmpValue=0;
 
       for(var i=0; i < data.length ; i++){
 
-        if(parseInt(data[i]['epoch']) > 100000 ){
+        if(parseInt(data[i]['epoch']) > 100000 && data[i]['data'] != "-127.00"){
           tmpValue = parseInt(data[i]['data']);
           tmpPromedio += tmpValue;
+          totalRegistros++;
 
           if(i == 0){
             valorMinimo = tmpValue;
