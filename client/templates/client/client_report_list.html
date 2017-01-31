@@ -33,6 +33,7 @@
                 <tr>
                   <th>ID Reporte</th>
                   <th>Fecha Creación</th>
+                  <th>Tipo Archivo</th>
                   <th>Tipo Reporte</th>
                   <th>Fechas del Reporte</th>
                   <th>Descargar</th>
@@ -45,6 +46,7 @@
                   <td> Reporte00{{report.id}} </td>
                   <td> {{report.created_at}} </td>
                   <td> {{report.get_tipo_archivo_display }} </td>
+                  <td> {{report.get_tipo_reporte_display }} </td>
                   <td> Fecha Inicial: <b>{{report.fecha_inicial | epoch2Date }} </b> <br/> Fecha Final: <b>{{report.fecha_final | epoch2Date }}</b>
                   </td>
                   <td>
@@ -53,6 +55,9 @@
                     </a>
                     <a href="{% url 'dashboard-client:reports-delete' sensor_pk=report.sensor.id pk=report.id  %}">
                       <button class="btn btn-info">Borrar</button>
+                    </a>
+                    <a href="{% url 'dashboard-client:reports-update' sensor_pk=report.sensor.id pk=report.id  %}">
+                      <button class="btn btn-info">Actualizar</button>
                     </a>
                   </td>
                 </tr>
