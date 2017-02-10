@@ -249,7 +249,17 @@ class AdminArduinoWithSensorsUpdateView(LoginRequiredMixin, UpdateView):
 
 class ReportListView(LoginRequiredMixin, ListView):
     template_name = 'client/client_report_list.html'
-    queryset = Report.objects.all()
+    # queryset = Report.objects.all()
+
+    def get_queryset(self):
+        return Report.objects.filter(
+            sensor_id=self.kwargs['sensor_pk']
+        )
+
+    def get_context_data(self, **kwargs):
+        ctx = super(ReportListView, self).get_context_data(**kwargs)
+        ctx.update(self.kwargs)
+        return ctx
 
 
 class ReportCreateView(LoginRequiredMixin, CreateView):
