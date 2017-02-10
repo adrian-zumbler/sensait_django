@@ -234,7 +234,7 @@ class ReportPrint:
         alert_list = []
 
         # Cargaremos los titulos de la tabla
-        table_data.append(("Fecha y Hora", "Valor Registrado", "Estatus"))
+        dataTable_L.append(("Fecha y Hora", "Valor Registrado", "Estatus"))
         sensorStatus = "Correcto"
         for num, data in enumerate(report_instance.sensor_data(), start=0):
             if str(data.data) != str("-127.00"):
@@ -250,7 +250,7 @@ class ReportPrint:
                         all_alerts.append(list(alert_list))
                         alert_list = []
 
-                dataTable_L.append((datetime.fromtimestamp(data.epoch).strftime('%d/%m/%Y %H:%M:%S') + " " + str(num), data.data, sensorStatus))
+                dataTable_L.append((datetime.fromtimestamp(data.epoch).strftime('%d/%m/%Y %H:%M:%S'), data.data, sensorStatus))
 
         table_L = Table(dataTable_L, colWidths=[(doc.width) / 3.0] * 3)
         table_L.setStyle(TableStyle([('INNERGRID', (0, 0), (-1, -1), 0.25, colors.black), ('BOX', (0, 0), (-1, -1), 0.25, colors.black)]))
