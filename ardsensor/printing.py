@@ -270,11 +270,11 @@ class ReportPrint:
         alerts_tables = []
         alert_content = []
 
-        print "all_alerts.len()"
-        print len(all_alerts)
+        # print "all_alerts.len()"
+        # print len(all_alerts)
 
         for num, alertlist in enumerate(all_alerts, start=0):
-            print str(len(alertlist))
+            # print str(len(alertlist))
             titulo = Paragraph('<b>Alerta # ' + str(num) + ' </b>', style_Normal)
             elements.append(titulo)
 
@@ -300,12 +300,12 @@ class ReportPrint:
             valMin = 0
             valTmp = 0
             for ids, alert in enumerate(alertlist, start=0):
-                print alert.data
+                # print alert.data
                 # datos = Paragraph(str(alert.data), style_Normal)
                 valTmp = float(alert.data)
-                print "tmp: " + str(valTmp)
-                print "max: " + str(valMax)
-                print "min: " + str(valMin)
+                # print "tmp: " + str(valTmp)
+                # print "max: " + str(valMax)
+                # print "min: " + str(valMin)
                 if float(valTmp) > float(valMax):
                     valMax = valTmp
                     if valMin == 0:
@@ -342,7 +342,7 @@ class ReportPrint:
             # lc.lines[1].strokeWidth = 1.5
             drawing.add(lc)
 
-            print "endFor"
+            # print "endFor"
 
             alert_data_tables.append((alert_content, drawing))
             alerts_tables = Table(alert_data_tables, colWidths=[(doc.width) / 2.0] * 3)
