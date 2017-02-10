@@ -69,7 +69,7 @@
               </div>
               <!-- /.box-body -->
               <div class="box-footer">
-                <a href="{% url 'dashboard-client:reports-list' sensor_pk=object.id %}" class="btn btn-default">Regresar</a>
+                <a href="{% url 'dashboard-client:reports-list' sensor_pk=sensor_pk %}" class="btn btn-default">Regresar</a>
                 <button type="submit" class="btn btn-primary">
                   {% if form.initial %} Actualizar {% else %} Crear {% endif %}
                   Reporte
