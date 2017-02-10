@@ -310,4 +310,3 @@ class ReportDeleteView(LoginRequiredMixin, DeleteView):
     template_name = 'client/client_report_delete.html'
     success_url = reverse_lazy('dashboard-client:reports-list')
     queryset = Report.objects.all()
-
