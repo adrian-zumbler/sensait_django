@@ -272,6 +272,11 @@ class ReportCreateView(LoginRequiredMixin, CreateView):
             kwargs={'sensor_pk': self.kwargs['sensor_pk']}
         )
 
+    def get_context_data(self, **kwargs):
+        ctx = super(ReportCreateView, self).get_context_data(**kwargs)
+        ctx.update(self.kwargs)
+        return ctx
+
     def form_valid(self, form):
         self.object = form.save(commit=False)
         self.object.sensor_id = self.kwargs['sensor_pk']
@@ -294,6 +299,11 @@ class ReportUpdateView(LoginRequiredMixin, UpdateView):
             'dashboard-client:reports-list',
             kwargs={'sensor_pk': self.kwargs['sensor_pk']}
         )
+
+    def get_context_data(self, **kwargs):
+        ctx = super(ReportUpdateView, self).get_context_data(**kwargs)
+        ctx.update(self.kwargs)
+        return ctx
 
 
 class ReportDeleteView(LoginRequiredMixin, DeleteView):
