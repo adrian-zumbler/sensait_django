@@ -53,10 +53,10 @@
                     <a href="{{report.archivo.url }}" target="_blank">
                       <button type="button" class="btn btn-warning">Descargar</button>
                     </a>
-                    <a href="{% url 'dashboard-client:reports-delete' sensor_pk=report.sensor.id pk=report.id  %}">
+                    <a href="{% url 'dashboard-client:reports-delete' sensor_pk=sensor_pk pk=report.id  %}">
                       <button class="btn btn-info">Borrar</button>
                     </a>
-                    <a href="{% url 'dashboard-client:reports-update' sensor_pk=report.sensor.id pk=report.id  %}">
+                    <a href="{% url 'dashboard-client:reports-update' sensor_pk=sensor_pk pk=report.id  %}">
                       <button class="btn btn-info">Actualizar</button>
                     </a>
                   </td>
@@ -74,13 +74,13 @@
     <div class="row">
       <div class="col-xs-12">
         <div class="box">
-          <a href="{% url 'dashboard-client:reports-add' sensor_pk=report_list.last.sensor.id  %}">
+          <a href="{% url 'dashboard-client:reports-add' sensor_pk=sensor_pk  %}">
             <button class="btn btn-block btn-info btn-lg">Crear Reporte</button>
           </a>
         </div>
       </div>
     </div>
-    
+
     {% if report_list.count > 0 %}
     {% endif %}
 
