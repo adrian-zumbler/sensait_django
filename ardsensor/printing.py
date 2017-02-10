@@ -224,7 +224,6 @@ class ReportPrint:
 
         elements.append(PageBreak())
 
-        elements.append(Paragraph('DETALLE DE ALERTAS', style_Title_Center))
         # Tabla de ejemplo
         main_table = []
         dataTable_L = []
@@ -264,75 +263,95 @@ class ReportPrint:
         # table_Main.setStyle(TableStyle([('INNERGRID', (0, 0), (-1, -1), 0.25, colors.red), ('BOX', (0, 0), (-1, -1), 0.25, colors.red)]))
 
         # Tabla con todos los registros...
-        elements.append(table_L)
+        elements.append(Paragraph('ALERTAS REGISTRADAS', style_Title_Center))
 
         # Tablas POR ALERTA...
         alert_data_tables = []
         alerts_tables = []
         alert_content = []
-        elements.append(PageBreak())
 
         print "all_alerts.len()"
         print len(all_alerts)
 
         for num, alertlist in enumerate(all_alerts, start=0):
             print str(len(alertlist))
-            titulo = Paragraph('<b>Alerta del ...:</b>' + str(num), style_Normal)
+            titulo = Paragraph('<b>Alerta # ' + str(num) + ' </b>', style_Normal)
             elements.append(titulo)
-
 
             alert_data_tables = []
             alert_content = []
             alert_graph = []
             alert_graph_dates = []
 
-            alerta_primer_registro = Paragraph('<b>Fecha inicio alerta:</b><br/>' + str(datetime.fromtimestamp(alertlist[0].epoch).strftime('%d/%m/%Y %H:%M:%S') + "<br/>"), style_Normal)
-            alerta_ultima_registro = Paragraph('<b>Fecha final alerta:</b><br/>' + str(datetime.fromtimestamp(alertlist[len(alertlist) - 1].epoch).strftime('%d/%m/%Y %H:%M:%S') + "<br/>"), style_Normal)
-            alerta_total_registros = Paragraph('<b>Registros fuera de rango:</b><br/>' + str(len(alertlist)) + "<br/>", style_Normal)
-            alerta_total_registros = Paragraph("<b>Comentarios:</b><br/>______________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________<br/>", style_Normal)
+            alerta_primer_registro = Paragraph('<b>Fecha inicio alerta:</b><br/>' + str(datetime.fromtimestamp(alertlist[0].epoch).strftime('%d/%m/%Y %H:%M:%S') + "<br/><br/>"), style_Normal)
+            alerta_ultima_registro = Paragraph('<b>Fecha final alerta:</b><br/>' + str(datetime.fromtimestamp(alertlist[len(alertlist) - 1].epoch).strftime('%d/%m/%Y %H:%M:%S') + "<br/><br/>"), style_Normal)
+            alerta_total_registros = Paragraph('<b>Registros fuera de rango:</b><br/>' + str(len(alertlist)) + "<br/><br/>", style_Normal)
+            rango_maximo = Paragraph('<b>Valor Maximo:</b><br/>' + str(report_instance.sensor.max_value) + "<br/><br/>", style_Normal)
+            rango_minimo = Paragraph('<b>Valor Maximo:</b><br/>' + str(report_instance.sensor.min_value) + "<br/><br/>", style_Normal)
+            alerta_comentarios = Paragraph("<b>Comentarios:</b><br/>__________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________<br/>", style_Normal)
             alert_content.append(alerta_primer_registro)
             alert_content.append(alerta_ultima_registro)
             alert_content.append(alerta_total_registros)
+            alert_content.append(rango_maximo)
+            alert_content.append(rango_minimo)
+            alert_content.append(alerta_comentarios)
+            alert_content.append(saltosDeLineax2)
             valMax = 0
+            valMin = 0
+            valTmp = 0
             for ids, alert in enumerate(alertlist, start=0):
                 print alert.data
                 # datos = Paragraph(str(alert.data), style_Normal)
-                if float(alert.data) > float(valMax):
-                    valMax = float(alert.data)
-                valueData = int(Decimal(alert.data))
+                valTmp = float(alert.data)
+                print "tmp: " + str(valTmp)
+                print "max: " + str(valMax)
+                print "min: " + str(valMin)
+                if float(valTmp) > float(valMax):
+                    valMax = valTmp
+                    if valMin == 0:
+                        valMin = float(valTmp)
+                if float(valMin) > float(alert.data):
+                    valMin = float(alert.data)
+                if float(valMin) > float(valTmp):
+                    valMin = float(valTmp)
 
-                print "holo"
-                print type(valueData)
+                valueData = float(alert.data)
 
                 alert_graph.append(valueData)
-                alert_graph_dates.append(str(datetime.fromtimestamp(alert.epoch).strftime('%d/%m/%Y %H:%M:%S')))
+                alert_graph_dates.append(str(datetime.fromtimestamp(alert.epoch).strftime('%H:%M:%S')))
             # END FOR
-            drawing = Drawing(300, 200)
-            data = alert_graph
+            drawing = Drawing(300, 400)
+            data = [alert_graph]
             lc = HorizontalLineChart()
             lc.x = 10
             lc.y = 30
-            lc.height = 125
+            lc.height = 250
             lc.width = 230
-            lc.data = alert_graph
+            lc.data = data
             lc.joinedLines = 1
             catNames = alert_graph_dates
             lc.categoryAxis.categoryNames = catNames
+            lc.categoryAxis.labels.dx = 0
+            lc.categoryAxis.labels.dy = -22
+            lc.categoryAxis.labels.angle = 60
             lc.categoryAxis.labels.boxAnchor = 'n'
-            lc.valueAxis.valueMin = 0
-            lc.valueAxis.valueMax = 60
-            lc.valueAxis.valueStep = 15
+            lc.valueAxis.valueMin = valMin - 2
+            lc.valueAxis.valueMax = valMax + 2
+            lc.valueAxis.valueStep = 1
             lc.lines[0].strokeWidth = 2
             # lc.lines[1].strokeWidth = 1.5
-            # drawing.add(lc)
+            drawing.add(lc)
 
             print "endFor"
 
             alert_data_tables.append((alert_content, drawing))
             alerts_tables = Table(alert_data_tables, colWidths=[(doc.width) / 2.0] * 3)
-            alerts_tables.setStyle(TableStyle([('INNERGRID', (0, 0), (-1, -1), 0.25, colors.black), ('BOX', (0, 0), (-1, -1), 0.25, colors.black)]))
+            alerts_tables.setStyle(TableStyle([('INNERGRID', (0, 0), (-1, -1), 0.25, colors.black), ('BOX', (0, 0), (-1, -1), 0.25, colors.white)]))
             elements.append(alerts_tables)
             elements.append(PageBreak())
+
+        elements.append(Paragraph('DETALLE DE REGISTROS', style_Title_Center))
+        elements.append(table_L)
         # elements.append(table_R)
 
         # Se agrega el llamado del header y footer
