@@ -263,91 +263,121 @@ class ReportPrint:
         # table_Main.setStyle(TableStyle([('INNERGRID', (0, 0), (-1, -1), 0.25, colors.red), ('BOX', (0, 0), (-1, -1), 0.25, colors.red)]))
 
         # Tabla con todos los registros...
-        elements.append(Paragraph('ALERTAS REGISTRADAS', style_Title_Center))
+        elements.append(Paragraph( str(len(all_alerts)) + ' ALERTAS REGISTRADAS', style_Title_Center))
 
         # Tablas POR ALERTA...
         alert_data_tables = []
         alerts_tables = []
         alert_content = []
 
+        alerts_onedata_data = []
+        alerts_onedata_table = []
         # print "all_alerts.len()"
         # print len(all_alerts)
 
+        alerts_onedata_data.append(("Fecha Alerta", "# Registros en alerta ", "Valor"))
+        alert_max_value = float(report_instance.sensor.max_value)
+        alert_min_value = float(report_instance.sensor.min_value)
+
         for num, alertlist in enumerate(all_alerts, start=0):
-            # print str(len(alertlist))
-            titulo = Paragraph('<b>Alerta # ' + str(num) + ' </b>', style_Normal)
-            elements.append(titulo)
+            print str(len(alertlist))
+            if len(alertlist) > 1 and len(alertlist) < 6:
+                one_fecha = str(datetime.fromtimestamp(alertlist[len(alertlist) - 1].epoch).strftime('%d/%m/%Y %H:%M:%S'))
+                one_registros = len(alertlist)
+                one_value = str(alertlist[len(alertlist) - 1].data)
+                alerts_onedata_data.append((one_fecha, one_registros, one_value))
+                # alerts_onedata_data.append( alertlist[num] , drawing))
+            else:
+                titulo = Paragraph('<b>Alerta # ' + str(num) + ' </b>', style_Normal)
+                elements.append(titulo)
 
-            alert_data_tables = []
-            alert_content = []
-            alert_graph = []
-            alert_graph_dates = []
+                alert_data_tables = []
+                alert_content = []
+                alert_graph = []
+                alert_limit = []
+                alert_graph_dates = []
 
-            alerta_primer_registro = Paragraph('<b>Fecha inicio alerta:</b><br/>' + str(datetime.fromtimestamp(alertlist[0].epoch).strftime('%d/%m/%Y %H:%M:%S') + "<br/><br/>"), style_Normal)
-            alerta_ultima_registro = Paragraph('<b>Fecha final alerta:</b><br/>' + str(datetime.fromtimestamp(alertlist[len(alertlist) - 1].epoch).strftime('%d/%m/%Y %H:%M:%S') + "<br/><br/>"), style_Normal)
-            alerta_total_registros = Paragraph('<b>Registros fuera de rango:</b><br/>' + str(len(alertlist)) + "<br/><br/>", style_Normal)
-            rango_maximo = Paragraph('<b>Valor Maximo:</b><br/>' + str(report_instance.sensor.max_value) + "<br/><br/>", style_Normal)
-            rango_minimo = Paragraph('<b>Valor Maximo:</b><br/>' + str(report_instance.sensor.min_value) + "<br/><br/>", style_Normal)
-            alerta_comentarios = Paragraph("<b>Comentarios:</b><br/>__________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________<br/>", style_Normal)
-            alert_content.append(alerta_primer_registro)
-            alert_content.append(alerta_ultima_registro)
-            alert_content.append(alerta_total_registros)
-            alert_content.append(rango_maximo)
-            alert_content.append(rango_minimo)
-            alert_content.append(alerta_comentarios)
-            alert_content.append(saltosDeLineax2)
-            valMax = 0
-            valMin = 0
-            valTmp = 0
-            for ids, alert in enumerate(alertlist, start=0):
-                # print alert.data
-                # datos = Paragraph(str(alert.data), style_Normal)
-                valTmp = float(alert.data)
-                # print "tmp: " + str(valTmp)
-                # print "max: " + str(valMax)
-                # print "min: " + str(valMin)
-                if float(valTmp) > float(valMax):
-                    valMax = valTmp
-                    if valMin == 0:
+                alerta_primer_registro = Paragraph('<b>Fecha inicio alerta:</b><br/>' + str(datetime.fromtimestamp(alertlist[0].epoch).strftime('%d/%m/%Y %H:%M:%S') + "<br/><br/>"), style_Normal)
+                alerta_ultima_registro = Paragraph('<b>Fecha final alerta:</b><br/>' + str(datetime.fromtimestamp(alertlist[len(alertlist) - 1].epoch).strftime('%d/%m/%Y %H:%M:%S') + "<br/><br/>"), style_Normal)
+                tiempoAlerta = alertlist[len(alertlist) - 1].epoch - alertlist[0].epoch
+                print "tiempoAlerta"
+                print tiempoAlerta
+                alerta_duracion = Paragraph('<b>Duracion alerta:</b><br/>' + str(datetime.fromtimestamp(tiempoAlerta).strftime('%M:%S') + "<br/><br/>"), style_Normal)
+                alerta_total_registros = Paragraph('<b>Registros fuera de rango:</b><br/>' + str(len(alertlist)) + "<br/><br/>", style_Normal)
+                rango_maximo = Paragraph('<b>Valor Maximo:</b><br/>' + str(report_instance.sensor.max_value) + "<br/><br/>", style_Normal)
+                rango_minimo = Paragraph('<b>Valor Maximo:</b><br/>' + str(report_instance.sensor.min_value) + "<br/><br/>", style_Normal)
+                alerta_comentarios = Paragraph("<b>Comentarios:</b><br/>__________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________<br/>", style_Normal)
+                alert_content.append(alerta_primer_registro)
+                alert_content.append(alerta_ultima_registro)
+                alert_content.append(alerta_duracion)
+                alert_content.append(alerta_total_registros)
+                alert_content.append(rango_maximo)
+                alert_content.append(rango_minimo)
+                alert_content.append(alerta_comentarios)
+                alert_content.append(saltosDeLineax2)
+                valMax = 0
+                valMin = 0
+                valTmp = 0
+
+                for ids, alert in enumerate(alertlist, start=0):
+                    # print alert.data
+                    # datos = Paragraph(str(alert.data), style_Normal)
+                    valTmp = float(alert.data)
+                    # print "tmp: " + str(valTmp)
+                    # print "max: " + str(valMax)
+                    # print "min: " + str(valMin)
+                    if float(valTmp) > float(valMax):
+                        valMax = valTmp
+                        if valMin == 0:
+                            valMin = float(valTmp)
+                    if float(valMin) > float(alert.data):
+                        valMin = float(alert.data)
+                    if float(valMin) > float(valTmp):
                         valMin = float(valTmp)
-                if float(valMin) > float(alert.data):
-                    valMin = float(alert.data)
-                if float(valMin) > float(valTmp):
-                    valMin = float(valTmp)
 
-                valueData = float(alert.data)
+                    valueData = float(alert.data)
 
-                alert_graph.append(valueData)
-                alert_graph_dates.append(str(datetime.fromtimestamp(alert.epoch).strftime('%H:%M:%S')))
-            # END FOR
-            drawing = Drawing(300, 400)
-            data = [alert_graph]
-            lc = HorizontalLineChart()
-            lc.x = 10
-            lc.y = 30
-            lc.height = 250
-            lc.width = 230
-            lc.data = data
-            lc.joinedLines = 1
-            catNames = alert_graph_dates
-            lc.categoryAxis.categoryNames = catNames
-            lc.categoryAxis.labels.dx = 0
-            lc.categoryAxis.labels.dy = -22
-            lc.categoryAxis.labels.angle = 60
-            lc.categoryAxis.labels.boxAnchor = 'n'
-            lc.valueAxis.valueMin = valMin - 2
-            lc.valueAxis.valueMax = valMax + 2
-            lc.valueAxis.valueStep = 1
-            lc.lines[0].strokeWidth = 2
-            # lc.lines[1].strokeWidth = 1.5
-            drawing.add(lc)
+                    alert_graph.append(valueData)
+                    alert_limit.append(alert_max_value)
+                    alert_graph_dates.append(str(datetime.fromtimestamp(alert.epoch).strftime('%H:%M:%S')))
+                # END FOR
+                drawing = Drawing(300, 400)
+                data = [alert_graph, alert_limit]
+                lc = HorizontalLineChart()
+                lc.x = 10
+                lc.y = 30
+                lc.height = 250
+                lc.width = 230
+                lc.data = data
+                lc.joinedLines = 1
+                catNames = alert_graph_dates
+                lc.categoryAxis.categoryNames = catNames
+                lc.categoryAxis.labels.dx = 0
+                lc.categoryAxis.labels.dy = -22
+                lc.categoryAxis.labels.angle = 60
+                lc.categoryAxis.labels.boxAnchor = 'n'
+                lc.valueAxis.valueMin = alert_max_value - 1
+                lc.valueAxis.valueMax = valMax + 2
+                lc.valueAxis.valueStep = 1
+                lc.lines[0].strokeWidth = 2
+                # lc.lines[1].strokeWidth = 1.5
+                drawing.add(lc)
 
-            # print "endFor"
+                # print "endFor"
 
-            alert_data_tables.append((alert_content, drawing))
-            alerts_tables = Table(alert_data_tables, colWidths=[(doc.width) / 2.0] * 3)
-            alerts_tables.setStyle(TableStyle([('INNERGRID', (0, 0), (-1, -1), 0.25, colors.black), ('BOX', (0, 0), (-1, -1), 0.25, colors.white)]))
-            elements.append(alerts_tables)
+                alert_data_tables.append((alert_content, drawing))
+                alerts_tables = Table(alert_data_tables, colWidths=[(doc.width) / 2.0] * 3)
+                alerts_tables.setStyle(TableStyle([('INNERGRID', (0, 0), (-1, -1), 0.25, colors.black), ('BOX', (0, 0), (-1, -1), 0.25, colors.white)]))
+                elements.append(alerts_tables)
+                elements.append(PageBreak())
+
+        if len(alerts_onedata_data) > 1:
+
+            elements.append(Paragraph('ALERTAS CON 5 REGISTROS O MENOS', style_Title_Center))
+            elements.append(saltosDeLineax1)
+            alerts_onedata_table = Table(alerts_onedata_data, colWidths=[(doc.width) / 3.0] * 3)
+            alerts_onedata_table.setStyle(TableStyle([('INNERGRID', (0, 0), (-1, -1), 0.25, colors.black), ('BOX', (0, 0), (-1, -1), 0.25, colors.black)]))
+            elements.append(alerts_onedata_table)
             elements.append(PageBreak())
 
         elements.append(Paragraph('DETALLE DE REGISTROS', style_Title_Center))
