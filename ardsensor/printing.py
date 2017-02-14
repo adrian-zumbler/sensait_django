@@ -281,7 +281,7 @@ class ReportPrint:
 
         for num, alertlist in enumerate(all_alerts, start=0):
             print str(len(alertlist))
-            if len(alertlist) > 1 and len(alertlist) < 6:
+            if len(alertlist) > 0 and len(alertlist) < 6:
                 one_fecha = str(datetime.fromtimestamp(alertlist[len(alertlist) - 1].epoch).strftime('%d/%m/%Y %H:%M:%S'))
                 one_registros = len(alertlist)
                 one_value = str(alertlist[len(alertlist) - 1].data)
