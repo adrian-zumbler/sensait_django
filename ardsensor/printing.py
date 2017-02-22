@@ -239,7 +239,7 @@ class ReportPrint:
         for num, data in enumerate(report_instance.sensor_data(), start=0):
             if str(data.data) != str("-127.00"):
                 if float(data.data) > float(max_value) or float(min_value) > float(data.data):
-                    sensorStatus = "Alerta"
+                    sensorStatus = "Fuera de Rango"
                     alert_list.append(data)
                     # print str(len(alert_list)) + " -- " + data.data + " " + str(datetime.fromtimestamp(data.epoch).strftime('%d/%m/%Y %H:%M:%S')) + " " + str(num)
 
