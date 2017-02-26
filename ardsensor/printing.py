@@ -36,7 +36,7 @@ class ReportPrint:
         styles = getSampleStyleSheet()
 
         # Header
-        header = Paragraph('REPORTE SENSAIT - HEADER.', styles['Normal'])
+        header = Paragraph(' ', styles['Normal'])
         w, h = header.wrap(doc.width, doc.topMargin)
         header.drawOn(canvas, doc.leftMargin, doc.height + doc.topMargin - (h - 10))
 
@@ -118,15 +118,32 @@ class ReportPrint:
         #  p1 = "here is some paragraph to see in large font"
         # Paragraph(p1, ps),
 
-        # Primer texto SENSAIT
-        elements.append(Paragraph('SENSAIT', style_Title_Center))
+        # Tabla con reporte de incidencias y LOGOS.
+        titulo_data = []
+        titulo_table = []
+        logo_cliente = Paragraph('Logo Cliente', style_Normal)
+        titulo_ciente = Paragraph('Reporte de incidencias<br/>Sensor ' + report_instance.sensor.description, style_Title_Center)
+        logo_sensait = Paragraph('Logo SensaIT', style_Normal)
 
-        elements.append(saltosDeLineax1)
-        # Tipo de Reporte a mostrar...
-        elements.append(Paragraph(str(report_instance.get_tipo_reporte_display()) + " del Sensor " + report_instance.sensor.description, style_Title))
-        elements.append(saltosDeLineax1)
+        titulo_data.append((logo_cliente, titulo_ciente, logo_sensait))
 
-        # Calculos necesarios para el template
+        titulo_table = Table(titulo_data, colWidths=(50 * mm, 100 * mm, 50 * mm))
+        titulo_table.setStyle(TableStyle([('INNERGRID', (0, 0), (-1, -1), 0.25, colors.white), ('BOX', (0, 0), (-1, -1), 0.25, colors.white)]))
+        elements.append(titulo_table)
+
+        elements.append(saltosDeLineax2)
+
+        resumen_data = []
+        resumen_table = []
+
+        resumen_laboratorio = Paragraph('<b>Laboratorio:</b><br/>' + report_instance.sensor.arduino.project.name, style_Normal)
+        resumen_equipo = Paragraph('<b>Equipo:</b><br/>' + report_instance.sensor.arduino.name, style_Normal)
+        resumen_serie = Paragraph('<b>Serie del Equipo:</b><br/>' + report_instance.sensor.equipment.equipment_name, style_Normal)
+
+        resumen_data.append((resumen_laboratorio, resumen_equipo, resumen_serie))
+
+        resumen_periodo = Paragraph('<b>Periodo:</b><br/>' + datetime.fromtimestamp(report_instance.fecha_inicial).strftime('%d/%m/%Y %H:%M:%S') + " al <br/>" + datetime.fromtimestamp(report_instance.fecha_final).strftime('%d/%m/%Y %H:%M:%S'), style_Normal)
+
         # Cantidad de Dias del reporte seleccionado.
         difEpochDias = (report_instance.fecha_final - report_instance.fecha_inicial) / 86400
         periodoReporte = "Dia"
@@ -142,35 +159,24 @@ class ReportPrint:
         else:
             periodoReporte = str(difEpochDias) + " Dia"
 
-        elements.append(Paragraph('Periodo Seleccionado ' + str(periodoReporte), style_Title))
-        elements.append(saltosDeLineax1)
+        resumen_rangodias = Paragraph('<b>Reporte Generado:</b><br/>' + str(periodoReporte), style_Normal)
+        resumen_void = Paragraph(" ", style_Normal)
 
-        elements.append(Paragraph('Responsable ' + report_instance.sensor.arduino.project.nombre_encargado, style_Title))
+        resumen_data.append((resumen_periodo, resumen_rangodias, resumen_void))
 
-        elements.append(saltosDeLineax1)
+        resumen_proyecto = Paragraph('<b>Proyecto:</b><br/>' + report_instance.sensor.arduino.project.name, style_Normal)
+        resumen_transmisor = Paragraph('<b>Transmisor:</b><br/>' + report_instance.sensor.arduino.name, style_Normal)
+        resumen_void = Paragraph(" ", style_Normal)
 
-        elements.append(Paragraph('Este reporte abarca del ' + datetime.fromtimestamp(report_instance.fecha_inicial).strftime('%d/%m/%Y %H:%M:%S') + " al " + datetime.fromtimestamp(report_instance.fecha_final).strftime('%d/%m/%Y %H:%M:%S') + " Siendo creado el " + str(report_instance.created_at), styles['Heading2']))
+        resumen_data.append((resumen_proyecto, resumen_transmisor, resumen_void))
 
-        elements.append(saltosDeLineax1)
+        resumen_sensor = Paragraph('<b>Sensor:</b><br/>' + report_instance.sensor.description, style_Normal)
+        resumen_valmin = Paragraph('<b>Valor Minimo:</b><br/>' + "%.2f" % report_instance.sensor.min_value, style_Normal)
+        resumen_valmax = Paragraph('<b>Valor Maximo:</b><br/>' + "%.2f" % report_instance.sensor.max_value, style_Normal)
 
-        # Informacion del reporte digamos LEGAL.
-        elements.append(Paragraph('La informacion que se despliega a continuacion son propiedad de la empresa que contrata el servicio de SENSAIT. La informacion que se despliega a continuacion son propiedad de la empresa que contrata el servicio de SENSAIT. ', styles['Normal']))
+        resumen_data.append((resumen_sensor, resumen_valmin, resumen_valmax))
 
-        elements.append(saltosDeLineax2)
-        # Informacion del SENSOR DEL REPORTE.
-        transmisor_data = []
-        data_transmisor = Paragraph('<b>Transmisor:</b><br/>' + report_instance.sensor.arduino.name, style_Normal)
-        data_proyecto = Paragraph('<b>Proyecto:</b><br/>' + report_instance.sensor.arduino.project.name, style_Normal)
-        data_equipo = Paragraph('<b>Equipo:</b><br/>' + report_instance.sensor.equipment.equipment_name, style_Normal)
-
-        transmisor_data.append((data_transmisor, data_proyecto, data_equipo))
-
-        data_sensor = Paragraph('<b>Sensor:</b><br/>' + report_instance.sensor.description, style_Normal)
-        data_sensor_max = Paragraph('<b>Val. Maximo:</b><br/>' + str(report_instance.sensor.max_value), style_Normal)
-        data_sensor_min = Paragraph('<b>Val. Minimo:</b><br/>' + str(report_instance.sensor.min_value), style_Normal)
-
-        transmisor_data.append((data_sensor, data_sensor_max, data_sensor_min))
-
+        # VALORES MINIMOS Y MAXIMOS CALCULO.
         min_value = report_instance.sensor.min_value
         max_value = report_instance.sensor.max_value
 
@@ -178,23 +184,71 @@ class ReportPrint:
         promedioRegistros = 0.0
         totalRegistros = 0
 
+        valmax = 0
+        valmin = 0
+
+        # Tabla de ejemplo
+        main_table = []
+        dataTable_L = []
+        dataTable_R = []
+        table_data = []
+
+        all_alerts = []
+        alert_list = []
+
+        dataTable_L.append(("Fecha y Hora", "Valor Registrado", "Estatus"))
+        sensorStatus = "Correcto"
+
         for num, data in enumerate(report_instance.sensor_data(), start=0):
             if str(data.data) != str("-127.00"):
                 totalRegistros = num
                 promedioRegistros += float(data.data)
+                if num == 0:
+                    valmin = float(data.data)
                 if float(data.data) > float(max_value) or float(min_value) > float(data.data):
+                    sensorStatus = "Fuera de Rango"
+                    alert_list.append(data)
                     totalAlertas += 1
+                else:
+                    sensorStatus = "Correcto"
+                    if len(alert_list) > 0:
+                        # print "New List " + str(len(all_alerts))
+                        all_alerts.append(list(alert_list))
+                        alert_list = []
 
-        data_total_registros = Paragraph('<b>Total Registros:</b><br/>' + str(totalRegistros), style_Normal)
-        data_registros_alerta = Paragraph('<b>Total Registros fuera de rango:</b><br/>' + str(totalAlertas), style_Normal)
-        data_promedio = Paragraph('<b>Temperatura Promedio:</b><br/>' + str(float(promedioRegistros) / float(totalRegistros)), style_Normal)
+                if float(data.data) > float(valmax):
+                    valmax = float(data.data)
+                if float(valmin) > float(data.data):
+                    valmin = float(data.data)
+                dataTable_L.append((datetime.fromtimestamp(data.epoch).strftime('%d/%m/%Y %H:%M:%S'), data.data, sensorStatus))
 
-        transmisor_data.append((data_total_registros, data_registros_alerta, data_promedio))
-        transmisor_table = Table(transmisor_data, colWidths=[(doc.width) / 3.0] * 3)
-        transmisor_table.setStyle(TableStyle([('INNERGRID', (0, 0), (-1, -1), 0.25, colors.black), ('BOX', (0, 0), (-1, -1), 0.25, colors.black)]))
-        elements.append(transmisor_table)
+        table_L = Table(dataTable_L, colWidths=[(doc.width) / 3.0] * 3)
+        table_L.setStyle(TableStyle([('INNERGRID', (0, 0), (-1, -1), 0.25, colors.black), ('BOX', (0, 0), (-1, -1), 0.25, colors.black)]))
+
+        val_promedio = float(promedioRegistros) / float(totalRegistros)
+
+        resumen_promedio = Paragraph('<b>Temperatura Promedio:</b><br/>' + "%.2f" % val_promedio, style_Normal)
+        resumen_minima = Paragraph('<b>Temperatura Minimo Registrada:</b><br/>' + "%.2f" % valmin, style_Normal)
+        resumen_maxima = Paragraph('<b>Temperatura Maxima Registrada:</b><br/>' + "%.2f" % valmax, style_Normal)
+
+        resumen_data.append((resumen_promedio, resumen_minima, resumen_maxima))
+
+        resumen_totalregistros = Paragraph('<b>Total de Registros:</b><br/>' + "%.2f" % totalRegistros, style_Normal)
+        resumen_totalfuera = Paragraph('<b>Resumen Registros:</b><br/>' + "X %.2f" % totalAlertas + "<br/> + %.2f" % (totalRegistros - totalAlertas), style_Normal)
+        resumen_alertasregistradas = Paragraph('<b>Total alertas registradas:</b><br/>' + str(len(all_alerts)), style_Normal)
+        resumen_void = Paragraph(" ", style_Normal)
+
+        resumen_data.append((resumen_totalregistros, resumen_totalfuera, resumen_alertasregistradas))
+
+        resumen_table = Table(resumen_data, colWidths=[(doc.width) / 3.0] * 3, rowHeights=(16 * mm))
+        resumen_table.setStyle(TableStyle([('INNERGRID', (0, 0), (-1, -1), 0.25, colors.white), ('BOX', (0, 0), (-1, -1), 0.25, colors.white), ('VALIGN', (0, 0), (-1, -1), 'TOP')]))
+        elements.append(resumen_table)
+
+        # Informacion del reporte digamos LEGAL.
+        # elements.append(Paragraph('La informacion que se despliega a continuacion son propiedad de la empresa que contrata el servicio de SENSAIT. La informacion que se despliega a continuacion son propiedad de la empresa que contrata el servicio de SENSAIT. ', styles['Normal']))
 
         elements.append(saltosDeLineax3)
+
         valores_Correctos = int(totalRegistros - totalAlertas)
         drawing = Drawing(400, 200)
         data = [
@@ -222,38 +276,9 @@ class ReportPrint:
         drawing.add(bc)
         elements.append(drawing)
 
+        elements.append(Paragraph('Responsable ' + report_instance.sensor.arduino.project.nombre_encargado, style_Title))
+
         elements.append(PageBreak())
-
-        # Tabla de ejemplo
-        main_table = []
-        dataTable_L = []
-        dataTable_R = []
-        table_data = []
-
-        all_alerts = []
-        alert_list = []
-
-        # Cargaremos los titulos de la tabla
-        dataTable_L.append(("Fecha y Hora", "Valor Registrado", "Estatus"))
-        sensorStatus = "Correcto"
-        for num, data in enumerate(report_instance.sensor_data(), start=0):
-            if str(data.data) != str("-127.00"):
-                if float(data.data) > float(max_value) or float(min_value) > float(data.data):
-                    sensorStatus = "Fuera de Rango"
-                    alert_list.append(data)
-                    # print str(len(alert_list)) + " -- " + data.data + " " + str(datetime.fromtimestamp(data.epoch).strftime('%d/%m/%Y %H:%M:%S')) + " " + str(num)
-
-                else:
-                    sensorStatus = "Correcto"
-                    if len(alert_list) > 0:
-                        # print "New List " + str(len(all_alerts))
-                        all_alerts.append(list(alert_list))
-                        alert_list = []
-
-                dataTable_L.append((datetime.fromtimestamp(data.epoch).strftime('%d/%m/%Y %H:%M:%S'), data.data, sensorStatus))
-
-        table_L = Table(dataTable_L, colWidths=[(doc.width) / 3.0] * 3)
-        table_L.setStyle(TableStyle([('INNERGRID', (0, 0), (-1, -1), 0.25, colors.black), ('BOX', (0, 0), (-1, -1), 0.25, colors.black)]))
 
         # table_R = Table(dataTable_R, colWidths=[(doc.width) / 3.0] * 3)
         # table_R.setStyle(TableStyle([('INNERGRID', (0, 0), (-1, -1), 0.25, colors.black), ('BOX', (0, 0), (-1, -1), 0.25, colors.black)]))
@@ -263,7 +288,7 @@ class ReportPrint:
         # table_Main.setStyle(TableStyle([('INNERGRID', (0, 0), (-1, -1), 0.25, colors.red), ('BOX', (0, 0), (-1, -1), 0.25, colors.red)]))
 
         # Tabla con todos los registros...
-        elements.append(Paragraph( str(len(all_alerts)) + ' ALERTAS REGISTRADAS', style_Title_Center))
+        elements.append(Paragraph(str(len(all_alerts)) + ' ALERTAS REGISTRADAS', style_Title_Center))
 
         # Tablas POR ALERTA...
         alert_data_tables = []
