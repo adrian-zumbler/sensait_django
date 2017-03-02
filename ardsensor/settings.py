@@ -217,7 +217,7 @@ if 'manto' in BASE_DIR:
             # "BACKEND": "asgiref.inmemory.ChannelLayer",
             "BACKEND": "asgi_redis.RedisChannelLayer",
             "CONFIG": {
-                "hosts": [("192.168.253.32", 6379)],
+                "hosts": [("192.168.253.223", 6379)],
             },
             "ROUTING": "ardsensor.routing.channel_routing",
         },
@@ -229,7 +229,7 @@ if 'manto' in BASE_DIR:
             'NAME': 'sensait',
             'USER': 'sensait_user',
             'PASSWORD': 'yG6$Pz2&',
-            'HOST': '192.168.253.32',
+            'HOST': '192.168.253.223',
             'PORT': '',
         }
     }
@@ -242,4 +242,4 @@ if 'manto' in BASE_DIR:
 
     ALLOWED_HOSTS = ['sensait.dyndns.org', '192.168.253.31']
 
-    SESSION_REDIS_HOST = '192.168.253.32'
+    SESSION_REDIS_HOST = '192.168.253.223'

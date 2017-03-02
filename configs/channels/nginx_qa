@@ -8,7 +8,7 @@ upstream app_servers {
 
 server {
 
-    listen 81;
+    listen 80;
     server_name sensait.dyndns.org;
 
     location = /favicon.ico { access_log off; log_not_found off; }
