@@ -41,7 +41,7 @@ class ReportPrint:
         header.drawOn(canvas, doc.leftMargin, doc.height + doc.topMargin - (h - 10))
 
         # Footer
-        footer = Paragraph('REPORTE SENSAIT - FOOTER   ', styles['Normal'])
+        footer = Paragraph('REPORTE SENSAIT ', styles['Normal'])
         w, h = footer.wrap(doc.width, doc.bottomMargin)
         footer.drawOn(canvas, doc.leftMargin, h)
 
@@ -164,11 +164,11 @@ class ReportPrint:
 
         resumen_data.append((resumen_periodo, resumen_rangodias, resumen_void))
 
-        resumen_proyecto = Paragraph('<b>Proyecto:</b><br/>' + report_instance.sensor.arduino.project.name, style_Normal)
-        resumen_transmisor = Paragraph('<b>Transmisor:</b><br/>' + report_instance.sensor.arduino.name, style_Normal)
-        resumen_void = Paragraph(" ", style_Normal)
+        # resumen_proyecto = Paragraph('<b>Proyecto:</b><br/>' + report_instance.sensor.arduino.project.name, style_Normal)
+        # resumen_transmisor = Paragraph('<b>Transmisor:</b><br/>' + report_instance.sensor.arduino.name, style_Normal)
+        # resumen_void = Paragraph(" ", style_Normal)
 
-        resumen_data.append((resumen_proyecto, resumen_transmisor, resumen_void))
+        # resumen_data.append((resumen_proyecto, resumen_transmisor, resumen_void))
 
         resumen_sensor = Paragraph('<b>Sensor:</b><br/>' + report_instance.sensor.description, style_Normal)
         resumen_valmin = Paragraph('<b>Valor Minimo:</b><br/>' + "%.2f" % report_instance.sensor.min_value, style_Normal)
@@ -196,8 +196,9 @@ class ReportPrint:
         all_alerts = []
         alert_list = []
 
-        dataTable_L.append(("Fecha y Hora", "Valor Registrado", "Estatus"))
+        dataTable_L.append(("Fecha y Hora", "Lectura", "Estado", "Numero incidencia"))
         sensorStatus = "Correcto"
+
 
         for num, data in enumerate(report_instance.sensor_data(), start=0):
             if str(data.data) != str("-127.00"):
@@ -220,9 +221,15 @@ class ReportPrint:
                     valmax = float(data.data)
                 if float(valmin) > float(data.data):
                     valmin = float(data.data)
-                dataTable_L.append((datetime.fromtimestamp(data.epoch).strftime('%d/%m/%Y %H:%M:%S'), data.data, sensorStatus))
 
-        table_L = Table(dataTable_L, colWidths=[(doc.width) / 3.0] * 3)
+                if len(alert_list) > 0:
+                    alerta_code = "Alerta # " + str(len(all_alerts))
+                else:
+                    alerta_code = " "
+
+                dataTable_L.append((datetime.fromtimestamp(data.epoch).strftime('%d/%m/%Y %H:%M:%S'), data.data, sensorStatus, alerta_code))
+
+        table_L = Table(dataTable_L, colWidths=[(doc.width) / 4.0] * 4)
         table_L.setStyle(TableStyle([('INNERGRID', (0, 0), (-1, -1), 0.25, colors.black), ('BOX', (0, 0), (-1, -1), 0.25, colors.black)]))
 
         val_promedio = float(promedioRegistros) / float(totalRegistros)
@@ -306,7 +313,8 @@ class ReportPrint:
 
         for num, alertlist in enumerate(all_alerts, start=0):
             print str(len(alertlist))
-            if len(alertlist) > 0 and len(alertlist) < 6:
+            # Esto genera la tabla para un rango de registros NO LO QUITARE jeje
+            if len(alertlist) > 200:
                 one_fecha = str(datetime.fromtimestamp(alertlist[len(alertlist) - 1].epoch).strftime('%d/%m/%Y %H:%M:%S'))
                 one_registros = len(alertlist)
                 one_value = str(alertlist[len(alertlist) - 1].data)
@@ -314,7 +322,6 @@ class ReportPrint:
                 # alerts_onedata_data.append( alertlist[num] , drawing))
             else:
                 titulo = Paragraph('<b>Alerta # ' + str(num) + ' </b>', style_Normal)
-                elements.append(titulo)
 
                 alert_data_tables = []
                 alert_content = []
@@ -325,21 +332,35 @@ class ReportPrint:
                 alerta_primer_registro = Paragraph('<b>Fecha inicio alerta:</b><br/>' + str(datetime.fromtimestamp(alertlist[0].epoch).strftime('%d/%m/%Y %H:%M:%S') + "<br/><br/>"), style_Normal)
                 alerta_ultima_registro = Paragraph('<b>Fecha final alerta:</b><br/>' + str(datetime.fromtimestamp(alertlist[len(alertlist) - 1].epoch).strftime('%d/%m/%Y %H:%M:%S') + "<br/><br/>"), style_Normal)
                 tiempoAlerta = alertlist[len(alertlist) - 1].epoch - alertlist[0].epoch
-                print "tiempoAlerta"
-                print tiempoAlerta
+
                 alerta_duracion = Paragraph('<b>Duracion alerta:</b><br/>' + str(datetime.fromtimestamp(tiempoAlerta).strftime('%M:%S') + "<br/><br/>"), style_Normal)
                 alerta_total_registros = Paragraph('<b>Registros fuera de rango:</b><br/>' + str(len(alertlist)) + "<br/><br/>", style_Normal)
-                rango_maximo = Paragraph('<b>Valor Maximo:</b><br/>' + str(report_instance.sensor.max_value) + "<br/><br/>", style_Normal)
-                rango_minimo = Paragraph('<b>Valor Maximo:</b><br/>' + str(report_instance.sensor.min_value) + "<br/><br/>", style_Normal)
+                rango_maximo = Paragraph('<b>Valor Maximo:</b><br/>' + "%.2f" % report_instance.sensor.max_value + "<br/><br/>", style_Normal)
+                rango_minimo = Paragraph('<b>Valor Maximo:</b><br/>' + "%.2f" % report_instance.sensor.min_value + "<br/><br/>", style_Normal)
                 alerta_comentarios = Paragraph("<b>Comentarios:</b><br/>__________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________<br/>", style_Normal)
-                alert_content.append(alerta_primer_registro)
-                alert_content.append(alerta_ultima_registro)
-                alert_content.append(alerta_duracion)
-                alert_content.append(alerta_total_registros)
-                alert_content.append(rango_maximo)
-                alert_content.append(rango_minimo)
-                alert_content.append(alerta_comentarios)
-                alert_content.append(saltosDeLineax2)
+                alerta_accioncorrectiva = Paragraph("<b>Accion correctiva:</b><br/>__________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________<br/>", style_Normal)
+
+                alerta_data = []
+                alerta_table = []
+
+                alerta_data.append((titulo, " "))
+                alerta_data.append((alerta_primer_registro, alerta_ultima_registro))
+                alerta_data.append((alerta_duracion, alerta_total_registros))
+                alerta_data.append((rango_maximo, rango_minimo))
+                alerta_data.append((" ", saltosDeLineax2))
+                # alerta_data.append((alerta_comentarios))
+
+                alerta_table = Table(alerta_data, colWidths=(50 * mm, 50 * mm))
+                alerta_table.setStyle(TableStyle([('INNERGRID', (0, 0), (-1, -1), 0.25, colors.white), ('BOX', (0, 0), (-1, -1), 0.25, colors.white)]))
+
+                # alert_content.append(alerta_primer_registro)
+                # alert_content.append(alerta_ultima_registro)
+                # alert_content.append(alerta_duracion)
+                # alert_content.append(alerta_total_registros)
+                # alert_content.append(rango_maximo)
+                # alert_content.append(rango_minimo)
+                # alert_content.append(alerta_comentarios)
+                # alert_content.append(saltosDeLineax2)
                 valMax = 0
                 valMin = 0
                 valTmp = 0
@@ -366,21 +387,25 @@ class ReportPrint:
                     alert_limit.append(alert_max_value)
                     alert_graph_dates.append(str(datetime.fromtimestamp(alert.epoch).strftime('%H:%M:%S')))
                 # END FOR
-                drawing = Drawing(300, 400)
+                drawing = Drawing(200, 220)
                 data = [alert_graph, alert_limit]
                 lc = HorizontalLineChart()
                 lc.x = 10
                 lc.y = 30
-                lc.height = 250
-                lc.width = 230
+                lc.height = 150
+                lc.width = 220
                 lc.data = data
-                lc.joinedLines = 1
+                # lc.strokeColor = colors.black
                 catNames = alert_graph_dates
                 lc.categoryAxis.categoryNames = catNames
                 lc.categoryAxis.labels.dx = 0
-                lc.categoryAxis.labels.dy = -22
-                lc.categoryAxis.labels.angle = 60
+                lc.categoryAxis.labels.dy = -15
+                lc.categoryAxis.labels.angle = 75
                 lc.categoryAxis.labels.boxAnchor = 'n'
+                lc.joinedLines = 1
+                lc.lines[0].symbol = makeMarker('FilledCircle')
+                # lc.lineLabelFormat = '%2.0f'
+                # lc.strokeColor = colors.black
                 lc.valueAxis.valueMin = alert_max_value - 1
                 lc.valueAxis.valueMax = valMax + 2
                 lc.valueAxis.valueStep = 1
@@ -390,11 +415,14 @@ class ReportPrint:
 
                 # print "endFor"
 
-                alert_data_tables.append((alert_content, drawing))
-                alerts_tables = Table(alert_data_tables, colWidths=[(doc.width) / 2.0] * 3)
-                alerts_tables.setStyle(TableStyle([('INNERGRID', (0, 0), (-1, -1), 0.25, colors.black), ('BOX', (0, 0), (-1, -1), 0.25, colors.white)]))
+                alert_data_tables.append((drawing, alerta_table))
+                alert_data_tables.append((alerta_comentarios, alerta_accioncorrectiva))
+
+                alerts_tables = Table(alert_data_tables, colWidths=[(doc.width) / 2.0] * 2)
+                alerts_tables.setStyle(TableStyle([('INNERGRID', (0, 0), (-1, -1), 0.25, colors.white), ('BOX', (0, 0), (-1, -1), 0.25, colors.white)]))
                 elements.append(alerts_tables)
-                elements.append(PageBreak())
+
+                # elements.append(PageBreak())
 
         if len(alerts_onedata_data) > 1:
 
@@ -403,8 +431,9 @@ class ReportPrint:
             alerts_onedata_table = Table(alerts_onedata_data, colWidths=[(doc.width) / 3.0] * 3)
             alerts_onedata_table.setStyle(TableStyle([('INNERGRID', (0, 0), (-1, -1), 0.25, colors.black), ('BOX', (0, 0), (-1, -1), 0.25, colors.black)]))
             elements.append(alerts_onedata_table)
-            elements.append(PageBreak())
+            # elements.append(PageBreak())
 
+        elements.append(PageBreak())
         elements.append(Paragraph('DETALLE DE REGISTROS', style_Title_Center))
         elements.append(table_L)
         # elements.append(table_R)
