@@ -123,7 +123,7 @@
   var urlApiBase;
   var tokenCode ;
 
-  if(site_url == 'sensait.dyndns.org'){
+  if(site_url == "sensait.dyndns.org"){
     tokenCode = 'Token d7e7f378cdc67dcd7cec11b76e017927c3e73bc3';
   }else{
     tokenCode   = 'Token 6b4f2e70ae0d435bf512897355947fe0a564972a';
@@ -245,7 +245,13 @@
     //canChangeProject
 
     actualProject = {{ project_list.first.id }} ;
-    actualArduino = {{ project_list.first.arduinos.first.id }};
+
+    actualArduino = {{project_list.first.arduinos.first.id}};
+    
+    actualArduino = {{project_list.first.arduinos.last.id}};
+
+    if(actualArduino == null)
+      actualArduino = 1;
 
     _proyID = actualProject;
 
