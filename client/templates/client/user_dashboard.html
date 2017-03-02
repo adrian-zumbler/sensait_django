@@ -220,15 +220,21 @@
   var _sysID      = 0 ;     //Systema seleccionada
   var _sensID     = 0 ;     //Sensor seleccionada
 
-  var proyectNames  = [] ;
+  var proyectNames    = [] ;
+  var firstProjectID  = 0;
+  var counterProject = 0;
   {% for project in project_list %}
     var name = '{{project.name}}';
     proyectNames[{{project.id}}] = '{{project.name}}';
+    if(counterProject == 0 ){
+      firstProjectID = {{project.arduinos.first.id}};
+      counterProject++;
+    }
   {% endfor %}
 
   var actualProject = ' ' ;
   var actualArduino = ' ' ;
-  var projectsApi   = 'projects/{{ project_list.first.arduinos.first.id }}/';
+  var projectsApi   = 'projects/'+firstProjectID+'/';
   var arduinosApi   = 'arduinos/';
   var sensorsApi    = 'sensors/idsensor/data/';
 
@@ -246,9 +252,7 @@
 
     actualProject = {{ project_list.first.id }} ;
 
-    actualArduino = {{project_list.first.arduinos.first.id}};
-    
-    actualArduino = {{project_list.first.arduinos.last.id}};
+    actualArduino = firstProjectID; //{{project_list.first.arduinos.first.id}};
 
     if(actualArduino == null)
       actualArduino = 1;
