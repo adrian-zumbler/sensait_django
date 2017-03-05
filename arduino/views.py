@@ -21,8 +21,8 @@ from django.db.models.query import QuerySet
 from arduino.serializers import (ArduinoSerializer, SensorTypeSerializer,
                                  ArduinoSensorSerializer, SensorDataSerializer)
 from arduino.permissions import isArduinoPermission
-from arduino.models import Arduino, SensorType, SensorEquipment
-from .forms import SensorTypeForm, SensorEquipmentForm
+from arduino.models import Arduino, SensorType, SensorEquipment, AlertObservation
+from .forms import SensorTypeForm, SensorEquipmentForm, AlertObservationForm
 from .exceptions import StandardAPIException
 
 from urlparse import parse_qsl
@@ -274,6 +274,39 @@ class AdminSensorTypeDeleteView(LoginRequiredMixin, DeleteView):
     template_name = 'admin/admin_sensorType_delete.html'
     success_url = reverse_lazy('sensorTypeList')
     queryset = SensorType.objects.all()
+
+
+# ALERTA Observacion
+class AdminAlertObservationListView(LoginRequiredMixin, ListView):
+    template_name = 'admin/admin_alertObservation_list.html'
+    queryset = AlertObservation.objects.all()
+
+
+class AdminAlertObservationCreateView(LoginRequiredMixin, CreateView):
+    template_name = 'admin/admin_alertObservation_edit.html'
+    form_class = AlertObservationForm
+    success_url = reverse_lazy('alertObservationList')
+
+
+class AdminAlertObservationDetailView(LoginRequiredMixin, DetailView):
+    template_name = 'admin/admin_alertObservation_detail.html'
+    queryset = AlertObservation.objects.all()
+
+
+class AdminAlertObservationEditView(LoginRequiredMixin, UpdateView):
+    template_name = 'admin/admin_alertObservation_edit.html'
+    form_class = AlertObservationForm
+    queryset = AlertObservation.objects.all()
+    success_url = reverse_lazy('alertObservationList')
+
+
+class AdminAlertObservationDeleteView(LoginRequiredMixin, DeleteView):
+    template_name = 'admin/admin_alertObservation_delete.html'
+    success_url = reverse_lazy('alertObservationList')
+    queryset = AlertObservation.objects.all()
+
+
+# SENSOR EQUIPMENT
 
 
 class AdminSensorEquipmentListView(LoginRequiredMixin, ListView):

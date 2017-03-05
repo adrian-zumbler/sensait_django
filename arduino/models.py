@@ -397,6 +397,36 @@ def report_files_name(instance, filename):
     )
 
 
+class AlertObservation(models.Model):
+    CAUSA_EVENTO_TIPO = (
+        (1, 'Pendiente de Llenado'),
+        (2, 'Mantenimiento'),
+        (3, 'Abastecimiento de material'),
+        (4, 'Falla electrica'),
+        (5, 'Cerrado Inapropiado')
+    )
+    causa_observacion = models.PositiveSmallIntegerField(
+        verbose_name='Causa del evento',
+        choices=CAUSA_EVENTO_TIPO,
+        default=1)
+    titulo_observacion = models.TextField(
+        verbose_name='Nombre Observacion',
+        max_length=1024,
+        blank=True,
+        null=True)
+    accion_observacion = models.TextField(
+        verbose_name='Accion Correctiva',
+        max_length=1024,
+        blank=True,
+        null=True)
+    nota_observacion = models.TextField(
+        verbose_name='Nota Adicional',
+        max_length=1024,
+        blank=True,
+        null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+
 class Report(models.Model):
     REPORTES_TIPO = (
         (1, 'Reporte de Registros'),

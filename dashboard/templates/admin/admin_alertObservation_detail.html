@@ -1,0 +1,93 @@
+{% extends 'main_header.html' %}
+{% load staticfiles %}
+{% load arduino_tags %}
+
+{% block main_content_wrapper %}
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <h1>
+        ADMINISTRACIÓN DE OBSERVACIONES EN ALERTAS
+
+        <small> </small>
+
+      </h1>
+    </section>
+
+    <!-- Main content -->
+<section class="content">
+  <div class="row">
+    <div class="col-xs-12">
+
+      <div class="box box-solid">
+        <div class="box-header with-border">
+          <i class="fa fa-adjust"></i>
+          <h3 class="box-title">Detalle de la Observacion
+            <b>{{alertobservation.titulo_observacion}}</b>
+          </h3>
+        </div><!-- /.box-header -->
+        <div class="box-body">
+
+          <div class="row">
+            <div class="col-xs-12">
+              <b>Titulo Observación:</b>
+              <p>{{alertobservation.titulo_observacion}}</p>
+              <br/>
+              <b>Causa de alerta:</b>
+              <p>{{alertobservation.get_causa_observacion_display}}</p>
+              <br/>
+              <b>Acciones Correctivas:</b>
+              <p>{{alertobservation.accion_observacion}}</p>
+              <br/>
+              <b>Notas Adicionales:</b>
+              <p>{{alertobservation.nota_observacion}}</p>
+              <br/>
+            </div>
+          </div>
+
+        </div><!-- /.box-body -->
+      </div><!-- /.box -->
+    </div>
+  </div><!-- /.row -->
+
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="box">
+        <a href="{% url 'alertObservationList' %}">
+          <button class="btn btn-block btn-info btn-lg">Regresar a Lista de Equipos</button>
+        </a>
+      </div>
+    </div>
+  </div>
+
+
+<!-- /.END PARA LOS ARDUINOS DEL PROYECTO -->
+  </section>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+
+{% endblock main_content_wrapper %}
+
+{% block content_js %}
+  <script src="{% static 'plugins/datatables/jquery.dataTables.min.js' %}"></script>
+  <script src="{% static 'plugins/datatables/dataTables.bootstrap.min.js' %}"></script>
+  <!-- page script -->
+<script type="application/javascript">
+
+  $(function () {
+    $('#table_projects').DataTable({
+      "paging": true,
+      "lengthChange": false,
+      "searching": true,
+      "ordering": true,
+      "info": true,
+      "autoWidth": false
+    });
+  });
+
+</script>
+
+{% endblock content_js %}

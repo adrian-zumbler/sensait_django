@@ -79,6 +79,13 @@ urlpatterns = [
     url(r'^dash/admin/projects/edit/(?P<pk>\d+)/$', AdminProjectsEditView.as_view(), name="projectsEdit"),
     url(r'^dash/admin/projects/delete/(?P<pk>\d+)/$', AdminProjectsDeleteView.as_view(), name="projectsDelete"),
 
+    url(r'^dash/admin/Observaciones/$', AdminAlertObservationListView.as_view(), name="alertObservationList"),
+    url(r'^dash/admin/Observaciones/new/$', AdminAlertObservationCreateView.as_view(), name="alertObservationNew"),
+    url(r'^dash/admin/Observaciones/detail/(?P<pk>\d+)/$', AdminAlertObservationDetailView.as_view(), name="alertObservationDetail"),
+    url(r'^dash/admin/Observaciones/edit/(?P<pk>\d+)/$', AdminAlertObservationEditView.as_view(), name="alertObservationEdit"),
+    url(r'^dash/admin/Observaciones/delete/(?P<pk>\d+)/$', AdminAlertObservationDeleteView.as_view(), name="alertObservationDelete"),
+
+
     url(r'^dash/admin/sensorequipment/$', AdminSensorEquipmentListView.as_view(), name="sensorEquipmentList"),
     url(r'^dash/admin/sensorequipment/new/$', AdminSensorEquipmentCreateView.as_view(), name="sensorEquipmentNew"),
     url(r'^dash/admin/sensorequipment/detail/(?P<pk>\d+)/$', AdminSensorEquipmentDetailView.as_view(), name="sensorEquipmentDetail"),
