@@ -281,12 +281,31 @@
       <li class="header">MENU PRINCIPAL </li>
       <li><a href="{% url 'main' %}"><i class="fa fa-book"></i> <span>INICIO</span></a></li>
 
+      <li><a href="{% url 'miperfil' %}"><i class="fa fa-book"></i> <span>MI PERFIL</span></a></li>
+
+      <li><a href="{% url 'dashboard-client:systemstatus' %}"><i class="fa fa-laptop"></i> <span>ESTADO GENERAL</span></a></li>
       {% if not request.user.client %}
 
       <li class="header">PROYECTOS</li>
       <li><a href="{% url 'dashboard-client:projects' %}"><i class="fa fa-laptop"></i> <span>
-        MIS PROYECTOS
-      </span></a></li>
+        MIS LABORATORIOS
+      </span></a>
+      </li>
+
+      <li class="header">ALERTAS & ACCIONES</li>
+      <li class="treeview">
+        <a href="#">
+          <i class="fa fa-laptop"></i>
+          <span>ALERTAS</span>
+          <i class="fa fa-angle-left pull-right"></i>
+        </a>
+        <ul class="treeview-menu" style="display: none;">
+          <li><a href="{% url 'ticket:ticket-list' %}"><i class="fa fa-laptop"></i> <span>Alertas</span></a></li>
+          <li><a href="{% url 'ticket:ticket-list' %}"><i class="fa fa-laptop"></i> <span>Reportes</span></a></li>
+          <li><a href="{% url 'ticket:ticket-list' %}"><i class="fa fa-laptop"></i> <span>Observaciones</span></a></li>
+          <li><a href="{% url 'ticket:ticket-list' %}"><i class="fa fa-laptop"></i> <span>Acciones correctivas</span></a></li>
+        </ul>
+      </li>
       {% comment %}
       <li class="treeview">
         <a href="#">
@@ -367,6 +386,7 @@
           </ul>
         </li>
 
+
         <li class="header">SOPORTE</li>
         <li class="treeview">
           <a href="#">
@@ -380,7 +400,7 @@
           </ul>
         </li>
 
-        <li><a href="{% url 'dashboard-client:status' %}"><i class="fa fa-laptop"></i> <span>STATUS GENERAL</span></a></li>
+
 
       {% else %}
 

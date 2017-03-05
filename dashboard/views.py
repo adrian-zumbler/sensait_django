@@ -43,12 +43,9 @@ class ArduinoDetailView(LoginRequiredMixin, DetailView):
     template_name = 'client/user_iots.html'
 
     def get_context_data(self, **kwargs):
-
         context = super(ArduinoDetailView, self).get_context_data(**kwargs)
-
         context['site_url'] = self.request.get_host()
         # build_absolute_uri('/')
-
         return context
 
     def get_queryset(self):
@@ -66,12 +63,9 @@ class ArduinoSensorDetailView(LoginRequiredMixin, DetailView):
     template_name = 'client/user_selected_sensor.html'
 
     def get_context_data(self, **kwargs):
-
         context = super(ArduinoSensorDetailView, self).get_context_data(**kwargs)
-
         context['site_url'] = self.request.get_host()
         # build_absolute_uri('/')
-
         return context
 
     def get_queryset(self):
@@ -83,6 +77,14 @@ class ArduinoSensorDetailView(LoginRequiredMixin, DetailView):
             queryset = ArduinoSensor.objects.all()
 
         return queryset
+
+
+class UsuarioPerfil(LoginRequiredMixin, DetailView):
+    template_name = 'client/user_profile.html'
+    """
+    def get_queryset(self):
+        queryset = self.request.user
+    """
 
 
 class DashMainListView(LoginRequiredMixin, ListView):
@@ -109,7 +111,7 @@ class DashMainListView(LoginRequiredMixin, ListView):
 
 
 class SystemStatusListView(LoginRequiredMixin, ListView):
-    template_name = 'admin/admin_systemstatus.html'
+    template_name = 'client/user_systemstatus.html'
 
     def get_context_data(self, **kwargs):
         context = super(SystemStatusListView, self).get_context_data(**kwargs)
@@ -144,15 +146,10 @@ class AdminProjectsDetailView(LoginRequiredMixin, DetailView):
     queryset = Project.objects.all()
 
     def get_context_data(self, **kwargs):
-
         context = super(AdminProjectsDetailView, self).get_context_data(**kwargs)
-
         tipo = type(self.object)
-
         proj = Project.objects.get(id=self.object.id)
-
         context['arduinos'] = Arduino.objects.filter(project_id=proj.id)
-
         return context
 
 
@@ -225,7 +222,6 @@ class AdminArduinoWithSensorsUpdateView(LoginRequiredMixin, UpdateView):
         )
 
     def get_context_data(self, **kwargs):
-
         ctx = super(AdminArduinoWithSensorsUpdateView, self).get_context_data(**kwargs)
         # qs = ArduinoSensor.objects.filter(
         #     arduino=self.object
@@ -237,13 +233,10 @@ class AdminArduinoWithSensorsUpdateView(LoginRequiredMixin, UpdateView):
         return ctx
 
     def get_success_url(self):
-
         return reverse('projectsDetail', kwargs={'pk': self.object.project.id})
 
     def get_queryset(self):
-
         qs = Arduino.objects.all()
-
         return qs
 
 

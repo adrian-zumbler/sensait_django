@@ -1,6 +1,6 @@
 from reportlab.lib import colors
 from reportlab.lib.pagesizes import letter, A4
-from reportlab.platypus import SimpleDocTemplate, Paragraph, Table, TableStyle
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Table, TableStyle, Image
 from reportlab.platypus.flowables import PageBreak, Spacer
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.lib.enums import TA_CENTER, TA_RIGHT, TA_LEFT, TA_JUSTIFY
@@ -86,7 +86,7 @@ class ReportPrint:
         doc = SimpleDocTemplate(buffer,
                                 rightMargin=50,
                                 leftMargin=50,
-                                topMargin=60,
+                                topMargin=20,
                                 bottomMargin=50,
                                 pagesize=self.pagesize)
 
@@ -121,11 +121,14 @@ class ReportPrint:
         # Tabla con reporte de incidencias y LOGOS.
         titulo_data = []
         titulo_table = []
-        logo_cliente = Paragraph('Logo Cliente', style_Normal)
+        logo_cliente = Paragraph('Logo Cliente' + report_instance.sensor.arduino.project.enterprise.name, style_Normal)
         titulo_ciente = Paragraph('Reporte de incidencias<br/>Sensor ' + report_instance.sensor.description, style_Title_Center)
-        logo_sensait = Paragraph('Logo SensaIT', style_Normal)
 
-        titulo_data.append((logo_cliente, titulo_ciente, logo_sensait))
+        img_sensait = Image("arduino/static/sensait/logos/Sensait_logo.png")
+        img_sensait.drawHeight = 8 * mm
+        img_sensait.drawWidth = 20 * mm
+
+        titulo_data.append((logo_cliente, titulo_ciente, img_sensait))
 
         titulo_table = Table(titulo_data, colWidths=(50 * mm, 100 * mm, 50 * mm))
         titulo_table.setStyle(TableStyle([('INNERGRID', (0, 0), (-1, -1), 0.25, colors.white), ('BOX', (0, 0), (-1, -1), 0.25, colors.white)]))
@@ -138,7 +141,7 @@ class ReportPrint:
 
         resumen_laboratorio = Paragraph('<b>Laboratorio:</b><br/>' + report_instance.sensor.arduino.project.name, style_Normal)
         resumen_equipo = Paragraph('<b>Equipo:</b><br/>' + report_instance.sensor.arduino.name, style_Normal)
-        resumen_serie = Paragraph('<b>Serie del Equipo:</b><br/>' + report_instance.sensor.equipment.equipment_name, style_Normal)
+        resumen_serie = Paragraph('<b>Modelo:</b><br/>' + report_instance.sensor.arduino.modelo_transmisor, style_Normal)
 
         resumen_data.append((resumen_laboratorio, resumen_equipo, resumen_serie))
 
@@ -159,7 +162,7 @@ class ReportPrint:
         else:
             periodoReporte = str(difEpochDias) + " Dia"
 
-        resumen_rangodias = Paragraph('<b>Reporte Generado:</b><br/>' + str(periodoReporte), style_Normal)
+        resumen_rangodias = Paragraph('<b>Periodo Generado:</b><br/>' + str(periodoReporte), style_Normal)
         resumen_void = Paragraph(" ", style_Normal)
 
         resumen_data.append((resumen_periodo, resumen_rangodias, resumen_void))

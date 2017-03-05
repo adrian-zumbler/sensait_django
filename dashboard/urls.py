@@ -4,7 +4,7 @@ from client.views import CSVReportView, ArduinoAlertDetailView
 
 urlpatterns = [
 
-    url(r'^dash/status/$', SystemStatusListView.as_view(), name="status"),
+    url(r'^dash/estatusgeneral/$', SystemStatusListView.as_view(), name="systemstatus"),
     url(r'^dash/projects/$', ProjectsListView.as_view(), name="projects"),
     url(r'^dash/projects/(?P<pk>\d+)/$', ProjectDetailView.as_view(), name="projectDetail"),
     url(r'^dash/reports/(?P<pk>\d+)/$', CSVReportView.as_view(), name="reports"),

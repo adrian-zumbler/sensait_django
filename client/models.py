@@ -74,7 +74,7 @@ class Enterprise(models.Model):
     )
     email_contact = models.CharField(
         verbose_name='Correo de contacto',
-        max_length=20,
+        max_length=300,
         blank=True,
         null=True
     )

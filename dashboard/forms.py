@@ -42,7 +42,7 @@ class AdminArduinoCreateForm(forms.ModelForm):
 
     class Meta:
         model = Arduino
-        fields = ['name', 'modelo_transmisor', 'location', 'correos_alertas', 'delta_time_alerts']
+        fields = ['name', 'estatus', 'modelo_transmisor', 'location', 'correos_alertas', 'delta_time_alerts']
 
 
 class AdminSensorCreateForm(forms.ModelForm):

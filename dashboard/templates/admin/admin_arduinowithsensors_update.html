@@ -34,7 +34,7 @@
                 {{arduino.name}}
               </a>
             </dd>
-            <dt>Proyecto Parent</dt>
+            <dt>Proyecto</dt>
             <dd>
                 {{arduino.project}}
             </dd>
@@ -50,6 +50,13 @@
             <dd>{{arduino.created_at}}</dd>
             <dt>Fecha de Actualización</dt>
             <dd>{{arduino.updated_at}}</dd>
+            <dt>Token</dt>
+            <dd>{{arduino.arduino_token}}</dd>
+            <dt>Estado del equipo:</dt>
+            <dd>
+              {% render_field form.estatus class="form-control" %}
+              <label for="estatus_error">{{ form.estatus.errors }}</label>
+            </dd>
           </dl>
         </div><!-- /.box-body -->
       </div><!-- /.box -->
@@ -78,16 +85,23 @@
           </div>
           <div class="col-xs-4">
             <div class="form-group">
-              <label for="sistema_alertas_time">Tiempo entre envio de alertas:</label>
-              {% render_field form.delta_time_alerts class="form-control" %}
-              <label for="sistema_alertas_time_error">{{ form.delta_time_alerts.errors }}</label>
+              <label for="modelo_transmisor">Modelo Equipo:</label>
+              {% render_field form.modelo_transmisor class="form-control" %}
+              <label for="modelo_transmisor_error">{{ form.modelo_transmisor.errors }}</label>
             </div>
           </div>
-          <div class="col-xs-12">
+          <div class="col-xs-6">
             <div class="form-group">
               <label for="sistema_alertas">Correo Alertas:</label>
               {% render_field form.correos_alertas class="form-control" %}
               <label for="sensor_alertas_error">{{ form.correos_alertas.errors }}</label>
+            </div>
+          </div>
+          <div class="col-xs-6">
+            <div class="form-group">
+              <label for="sistema_alertas_time">Tiempo en min. entre envio de alertas:</label>
+              {% render_field form.delta_time_alerts class="form-control" %}
+              <label for="sistema_alertas_time_error">{{ form.delta_time_alerts.errors }}</label>
             </div>
           </div>
         </div><!-- /.box-body -->

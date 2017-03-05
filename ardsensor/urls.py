@@ -66,6 +66,9 @@ urlpatterns = [
     url(r'^dash/', include('client.urls', namespace='enterprise-client')),
 
     url(r'^dash/main/$', DashMainListView.as_view(), name="main"),
+
+    url(r'^perfil/$', UsuarioPerfil.as_view(), name="miperfil"),
+
     url(r'^logout/$', logout, {'next': '/'}, name="logout"),
     url(r'^logins/$', login_user),
     url(r'^error/$', TemplateView.as_view(template_name='system/errors/error.html')),
