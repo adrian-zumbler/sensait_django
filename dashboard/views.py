@@ -136,10 +136,31 @@ class SystemStatusListView(LoginRequiredMixin, ListView):
 # _____________________________________________#
 
 
+class UserProjectListView(LoginRequiredMixin, ListView):
+    template_name = 'client/user_project_list.html'
+
+    def get_queryset(self):
+        if self.request.user.is_superuser:
+            qs = Project.objects.all()
+        else:
+            qs = self.request.user.client.projects
+        return qs
+
+#       ADMIN - PROYECTOS
+# _____________________________________________#
+
+
 class AdminProjectsListView(LoginRequiredMixin, ListView):
     template_name = 'admin/admin_projects_list.html'
     queryset = Project.objects.all()
-
+"""
+    def get_context_data(self, **kwargs):
+        context = super(AdminProjectsListView, self).get_context_data(**kwargs)
+        tipo = type(self.object)
+        proj = Project.objects.get(id=self.object.id)
+        context['arduinos'] = Arduino.objects.filter(project_id=proj.id)
+        return context
+"""
 
 class AdminProjectsDetailView(LoginRequiredMixin, DetailView):
     template_name = 'admin/admin_projects_detail.html'

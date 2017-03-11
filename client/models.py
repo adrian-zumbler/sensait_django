@@ -19,6 +19,15 @@ def client_files_name(instance, filename):
                      filename])
 
 
+def client_logo_name(instance, filename):
+    today = timezone.now()
+    today_path = today.strftime('%Y/%m/%d')
+    return '/'.join(['clients',
+                     today_path,
+                     'client_logo_' + str(instance.id),
+                     filename])
+
+
 class Enterprise(models.Model):
 
     ESTATUS_CHOICES = (
@@ -78,7 +87,12 @@ class Enterprise(models.Model):
         blank=True,
         null=True
     )
-
+    image_logo = models.ImageField(
+        verbose_name='Logotipo',
+        blank=True,
+        upload_to=client_logo_name,
+        null=True
+    )
     estatus = models.PositiveSmallIntegerField(verbose_name='Estatus', choices=ESTATUS_CHOICES, default=1)
 
     def __unicode__(self):
