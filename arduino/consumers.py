@@ -6,7 +6,13 @@ from django.utils import timezone
 from django.core.mail import EmailMultiAlternatives
 from channels.sessions import channel_session, enforce_ordering
 
-from arduino.models import SensorData
+from io import BytesIO
+
+from django.utils import timezone
+from django.core.files import File
+from ardsensor.printing import ReportPrint
+
+from arduino.models import SensorData, Report
 
 
 def post_save_sensordata(message):
@@ -32,6 +38,21 @@ def post_save_sensordata(message):
                 alert.active = False
                 alert.finished_at = timezone.now()
                 alert.save()
+
+
+def create_file(message):
+    instance = Report.objects.get(
+        id=message.content['report_id']
+    ).create_update_file()
+    instance.save()
+
+    # buff = BytesIO()
+    # report = ReportPrint(buff, 'Letter')
+    # report.print_sensor_data(report_instance=)
+    #
+    # # Save the file but don't save the model to avoid
+    # # loop with self.save method
+    # self.archivo.save('tmp_name.pdf', File(buff), save=False)
 
 
 def arduino_alert(message):

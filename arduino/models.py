@@ -453,7 +453,9 @@ class Report(models.Model):
 
     created_at = models.DateTimeField(auto_now_add=True)
 
-    archivo = models.FileField(upload_to=report_files_name)
+    archivo = models.FileField(upload_to=report_files_name, blank=True, null=True)
+
+    is_file_ready = models.BooleanField(default=False)
 
     class Meta:
         ordering = ['-created_at']
@@ -475,12 +477,13 @@ class Report(models.Model):
         # Save the file but don't save the model to avoid
         # loop with self.save method
         self.archivo.save('tmp_name.pdf', File(buff), save=False)
+        self.is_file_ready = True
 
     def save(self, force_insert=False, force_update=False, using=None,
              update_fields=None):
 
-        # Create the file befor saveing
-        self.create_update_file()
+        # File is not ready
+        self.is_file_ready = False
         return super(Report, self).save(
             force_insert=False, force_update=False,
             using=None, update_fields=None)
@@ -498,3 +501,12 @@ def merge_epoch_field(arduino, efield_name='field1'):
             created_at__gt=edatetime - delta,
             created_at__lt=edatetime + delta
         ).update(epoch=epoch)
+
+
+@receiver(post_save, sender=Report, dispatch_uid="create_report_file")
+def create_report_file(sender, instance, **kwargs):
+
+    Channel('arduino-alert').send({
+        'report_id': instance.id
+    })
+
