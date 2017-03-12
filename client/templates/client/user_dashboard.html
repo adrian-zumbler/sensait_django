@@ -621,11 +621,9 @@ function getSensorsFromAPI(proy_ID,sensor_ID, arduinoID,sens_info,query){
           var max = $('#max_'+wsData[i]['arduino_sensor']).text();
 
           if(parseFloat(Number(data)) > parseFloat(max) || parseFloat(min) > parseFloat(Number(data))){
-            console.log(wsData[i]['arduino_sensor']+ "ehh....");
             $('#row_'+wsData[i]['arduino_sensor']).removeClass("card-ok");
             $('#row_'+wsData[i]['arduino_sensor']).addClass("card-alert");
           }else{
-            console.log(wsData[i]['arduino_sensor']+ "puto....");
             $('#row_'+wsData[i]['arduino_sensor']).addClass("card-ok");
             $('#row_'+wsData[i]['arduino_sensor']).removeClass("card-alert");
           }
