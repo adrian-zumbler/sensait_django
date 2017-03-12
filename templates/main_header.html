@@ -5,7 +5,7 @@
 {% block main_header %}
 <header class="main-header">
   <!-- Logo -->
-  <a href="#" class="logo">
+  <a href="{% url 'main' %}" class="logo">
     <!-- mini logo for sidebar mini 50x50 pixels -->
 
     <!-- logo for regular state and mobile devices -->
@@ -268,10 +268,11 @@
     <div class="user-panel">
       <div class="pull-left image">
         <img src=" {% static 'sensait/logos/Sensait_logo.png' %}" class="img-image" alt="User Image">
+        <br/><br/>
       </div>
       <div class="pull-left info">
         <p>{{request.user}}</p>
-        <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
+        <a href="#"><i class="fa fa-circle text-success"></i>En línea</a>
       </div>
     </div>
     <!-- sidebar menu: : style can be found in sidebar.less -->
@@ -283,28 +284,16 @@
 
       <li><a href="{% url 'miperfil' %}"><i class="fa fa-book"></i> <span>MI PERFIL</span></a></li>
 
-      <li><a href="{% url 'dashboard-client:systemstatus' %}"><i class="fa fa-laptop"></i> <span>ESTADO GENERAL</span></a></li>
+
+
       {% if not request.user.client %}
 
-      <li class="header">PROYECTOS</li>
+      <li class="header">MIS LABORATORIOS</li>
       <li><a href="{% url 'dashboard-client:projects' %}"><i class="fa fa-laptop"></i> <span>
-        MIS LABORATORIOS
+        PROYECTOS
       </span></a>
       </li>
 
-      <li class="header">ALERTAS & ACCIONES</li>
-      <li class="treeview">
-        <a href="#">
-          <i class="fa fa-laptop"></i>
-          <span>ALERTAS</span>
-          <i class="fa fa-angle-left pull-right"></i>
-        </a>
-        <ul class="treeview-menu" style="display: none;">
-          <li><a href="{% url 'alertObservationList' %}"><i class="fa fa-laptop"></i> <span>Alertas</span></a></li>
-          <li><a href="{% url 'alertObservationList' %}"><i class="fa fa-laptop"></i> <span>Reportes</span></a></li>
-          <li><a href="{% url 'alertObservationList' %}"><i class="fa fa-laptop"></i> <span>Observaciones & Acciones</span></a></li>
-        </ul>
-      </li>
       {% comment %}
       <li class="treeview">
         <a href="#">
@@ -360,7 +349,7 @@
         </li>
 
 
-        <li class="header">SENSORES & EQUIPOS</li>
+        <li class="header">ADMINISTRACIÓN</li>
 
         <li class="treeview">
           <a href="#">
@@ -384,7 +373,17 @@
             <li><a href="{% url 'sensorEquipmentNew' %}"><i class="fa fa-laptop"></i> <span>Nuevo Equipo</span></a></li>
           </ul>
         </li>
-
+        <li class="treeview">
+          <a href="#">
+            <i class="fa fa-laptop"></i>
+            <span>OBSERVACIONES & ACCIONES</span>
+            <i class="fa fa-angle-left pull-right"></i>
+          </a>
+          <ul class="treeview-menu" style="display: none;">
+            <li><a href="{% url 'alertObservationList' %}"><i class="fa fa-laptop"></i> <span>Lista de Observaciones</span></a></li>
+            <li><a href="{% url 'alertObservationNew' %}"><i class="fa fa-laptop"></i> <span>Nueva Observacion</span></a></li>
+          </ul>
+        </li>
 
         <li class="header">SOPORTE</li>
         <li class="treeview">
@@ -398,6 +397,7 @@
             <li><a href="{% url 'ticket:ticket-add' %}"><i class="fa fa-laptop"></i> <span>Nuevo Ticket</span></a></li>
           </ul>
         </li>
+        <li><a href="{% url 'dashboard-client:systemstatus' %}"><i class="fa fa-laptop"></i> <span>ESTADO GENERAL</span></a></li>
 
 
 

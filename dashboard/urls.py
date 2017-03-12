@@ -6,6 +6,7 @@ urlpatterns = [
 
     url(r'^dash/estatusgeneral/$', SystemStatusListView.as_view(), name="systemstatus"),
     url(r'^dash/projects/$', ProjectsListView.as_view(), name="projects"),
+    url(r'^dash/projectlist/$', UserProjectListView.as_view(), name="user-list-projects"),
     url(r'^dash/projects/(?P<pk>\d+)/$', ProjectDetailView.as_view(), name="projectDetail"),
     url(r'^dash/reports/(?P<pk>\d+)/$', CSVReportView.as_view(), name="reports"),
     url(r'^dash/alerts/(?P<pk>\d+)/$', ArduinoAlertDetailView.as_view(), name="alerts"),
