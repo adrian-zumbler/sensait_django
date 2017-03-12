@@ -452,6 +452,7 @@ class Report(models.Model):
     fecha_final = models.PositiveIntegerField()
 
     created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateField(auto_now=True)
 
     archivo = models.FileField(upload_to=report_files_name, blank=True, null=True)
 
@@ -481,9 +482,10 @@ class Report(models.Model):
 
     def save(self, force_insert=False, force_update=False, using=None,
              update_fields=None):
+        # File has not been created
+        if not hasattr(self, '_signal_sended'):
+            self.is_file_ready = False
 
-        # File is not ready
-        self.is_file_ready = False
         return super(Report, self).save(
             force_insert=False, force_update=False,
             using=None, update_fields=None)
@@ -506,7 +508,8 @@ def merge_epoch_field(arduino, efield_name='field1'):
 @receiver(post_save, sender=Report, dispatch_uid="create_report_file")
 def create_report_file(sender, instance, **kwargs):
 
-    Channel('arduino-alert').send({
-        'report_id': instance.id
-    })
+    if not hasattr(instance, '_signal_sended'):
+        Channel('create-file').send({
+            'instance_id': instance.id
+        })
 

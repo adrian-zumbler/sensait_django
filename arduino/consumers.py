@@ -42,17 +42,10 @@ def post_save_sensordata(message):
 
 def create_file(message):
     instance = Report.objects.get(
-        id=message.content['report_id']
+        id=message.content['instance_id']
     ).create_update_file()
+    instance._signal_sended = True
     instance.save()
-
-    # buff = BytesIO()
-    # report = ReportPrint(buff, 'Letter')
-    # report.print_sensor_data(report_instance=)
-    #
-    # # Save the file but don't save the model to avoid
-    # # loop with self.save method
-    # self.archivo.save('tmp_name.pdf', File(buff), save=False)
 
 
 def arduino_alert(message):
