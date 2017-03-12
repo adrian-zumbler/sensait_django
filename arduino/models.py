@@ -456,7 +456,7 @@ class Report(models.Model):
 
     archivo = models.FileField(upload_to=report_files_name, blank=True, null=True)
 
-    is_file_ready = models.BooleanField(default=False)
+    is_file_ready = models.BooleanField(default=True)
 
     class Meta:
         ordering = ['-created_at']

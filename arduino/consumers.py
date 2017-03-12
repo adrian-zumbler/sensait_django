@@ -43,7 +43,8 @@ def post_save_sensordata(message):
 def create_file(message):
     instance = Report.objects.get(
         id=message.content['instance_id']
-    ).create_update_file()
+    )
+    instance.create_update_file()
     instance._signal_sended = True
     instance.save()
 

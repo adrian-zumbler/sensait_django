@@ -50,9 +50,13 @@
                   <td> Fecha Inicial: <b>{{report.fecha_inicial | epoch2Date }} </b> <br/> Fecha Final: <b>{{report.fecha_final | epoch2Date }}</b>
                   </td>
                   <td>
+                    {% if report.is_file_ready %}
                     <a href="{{report.archivo.url }}" target="_blank">
                       <button type="button" class="btn btn-warning">Descargar</button>
                     </a>
+                    {% else %}
+                      <span>Creating file!</span>
+                    {% endif %}
                     <a href="{% url 'dashboard-client:reports-delete' sensor_pk=sensor_pk pk=report.id  %}">
                       <button class="btn btn-info">Borrar</button>
                     </a>
