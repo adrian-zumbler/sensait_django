@@ -452,7 +452,7 @@ class Report(models.Model):
     fecha_final = models.PositiveIntegerField()
 
     created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateField(auto_now=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     archivo = models.FileField(upload_to=report_files_name, blank=True, null=True)
 
