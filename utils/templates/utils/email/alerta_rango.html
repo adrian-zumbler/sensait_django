@@ -97,7 +97,7 @@ Apreciable <b>{{ arduinoalert.sensor_data.last.arduino_sensor.arduino.project.no
 <p style="font-size:18px;line-height: 30px;">
   Fecha de Inicio de alerta: <b>{{ arduinoalert.created_at }}</b><br/>
   Ultima actualización de alerta: <b>{{ arduinoalert.updated_at }}</b><br/>
-  Total de sensores en alerta: <b>{{arduinoalert.sensors_in_alert.count}}</b><br/>
+  Total de sensores en alerta: <b>{{arduinoalert.sensor_alerts |generatorcount}}</b><br/>
   Valores recibidos fuera de Rango : <b>{{ arduinoalert.sensor_data.count }}</b><br/><br/>
   Instalación: <b> {{ arduinoalert.sensor_data.last.arduino_sensor.arduino.project.name }}</b><br/>
   Transmisor: <b> {{ arduinoalert.sensor_data.last.arduino_sensor.arduino.name }} </b><br/>
