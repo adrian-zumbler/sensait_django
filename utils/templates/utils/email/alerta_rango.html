@@ -2,25 +2,10 @@
 {% load l10n %}
 {% load i18n %}
 
-
-
-<style>
-  html{
-    font-family:Arial;
-  }
-  p{
-    font-size:18px;
-     line-height: 30px;
-  }
-  .tableContainer{
-    display:inline-table;
-    border:1px solid black;
-  }
-</style>
-
 {% language 'es' %}
 
 {% if arduinoalert.sensor_alerts|generatorcount == 1 %}
+<body style="font-family:Arial;">
   <h1>
     ¡Alerta! Se encuentra <b>{{arduinoalert.sensor_alerts |generatorcount}}</b> sensor con registros fuera de rango.
   </h1>
@@ -30,14 +15,14 @@
   </h1>
 {% endif %}
 
-<p>
+<p style="font-size:18px;line-height: 30px;">
 Apreciable <b>{{ arduinoalert.sensor_data.last.arduino_sensor.arduino.project.nombre_encargado }}</b> el dispositivo <b>Sensait CORE {{ arduinoalert.sensor_data.last.arduino_sensor.arduino.name }}</b> ha registrado temperaturas fuera de rango de operación, por favor verifique que el equipo <b> {{ arduinoalert.sensor_data.last.arduino_sensor.equipment.equipment_name }} </b> esté funcionando o cerrado correctamente.
 </p>
 
 <div class="">
 
 {% for sensor_alert in arduinoalert.sensor_alerts %}
-<table border="0" class="tableContainer">
+<table border="0" style="display:inline-table; border:1px solid black;">
   <tr>
     <td colspan="2" align="center">
       Sensor:
@@ -81,7 +66,7 @@ Apreciable <b>{{ arduinoalert.sensor_data.last.arduino_sensor.arduino.project.no
 <h2>Detalle de los Sensores en Alerta: </h2>
 
 {% for sensor_alert in arduinoalert.sensor_alerts %}
-<table border="0" class="tableContainer">
+<table border="0" style="display:inline-table; border:1px solid black;">
   <tr>
     <td>
       Sensor:
@@ -109,7 +94,7 @@ Apreciable <b>{{ arduinoalert.sensor_data.last.arduino_sensor.arduino.project.no
 <br/><br/>
 
 <h2>Información de la Alerta: </h2>
-<p>
+<p style="font-size:18px;line-height: 30px;">
   Fecha de Inicio de alerta: <b>{{ arduinoalert.created_at }}</b><br/>
   Ultima actualización de alerta: <b>{{ arduinoalert.updated_at }}</b><br/>
   Total de sensores en alerta: <b>{{arduinoalert.sensors_in_alert.count}}</b><br/>
@@ -121,7 +106,7 @@ Apreciable <b>{{ arduinoalert.sensor_data.last.arduino_sensor.arduino.project.no
 </p>
 
 <br/>
-<p>
+<p style="font-size:18px; line-height: 30px;">
 Puede ver mas información de esta alerta dando click <a href="http://sensait.dyndns.org/dash/alerts/{{ arduinoalert.id }}/" target="_blank">aqui</a>
 <br/>
 <br/>
@@ -131,10 +116,11 @@ Sensait Soporte: <a href="mailto:antonio.martinez@adumx.com?Subject=SoporteSensa
 </p>
 
 <hr/>
-<p>
+<p style="font-size:18px;line-height: 30px;">
   <b>Nota:</b> Para mayor detalle de la alerta y registros favor de entrar a la plataforma de adminsitración en <a href="sensait.dyndns.org" target="_blank">SENSAIT.COM</a>.
   <br/>
 </p>
+<body>
 <!-- hola mundo {{ object.data }}
 hola mundo {{ sensordata.data }}-->
 {% endlanguage %}
