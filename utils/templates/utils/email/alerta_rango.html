@@ -1,5 +1,8 @@
 {% load arduino_tags %}
+{% load l10n %}
 {% load i18n %}
+
+
 
 <style>
   html{
@@ -9,17 +12,21 @@
     font-size:18px;
      line-height: 30px;
   }
+  .tableContainer{
+    display:inline-table;
+    border:1px solid black;
+  }
 </style>
 
 {% language 'es' %}
 
-{% if arduinoalert.sensors_in_alert.count == 1 %}
+{% if arduinoalert.sensor_alerts|generatorcount == 1 %}
   <h1>
-    ¡Alerta! Se encuentra <b>{{arduinoalert.sensors_in_alert.count}}</b> sensor con registros fuera de rango.
+    ¡Alerta! Se encuentra <b>{{arduinoalert.sensor_alerts |generatorcount}}</b> sensor con registros fuera de rango.
   </h1>
 {% else %}
   <h1>
-    ¡Alerta! Se encuentran <b>{{arduinoalert.sensors_in_alert.count}}</b> sensores con registros fuera de rango.
+    ¡Alerta! Se encuentran <b>{{arduinoalert.sensor_alerts |generatorcount}}</b> sensores con registros fuera de rango.
   </h1>
 {% endif %}
 
@@ -27,33 +34,79 @@
 Apreciable <b>{{ arduinoalert.sensor_data.last.arduino_sensor.arduino.project.nombre_encargado }}</b> el dispositivo <b>Sensait CORE {{ arduinoalert.sensor_data.last.arduino_sensor.arduino.name }}</b> ha registrado temperaturas fuera de rango de operación, por favor verifique que el equipo <b> {{ arduinoalert.sensor_data.last.arduino_sensor.equipment.equipment_name }} </b> esté funcionando o cerrado correctamente.
 </p>
 
-<ul>
-  {% for sensor_alert in arduinoalert.sensor_alerts %}
-    <li>
-      <span>
-        Sensor: <b>{{sensor_alert.description}}</b>
-        Ultimo Valor Registrado: <b>{{ sensor_alert.data.last.data |floatformat:2}}{{ sensor_alert.sensor_type.subfix}}</b>
-        Fecha de Envio: <b>{{sensor_alert.data.last.epoch | epoch2Date }}</b>
-      </span>
-    </li><br/>
-  {% endfor %}
-</ul>
+<div class="">
 
+{% for sensor_alert in arduinoalert.sensor_alerts %}
+<table border="0" class="tableContainer">
+  <tr>
+    <td colspan="2" align="center">
+      Sensor:
+      <br/>
+      <b>{{sensor_alert.description}}</b>
+    </td>
+  </tr>
+  <tr>
+    <td colspan="2" align="center">
+      <h1>{{ sensor_alert.data.last.data |floatformat:2 |decimalcomma }}{{ sensor_alert.sensor_type.subfix}}
+      </h1>
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+       {{  arduinoalert.sensor_data.last.arduino_sensor.min_value  |floatformat:2 | decimalcomma}}{{ arduinoalert.sensor_data.last.arduino_sensor.sensor_type.subfix }}
+      <br/>
+      Min.
+    </td>
+    <td align="center">
+      {{  arduinoalert.sensor_data.last.arduino_sensor.max_value |floatformat:2 |decimalcomma}}{{ arduinoalert.sensor_data.last.arduino_sensor.sensor_type.subfix }}
+      <br/>
+      Max.
+    </td>
+  </tr>
+  <tr>
+    <td colspan="2" align="center">
+      <hr/>
+      <br/>
+      Fecha & Hora ult. valor:
+      <br/><br/>
+      <b>{{sensor_alert.data.last.epoch | epoch2Date }}</b>
+      <br/><br/>
+    </td>
+  </tr>
+</table>
+{% endfor %}
+
+</div>
+<br/><br/>
 <h2>Detalle de los Sensores en Alerta: </h2>
 
 {% for sensor_alert in arduinoalert.sensor_alerts %}
-  <p>
-  Nombre de Sensor: <b>{{sensor_alert.description}}</b> <br/>
-  Tipo de Sensor: <b>{{sensor_alert.sensor_type.name}}</b> <br/>
-  Equipo: <b>{{sensor_alert.equipment.equipment_name}}</b> <br/>
-  Ultimo Dato: <b>{{ sensor_alert.data.last.data |floatformat:2}}{{ sensor_alert.sensor_type.subfix}}</b> <br/>
-  Valor Minimo: <b> {{  arduinoalert.sensor_data.last.arduino_sensor.min_value |floatformat:2}}{{ arduinoalert.sensor_data.last.arduino_sensor.sensor_type.subfix }} </b> <br/>
-  Valor Minimo: <b> {{  arduinoalert.sensor_data.last.arduino_sensor.max_value |floatformat:2}}{{ arduinoalert.sensor_data.last.arduino_sensor.sensor_type.subfix }} </b> <br/>
-  Fecha: <b>{{sensor_alert.data.last.epoch | epoch2Date }}</b> <br/>
-  </p>
+<table border="0" class="tableContainer">
+  <tr>
+    <td>
+      Sensor:
+       <br/>
+       <b>{{sensor_alert.description}}</b>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      Tipo:
+       <br/>
+       <b>{{sensor_alert.sensor_type.name}}</b>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      Equipo:
+       <br/>
+       <b>{{sensor_alert.equipment.equipment_name}}</b>
+    </td>
+  </tr>
+</table>
 {% endfor %}
 
-<br/>
+<br/><br/>
 
 <h2>Información de la Alerta: </h2>
 <p>
@@ -64,8 +117,6 @@ Apreciable <b>{{ arduinoalert.sensor_data.last.arduino_sensor.arduino.project.no
   Instalación: <b> {{ arduinoalert.sensor_data.last.arduino_sensor.arduino.project.name }}</b><br/>
   Transmisor: <b> {{ arduinoalert.sensor_data.last.arduino_sensor.arduino.name }} </b><br/>
   Ubicación:<b>  {{ arduinoalert.sensor_data.last.arduino_sensor.arduino.location }} </b><br/>
-  Equipo:<b> {{ arduinoalert.sensor_data.last.arduino_sensor.equipment.equipment_name }} </b>
-  <br/>
   </b>
 </p>
 
@@ -76,7 +127,7 @@ Puede ver mas información de esta alerta dando click <a href="http://sensait.dy
 <br/>
 
 Quedamos a sus órdenes para cualquier duda o comentario.<br/>
-Sensait Soporte: <a href="mailto:jose.martinez@adumx.com?Subject=Soporte">jose.martinez@adumx.com</a>
+Sensait Soporte: <a href="mailto:antonio.martinez@adumx.com?Subject=SoporteSensaIT">antonio.martinez@adumx.com</a>
 </p>
 
 <hr/>

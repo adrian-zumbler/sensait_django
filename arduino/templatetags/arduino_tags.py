@@ -1,5 +1,7 @@
+import re
 from django import template
 from datetime import datetime
+from django.utils.encoding import force_text
 
 register = template.Library()
 
@@ -22,3 +24,13 @@ def epoch2Date(epoch):
     except ValueError:
         return "En proceso..."
     return datetime.fromtimestamp(ts).strftime('%d/%m/%Y %H:%M:%S')
+
+
+@register.filter(name="decimalcomma")
+def intdot(value):
+    return value.replace(",", ".")
+
+
+@register.filter(name="generatorcount")
+def gencount(value):
+    return len(list(value))
