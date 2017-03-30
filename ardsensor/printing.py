@@ -121,7 +121,7 @@ class ReportPrint:
         # Tabla con reporte de incidencias y LOGOS.
         titulo_data = []
         titulo_table = []
-        logo_cliente = Paragraph('Logo Cliente' + report_instance.sensor.arduino.project.enterprise.name, style_Normal)
+        logo_cliente = Paragraph('' + report_instance.sensor.arduino.project.enterprise.name, style_Normal)
         titulo_ciente = Paragraph('Reporte de incidencias<br/>Sensor ' + report_instance.sensor.description, style_Title_Center)
 
         img_sensait = Image("arduino/static/sensait/logos/Sensait_logo.png")
@@ -158,7 +158,7 @@ class ReportPrint:
         elif difEpochDias == 7 or difEpochDias == 6:
             periodoReporte = "Semanal"
         elif difEpochDias != 1:
-            periodoReporte = "Diario"
+            periodoReporte = str(difEpochDias) + " dias"
         else:
             periodoReporte = str(difEpochDias) + " Dia"
 

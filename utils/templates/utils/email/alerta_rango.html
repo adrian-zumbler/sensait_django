@@ -21,6 +21,7 @@ Apreciable <b>{{ arduinoalert.sensor_data.last.arduino_sensor.arduino.project.no
 
 <div class="">
 
+<table border="0" style="display:inline-table;">
 {% for sensor_alert in arduinoalert.sensor_alerts %}
 <table border="0" style="display:inline-table; border:1px solid black;">
   <tr>
@@ -60,11 +61,14 @@ Apreciable <b>{{ arduinoalert.sensor_data.last.arduino_sensor.arduino.project.no
   </tr>
 </table>
 {% endfor %}
+</table>
+
 
 </div>
 <br/><br/>
 <h2>Detalle de los Sensores en Alerta: </h2>
 
+<table border="0" style="display:inline-table;">
 {% for sensor_alert in arduinoalert.sensor_alerts %}
 <table border="0" style="display:inline-table; border:1px solid black;">
   <tr>
@@ -90,6 +94,7 @@ Apreciable <b>{{ arduinoalert.sensor_data.last.arduino_sensor.arduino.project.no
   </tr>
 </table>
 {% endfor %}
+</table>
 
 <br/><br/>
 

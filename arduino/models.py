@@ -512,4 +512,3 @@ def create_report_file(sender, instance, **kwargs):
         Channel('create-file').send({
             'instance_id': instance.id
         })
-
