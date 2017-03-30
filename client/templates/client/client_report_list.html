@@ -64,7 +64,10 @@
                 {% for report in report_list %}
                 <tr>
                   <td> Rep-00{{report.id}} </td>
-                  <td> {{report.created_at}} </td>
+                  <td>
+                    <b> Creado: </b> {{report.created_at}}<br/>
+                    <b> Actualizado: </b> {{report.updated_at}}
+                  </td>
                   <td> {{report.get_tipo_archivo_display }} </td>
                   <td> {{report.get_tipo_reporte_display }} </td>
                   <td> Fecha Inicial: <b>{{report.fecha_inicial | epoch2Date }} </b> <br/> Fecha Final: <b>{{report.fecha_final | epoch2Date }}</b>
