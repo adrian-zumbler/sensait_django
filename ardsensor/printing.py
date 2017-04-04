@@ -202,7 +202,6 @@ class ReportPrint:
         dataTable_L.append(("Fecha y Hora", "Lectura", "Estado", "Numero incidencia"))
         sensorStatus = "Correcto"
 
-
         for num, data in enumerate(report_instance.sensor_data(), start=0):
             if str(data.data) != str("-127.00"):
                 totalRegistros = num
@@ -235,7 +234,12 @@ class ReportPrint:
         table_L = Table(dataTable_L, colWidths=[(doc.width) / 4.0] * 4)
         table_L.setStyle(TableStyle([('INNERGRID', (0, 0), (-1, -1), 0.25, colors.black), ('BOX', (0, 0), (-1, -1), 0.25, colors.black)]))
 
-        val_promedio = float(promedioRegistros) / float(totalRegistros)
+        print promedioRegistros
+        print totalRegistros
+        if float(promedioRegistros) == 0 and float(promedioRegistros) == 0:
+            val_promedio = 0
+        else:
+            val_promedio = float(promedioRegistros) / float(totalRegistros)
 
         resumen_promedio = Paragraph('<b>Temperatura Promedio:</b><br/>' + "%.2f" % val_promedio, style_Normal)
         resumen_minima = Paragraph('<b>Temperatura Minimo Registrada:</b><br/>' + "%.2f" % valmin, style_Normal)
@@ -334,7 +338,11 @@ class ReportPrint:
 
                 alerta_primer_registro = Paragraph('<b>Fecha inicio alerta:</b><br/>' + str(datetime.fromtimestamp(alertlist[0].epoch).strftime('%d/%m/%Y %H:%M:%S') + "<br/><br/>"), style_Normal)
                 alerta_ultima_registro = Paragraph('<b>Fecha final alerta:</b><br/>' + str(datetime.fromtimestamp(alertlist[len(alertlist) - 1].epoch).strftime('%d/%m/%Y %H:%M:%S') + "<br/><br/>"), style_Normal)
-                tiempoAlerta = alertlist[len(alertlist) - 1].epoch - alertlist[0].epoch
+                tiempoAlerta = alertlist[0].epoch - alertlist[len(alertlist) - 1].epoch
+
+                print "difEpoch: " + str(alertlist[len(alertlist) - 1].epoch)
+                print "difEpochR: " + str(tiempoAlerta)
+                print "difEpoch: " + str(alertlist[0].epoch)
 
                 alerta_duracion = Paragraph('<b>Duracion alerta:</b><br/>' + str(datetime.fromtimestamp(tiempoAlerta).strftime('%M:%S') + "<br/><br/>"), style_Normal)
                 alerta_total_registros = Paragraph('<b>Registros fuera de rango:</b><br/>' + str(len(alertlist)) + "<br/><br/>", style_Normal)
@@ -375,14 +383,23 @@ class ReportPrint:
                     # print "tmp: " + str(valTmp)
                     # print "max: " + str(valMax)
                     # print "min: " + str(valMin)
-                    if float(valTmp) > float(valMax):
-                        valMax = valTmp
-                        if valMin == 0:
+                    if float(valTmp >= 0):
+                        if float(valTmp) > float(valMax):
+                            valMax = valTmp
+                            if valMin == 0:
+                                valMin = float(valTmp)
+
+                        if float(valMin) > float(valTmp):
                             valMin = float(valTmp)
-                    if float(valMin) > float(alert.data):
-                        valMin = float(alert.data)
-                    if float(valMin) > float(valTmp):
-                        valMin = float(valTmp)
+
+                    else:
+                        if float(valTmp) < float(valMax):
+                            valMax = valTmp
+                            if valMin == 0:
+                                valMin = float(valTmp)
+
+                        if float(valTmp) > float(valMin):
+                            valMin = float(valTmp)
 
                     valueData = float(alert.data)
 
@@ -390,6 +407,30 @@ class ReportPrint:
                     alert_limit.append(alert_max_value)
                     alert_graph_dates.append(str(datetime.fromtimestamp(alert.epoch).strftime('%H:%M:%S')))
                 # END FOR
+                print "tmp: " + str(valTmp)
+                print "max: " + str(valMax)
+                print "min: " + str(valMin)
+
+                # CALCULAR BIEN LOS LIMITES DE LA GRAFICA
+                if float(valMin) >= 0:
+                    lim_min = float(valMin - 1)
+
+                elif float(valMax) >= 0:
+                    lim_max = float(valMax + 2)
+
+                elif float(valMax) < 0:
+                    lim_max = float(valMax - 2)
+
+                elif float(valMin) < 0:
+                    lim_min = float(valMin - 1)
+                # END CALCULAR LIMITES
+
+                lim_min = valMin
+                lim_max = valMax
+
+                print "lim_min: " + str(lim_min)
+                print "lim_max: " + str(lim_max)
+
                 drawing = Drawing(200, 220)
                 data = [alert_graph, alert_limit]
                 lc = HorizontalLineChart()
@@ -409,8 +450,8 @@ class ReportPrint:
                 lc.lines[0].symbol = makeMarker('FilledCircle')
                 # lc.lineLabelFormat = '%2.0f'
                 # lc.strokeColor = colors.black
-                lc.valueAxis.valueMin = alert_max_value - 1
-                lc.valueAxis.valueMax = valMax + 2
+                lc.valueAxis.valueMin = lim_min
+                lc.valueAxis.valueMax = lim_max
                 lc.valueAxis.valueStep = 1
                 lc.lines[0].strokeWidth = 2
                 # lc.lines[1].strokeWidth = 1.5

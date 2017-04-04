@@ -185,17 +185,7 @@
     var ws_url = 'ws://' + site_url;
 
     var urlApi;
-    var tokenCode ;
-
-    if(site_url == 'sensait.dyndns.org'){
-      tokenCode = 'Token d7e7f378cdc67dcd7cec11b76e017927c3e73bc3';
-    }else{
-      tokenCode   = 'Token 6b4f2e70ae0d435bf512897355947fe0a564972a';
-      //Para cuando se accede desde la RED local el server
-      if( site_url == "192.168.253.31"){
-        tokenCode = 'Token d7e7f378cdc67dcd7cec11b76e017927c3e73bc3';
-      }
-    }
+    var tokenCode = 'Token d7e7f378cdc67dcd7cec11b76e017927c3e73bc3';
 
   $(function () {
     $('#table_sistemas').DataTable({

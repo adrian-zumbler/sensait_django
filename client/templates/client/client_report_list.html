@@ -99,7 +99,14 @@
     </div>
 
     <div class="row">
-      <div class="col-xs-12">
+      <div class="col-xs-3">
+        <div class="box">
+          <a href="/dash/iot/{{report_list.last.sensor.arduino.id}}" target="_self">
+            <button class="btn btn-block btn-default btn-lg">Volver</button>
+          </a>
+        </div>
+      </div>
+      <div class="col-xs-8">
         <div class="box">
           <a href="{% url 'dashboard-client:reports-add' sensor_pk=sensor_pk  %}">
             <button class="btn btn-block btn-info btn-lg">Crear Reporte</button>
