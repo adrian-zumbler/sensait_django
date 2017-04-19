@@ -68,24 +68,20 @@
               <dd id="">
                 {{arduinoalert.finished_at | default:" Alerta En progreso" }}
               </dd>
+              <dt>Último correo enviado:</dt>
+              <dd id="">
+                {{arduinoalert.email_sends.last.sended_at | default:"Sin correos enviados" }}
+              </dd>
+              <dt>Correos enviados:</dt>
+              <dd id="">
+                <b>{{ arduinoalert.email_sends.count }}</b> email's
+              </dd>
+
             </dl>
           </div><!-- /.box-body -->
         </div><!-- /.box -->
       </div><!-- ./col -->
-      <div class="row">
-        <div class="col-xs-6">
-          <div class="box box-info">
-            <div class="box-header with-border">
-              <h3 class="box-title">
-                Descargar registros de la alerta
-              </h3>
-            </div>
-            <div class="box-body">
-              WIP - Descarga de registros en alerta del SENSOR
-            </div>
-          </div>
-          </div>
-        </div>
+
     </div>
 
     <div class="row">
@@ -263,6 +259,50 @@
       </div>
     </div>
   </div>
+
+  <div class="row">
+    <div class="col-xs-8">
+      <div class="box box-info">
+        <div class="box-header with-border">
+          <h3 class="box-title">
+            <b>{{ arduinoalert.email_sends.count }}</b> Correos de alertas enviados
+          </h3>
+        </div>
+        <div class="box-body">
+
+          <table id="table_data_emails" class="table table-bordered table-striped">
+            <thead>
+              <tr>
+                <th>Fecha de Envio</th>
+                <th>Titulo</th>
+              </tr>
+            </thead>
+            <tbody>
+
+              {% for email_send in arduinoalert.email_sends.all %}
+              <tr>
+                <td>
+                    {{ email_send.sended_at }}
+                </td>
+                <td>
+                    {{ email_send.subject }}
+                </td>
+              </tr>
+            {% endfor %}
+            </tbody>
+
+          </table>
+            <br/>
+            Los correos fueron enviados a la siguientes direcciones:
+            <br/>
+            <b>
+              {{ arduinoalert.email_sends.last.to }}
+            </b>
+        </div>
+      </div>
+      </div>
+    </div>
+
 </section>
 
 </div>
@@ -322,7 +362,17 @@
       "searching": false,
       "ordering": false,
       "info": false,
-      "autoWidth": false
+      "autoWidth": false,
+      "pageLength": 3
+    });
+
+    $('#table_data_emails').DataTable({
+      "paging": true,
+      "lengthChange": false,
+      "searching": false,
+      "ordering": false,
+      "info": false,
+      "autoWidth": false,
     });
 
   });
