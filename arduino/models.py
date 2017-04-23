@@ -361,6 +361,28 @@ class ArduinoAlert(models.Model):
 
             sensor_safe_alert.finished_at = sensor_safe_alert.data.last().epoch
 
+            # loop counter
+            safe_data = safe_data.exclude(
+                arduino_sensor=sensor_safe_alert
+            )
+            yield
+
+    def sensor_safe_alerts_minimize(self):
+        safe_data = self.sensor_data.exclude(
+            arduino_sensor__in=self.sensors_in_alert.all()
+        )
+        while safe_data:
+            sensor_safe_alert = safe_data[0].arduino_sensor
+            qs = safe_data.filter(
+                arduino_sensor=sensor_safe_alert
+            ).order_by('epoch')
+            sensor_safe_alert.data_count = qs.count()
+            sensor_safe_alert.data_first = qs.first()
+            sensor_safe_alert.data_last = qs.last()
+
+            sensor_safe_alert.finished_at = sensor_safe_alert.data_last.epoch
+
+            # loop counter
             safe_data = safe_data.exclude(
                 arduino_sensor=sensor_safe_alert
             )

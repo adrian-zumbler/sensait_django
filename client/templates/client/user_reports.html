@@ -154,13 +154,13 @@
                 <tbody>
                 {% if inactive_alerts %}
                   {% for alert in inactive_alerts %}
-                  {% for sensor_alert in alert.sensor_safe_alerts %}
+                  {% for sensor_alert in alert.sensor_safe_alerts_minimize %}
                   <tr id="alert_{{alert.id}}">
                     <td>
                       <b>{{ sensor_alert.description}}</b>
                     </td>
                     <td>
-                      {{ sensor_alert.data.first.epoch|epoch2Date }}
+                      {{ sensor_alert.data_first.epoch|epoch2Date }}
                     </td>
                     <td>
                       {{ sensor_alert.finished_at|epoch2Date }}
@@ -169,7 +169,7 @@
                       Min. {{ sensor_alert.min_value|floatformat:2}}{{ sensor_alert.sensor_type.subfix}}
                       <br/>
                       <b>Valor:
-                        {{ sensor_alert.data.last.data|floatformat:2}}{{ sensor_alert.sensor_type.subfix}}
+                        {{ sensor_alert.data_last.data|floatformat:2}}{{ sensor_alert.sensor_type.subfix}}
                       </b>
                       <br/>
                       Max. {{ sensor_alert.max_value|floatformat:2}}{{ sensor_alert.sensor_type.subfix}}
@@ -179,14 +179,14 @@
                       </div>
                     </td>
                     <td align="center">
-                      <div class="epoch2Date_{{ sensor_alert.data.last.id}}">
-                      {{ sensor_alert.data.last.epoch }}
+                      <div class="epoch2Date_{{ sensor_alert.data_last.id}}">
+                      {{ sensor_alert.data_last.epoch }}
                       </div>
                     </td>
                     <td align="center">
-                      {{ sensor_alert.data.count }}
+                      {{ sensor_alert.data_count }}
                       <div class="hidden" id="sensor_{{ sensor_alert.id}}" class="" align="center">
-                        api/arduinos/{{ alert.arduino.id}}/sensors/{{ sensor_alert.id}}/data/?min_time={{ sensor_alert.data.first.epoch| add:-600 }}&max_time={{ sensor_alert.data.last.epoch| add:600}}
+                        api/arduinos/{{ alert.arduino.id}}/sensors/{{ sensor_alert.id}}/data/?min_time={{ sensor_alert.data_first.epoch| add:-600 }}&max_time={{ sensor_alert.data_last.epoch| add:600}}
                       </div>
                     </td>
                     <td  align="center">
