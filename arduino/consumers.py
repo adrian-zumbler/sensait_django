@@ -109,6 +109,9 @@ def state_consumer(message):
 
 # @channel_session
 def ws_connect(message, arduino_token):
+    # Accept the incoming connection
+    message.reply_channel.send({"accept": True})
+
     Group("arduino-%s" % arduino_token).add(message.reply_channel)
 
 
