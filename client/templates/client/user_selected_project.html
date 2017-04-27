@@ -3,6 +3,26 @@
 
 {% load arduino_tags %}
 
+
+{% block content_css %}
+
+<style>
+  .centered{
+    display: inline-block;
+    margin: 0 auto;
+    padding-left:150px;
+  }
+
+  .rowSeparator{
+    border-bottom: 1px dotted #ECF0F5;
+    padding-bottom:10px;
+  }
+</style>
+
+{% endblock content_css %}
+
+
+
 {% block main_content_wrapper %}
 
   <!-- Content Wrapper. Contains page content -->
@@ -51,68 +71,77 @@
           </div><!-- /.box-body -->
         </div><!-- /.box -->
       </div><!-- ./col -->
+
     </div>
 
+
+
+
+    {%for cores in project.arduinos.all %}
       <div class="row">
         <div class="col-xs-12">
           <!-- TABLE: LATEST ORDERS -->
           <div class="box box-info">
             <div class="box-header with-border">
-              <h3 class="box-title">
-                Lista de transmisores
-              </h3>
+              <span  class="box-title">
+                <b>{{ cores.name }} </b>
+              </span>
+
+              <div class="btn-group centered">
+                <a href="/dash/iot/{{cores.id}}" target="_self">
+                  <button  type="button" class="btn btn-success">Detalle</button>
+                </a>
+                <a href="/dash/reports/{{cores.id}}" target="_self">
+                  <button  type="button" class="btn btn-danger">Alertas</button>
+                </a>
+                <a href="/dash/reports/{{cores.id}}" target="_self">
+                  <button  type="button" class="btn btn-info">Lecturas</button>
+                </a>
+              </div>
+
+              <div class="box-tools pull-right">
+                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+              </div>
+
             </div>
             <!-- /.box-header -->
             <div class="box-body">
-              <div class="table-responsive">
-                <table class="table no-margin">
-                  <thead>
-                    <tr>
-                      <th>ID Transmisor</th>
-                      <th>Nombre Transmisor</th>
-                      <th></th>
-                    </tr>
-                  </thead>
-                  <tbody>
+              <div class="row">
+              {%for sensor in cores.arduino_sensors.all %}
+                {% if  sensor.data_key != "field1" %}
 
-                    {%for arduino in project.arduinos.all %}
-                    <tr>
-                      <td>
-                        <a href="/dash/iot/{{ arduino.id}}">Sist-00{{ arduino.id}}</a>
-                      </td>
-                      <td> {{ arduino.name }}</td>
-                      <td>
+                  <div class="col-xs-6">
+                    <div class="row rowSeparator">
+                      <div class="col-xs-6">
+                        {{ sensor.description }}
+                      </div>
+                      <div class="col-xs-6">
                         <div class="btn-group">
-                          <a href="/dash/iot/{{arduino.id}}" target="_self">
-                            <button  type="button" class="btn btn-success">Ver Detalle</button>
+                          <a href="/dash/sensor/{{sensor.id}}" target="_self">
+                            <button  type="button" class="btn btn-success">Gráficas</button>
                           </a>
-                          <a href="/dash/reports/{{arduino.id}}" target="_self">
-                            <button  type="button" class="btn btn-warning">Alertas y Lecturas</button>
+                          <a href="/dash/{{sensor.id}}/reports/" target="_self">
+                            <button  type="button" class="btn btn-warning">Reportes</button>
                           </a>
                         </div>
-                      </td>
-                    </tr>
-                    {% endfor %}
+                      </div>
+                    </div>
+                  </div>
 
-                  </tbody>
-                </table>
+                {% endif %}
+              {% endfor %}
+
               </div>
-              <!-- /.table-responsive -->
+
             </div>
-            <!-- /.box-body -->
-            {% comment %}
-            <div class="box-footer clearfix">
-              <a href="javascript::;" class="btn btn-sm btn-default btn-flat pull-right">
-                Ver detalle del Proyecto
-              </a>
-            </div>
-            {% endcomment %}
-            <!-- /.box-footer -->
+
           </div>
           <!-- /.box -->
         </div>
 
+
       </div>
+      {% endfor %}
 
     </section>
     <!-- /.content -->

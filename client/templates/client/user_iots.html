@@ -10,8 +10,8 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-        Nombre Transmisor: <b>{{ arduino.name }}</b>
-        <small>Transmisor Seleccionado</small>
+        Nombre Core: <b>{{ arduino.name }}</b>
+        <small>Core Seleccionado</small>
       </h1>
     </section>
 
@@ -138,10 +138,10 @@
                           {% ifnotequal sensor.description "Epoch"%}
                           <div class="btn-group">
                             <a href="/dash/sensor/{{sensor.id}}" target="_self">
-                              <button  type="button" class="btn btn-success">Gráfica</button>
+                              <button  type="button" class="btn btn-success">Gráficas</button>
                             </a>
                             <a href="/dash/{{sensor.id}}/reports/" target="_self">
-                              <button  type="button" class="btn btn-success">Reportes</button>
+                              <button  type="button" class="btn btn-warning">Reportes</button>
                             </a>
                           </div>
                           {% endifnotequal%}
