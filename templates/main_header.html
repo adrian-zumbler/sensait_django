@@ -282,10 +282,6 @@
       <li class="header">MENU PRINCIPAL </li>
       <li><a href="{% url 'main' %}"><i class="fa fa-book"></i> <span>INICIO</span></a></li>
 
-      <li><a href="{% url 'miperfil' %}"><i class="fa fa-book"></i> <span>MI PERFIL</span></a></li>
-
-
-
       {% if not request.user.client %}
 
       <li class="header">MIS LABORATORIOS</li>

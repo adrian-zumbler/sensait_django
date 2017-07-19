@@ -4,20 +4,34 @@
   var allData;
   //var urlApiBase    = 'http://dashboard:8000/api/arduinos/';
   var urlApiBase    = 'http://sensait.dyndns.org/api/arduinos/';
-  var actualArduino = 5;
+  var actualArduino = 23;
+
+  var actualUrl = window.location.href;
 
 
   $(document).ready(function() {
+    console.log("Saludos Humanos desde MTY");
+
+    console.log(actualUrl);
+
+    //Mismo dominio de sensait
+    if(actualUrl.indexOf("sensait") === 0 ){
+      console.log(actualUrl);
+      urlApiBase    = 'http://sensait.dyndns.org/api/arduinos/';
+      //Sensait desde servidor local
+    }else if(actualUrl.indexOf("sensait") == -1){
+      urlApiBase    = 'http://192.168.253.31/api/arduinos/';
+      console.log("actualUrl");
+    }else{
+      console.log("dos");
+    }
 
     getArduinosFromAPI(actualArduino);
-    console.log("Saludos Humanos desde MTY");
+    console.log(urlApiBase);
   });
 
-
+    //Peticion AJAX de los datos
     function getArduinosFromAPI(arduino_ID){
-      //Peticion AJAX de los datos
-      //console.log(urlApiBase + arduinosApi + actualArduino + '/');
-
       $.ajax({
         url: urlApiBase + actualArduino + '/',
         type: 'GET',
@@ -33,8 +47,8 @@
         success: function(data) {
           console.log('AJAX API SUCCESS - PROYECTO SELECCIONADO ');
           //Se hara un return con el JSON obtenido en la API
-          //console.log(data);
-          dataArduinosCallBack(data);
+          console.log(data);
+          //dataArduinosCallBack(data);
         },
         error: function() {
           console.log('Hubo un problema, solucionalo...!');
@@ -94,4 +108,10 @@
             console.log('Hubo un problema, solucionalo...!');
           }
         });
+      }
+
+
+      function dataSensorsCallBack(data,passData_arduinoID,passData_sensID){
+        console.log(data);
+
       }
