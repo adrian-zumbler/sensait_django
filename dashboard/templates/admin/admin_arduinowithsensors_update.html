@@ -58,6 +58,7 @@
               <label for="estatus_error">{{ form.estatus.errors }}</label>
             </dd>
           </dl>
+
         </div><!-- /.box-body -->
       </div><!-- /.box -->
     </div>
@@ -102,6 +103,16 @@
               <label for="sistema_alertas_time">Tiempo en min. entre envio de alertas:</label>
               {% render_field form.delta_time_alerts class="form-control" %}
               <label for="sistema_alertas_time_error">{{ form.delta_time_alerts.errors }}</label>
+            </div>
+          </div>
+          <br/>
+          <div class="col-xs-12 ">
+
+            <div class="">
+              <label for="">Borrado definitivo de información y alertas registradas.</label>
+              <a href="{% url 'projectsList' %}">
+                <button class="btn btn-block btn-danger btn-lg">Borrar Información del transmisor</button>
+              </a>
             </div>
           </div>
         </div><!-- /.box-body -->
