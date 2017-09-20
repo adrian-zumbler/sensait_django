@@ -358,7 +358,7 @@
   // receive a message though the websocket from the server
   function receiveMessage(msg) {
     useWSData(msg);
-    console.log(msg);
+    //console.log(msg);
   }
 
 //##############################
@@ -448,7 +448,7 @@ function getTodayRange(actualDate){
   var seconds =  actualDate.getSeconds()+'';
 
   var time24hrs = moment().subtract(24,"h");
-  console.log(time24hrs);
+  //console.log(time24hrs);
 
 
   if(day.length == 1)
@@ -738,7 +738,7 @@ function convertEpoch2Date(epochData){
       if(query_dataLimit != "" && query_endDate != "")
         query += "&last=" + query_dataLimit;
 
-        //console.log(urlApi + query);
+      console.log(urlApi + query);
       $.ajax({
         url: urlApi + query ,
         type: 'GET',
@@ -835,7 +835,7 @@ function convertEpoch2Date(epochData){
 
     for (var i = 0; i < _sensors_data.length; i++) {
 
-      if(_sensors_data[i]['data'] != "-127.00" && parseInt(_sensors_data[i]['epoch']) > 100000 && parseInt(_sensors_data[i]['data']) < 2000) {
+      if(_sensors_data[i]['data'] != "-127.00" && parseInt(_sensors_data[i]['epoch']) > 100000) {
         sensor_data_chart.push(_sensors_data[i]['data']);
 
         /*
