@@ -33,18 +33,18 @@ Apreciable <b>{{ arduinoalert.sensor_data.last.arduino_sensor.arduino.project.no
   </tr>
   <tr>
     <td colspan="2" align="center">
-      <h1>{{ sensor_alert.data.last.data |floatformat:2 |decimalcomma }}{{ sensor_alert.sensor_type.subfix}}
+      <h1>{{ sensor_alert.data.last.data |floatformat:sensor_alert.sensor_type.decimales |decimalcomma }}{{ sensor_alert.sensor_type.simbolo}}
       </h1>
     </td>
   </tr>
   <tr>
     <td align="center">
-       {{  arduinoalert.sensor_data.last.arduino_sensor.min_value  |floatformat:2 | decimalcomma}}{{ arduinoalert.sensor_data.last.arduino_sensor.sensor_type.subfix }}
+       {{  arduinoalert.sensor_data.last.arduino_sensor.min_value  |floatformat:sensor_alert.sensor_type.decimales | decimalcomma}}{{ arduinoalert.sensor_data.last.arduino_sensor.sensor_type.simbolo }}
       <br/>
       Min.
     </td>
     <td align="center">
-      {{  arduinoalert.sensor_data.last.arduino_sensor.max_value |floatformat:2 |decimalcomma}}{{ arduinoalert.sensor_data.last.arduino_sensor.sensor_type.subfix }}
+      {{  arduinoalert.sensor_data.last.arduino_sensor.max_value |floatformat:sensor_alert.sensor_type.decimales |decimalcomma}}{{ arduinoalert.sensor_data.last.arduino_sensor.sensor_type.simbolo }}
       <br/>
       Max.
     </td>
