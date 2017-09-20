@@ -10,8 +10,8 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-        Nombre Core: <b>{{ arduino.name }}</b>
-        <small>Core Seleccionado</small>
+        Transmisor: <b>{{ arduino.name }}</b>
+        <small>{{ arduino.project.name }}</small>
       </h1>
     </section>
 
@@ -47,19 +47,6 @@
                   <dl class="dl-horizontal">
                     <dt>Cantidad de Sensores</dt>
                     <dd>{{ arduino.sensors.count | add:"-1" }} </dd>
-
-                    {% comment %}
-                    <dt>Estado</dt>
-                    <dd><span class="label label-success">Correcto</span></dd>
-                    <dt>Epoch</dt>
-                    {% for sensor in arduino.arduino_sensors.all %}
-                      {% if  sensor.data_key == "field2" %}
-                        <span id="epoch_{{ sensor.id}}">
-                          {{ sensor.sensor_data.last.data }}
-                        </span>
-                      {% endif %}
-                    {% endfor %}
-                    {% endcomment %}
                   </dl>
                 </div><!-- /.box-body -->
               </div><!-- /.box -->
@@ -113,18 +100,22 @@
                         <td>{{ sensor.description }}</td>
                         <td>{{ sensor.sensor_type.name }}</td>
                         <td align="center">
-                            {{ sensor.min_value|floatformat:2 }} {{ sensor.sensor_type.subfix}}
+                            {{ sensor.min_value|floatformat:sensor.sensor_type.decimales }} {{ sensor.sensor_type.simbolo }}
                         </td>
                         <td align="center">
                           <span id="sensor_{{ sensor.id}}">
-                            {{ sensor.sensor_data.last.data|floatformat:2 }}
+                            {{ sensor.sensor_data.last.data|floatformat:sensor.sensor_type.decimales }}
                           </span>
                           <span id="subfix_{{ sensor.id}}">
-                            {{ sensor.sensor_type.subfix}}
+                            {{ sensor.sensor_type.simbolo}}
                           </span>
+                          <span class="hidden" id="decimalsid_{{sensor.id}}">
+                            {{ sensor.sensor_type.decimales}}
+                          </span>
+
                         </td>
                         <td align="center">
-                            {{ sensor.max_value|floatformat:2 }} {{ sensor.sensor_type.subfix}}
+                          {{ sensor.min_value|floatformat:sensor.sensor_type.decimales }} {{ sensor.sensor_type.simbolo }}
                         </td>
 
                         {% comment %}
@@ -138,7 +129,7 @@
                           {% ifnotequal sensor.description "Epoch"%}
                           <div class="btn-group">
                             <a href="/dash/sensor/{{sensor.id}}" target="_self">
-                              <button  type="button" class="btn btn-success">Gráficas</button>
+                              <button  type="button" class="btn btn-success">Gráfica</button>
                             </a>
                             <a href="/dash/{{sensor.id}}/reports/" target="_self">
                               <button  type="button" class="btn btn-warning">Reportes</button>
@@ -260,7 +251,8 @@
             $('#epoch_'+wsData[0]['arduino_sensor']).html('Ultima Actualización:  ' + epochDate);
 
             $('#row_'+wsData[i]['arduino_sensor']).show();
-            $('#sens_'+wsData[i]['arduino_sensor']).html(Number(data).toFixed(2));
+            var Decimals =   Number($('#decimalsid_'+wsData[i]['arduino_sensor']).val());
+            $('#sens_'+wsData[i]['arduino_sensor']).html(Number(data).toFixed(Decimals));
           }
         }
       }

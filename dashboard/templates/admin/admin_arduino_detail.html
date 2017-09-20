@@ -112,12 +112,16 @@
                 {% for sensor in arduino.arduino_sensors.all %}
                 {% if  sensor.data_key != "field1" %}
                 <tr>
-                  <td> Sensor00{{sensor.id}} </td>
+                  <td>
+                    <a href="/dash/sensor/{{sensor.id}}" target="_self">
+                      Sensor00{{sensor.id}}
+                    </a>
+                   </td>
                   <td> {{sensor.description}} </td>
                   <td> {{sensor.sensor_type.name}} </td>
-                  <td> {{sensor.min_value}} </td>
-                  <td> {{ sensor.sensor_data.last.data }} </td>
-                  <td> {{sensor.max_value}} </td>
+                  <td> {{sensor.min_value|floatformat:sensor.sensor_type.decimales}}{{sensor.sensor_type.simbolo}} </td>
+                  <td> {{sensor.sensor_data.last.data|floatformat:sensor.sensor_type.decimales }}{{sensor.sensor_type.simbolo}} </td>
+                  <td> {{sensor.max_value|floatformat:sensor.sensor_type.decimales}}{{sensor.sensor_type.simbolo}} </td>
                   <td>
                     <div class="btn-group">
                       <a href="/dash/sensor/{{sensor.id}}" target="_self">

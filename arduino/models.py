@@ -49,6 +49,19 @@ class SensorType(models.Model):
         max_length=255,
         default=''
     )
+    magnitud = models.CharField(
+        verbose_name='Magnitud de la medicion',
+        max_length=255,
+        default=''
+    )
+    simbolo = models.CharField(
+        verbose_name='Simbolo de la magnitud',
+        max_length=30,
+        default=''
+    )
+    
+    decimales = models.PositiveIntegerField(default=0, null=True)
+
     prefix = models.CharField(
         verbose_name='Prefijo',
         max_length=2,
@@ -72,7 +85,8 @@ class SensorType(models.Model):
         default=''
     )
     data_type = models.PositiveSmallIntegerField(
-        choices=DATA_TYPE_CHOICES, default=1)
+        choices=DATA_TYPE_CHOICES, default=1
+    )
     data_sheet = models.FileField(
         verbose_name='Ficha técnica',
         upload_to=sensortype_files_name,

@@ -60,7 +60,6 @@
             <div class="box-header with-border">
               <h3 class="box-title">
                 Gráfica del Sensor - {{ arduinosensor.sensor_type.name }}
-
               </h3>
               <div class="box-tools pull-right">
                 Ultima actualización:
@@ -140,7 +139,7 @@
           <div class="small-box bg-green-min">
             <div class="inner">
               <h3 id="val_min">
-                {{ arduinosensor.min_value }}{{ arduinosensor.sensor_type.subfix }}
+                {{ arduinosensor.min_value|floatformat:arduinosensor.sensor_type.decimales}}{{arduinosensor.sensor_type.simbolo}}
               </h3>
               <span>Valor Mínimo permitido</span>
             </div>
@@ -154,9 +153,9 @@
           <div class="small-box bg-yellow">
             <div class="inner">
               <h3 id="ultimoValor">
-                {{ arduinosensor.sensor_data.last.data }}{{ arduinosensor.sensor_type.subfix }}
+                {{ arduinosensor.sensor_data.last.data |floatformat:arduinosensor.sensor_type.decimales}}{{arduinosensor.sensor_type.simbolo}}
               </h3>
-              <span>Último valor registrado</span><span id="dateEpoch"> Conectando...</span>
+              <span>Último valor recibido: </span><span id="dateEpoch"> Conectando...</span>
             </div>
             <div class="icon">
               <i class="ion ion-stats-bars"></i>
@@ -168,7 +167,7 @@
           <div class="small-box bg-red">
             <div class="inner">
               <h3 id="val_max">
-                {{ arduinosensor.max_value }}{{ arduinosensor.sensor_type.subfix }}
+                {{ arduinosensor.max_value|floatformat:arduinosensor.sensor_type.decimales}}{{arduinosensor.sensor_type.simbolo}}
               </h3>
               <span>Valor Máximo permitido</span>
             </div>
@@ -201,17 +200,18 @@
                     {{arduinosensor.arduino.name}}
                   </a>
                 </dd>
+
                 <dt>Tipo de Sensor</dt>
                 <dd>{{ arduinosensor.sensor_type.name }}</dd>
-                <dt># del Sensor en el sistema</dt>
-                <dd>{{ arduinosensor.index }}</dd>
 
-                {% comment %}
-                  <dt>Valor Máximo permitido</dt>
-                  <dd>{{ arduinosensor.max_value }} {{ arduinosensor.sensor_type.subfix}}</dd>
-                  <dt>Valor Mínimo permitido</dt>
-                  <dd>{{ arduinosensor.min_value }}</dd>
-                {% endcomment %}
+                <dt>Magnitud de la medición</dt>
+                <dd>{{ arduinosensor.sensor_type.magnitud }}</dd>
+
+                <dt>Simbolo de la Magnitud</dt>
+                <dd>{{ arduinosensor.sensor_type.simbolo }}</dd>
+
+                <dt class="hidden">Numero de Decimales</dt>
+                <dd class="hidden" id="decimalsCount">{{ arduinosensor.sensor_type.decimales }}</dd>
 
               </dl>
             </div><!-- /.box-body -->
@@ -239,9 +239,9 @@
 
                 <dt>Promedio de registros</dt>
                 <dd id="totalPromedio">0</dd>
-                <dt>Valor minimo registrado</dt>
+                <dt>Valor mínimo registrado</dt>
                 <dd id="valorMinimo">0</dd>
-                <dt>Valor maximo registrado</dt>
+                <dt>Valor máximo registrado</dt>
                 <dd id="valorMaximo">0</dd>
               </dl>
             </div><!-- /.box-body -->
@@ -370,7 +370,7 @@ function useWSData(data){
 
     var jso = JSON.parse(data);
 
-    if( filter_type == 1  || moment(date_today).isBetween(filter_date_start, filter_date_end ) || moment(date_today).isSameOrBefore(filter_date_end ) ){
+    if( filter_type == 1  || jso[0]['epoch'] >= todayDate ){
 
       for(var i= 0 ; i < jso.length ; i++){
 
@@ -395,7 +395,8 @@ function useWSData(data){
           _sensors_data.push(jso[i]);
 
           $('#totalRegistros').html(lastPosition);
-          $('#ultimoValor').html( _sensors_data[lastPosition]['data'] );
+
+          $('#ultimoValor').html( Number(_sensors_data[lastPosition]['data']).toFixed(decimals) + "" + simbolo );
            //_sensors_data[lastPosition]['data'] = jso[i]['data'];
 
           dygraphs_data.push([d, _sensors_data[lastPosition]['data'], {{ arduinosensor.min_value }}, {{ arduinosensor.max_value }}]);
@@ -414,7 +415,7 @@ function useWSData(data){
             drawPoints:true,
             pointSize:3,
             strokeWidth:3,
-            rightGap:40,
+            rightGap:10,
             legend:"always",
             highlightCircleSize:5,
             showRoller:true,
@@ -425,9 +426,13 @@ function useWSData(data){
           });
 
         }else{
-          console.log("ño");
+          console.log("No es el sensor");
         }
-      }
+      }//End FOR
+    }else{ //ELSE DATA RECIBIDA ERRONEAMENTE
+      console.log("------ Error en el envio de los datos....");
+      console.log(jso);
+      console.log("-----------------------------------");
     }
   }else{
     console.log("Esperaaaa....");
@@ -551,6 +556,11 @@ function convertEpoch2Date(epochData){
   var date_today;
 
 
+  //Valor de los DECIMALES para todo del ID
+  var decimals = "{{ arduinosensor.sensor_type.decimales }}";
+  var simbolo = "{{ arduinosensor.sensor_type.simbolo }}";
+
+  var todayDate   = moment().unix();
 
 
   $(document).ready(function(){
@@ -559,7 +569,7 @@ function convertEpoch2Date(epochData){
     //var dateRange = getTodayRange(todayDate);
     //console.log(dateRange);
 
-    var todayDate   = moment().unix();
+
     var today24Ago  = moment().subtract(24,"h").unix();
 
     date_today  = moment().format("YYYY-MM-DD");
@@ -569,11 +579,12 @@ function convertEpoch2Date(epochData){
     var min = "{{ arduinosensor.min_value }}";
     var max = "{{ arduinosensor.max_value }}";
 
-    $('#val_min').html(min.substring(0,(min.length-2)));
-    $('#val_min').append('{{ arduinosensor.sensor_type.subfix }}');
 
-    $('#val_max').html(max.substring(0,(max.length-2)));
-    $('#val_max').append('{{ arduinosensor.sensor_type.subfix }}');
+    $('#val_min').html(  Number(min).toFixed(decimals) );
+    $('#val_min').append('{{ arduinosensor.sensor_type.simbolo }}');
+
+    $('#val_max').html( Number(max).toFixed(decimals) );
+    $('#val_max').append('{{ arduinosensor.sensor_type.simbolo }}');
 
     //ocultamos los selectores de la grafica
     filter_type = 1;
@@ -667,8 +678,8 @@ function convertEpoch2Date(epochData){
       epoch_start = epoch_start.substring(0,(epoch_start.length-3));
       epoch_end   = epoch_end.substring(0,(epoch_end.length-3));
 
-      console.log(epoch_start);
-      console.log(epoch_end);
+      //console.log(epoch_start);
+      //console.log(epoch_end);
 
       if(filter_type == 2 ){
         $("#filter_resume").html("Fecha del  " + filter_date_start + " al " + filter_date_end  );
@@ -702,7 +713,7 @@ function convertEpoch2Date(epochData){
           $("#filter_limit").show();
         }
       }
-      console.log(type);
+      //console.log(type);
 
       //getDataFromAPI("","",this.value);
     });
@@ -727,7 +738,7 @@ function convertEpoch2Date(epochData){
       if(query_dataLimit != "" && query_endDate != "")
         query += "&last=" + query_dataLimit;
 
-        console.log(urlApi + query);
+        //console.log(urlApi + query);
       $.ajax({
         url: urlApi + query ,
         type: 'GET',
@@ -794,13 +805,17 @@ function convertEpoch2Date(epochData){
       $('#totalRegistros').html(totalRegistros);
       $('#totalConRiesgo').html('000');
       $('#totalAlertas').html('000');
-      $('#totalPromedio').html(promedio.toFixed(2)+'{{ arduinosensor.sensor_type.subfix}}');
-      $('#valorMinimo').html(valorMinimo.toFixed(2)+'{{ arduinosensor.sensor_type.subfix}}');
-      $('#valorMaximo').html(valorMaximo.toFixed(2)+'{{ arduinosensor.sensor_type.subfix}}');
+      $('#totalPromedio').html(promedio.toFixed(parseInt(decimals))+'{{ arduinosensor.sensor_type.simbolo}}');
+      $('#valorMinimo').html(valorMinimo.toFixed(parseInt(decimals))+'{{ arduinosensor.sensor_type.simbolo}}');
+      $('#valorMaximo').html(valorMaximo.toFixed(parseInt(decimals))+'{{ arduinosensor.sensor_type.simbolo}}');
 
-      $('#widget_Promedio').html(promedio.toFixed(2)+'{{ arduinosensor.sensor_type.subfix}}');
+      $('#widget_Promedio').html(promedio.toFixed(parseInt(decimals))+'{{ arduinosensor.sensor_type.simbolo}}');
       $('#widget_TotalRegistros').html(totalRegistros);
 
+      var epochDate = convertEpoch2Date(data[data.length-1]['epoch']);
+      $('#epochDate').html(epochDate);
+      $('#dateEpoch').html(epochDate);
+      $('#sensor_lastupdate').html(epochDate);
 
       createGraph(data);
     }
@@ -870,7 +885,7 @@ function convertEpoch2Date(epochData){
         drawPoints:true,
         pointSize:3,
         strokeWidth:3,
-        rightGap:40,
+        rightGap:10,
         legend:"always",
         highlightCircleSize:5,
         showRoller:true,

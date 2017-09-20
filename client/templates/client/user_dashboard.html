@@ -66,7 +66,7 @@
     <!-- Content Header (Page header) -->
   <section class="content-header">
     <h1>
-      RESUMEN DE TRANSMISORES
+      LISTA DE TRANSMISORES
       <small>activos</small>
     </h1>
   </section>
@@ -359,7 +359,10 @@
   }
 
   function dataProjectCallBack( data ){
+    console.log("---dataProjectCallBack-------****");
     console.log(data);
+    console.log("----------****");
+
     $('#transmisores').html(" ");
 
     var rowData = "";
@@ -422,7 +425,7 @@
                   '<h3 class="box-title">'+
                     'Proyecto: <b>'+proyectNames[_proyID] +'</b> '+
                     'Transmisor:  <b>'+data[i].name+'</b><br/>'+
-                    '<span class="'+epoch_div+'"> -  Ultima actualización: </span>'+
+                    '<span class="'+epoch_div+'"> -  Última actualización: </span>'+
                   '</h3>'+
                   '<div class="box-tools pull-right">'+
                     '<a href="/dash/reports/'+data[i].id+'" target="_self" class="btn btn-danger">Ver Alertas</a>'+
@@ -519,13 +522,17 @@ function getSensorsFromAPI(proy_ID,sensor_ID, arduinoID,sens_info,query){
       var passData_sensID     = sensID;
 
       if(sensInfo.data_key != 'field1'){
-        //console.log(data);
+        console.log("----sensorsCallBack----------------");
+        console.log(data);
+        console.log(sensInfo);
+        console.log("--------------------");
         var passData_proyectID  = proy_ID;
         var passData_arduinoID  = arduinoID;
 
         var passData_sensInfo   = sensInfo;
         var dataSend = Number(data[0].data);
-        $('#sens_'+sensID).html(dataSend.toFixed(2)+'°');
+        $('#sens_'+sensID).html(dataSend.toFixed(2) + '°');
+
         var max = sensInfo.max_value;
         var min = sensInfo.min_value;
 
@@ -537,13 +544,13 @@ function getSensorsFromAPI(proy_ID,sensor_ID, arduinoID,sens_info,query){
           $('#row_'+sensID).removeClass("card-alert");
         }
 
-        $('#min_'+sensID).html(' '+min.substring(0,(min.length-2))+'°');
-        $('#max_'+sensID).html(' '+max.substring(0,(max.length-2))+'°');
+        $('#min_'+sensID).html(' ' + min.substring(0,(min.length-2)) + '°');
+        $('#max_'+sensID).html(' ' + max.substring(0,(max.length-2)) + '°');
 
         var epoch = data[0].epoch;
         var epochDate = convertEpoch2Date(epoch);
 
-        $('.epoch_'+sensID).html('Ultima Actualización:  ' + epochDate);
+        $('.epoch_'+sensID).html('Última Actualización:  ' + epochDate);
 
         if(Number(data[0].data).toFixed(2) == "-127.00" ){
           $('#row_'+sensID).hide();
@@ -593,7 +600,9 @@ function getSensorsFromAPI(proy_ID,sensor_ID, arduinoID,sens_info,query){
 
     if(canUseSocket == true ){
       var wsData = JSON.parse(msg);
+      console.log("---wsData---------***");
       console.log(wsData);
+      console.log("------------***");
 
 
       for(var i= 0 ; i < wsData.length ; i++){
