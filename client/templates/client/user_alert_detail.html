@@ -557,7 +557,7 @@
     _sensors_data = data;
 
     for (var i = 0; i < _sensors_data.length; i++) {
-      if(_sensors_data[i]['data'] != "-127.00" && parseInt(_sensors_data[i]['epoch']) > 100000) {
+      if((_sensors_data[i]['data'] != "-127.00" || _sensors_data[i]['data'] != "-99.99") && parseInt(_sensors_data[i]['epoch']) > 100000) {
         sensor_data_chart.push(_sensors_data[i]['data']);
 
         var d = new Date(parseInt(_sensors_data[i]['epoch'])*1000);

@@ -552,7 +552,7 @@ function getSensorsFromAPI(proy_ID,sensor_ID, arduinoID,sens_info,query){
 
         $('.epoch_'+sensID).html('Última Actualización:  ' + epochDate);
 
-        if(Number(data[0].data).toFixed(2) == "-127.00" ){
+        if(Number(data[0].data).toFixed(2) == "-127.00" || Number(data[0].data).toFixed(2) == "-99.99"){
           $('#row_'+sensID).hide();
         }
 
@@ -608,7 +608,7 @@ function getSensorsFromAPI(proy_ID,sensor_ID, arduinoID,sens_info,query){
       for(var i= 0 ; i < wsData.length ; i++){
         var data = wsData[i]['data'];
         console.log(wsData[i]['arduino_sensor']);
-        if(data == '-127.00' || data == ''){
+        if(data == '-127.00' || data == '-99.99' || data == ''){
           $('#row_'+wsData[i]['arduino_sensor']).hide();
         }else{
           var epochDate = convertEpoch2Date(wsData[i]['epoch']);

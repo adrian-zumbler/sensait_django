@@ -393,7 +393,7 @@ function useWSData(data){
 
       for(var i= 0 ; i < jso.length ; i++){
 
-        if(jso[i]['arduino_sensor'] == {{arduinosensor.id}} && jso[i]['data'] != "-127.00"){
+        if(jso[i]['arduino_sensor'] == {{arduinosensor.id}} && (jso[i]['data'] != "-127.00" || jso[i]['data'] != "-99.99")){
 
           var epochDate = convertEpoch2Date(jso[i]['epoch']);
           $('#epochDate').html(epochDate);
@@ -798,7 +798,7 @@ function convertEpoch2Date(epochData){
 
       for(var i=0; i < data.length ; i++){
 
-        if(parseInt(data[i]['epoch']) > 100000 && data[i]['data'] != "-127.00"){
+        if(parseInt(data[i]['epoch']) > 100000 && ( data[i]['data'] != "-127.00" ||  data[i]['data'] != "-99.99" )){
           tmpValue = parseInt(data[i]['data']);
           tmpPromedio += tmpValue;
           totalRegistros++;
@@ -852,7 +852,7 @@ function convertEpoch2Date(epochData){
 
     for (var i = 0; i < _sensors_data.length; i++) {
 
-      if(_sensors_data[i]['data'] != "-127.00" && parseInt(_sensors_data[i]['epoch']) > 100000) {
+      if( (_sensors_data[i]['data'] != "-127.00" || _sensors_data[i]['data'] != "-99.99") && parseInt(_sensors_data[i]['epoch']) > 100000) {
         sensor_data_chart.push(_sensors_data[i]['data']);
 
         /*

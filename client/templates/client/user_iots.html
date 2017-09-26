@@ -90,7 +90,7 @@
                     {% for sensor in arduino.arduino_sensors.all %}
                       {% if  sensor.data_key != "field1" %}
 
-                        {% if  sensor.sensor_data.last.data|floatformat:2  == "-127.00" %}
+                        {% if  sensor.sensor_data.last.data|floatformat:2  == "-127.00" or sensor.sensor_data.last.data|floatformat:2  == "-99.99" %}
                           <tr id="row_{{sensor.id}}" class="hidden">
                         {% else %}
                           <tr id="row_{{sensor.id}}">
@@ -244,7 +244,7 @@
         for(var i= 0 ; i < wsData.length ; i++){
           var data = wsData[i]['data'];
 
-          if(data == '-127.00' || data == ''){
+          if(data == '-127.00' || data == '-99.99' || data == ''){
             $('#row_'+wsData[i]['arduino_sensor']).hide();
           }else{
             var epochDate = convertEpoch2Date(wsData[i]['epoch']);
