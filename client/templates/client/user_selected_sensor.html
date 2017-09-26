@@ -28,6 +28,25 @@
     background-color: #f0f0f0 !important;
   }
 
+  @media print {
+   body {
+     font-size: 12pt;
+     background: white;
+     margin-top: 2cm;
+     margin-right: 1cm;
+     margin-left: 1cm;
+     margin-bottom: 1.5cm;
+
+     font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif;
+    }
+    .no-print{
+      display:none;
+    }
+    .page-break{
+      page-break-before:always;
+    }
+ }
+
 </style>
 
 {% endblock content_css %}
@@ -63,7 +82,7 @@
               </h3>
               <div class="box-tools pull-right">
                 Ultima actualización:
-                <span id="sensor_lastupdate" class="">
+                <span id="sensor_lastupdate" class="no-print">
                   conectando...
                 </span>
               </div>
@@ -72,7 +91,7 @@
             <div class="box-body">
               <div class="row">
                 <div class="col-xs-4 ">
-                  <div id="filter_type" class="form-group">
+                  <div id="filter_type" class="form-group no-print">
                     <label for="limit_selector" class=" col-xs-12 control-label">Tipo de Filtrado:</label>
                     <div class="col-xs-8">
                       <select class="form-control" id="type_selector">
@@ -85,8 +104,8 @@
                   </div>
                 </div>
 
-                <div class="col-xs-4 ">
-                  <div id="filter_date" class="form-group">
+                <div class="col-xs-4  ">
+                  <div id="filter_date" class="form-group no-print">
                     <label for="date_selector" class=" control-label">Seleccione fechas:</label>
                     <div class="">
                       <button type="button" class="btn btn-default pull-left" id="daterange"><span><i class="fa fa-calendar"></i> Selección de Fechas</span><i class="fa fa-caret-down"></i></button>
@@ -95,7 +114,7 @@
                 </div>
 
                 <div class="col-xs-4 ">
-                  <div id="filter_limit" class="form-group">
+                  <div id="filter_limit" class="form-group no-print">
                     <label for="limit_selector" class=" col-xs-12 control-label">Ultimos Registros</label>
                     <div class="col-xs-6">
                       <select class="form-control" id="limit_selector">
@@ -133,9 +152,9 @@
       </div>
 
 
-      <div class="row">
+      <div class="row ">
 
-        <div class="col-lg-4 col-xs-6">
+        <div class="col-lg-4 col-xs-6 page-break">
           <div class="small-box bg-green-min">
             <div class="inner">
               <h3 id="val_min">
@@ -149,7 +168,7 @@
           </div>
         </div>
 
-        <div class="col-lg-4 col-xs-6">
+        <div class="col-lg-4 col-xs-6 page-break">
           <div class="small-box bg-yellow">
             <div class="inner">
               <h3 id="ultimoValor">
@@ -163,7 +182,7 @@
           </div>
         </div>
 
-        <div class="col-lg-4 col-xs-6">
+        <div class="col-lg-4 col-xs-6 page-break">
           <div class="small-box bg-red">
             <div class="inner">
               <h3 id="val_max">
@@ -618,6 +637,7 @@ function convertEpoch2Date(epochData){
         getDataFromAPI("","", filter_registers);
       }
       else {
+
         $("#filter_resume").html("Fecha del  " + filter_date_start + " al " + filter_date_end + " como maximo "+ limit + " registros" );
         getDataFromAPI(filter_date_start,filter_date_end, filter_registers);
       }
@@ -683,10 +703,10 @@ function convertEpoch2Date(epochData){
 
       if(filter_type == 2 ){
         $("#filter_resume").html("Fecha del  " + filter_date_start + " al " + filter_date_end  );
+        filter_registers = "";
       }else {
         $("#filter_resume").html("Fecha del  " + filter_date_start + " al " + filter_date_end + " como maximo "+ filter_registers + " registros" );
       }
-
       getDataFromAPI(epoch_start,epoch_end, filter_registers);
     });
 
@@ -734,9 +754,6 @@ function convertEpoch2Date(epochData){
 
       if(query_dataLimit != "" && query_endDate == "")
         query += "last=" + query_dataLimit;
-
-      if(query_dataLimit != "" && query_endDate != "")
-        query += "&last=" + query_dataLimit;
 
       console.log(urlApi + query);
       $.ajax({
