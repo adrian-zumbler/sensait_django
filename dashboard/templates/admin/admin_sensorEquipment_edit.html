@@ -1,0 +1,68 @@
+{% extends 'main_header.html' %}
+{% load staticfiles %}
+{% load widget_tweaks %}
+
+
+{% block main_content_wrapper %}
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <h1>
+        ADMINISTRACIÓN DE EQUIPOS ASIGNADOS EN LOS SENSORES<br/>
+        {% if form.initial %} EDITAR {% else %} CREAR {% endif %}
+         - EQUIPO DEL SENSOR
+        <small></small>
+      </h1>
+    </section>
+
+    <!-- Main content -->
+<section class="content">
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="box box-primary">
+        <div class="box-header with-border">
+          <h3 class="box-title">Formulario para Equipos de los sensores.</h3>
+        </div><!-- /.box-header -->
+
+        <!-- form start -->
+        <form class="form-horizontal" role="form" action="" method="post" enctype="multipart/form-data">
+        <div class="box-body">
+            {% csrf_token %}
+            {% for field in form %}
+
+            <div class="form-group">
+                <label for="{{ field.label }}" class="col-sm-2 control-label">{{ field.label }}</label>
+                <div class="col-sm-10">
+                   {% render_field field class="form-control" %}
+                </div>
+                <div class="col-sm-offset-2 col-sm-8">
+                   {{field.errors}}
+                </div>
+            </div>
+
+            {% endfor %}
+        </div>
+        <!-- /.box-body -->
+        <div class="box-footer">
+          <a href="{% url 'sensorEquipmentList' %}" class="btn btn-default">Regresar</a>
+          <button type="submit" class="btn btn-primary">{% if form.initial %}Editar {% else %} Agregar {% endif %} Equipo</button>
+        </div>
+        <!-- /.box-footer -->
+        </form>
+      </div><!-- /.box -->
+    </div>
+  </div>
+
+  </section>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+
+{% endblock main_content_wrapper %}
+
+{% block content_js %}
+
+
+{% endblock content_js %}

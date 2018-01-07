@@ -13,14 +13,6 @@
         Admin - Sistema - Detalle
         <small>Detalle del Sistema</small>
       </h1>
-      <ol class="breadcrumb">
-        <li>
-          <a href="#">
-            <i class="fa fa-dashboard"></i>
-            Home</a>
-        </li>
-        <li class="active">Dashboard</li>
-      </ol>
     </section>
 
     <!-- Main content -->
@@ -42,7 +34,7 @@
                 {{arduino.name}}
               </a>
             </dd>
-            <dt>Proyecto Parent</dt>
+            <dt>Proyecto</dt>
             <dd>
                 {{arduino.project}}
             </dd>
@@ -58,7 +50,15 @@
             <dd>{{arduino.created_at}}</dd>
             <dt>Fecha de Actualización</dt>
             <dd>{{arduino.updated_at}}</dd>
+            <dt>Token</dt>
+            <dd>{{arduino.arduino_token}}</dd>
+            <dt>Estado del equipo:</dt>
+            <dd>
+              {% render_field form.estatus class="form-control" %}
+              <label for="estatus_error">{{ form.estatus.errors }}</label>
+            </dd>
           </dl>
+
         </div><!-- /.box-body -->
       </div><!-- /.box -->
     </div>
@@ -81,7 +81,38 @@
             <div class="form-group">
               <label for="sistema_location">Ubicación:</label>
               {% render_field form.location class="form-control" %}
-              <label for="sensor_type_error">{{ form.location.errors }}</label>
+              <label for="sensor_location_error">{{ form.location.errors }}</label>
+            </div>
+          </div>
+          <div class="col-xs-4">
+            <div class="form-group">
+              <label for="modelo_transmisor">Modelo Equipo:</label>
+              {% render_field form.modelo_transmisor class="form-control" %}
+              <label for="modelo_transmisor_error">{{ form.modelo_transmisor.errors }}</label>
+            </div>
+          </div>
+          <div class="col-xs-6">
+            <div class="form-group">
+              <label for="sistema_alertas">Correo Alertas:</label>
+              {% render_field form.correos_alertas class="form-control" %}
+              <label for="sensor_alertas_error">{{ form.correos_alertas.errors }}</label>
+            </div>
+          </div>
+          <div class="col-xs-6">
+            <div class="form-group">
+              <label for="sistema_alertas_time">Tiempo en min. entre envio de alertas:</label>
+              {% render_field form.delta_time_alerts class="form-control" %}
+              <label for="sistema_alertas_time_error">{{ form.delta_time_alerts.errors }}</label>
+            </div>
+          </div>
+          <br/>
+          <div class="col-xs-12 ">
+
+            <div class="">
+              <label for="">Borrado definitivo de información y alertas registradas.</label>
+              <a href="{% url 'projectsList' %}">
+                <button class="btn btn-block btn-danger btn-lg">Borrar Información del transmisor</button>
+              </a>
             </div>
           </div>
         </div><!-- /.box-body -->
@@ -104,94 +135,38 @@
         </div><!-- /.box-header -->
 
         <!-- form start  {{form}} -->
-
+        <div class="box-body">
           {% csrf_token %}
             <div class="sensor-formset">
-              {{ sensor_formset.management_form }}
-
-
               {% for sform in sensor_formset %}
+                <div class="col-xs-12">
+                  <div class="sensor-form" >
+                    {% if sform.instance.pk %}{{ sform.DELETE }}{% endif %}
 
+                    {% for field in sform %}
+                    <div class="form-group">
+                      {{ field.label_tag }}
+                      {{ field }}
+                    </div>
+                    {% endfor %}
 
-
-              <!-- //Ver si puedes contar el ultimo para arreglar el add sensor -->
-
-
-              <div class="row">
-              <div class="sensor-form" >
-                {{ sform }}
-
-                {% comment %}<div class="col-xs-2">
-                  <div class="form-group">
-                    <label for="sensor_type">Tipo Sensor:</label>
-                    {% render_field sform.sensor_type class="form-control" %}
-                    <label for="sensor_type_error">{{ sform.sensor_type.errors }}</label>
                   </div>
+                  <br/><hr/><br/><br/>
                 </div>
-
-                <div class="col-xs-2">
-                  <div class="form-group">
-                    <label for="sensor_type">Valor Maximo:</label>
-                    {% render_field sform.max_value class="form-control" %}
-                    <label for="sensor_type_error">{{ sform.sensor_type.errors }}</label>
-                  </div>
-                </div>
-
-                <div class="col-xs-2">
-                  <div class="form-group">
-                    <label for="sensor_type">Valor Minimo:</label>
-                    {% render_field sform.min_value class="form-control" %}
-                    <label for="sensor_type_error">{{ sform.sensor_type.errors }}</label>
-                  </div>
-                </div>
-
-                <div class="col-xs-2">
-                  <div class="form-group">
-                    <label for="description">Descripcion:</label>
-                    {% render_field sform.description class="form-control" %}
-                    <label for="sensor_type_error">{{ sform.description.errors }}</label>
-                  </div>
-                </div>
-
-                <div class="col-xs-1">
-                  <div class="form-group">
-                    <label for="index">Indice: </label>
-                    {% render_field sform.index class="form-control" %}
-                    <label for="sensor_type_error">{{ sform.index.errors }}</label>
-                  </div>
-                </div>
-
-                <div class="col-xs-1">
-                  <div class="form-group">
-                    <label for="datakey">Data Key:</label>
-                    {% render_field sform.data_key class="form-control" %}
-                    <label for="sensor_type_error">{{ sform.data_key.errors }}</label>
-                  </div>
-                </div>{% endcomment %}
-
-              </div>
-              </div>
 
               {% endfor %}
             </div>
-
           </div>
-          <div class="box-footer">
-
-          </div>
-
+        </div>
+      </div>
     </div>
-  </div>
 
 <div class="row">
-
   <div class="col-xs-4 ">
     <button type="submit" class="btn btn-block btn-primary btn-lg">Guardar Cambios</button>
   </div>
-
+  {{ sensor_formset.management_form }}
 </form>
-
-
 
   <div class="col-xs-4 col-xs-offset-2">
       <a href="{% url 'projectsList' %}">
@@ -199,13 +174,7 @@
       </a>
   </div>
 
-
-
 </div>
-
-
-
-
 </section>
     <!-- /.content -->
   </div>
@@ -226,10 +195,61 @@
       $(function() {
         $('.sensor-form').formset({
             addText: 'Agregar Sensor',
-            deleteText: 'Quitar'
+            deleteText: 'Quitar',
+            prefix: '{{ formset.prefix }}'
         });
     });
       </script>
 
 
   {% endblock content_js %}
+
+    {% comment %}
+      <div class="col-xs-2">
+        <div class="form-group">
+          <label for="sensor_type">Tipo Sensor:</label>
+          {% render_field sform.sensor_type class="form-control" %}
+          <label for="sensor_type_error">{{ sform.sensor_type.errors }}</label>
+        </div>
+      </div>
+
+      <div class="col-xs-2">
+        <div class="form-group">
+          <label for="sensor_type">Valor Maximo:</label>
+          {% render_field sform.max_value class="form-control" %}
+          <label for="sensor_type_error">{{ sform.sensor_type.errors }}</label>
+        </div>
+      </div>
+
+      <div class="col-xs-2">
+        <div class="form-group">
+          <label for="sensor_type">Valor Minimo:</label>
+          {% render_field sform.min_value class="form-control" %}
+          <label for="sensor_type_error">{{ sform.sensor_type.errors }}</label>
+        </div>
+      </div>
+
+      <div class="col-xs-2">
+        <div class="form-group">
+          <label for="description">Descripcion:</label>
+          {% render_field sform.description class="form-control" %}
+          <label for="sensor_type_error">{{ sform.description.errors }}</label>
+        </div>
+      </div>
+
+      <div class="col-xs-1">
+        <div class="form-group">
+          <label for="index">Indice: </label>
+          {% render_field sform.index class="form-control" %}
+          <label for="sensor_type_error">{{ sform.index.errors }}</label>
+        </div>
+      </div>
+
+      <div class="col-xs-1">
+        <div class="form-group">
+          <label for="datakey">Data Key:</label>
+          {% render_field sform.data_key class="form-control" %}
+          <label for="sensor_type_error">{{ sform.data_key.errors }}</label>
+        </div>
+      </div>
+    {% endcomment %}

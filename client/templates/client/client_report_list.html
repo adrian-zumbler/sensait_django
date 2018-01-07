@@ -1,0 +1,157 @@
+{% extends 'main_header.html' %}
+{% load staticfiles %}
+{% load arduino_tags %}
+{% load i18n %}
+
+
+{% block main_content_wrapper %}
+  {% language 'es' %}
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <h1>
+        REPORTES DEL SENSOR <b>{{report_list.last.sensor}}</b>
+        <small></small>
+      </h1>
+    </section>
+
+
+    <section class="content">
+
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="alert alert-warning alert-dismissible">
+          <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+          <h4><i class="icon fa fa-warning"></i> !IMPORTANTE!</h4>
+          El tiempo de generación de los reportes varia dependiendo la cantidad de días y registros obtenidos.
+          <br/><br/>
+          <b>Tiempos estimados:</b><br/>
+          1-3 dias = 5 minutos<br/>
+          4 - 10 dias = 15 minutos<br/>
+          11 - 20 dias = 20 minutos<br/>
+          30 dias = 30 minutos<br/>
+          31 - 90  = 30 - 60 minutos<br/>
+          <br/>
+          <b>Favor de presionar F5 en el teclado ó  presionar el siguiente boton.</b>
+          <button id="reload" class="btn btn-danger">Recargar</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="box">
+          <div class="box-header">
+            <h3 class="box-title">
+              Todos los reportes
+            </h3>
+          </div>
+          <div class="box-body">
+            <table id="table_reports" class="table table-bordered table-striped">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Fecha Creación</th>
+                  <th>Tipo Archivo</th>
+                  <th>Tipo Reporte</th>
+                  <th>Fechas del Reporte</th>
+                  <th>Descargar</th>
+                </tr>
+              </thead>
+              <tbody>
+
+                {% for report in report_list %}
+                <tr>
+                  <td> Rep-00{{report.id}} </td>
+                  <td>
+                    <b> Creado: </b> {{report.created_at}}<br/>
+                    <b> Actualizado: </b> {{report.updated_at}}
+                  </td>
+                  <td> {{report.get_tipo_archivo_display }} </td>
+                  <td> {{report.get_tipo_reporte_display }} </td>
+                  <td> Fecha Inicial: <b>{{report.fecha_inicial | epoch2Date }} </b> <br/> Fecha Final: <b>{{report.fecha_final | epoch2Date }}</b>
+                  </td>
+                  <td>
+                    {% if report.is_file_ready %}
+                    <a href="{{report.archivo.url }}" target="_blank">
+                      <button type="button" class="btn btn-warning">Descargar</button>
+                    </a>
+                    {% else %}
+                      <span>Creating file!</span>
+                    {% endif %}
+                    <a href="{% url 'dashboard-client:reports-delete' sensor_pk=sensor_pk pk=report.id  %}">
+                      <button class="btn btn-info">Borrar</button>
+                    </a>
+                    <a href="{% url 'dashboard-client:reports-update' sensor_pk=sensor_pk pk=report.id  %}">
+                      <button class="btn btn-info">Actualizar</button>
+                    </a>
+                  </td>
+                </tr>
+                {% endfor %}
+
+              </tbody>
+            </table>
+          </div><!-- /.box-body -->
+        </div><!-- /.box -->
+
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-xs-3">
+        <div class="box">
+          <a href="/dash/iot/{{report_list.last.sensor.arduino.id}}" target="_self">
+            <button class="btn btn-block btn-default btn-lg">Volver</button>
+          </a>
+        </div>
+      </div>
+      <div class="col-xs-8">
+        <div class="box">
+          <a href="{% url 'dashboard-client:reports-add' sensor_pk=sensor_pk  %}">
+            <button class="btn btn-block btn-info btn-lg">Crear Reporte</button>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    {% if report_list.count > 0 %}
+    {% endif %}
+
+
+  </section>
+  <!-- /.content -->
+</div>
+<!-- /.content-wrapper -->
+{% endlanguage %}
+{% endblock main_content_wrapper %}
+
+
+{% block content_js %}
+  <script src="{% static 'plugins/datatables/jquery.dataTables.min.js' %}"></script>
+  <script src="{% static 'plugins/datatables/dataTables.bootstrap.min.js' %}"></script>
+  <!-- page script -->
+  <script type="application/javascript">
+
+
+  $('#reload').click(function() {
+    location.reload();
+  });
+
+  $(function () {
+    $('#table_reports').DataTable({
+      "paging": true,
+      "lengthChange": false,
+      "searching": true,
+      "ordering": true,
+      "info": false,
+      "autoWidth": true,
+      "oLanguage": {
+        "sSearch": "Buscar:"
+      }
+    });
+  });
+
+</script>
+
+{% endblock content_js %}

@@ -42,7 +42,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'client',
-    'corsheaders',
+    #'corsheaders',
     'bootstrapform',
     'markdown_deux',
     'helpdesk',
@@ -51,6 +51,8 @@ INSTALLED_APPS = [
     'dashboard',
     'widget_tweaks',
     'ws4redis',
+    'channels',
+    'utils',
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -64,6 +66,8 @@ MIDDLEWARE_CLASSES = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+LOGIN_URL = '/logins/'
 
 CORS_ORIGIN_ALLOW_ALL = True
 
@@ -82,6 +86,17 @@ WS4REDIS_ALLOWED_CHANNELS = 'arduino.channels.get_allowed_channels'
 SESSION_ENGINE = 'redis_sessions.session'
 
 SESSION_REDIS_PREFIX = 'session'
+
+CHANNEL_LAYERS = {
+    "default": {
+        #"BACKEND": "asgiref.inmemory.ChannelLayer",
+        "BACKEND": "asgi_redis.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("localhost", 6379)],
+        },
+        "ROUTING": "ardsensor.routing.channel_routing",
+    },
+}
 
 TEMPLATES = [
     {
@@ -103,18 +118,39 @@ TEMPLATES = [
 ]
 
 
+EMAIL_HOST = 'mail.sensait.com'
 
+EMAIL_PORT = 465
 
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_HOST_USER = 'alertas@sensait.com'
+
+EMAIL_HOST_PASSWORD = 'Y4bfaJ^P'
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
+#EMAIL_USE_TLS = True
+
+EMAIL_USE_SSL = True
+
+# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 # Database
 # https://docs.djangoproject.com/en/1.9/ref/settings/#databases
-
+#
 DATABASES = {
-    'default': {
+    'default0': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    },
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'sensait',
+        'USER': 'postgres',
+        'PASSWORD': 'postgres',
+        'HOST': '127.0.0.1',
+        'PORT': '',
     }
+
 }
 
 # Password validation
@@ -176,13 +212,27 @@ if 'manto' in BASE_DIR:
         'password': None,
     }
 
+    CHANNEL_LAYERS = {
+        "default": {
+            # "BACKEND": "asgiref.inmemory.ChannelLayer",
+            # Estos se cambiaron tras el apagon del  5 de JUNIO 17
+            # 192.168.253.223 FUNCIONAL
+            # 192.168.253.32 PRUEBAS
+            "BACKEND": "asgi_redis.RedisChannelLayer",
+            "CONFIG": {
+                "hosts": [("192.168.253.33", 6379)],
+            },
+            "ROUTING": "ardsensor.routing.channel_routing",
+        },
+    }
+
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
             'NAME': 'sensait',
             'USER': 'sensait_user',
             'PASSWORD': 'yG6$Pz2&',
-            'HOST': '192.168.253.32',
+            'HOST': '192.168.253.33',
             'PORT': '',
         }
     }
@@ -191,9 +241,8 @@ if 'manto' in BASE_DIR:
 
     MEDIA_ROOT = os.path.join(BASE_DIR, '../media/')
 
-    DEBUG = False
+    DEBUG = True
 
-    ALLOWED_HOSTS = ['sensait.dyndns.org']
+    ALLOWED_HOSTS = ['sensait.dyndns.org', '192.168.253.31']
 
-    SESSION_REDIS_HOST = '192.168.253.32'
-
+    SESSION_REDIS_HOST = '192.168.253.33'

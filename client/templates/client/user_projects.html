@@ -1,12 +1,12 @@
 {% extends 'main_header.html' %}
 {% load staticfiles %}
-
+{% load i18n %}
 {% load arduino_tags %}
 
 
 {% block main_content_wrapper %}
 
-
+{% language 'es' %}
 
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
@@ -14,16 +14,8 @@
     <section class="content-header">
       <h1>
         LISTA DE PROYECTOS
-        <small>Control panel</small>
+        <small>activos</small>
       </h1>
-      <ol class="breadcrumb">
-        <li>
-          <a href="#">
-            <i class="fa fa-dashboard"></i>
-            Home</a>
-        </li>
-        <li class="active">Dashboard</li>
-      </ol>
     </section>
 
     <!-- Main content -->
@@ -33,30 +25,16 @@
         <div class="col-xs-12">
           <!-- TABLE: LATEST ORDERS -->
           <div class="box box-info">
-            <div class="box-header with-border">
-              <h3 class="box-title">
-                Proyectos Activos
-              </h3>
-              <div class="box-tools pull-right">
-                <button class="btn btn-box-tool" data-widget="collapse">
-                  <i class="fa fa-minus"></i>
-                </button>
-                <button class="btn btn-box-tool" data-widget="remove">
-                  <i class="fa fa-times"></i>
-                </button>
-              </div>
-            </div>
+
             <!-- /.box-header -->
             <div class="box-body">
-              <div class="table-responsive">
+              <div class="table">
                 <table id="table_projects" class="table table-bordered table-striped">
                   <thead>
                     <tr>
                       <th>ID Proyecto</th>
-                      <th>Nombre</th>
-                      <th>No. de Sistemas</th>
-                      <th>Fecha Creación</th>
-                      <th>Estatus</th>
+                      <th>Nombre del Proyecto</th>
+                      <th>No. de Transmisores</th>
                       <th>Acciones</th>
                     </tr>
                   </thead>
@@ -65,22 +43,14 @@
                     {% for project in project_list %}
                     <tr>
                       <td>
-                        <a href="/dash/projects/{{project.id}}">Proy-00{{project.id}}</a>
+                        <a href="/dash/projects/{{project.id}}">Proy00{{project.id}}</a>
                       </td>
                       <td>{{project.name}}</td>
-                      <td>{{project.arduinos.count}}</td>
-                      <td>{{project.created_at}}</td>
-
-                      {% if  project.id|isEven == 0%}
-                        <td> <span class="label label-danger">{{project.get_estatus_display }}</span> </td>
-                      {% else %}
-                        <td> <span class="label label-success">{{project.get_estatus_display }}</span> </td>
-                      {% endif %}
-
-                      <td>
+                      <td align="center">{{project.arduinos.count}}</td>
+                      <td align="center">
                         <div class="btn-group">
                           <a href="/dash/projects/{{project.id}}" target="_self">
-                            <button  type="button" class="btn btn-success">Ver</button>
+                            <button  type="button" class="btn btn-success">Ver Proyecto</button>
                           </a>
                         </div>
                       </td>
@@ -98,14 +68,13 @@
           </div>
           <!-- /.box -->
         </div>
-
       </div>
 
     </section>
     <!-- /.content -->
   </div>
   <!-- /.content-wrapper -->
-
+{% endlanguage %}
 {% endblock main_content_wrapper %}
 
 
@@ -118,11 +87,11 @@
 
   $(function () {
     $('#table_projects').DataTable({
-      "paging": true,
+      "paging": false,
       "lengthChange": false,
-      "searching": true,
+      "searching": false,
       "ordering": true,
-      "info": true,
+      "info": false,
       "autoWidth": false
     });
   });

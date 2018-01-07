@@ -10,17 +10,9 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-        {{ arduino.name }}
-        <small>Sistema Seleccionado</small>
+        Transmisor: <b>{{ arduino.name }}</b>
+        <small>{{ arduino.project.name }}</small>
       </h1>
-      <ol class="breadcrumb">
-        <li>
-          <a href="#">
-            <i class="fa fa-dashboard"></i>
-            Home</a>
-        </li>
-        <li class="active">Dashboard</li>
-      </ol>
     </section>
 
     <!-- Main content -->
@@ -38,10 +30,8 @@
                     <dd>{{ arduino.name }} </dd>
                     <dt>Ubicación</dt>
                     <dd>{{ arduino.location }} </dd>
-                    <dt>ID del IoT </dt>
-                    <dd> {{ arduino.id }} </dd>
-                    <dt>Versión</dt>
-                    <dd> V. 0.0{{ arduino.id }} </dd>
+                    <dt>ID del Transmisor </dt>
+                    <dd> Sist-00{{ arduino.id }} </dd>
                   </dl>
                 </div><!-- /.box-body -->
               </div><!-- /.box -->
@@ -55,17 +45,8 @@
                 </div><!-- /.box-header -->
                 <div class="box-body">
                   <dl class="dl-horizontal">
-                    <dt>Cabtidad de Sensores</dt>
-                    <dd>{{ arduino.sensors.count }} </dd>
-                    <dt>Estatus</dt>
-                    <dd><span class="label label-success">Correcto</span></dd>
-                    <dt>Configuración de Alertas</dt>
-                    <dd>
-                      <a href="#">
-                        <i class="fa fa-edit"></i>
-                        Configurar
-                      </a>
-                    </dd>
+                    <dt>Cantidad de Sensores</dt>
+                    <dd>{{ arduino.sensors.count | add:"-1" }} </dd>
                   </dl>
                 </div><!-- /.box-body -->
               </div><!-- /.box -->
@@ -79,54 +60,85 @@
           <div class="box box-info">
             <div class="box-header with-border">
               <h3 class="box-title">
-                Lista de sensores
+                Lista de sensores        -
+                {% for sensor in arduino.arduino_sensors.all %}
+                  {% if  sensor.data_key == "field2" %}
+                    <span id="epoch_{{ sensor.id}}">
+                      Conectando...
+                    </span>
+                    {% endif %}
+                  {% endfor %}
               </h3>
-              <div class="box-tools pull-right">
-                <button class="btn btn-box-tool" data-widget="collapse">
-                  <i class="fa fa-minus"></i>
-                </button>
-                <button class="btn btn-box-tool" data-widget="remove">
-                  <i class="fa fa-times"></i>
-                </button>
-              </div>
             </div>
             <!-- /.box-header -->
             <div class="box-body">
-              <div class="table-responsive">
+              <div class="">
                 <table id="table_sistemas" class="table table-bordered table-striped">
                   <thead>
                     <tr>
                       <th>Sensor ID</th>
+                      <th>Nombre Sensor</th>
                       <th>Tipo de Sensor</th>
-                      <th>Ubicación</th>
-                      <th>Ultimo Fecha</th>
+                      <th>Valor Mínimo</th>
                       <th>Ultimo Valor</th>
-                      <th>Estatus </th>
+                      <th>Valor Máximo</th>
                       <th> </th>
                     </tr>
                   </thead>
                   <tbody>
 
                     {% for sensor in arduino.arduino_sensors.all %}
-                      <tr>
-                        <td> <a href="/dash/sensor/{{sensor.id}}">SENSOR-00{{sensor.index}}</a> </td>
-                        <td>{{ sensor.sensor_type.name }}</td>
-                        <td>{{ sensor.description }}</td>
-                        <td>{{ sensor.sensor_data.last.created_at }}</td>
-                        <td>{{ sensor.sensor_data.last.data }}</td>
-                        {% if  arduino.id|isEven == 0%}
-                          <td> <span class="label label-danger">{{arduino.get_estatus_display }}</span> </td>
+                      {% if  sensor.data_key != "field1" %}
+
+                        {% if  sensor.sensor_data.last.data|floatformat:2  == "-127.00" or sensor.sensor_data.last.data|floatformat:2  == "-99.99" %}
+                          <tr id="row_{{sensor.id}}" class="hidden">
                         {% else %}
-                          <td> <span class="label label-success">{{arduino.get_estatus_display }}</span> </td>
+                          <tr id="row_{{sensor.id}}">
                         {% endif %}
+
+                        <td> <a href="/dash/sensor/{{sensor.id}}">SENSOR-00{{sensor.index}}</a> </td>
+                        <td>{{ sensor.description }}</td>
+                        <td>{{ sensor.sensor_type.name }}</td>
+                        <td align="center">
+                            {{ sensor.min_value|floatformat:sensor.sensor_type.decimales }} {{ sensor.sensor_type.simbolo }}
+                        </td>
+                        <td align="center">
+                          <span id="sensor_{{ sensor.id}}">
+                            {{ sensor.sensor_data.last.data|floatformat:sensor.sensor_type.decimales }}
+                          </span>
+                          <span id="subfix_{{ sensor.id}}">
+                            {{ sensor.sensor_type.simbolo}}
+                          </span>
+                          <span class="hidden" id="decimalsid_{{sensor.id}}">
+                            {{ sensor.sensor_type.decimales}}
+                          </span>
+
+                        </td>
+                        <td align="center">
+                          {{ sensor.min_value|floatformat:sensor.sensor_type.decimales }} {{ sensor.sensor_type.simbolo }}
+                        </td>
+
+                        {% comment %}
+                          {% if  arduino.id|isEven == 0%}
+                            <td> <span class="label label-danger">{{arduino.get_estatus_display }}</span> </td>
+                          {% else %}
+                            <td> <span class="label label-success">{{arduino.get_estatus_display }}</span> </td>
+                          {% endif %}
+                        {% endcomment %}
                         <td>
+                          {% ifnotequal sensor.description "Epoch"%}
                           <div class="btn-group">
                             <a href="/dash/sensor/{{sensor.id}}" target="_self">
-                              <button  type="button" class="btn btn-success">Grafica</button>
+                              <button  type="button" class="btn btn-success">Gráfica</button>
+                            </a>
+                            <a href="/dash/{{sensor.id}}/reports/" target="_self">
+                              <button  type="button" class="btn btn-warning">Reportes</button>
                             </a>
                           </div>
+                          {% endifnotequal%}
                         </td>
                       </tr>
+                      {% endif %}
                     {% endfor %}
 
                   </tbody>
@@ -139,9 +151,7 @@
           </div>
           <!-- /.box -->
         </div>
-
       </div>
-
     </section>
     <!-- /.content -->
   </div>
@@ -152,14 +162,25 @@
 
 
 {% block content_js %}
-  <script src="{% static 'plugins/datatables/jquery.dataTables.min.js' %}"></script>
-  <script src="{% static 'plugins/datatables/dataTables.bootstrap.min.js' %}"></script>
-  <!-- page script -->
-<script type="application/javascript">
+<script type="text/javascript" src="{% static 'js/ws4redis.js'  %}"></script>
+<script src="{% static 'plugins/datatables/jquery.dataTables.min.js' %}"></script>
+<script src="{% static 'plugins/datatables/dataTables.bootstrap.min.js' %}"></script>
+
+  <script type="application/javascript">
+
+    // Validamos el entorno donde estamos trabajando
+    //Tambien tomamos la IP dinamica para ya no moverle :3
+    //##############################
+
+    var site_url = "{{ site_url }}";
+    var ws_url = 'ws://' + site_url;
+
+    var urlApi;
+    var tokenCode = 'Token d7e7f378cdc67dcd7cec11b76e017927c3e73bc3';
 
   $(function () {
     $('#table_sistemas').DataTable({
-      "paging": true,
+      "paging": false,
       "lengthChange": false,
       "searching": false,
       "ordering": true,
@@ -168,6 +189,120 @@
     });
   });
 
-</script>
+
+    var canUseSocket = false;
+    var allSockets = [];
+
+    function createSocket(arduinoID, arduinoToken){
+      var ws4redis = WS4Redis({
+        uri: ws_url+'/ws/arduino/'+arduinoToken,
+        //uri: ws_url+'/ws/'+arduinoToken+'?subscribe-broadcast&publish-broadcast&echo',
+        //'ws://sensait.dyndns.org/ws/{{arduinosensor.arduino.arduino_token}}?subscribe-broadcast&publish-broadcast&echo',
+        //':'+userPort+
+        connecting: on_connecting,
+        connected: on_connected,
+        receive_message: receiveMessage,
+        disconnected: on_disconnected,
+        heartbeat_msg: {{ WS4REDIS_HEARTBEAT }}
+      });
+      allSockets.push(ws4redis);
+    }
+
+    // attach this function to an event handler on your site
+    function sendMessage() {
+      ws4redis.send_message('A message');
+    }
+
+    function on_connecting() {
+      alert('Websocket is connecting...');
+    }
+
+    function on_connected() {
+      ws4redis.send_message('Hello');
+    }
+
+    function on_disconnected(evt) {
+      alert('Websocket was disconnected: ' + JSON.stringify(evt));
+    }
+
+    // receive a message though the websocket from the server
+    function receiveMessage(msg) {
+      useWSData(msg);
+      console.log(msg)
+    }
+
+    $(document).ready(function(){
+      createSocket("{{ arduino.id }}", "{{ arduino.arduino_token }}");
+      canUseSocket = true;
+    });
+
+    function useWSData(msg){
+
+      if(canUseSocket == true ){
+        var wsData = JSON.parse(msg);
+
+        for(var i= 0 ; i < wsData.length ; i++){
+          var data = wsData[i]['data'];
+
+          if(data == '-127.00' || data == '-99.99' || data == ''){
+            $('#row_'+wsData[i]['arduino_sensor']).hide();
+          }else{
+            var epochDate = convertEpoch2Date(wsData[i]['epoch']);
+            $('#epoch_'+wsData[0]['arduino_sensor']).html('Ultima Actualización:  ' + epochDate);
+
+            $('#row_'+wsData[i]['arduino_sensor']).show();
+            var Decimals =   Number($('#decimalsid_'+wsData[i]['arduino_sensor']).val());
+            $('#sens_'+wsData[i]['arduino_sensor']).html(Number(data).toFixed(Decimals));
+          }
+        }
+      }
+    }
+
+    function convertEpoch2Date(epochData){
+
+      if(parseInt(epochData)>10000){
+        var actualDate = new Date();
+        var actualHours = actualDate.getHours();
+
+        var d = new Date(parseInt(epochData)*1000);
+        var day     =  d.getDate() +'';
+        var month   =  d.getMonth() + 1 +'';
+        var hour    =  d.getHours() +'';
+        var minutes =  d.getMinutes()+'';
+        var seconds =  d.getSeconds()+'';
+
+        /*
+        if(parseInt(hour) > parseInt(actualHours)){
+          if(parseInt(hour) < 5){
+            var dif = hour - 5;
+            hour = 24 - dif;
+          }else{
+            hour = hour - 5;
+          }
+        }
+        */
+
+        //NO me gusta... pero no se me ocurre otra forma...
+        if(day.length == 1)
+          day = '0'+day;
+        if(month.length == 1)
+          month = '0'+month;
+        if(hour.length == 1)
+          hour = '0'+hour;
+        if(minutes.length == 1)
+          minutes = '0'+minutes;
+        if(seconds.length == 1)
+          seconds = '0'+seconds;
+
+        var dateFormat = day +'/'+month+'/'+d.getFullYear();
+        var timeFormat = hour+':'+minutes+':'+seconds;
+
+        return dateFormat + '               <b>' + timeFormat + '</b>';
+      }else{
+        return "Formato de Fecha Invalido";
+      }
+    }
+
+  </script>
 
 {% endblock content_js %}

@@ -10,7 +10,7 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-        Admin - Sistema  - {% if form.initial %} Editar {% else %} Crear Nuevo {% endif %}
+        ADMIN - {% if form.initial %} Editar {% else %} Crear {% endif %} TRANSMISOR
         <small>SISTEMA</small>
       </h1>
       <ol class="breadcrumb">
@@ -52,7 +52,7 @@
         </div>
         <!-- /.box-body -->
         <div class="box-footer">
-          <a href="{% url 'enterprise-client:client-list' %}" class="btn btn-default">Regresar</a>
+          <a href="{% url 'projectsList' %}" class="btn btn-default">Regresar</a>
         </div>
         <!-- /.box-footer -->
 

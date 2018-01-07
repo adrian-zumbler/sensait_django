@@ -9,24 +9,10 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-        Admin - VISTA DETALLADA DE LA EMPRESA
-        <small>   {{enterprise.name }} </small>
+        ADMINISTRACIÓN - Detalle de <b>{{enterprise.name }} </b>
+        <small> </small>
 
       </h1>
-      <ol class="breadcrumb">
-        <li>
-          <a href="#">
-            <i class="fa fa-dashboard"></i>
-            Home</a>
-        </li>
-        <li class="active">
-          <a href="#" target="_self">
-            Lista de Empresas
-          </a>
-        </li>
-        <li class="active"> Empresa  <b>{{enterprise.name }}</b></li>
-
-      </ol>
     </section>
 
     <!-- Main content -->
@@ -35,14 +21,14 @@
       <div class="box box-solid">
         <div class="box-header with-border">
           <i class="fa fa-adjust"></i>
-          <h3 class="box-title">Información de la empresa:  {{enterprise.name }}</h3>
+          <h3 class="box-title">Información del cliente:  {{enterprise.name }}</h3>
         </div><!-- /.box-header -->
         <div class="box-body">
           <div class="row">
             <div class="col-xs-8">
           <dl class="dl-horizontal">
 
-            <dt>Empresa:</dt>
+            <dt>Cliente:</dt>
             <dd>
                 {{enterprise.name}}
             </dd>
@@ -57,14 +43,16 @@
             <dt>Télefono de contacto #2</dt>
             <dd>{{enterprise.phone_number_2}}</dd>
             <dt>Sitio web:</dt>
-            <dd>www.panthea.com.mx</dd>
+            <dd>   </dd>
             <dt>Mapa de la empresa:</dt>
             <dd>
               <a href="https://goo.gl/maps/vtgW1R9woGL2" target="_blank"> Ver en mapa</a>
             </dd>
 
-            <dt>Estatus de la empresa:</dt>
-            <dd> <b>ESTATUS DE LA EMPRESA</b> </dd>
+            <dt>Estado de la empresa:</dt>
+            <dd><b>
+              {{enterprise.get_estatus_display}}
+            </b></dd>
 
           </dl>
           </div><!-- /.box-body -->
@@ -82,10 +70,10 @@
       <div class="box box-solid">
         <div class="box-header with-border">
           <i class="fa fa-adjust"></i>
-          <h3 class="box-title">Lista de Usuarios de la empresa: {{enterprise.name }} </h3>
+          <h3 class="box-title">Lista de Usuarios del Cliente: <b>{{enterprise.name }}</b> </h3>
         </div><!-- /.box-header -->
         <div class="box-body">
-          Aqui debe ir la lista de todos los usuarios de la empresa:
+
 
           <table id="table_clients" class="table table-bordered table-striped">
             <thead>
@@ -134,10 +122,9 @@
       <div class="box box-solid">
         <div class="box-header with-border">
           <i class="fa fa-adjust"></i>
-          <h3 class="box-title">Lista de PROYECTOS de la empresa: {{enterprise.name }} </h3>
+          <h3 class="box-title">Lista de PROYECTOS del Cliente: <b>{{enterprise.name }}</b> </h3>
         </div><!-- /.box-header -->
         <div class="box-body">
-          Aqui debe ir la lista de todos los PROYECTOS de la empresa:
 
           <table id="table_projects" class="table table-bordered table-striped">
             <thead>

@@ -8,10 +8,10 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-        ADMIN - {% if form.initial %} EDITAR {% else %} CREAR {% endif %}
-         - EMPRESA
+        ADMIN - {% if form.initial %} EDITAR INFORMACIÓN DE LA EMPRESA <b>{{enterprise.name }}</b> {% else %} CREAR NUEVA EMPRESA {% endif %}
         <small>Control de Empresas</small>
       </h1>
+      {% comment %}
       <ol class="breadcrumb">
         <li>
           <a href="#">
@@ -26,23 +26,23 @@
         {% if form.initial %}
           <li class="active"> Empresa: <b>{{enterprise.name }}</b></li>
         {% else %}
-
         {% endif %}
       </ol>
+      {% endcomment %}
     </section>
 
     <!-- Main content -->
 
     <section class="content">
       <div class="row">
-        <div class="col-xs-10">
+        <div class="col-xs-12">
           <div class="box box-info">
             <div class="box-header with-border">
-              <h3 class="box-title">Crear Empresa</h3>
+              <h3 class="box-title">{% if form.initial %} Editar {% else %} Crear {% endif %} Empresa</h3>
             </div>
             <!-- /.box-header -->
             <!-- form start -->
-              <form class="form-horizontal" role="form" action="" method="post">
+              <form class="form-horizontal" role="form" action="" method="post" enctype="multipart/form-data">
               <div class="box-body">
                   {% csrf_token %}
                   {% for field in form %}

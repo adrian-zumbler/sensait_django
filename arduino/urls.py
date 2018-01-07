@@ -1,13 +1,14 @@
 from django.conf.urls import url, include
 from rest_framework_nested import routers
 
-from arduino.views import (ArduinoViewSet, SensorViewSet, DataViewSet,
+from arduino.views import (ArduinoViewSet, SensorViewSet, DataViewSet, BulkDataViewSet,
                            ArduinoSensorViewSet, SensorDataViewSet, ArduinoDataViewSet)
 
 router = routers.DefaultRouter()
 router.register(r'arduinos', ArduinoViewSet, base_name='device')
 router.register(r'sensors', SensorViewSet, base_name='sensor')
 router.register(r'data', DataViewSet, base_name='data')
+router.register(r'bulkdata', BulkDataViewSet, base_name='bulkdata')
 
 arduino_router = routers.NestedSimpleRouter(router, r'arduinos', lookup='arduino')
 arduino_router.register(r'sensors', ArduinoSensorViewSet, base_name='device-sensor')

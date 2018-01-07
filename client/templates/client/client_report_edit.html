@@ -1,0 +1,270 @@
+{% extends 'main_header.html' %}
+{% load staticfiles %}
+{% load widget_tweaks %}
+
+
+{% block content_css %}
+
+<style>
+  #id_fecha_inicial, #id_fecha_final, #fecha_ini_block, #fecha_fin_block{
+    display:none;
+  }
+</style>
+
+{% endblock content_css %}
+
+
+{% block main_content_wrapper %}
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <h1>
+        {% if form.initial %} MODIFICAR {% else %}CREAR {% endif %} REPORTE DEL SENSOR - {{report.sensor.description}}
+        <small></small>
+      </h1>
+    </section>
+
+    <!-- Main content -->
+
+    <section class="content">
+      <div class="row">
+        <div class="col-xs-12">
+          <div class="box box-info">
+            <div class="box-header with-border">
+              <h3 class="box-title">Crear Reporte</h3>
+            </div>
+            <!-- /.box-header -->
+            <!-- form start -->
+              <form class="form-horizontal" role="form" action="" method="post">
+              <div class="box-body">
+                  {% csrf_token %}
+                  {% for field in form %}
+
+                  <div class="form-group">
+                      <label for="inputEmail3" class="col-sm-2 control-label">{{ field.label }}:</label>
+                      <div class="col-sm-6">
+                         {% render_field field class="form-control" %}
+
+                         {% if field.label == "Fecha inicial" %}
+                           <div class="">
+                             <button type="button" class="btn btn-default pull-left" id="cal_fecha_inicial"><span><i class="fa fa-calendar"></i> Selección {{field.label}}</span><i class="fa fa-caret-down"></i></button>
+                             <div id="fecha_ini_block">
+                               <br/><br/>
+                               Fecha Seleccionada:
+                               <br/>
+                               <span id="fecha_ini_data">
+                               </span>
+                              </div>
+                           </div>
+                         {% endif %}
+
+                         {% if field.label == "Fecha final" %}
+                           <div class="">
+                             <button type="button" class="btn btn-default pull-left" id="cal_fecha_final"><span><i class="fa fa-calendar"></i> Selección {{field.label}}</span><i class="fa fa-caret-down"></i></button>
+                             <div id="fecha_fin_block">
+                               <br/><br/>
+                               Fecha Seleccionada:
+                               <br/>
+                               <span id="fecha_fin_data">
+                               </span>
+                              </div>
+                           </div>
+                         {% endif %}
+
+                      </div>
+                      <div class="col-sm-offset-2 col-sm-8">
+                         {{field.errors}}
+                      </div>
+                  </div>
+
+                  {% endfor %}
+              </div>
+              <!-- /.box-body -->
+              <div class="box-footer">
+                <a href="{% url 'dashboard-client:reports-list' sensor_pk=sensor_pk %}" class="btn btn-default">Regresar</a>
+
+                <button type="submit" class="btn btn-primary">
+                  {% if form.initial %} Actualizar {% else %} Crear {% endif %}
+                  Reporte
+                </button>
+              </div>
+              <!-- /.box-footer -->
+            </form>
+          </div>
+          </div><!-- /.box -->
+        </div>
+      </div>
+
+    </section>
+    </div>
+</div>
+{% endblock main_content_wrapper %}
+
+
+{% block content_js %}
+  <script type="application/javascript">
+
+  $( document ).ready(function() {
+    var data_ini = $('#id_fecha_inicial').val();
+    var data_fin = $('#id_fecha_final').val();
+
+    if(data_ini.length > 0){
+      $('#fecha_ini_block').show();
+      $('#fecha_ini_data').html(convertEpoch2Date(data_ini));
+    }
+
+    if(data_fin.length > 0){
+      $('#fecha_fin_block').show();
+      $('#fecha_fin_data').html(convertEpoch2Date(data_fin));
+    }
+
+  });
+
+
+
+  $('#cal_fecha_inicial').daterangepicker({
+    locale: {
+     format: "MM/DD/YYYY h:mm A",
+     "separator": " - ",
+     applyLabel: "Aplicar",
+     cancelLabel: "Cancelar",
+     fromLabel: "Del",
+     toLabel: "Al",
+     daysOfWeek: [
+          "Dom",
+          "Lun",
+          "Mar",
+          "Mie",
+          "Jue",
+          "Vie",
+          "Sab"
+      ],
+      monthNames: [
+        "Enero",
+        "Febrero",
+        "Marzo",
+        "Abril",
+        "Mayo",
+        "Junio",
+        "Julio",
+        "Agosto",
+        "Septiembre",
+        "Octubre",
+        "Noviembre",
+        "Diciembre"
+      ],
+   },
+   singleDatePicker:true,
+   opens: "center",
+   drops: "down",
+   showWeekNumbers:true,
+   timePicker: true,
+   timePickerIncrement: 10,
+   minDate: moment().subtract(1, 'year'),
+   maxDate: moment().add(1,'days'),
+   startDate: moment(), //moment(min_date,"YYYY-MM-DD"),
+   endDate: moment() //moment(max_date,"YYYY-MM-DD")
+  },
+  function (start, end) {
+    filter_date_start = start.format('YYYY-MM-DD HH:mm');
+    var epoch_start   = Date.parse(filter_date_start) + "";
+    epoch_start = epoch_start.substring(0,(epoch_start.length-3));
+    //console.log(epoch_start);
+    $('#id_fecha_inicial').val(epoch_start);
+    $('#fecha_ini_data').show();
+    $('#fecha_ini_block').show();
+    $('#fecha_ini_data').html(convertEpoch2Date(epoch_start));
+  });
+
+
+  $('#cal_fecha_final').daterangepicker({
+    locale: {
+     format: "MM/DD/YYYY h:mm A",
+     "separator": " - ",
+     applyLabel: "Aplicar",
+     cancelLabel: "Cancelar",
+     fromLabel: "Del",
+     toLabel: "Al",
+     daysOfWeek: [
+          "Dom",
+          "Lun",
+          "Mar",
+          "Mie",
+          "Jue",
+          "Vie",
+          "Sab"
+      ],
+      monthNames: [
+        "Enero",
+        "Febrero",
+        "Marzo",
+        "Abril",
+        "Mayo",
+        "Junio",
+        "Julio",
+        "Agosto",
+        "Septiembre",
+        "Octubre",
+        "Noviembre",
+        "Diciembre"
+      ],
+   },
+   singleDatePicker:true,
+   opens: "center",
+   drops: "down",
+   showWeekNumbers:true,
+   timePicker: true,
+   timePickerIncrement: 10,
+   minDate: moment().subtract(1, 'year'),
+   maxDate: moment().add(1,'days'),
+   startDate: moment(), //moment(min_date,"YYYY-MM-DD"),
+   endDate: moment() //moment(max_date,"YYYY-MM-DD")
+  },
+  function (start, end) {
+    filter_date_start = start.format('YYYY-MM-DD HH:mm');
+    var epoch_start   = Date.parse(filter_date_start) + "";
+    epoch_start = epoch_start.substring(0,(epoch_start.length-3));
+    //console.log(epoch_start);
+    $('#id_fecha_final').val(epoch_start);
+    $('#fecha_fin_data').show();
+    $('#fecha_fin_block').show();
+    $('#fecha_fin_data').html(convertEpoch2Date(epoch_start));
+  });
+
+
+
+  function convertEpoch2Date(epochData){
+
+    if(parseInt(epochData)>10000){
+      var actualDate = new Date();
+
+      var d       =  new Date(parseInt(epochData)*1000);
+      var day     =  d.getDate() +'';
+      var month   =  d.getMonth() + 1 +'';
+      var hour    =  d.getHours() +'';
+      var minutes =  d.getMinutes()+'';
+      var seconds =  d.getSeconds()+'';
+
+     //NO me gusta... pero no se me ocurre otra forma...
+      if(day.length == 1)
+        day = '0'+day;
+      if(month.length == 1)
+        month = '0'+month;
+      if(hour.length == 1)
+        hour = '0'+hour;
+      if(minutes.length == 1)
+        minutes = '0'+minutes;
+      if(seconds.length == 1)
+        seconds = '0'+seconds;
+
+      var dateFormat = day +'/'+month+'/'+d.getFullYear();
+      var timeFormat = hour+':'+minutes+':'+seconds;
+
+      return dateFormat + '               <b>' + timeFormat + '</b>';
+    }else{
+      return "Formato de Fecha Invalido";
+    }
+  }
+</script>
+
+{% endblock content_js %}

@@ -1,0 +1,19 @@
+server {
+    listen 80;
+    server_name sensait.dyndns.org;
+
+    location = /favicon.ico { access_log off; log_not_found off; }
+    
+    location /static/ {
+        root /home/manto/sensait;
+    }
+
+    location /media/ {
+        root /home/manto/sensait;
+    }
+
+    location / {
+        include proxy_params;
+        proxy_pass http://unix:/home/manto/sensait/daphne.sock;
+    }
+}

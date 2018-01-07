@@ -1,0 +1,131 @@
+{% load arduino_tags %}
+{% load l10n %}
+{% load i18n %}
+
+{% language 'es' %}
+
+{% if arduinoalert.sensor_alerts|generatorcount == 1 %}
+<body style="font-family:Arial;">
+  <h1>
+    ¡Alerta! Se encuentra <b>{{arduinoalert.sensor_alerts |generatorcount}}</b> sensor con registros fuera de rango.
+  </h1>
+{% else %}
+  <h1>
+    ¡Alerta! Se encuentran <b>{{arduinoalert.sensor_alerts |generatorcount}}</b> sensores con registros fuera de rango.
+  </h1>
+{% endif %}
+
+<p style="font-size:18px;line-height: 30px;">
+Apreciable <b>{{ arduinoalert.sensor_data.last.arduino_sensor.arduino.project.nombre_encargado }}</b> el dispositivo <b>Sensait CORE {{ arduinoalert.sensor_data.last.arduino_sensor.arduino.name }}</b> ha registrado temperaturas fuera de rango de operación, por favor verifique que el equipo <b> {{ arduinoalert.sensor_data.last.arduino_sensor.equipment.equipment_name }} </b> esté funcionando o cerrado correctamente.
+</p>
+
+<div class="">
+
+<table border="0" style="display:inline-table;">
+{% for sensor_alert in arduinoalert.sensor_alerts %}
+<table border="0" style="display:inline-table; border:1px solid black;">
+  <tr>
+    <td colspan="2" align="center">
+      Sensor:
+      <br/>
+      <b>{{sensor_alert.description}}</b>
+    </td>
+  </tr>
+  <tr>
+    <td colspan="2" align="center">
+      <h1>{{ sensor_alert.data.last.data |floatformat:sensor_alert.sensor_type.decimales |decimalcomma }}{{ sensor_alert.sensor_type.simbolo}}
+      </h1>
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+       {{  arduinoalert.sensor_data.last.arduino_sensor.min_value  |floatformat:sensor_alert.sensor_type.decimales | decimalcomma}}{{ arduinoalert.sensor_data.last.arduino_sensor.sensor_type.simbolo }}
+      <br/>
+      Min.
+    </td>
+    <td align="center">
+      {{  arduinoalert.sensor_data.last.arduino_sensor.max_value |floatformat:sensor_alert.sensor_type.decimales |decimalcomma}}{{ arduinoalert.sensor_data.last.arduino_sensor.sensor_type.simbolo }}
+      <br/>
+      Max.
+    </td>
+  </tr>
+  <tr>
+    <td colspan="2" align="center">
+      <hr/>
+      <br/>
+      Fecha & Hora ult. valor:
+      <br/><br/>
+      <b>{{sensor_alert.data.last.epoch | epoch2Date }}</b>
+      <br/><br/>
+    </td>
+  </tr>
+</table>
+{% endfor %}
+</table>
+
+
+</div>
+<br/><br/>
+<h2>Detalle de los Sensores en Alerta: </h2>
+
+<table border="0" style="display:inline-table;">
+{% for sensor_alert in arduinoalert.sensor_alerts %}
+<table border="0" style="display:inline-table; border:1px solid black;">
+  <tr>
+    <td>
+      Sensor:
+       <br/>
+       <b>{{sensor_alert.description}}</b>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      Tipo:
+       <br/>
+       <b>{{sensor_alert.sensor_type.name}}</b>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      Equipo:
+       <br/>
+       <b>{{sensor_alert.equipment.equipment_name}}</b>
+    </td>
+  </tr>
+</table>
+{% endfor %}
+</table>
+
+<br/><br/>
+
+<h2>Información de la Alerta: </h2>
+<p style="font-size:18px;line-height: 30px;">
+  Fecha de Inicio de alerta: <b>{{ arduinoalert.created_at }}</b><br/>
+  Ultima actualización de alerta: <b>{{ arduinoalert.updated_at }}</b><br/>
+  Total de sensores en alerta: <b>{{arduinoalert.sensor_alerts |generatorcount}}</b><br/>
+  Valores recibidos fuera de Rango : <b>{{ arduinoalert.sensor_data.count }}</b><br/><br/>
+  Instalación: <b> {{ arduinoalert.sensor_data.last.arduino_sensor.arduino.project.name }}</b><br/>
+  Transmisor: <b> {{ arduinoalert.sensor_data.last.arduino_sensor.arduino.name }} </b><br/>
+  Ubicación:<b>  {{ arduinoalert.sensor_data.last.arduino_sensor.arduino.location }} </b><br/>
+  </b>
+</p>
+
+<br/>
+<p style="font-size:18px; line-height: 30px;">
+Puede ver mas información de esta alerta dando click <a href="http://sensait.dyndns.org/dash/alerts/{{ arduinoalert.id }}/" target="_blank">aqui</a>
+<br/>
+<br/>
+
+Quedamos a sus órdenes para cualquier duda o comentario.<br/>
+Sensait Soporte: <a href="mailto:antonio.martinez@adumx.com?Subject=SoporteSensaIT">antonio.martinez@adumx.com</a>
+</p>
+
+<hr/>
+<p style="font-size:18px;line-height: 30px;">
+  <b>Nota:</b> Para mayor detalle de la alerta y registros favor de entrar a la plataforma de adminsitración en <a href="sensait.dyndns.org" target="_blank">SENSAIT.COM</a>.
+  <br/>
+</p>
+<body>
+<!-- hola mundo {{ object.data }}
+hola mundo {{ sensordata.data }}-->
+{% endlanguage %}

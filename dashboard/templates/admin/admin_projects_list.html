@@ -11,16 +11,8 @@
       <h1>
         ADMINISTRACIÓN DE PROYECTOS
         <small>PROYECTOS ACTIVOS</small>
-
       </h1>
-      <ol class="breadcrumb">
-        <li>
-          <a href="#">
-            <i class="fa fa-dashboard"></i>
-            Home</a>
-        </li>
-        <li class="active">Dashboard</li>
-      </ol>
+
     </section>
 
 
@@ -35,10 +27,9 @@
                 <tr>
                   <th>ID Proyecto</th>
                   <th>Nombre Cliente</th>
-                  <th>Projecto ID/Nombre</th>
+                  <th>Nombre Proyecto</th>
                   <th>Fecha Creación</th>
-                  <th>Estatus</th>
-                  <th>Accion</th>
+                  <th>Acción</th>
                 </tr>
               </thead>
               <tbody>
@@ -46,17 +37,9 @@
                 {% for project in project_list %}
                 <tr>
                   <td>PROY-00{{project.id}}</td>
-                  <td>Cliente nombre</td>
-                  <td>{{project.id}} - {{project.name}}</td>
+                  <td> {{project.enterprise.name}}   </td>
+                  <td>{{project.name}}</td>
                   <td> {{project.created_at}} </td>
-
-
-
-                  {% if  project.id|isEven == 0%}
-                    <td> <span class="label label-danger">{{project.get_estatus_display }}</span> </td>
-                  {% else %}
-                    <td> <span class="label label-success">{{project.get_estatus_display }}</span> </td>
-                  {% endif %}
 
                   <td>
                     <div class="btn-group">
@@ -76,16 +59,6 @@
                 {% endfor %}
 
               </tbody>
-              <tfoot>
-                <tr>
-                  <th>ID Proyecto</th>
-                  <th>Nombre Cliente</th>
-                  <th>Projecto ID/Nombre</th>
-                  <th>Fecha Creación</th>
-                  <th>Estatus</th>
-                  <th>Accion</th>
-                </tr>
-              </tfoot>
             </table>
           </div><!-- /.box-body -->
         </div><!-- /.box -->
@@ -118,11 +91,11 @@
 
   $(function () {
     $('#table_projects').DataTable({
-      "paging": true,
+      "paging": false,
       "lengthChange": false,
-      "searching": true,
-      "ordering": true,
-      "info": true,
+      "searching": false,
+      "ordering": false,
+      "info": false,
       "autoWidth": false
     });
   });

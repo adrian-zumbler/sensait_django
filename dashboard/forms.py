@@ -2,6 +2,7 @@ from django import forms
 
 from arduino.models import Arduino, SensorType, ArduinoSensor
 from client.models import Project, Client
+from arduino.models import Report
 from django.forms.utils import ErrorList
 
 class AdminProjectCreateForm(forms.ModelForm):
@@ -41,7 +42,7 @@ class AdminArduinoCreateForm(forms.ModelForm):
 
     class Meta:
         model = Arduino
-        fields = ['name', 'location']
+        fields = ['name', 'estatus', 'modelo_transmisor', 'location', 'correos_alertas', 'delta_time_alerts']
 
 
 class AdminSensorCreateForm(forms.ModelForm):
@@ -49,6 +50,12 @@ class AdminSensorCreateForm(forms.ModelForm):
     class Meta:
         model = Arduino
         fields = '__all__'
+
+
+class ReportForm(forms.ModelForm):
+    class Meta:
+        model = Report
+        exclude = ['sensor', 'archivo', 'is_file_ready']
 
 
 class AdminInlineArduinoSensorCreateForm(forms.ModelForm):
@@ -61,5 +68,12 @@ class AdminInlineArduinoSensorCreateForm(forms.ModelForm):
 ArduinoSensorFormSet = forms.modelformset_factory(
     ArduinoSensor,
     exclude=('arduino',),
+    extra=2
+)
+
+InLineArduinoSensorFormSet = forms.inlineformset_factory(
+    Arduino,
+    ArduinoSensor,
+    fields='__all__',
     extra=2
 )

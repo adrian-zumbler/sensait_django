@@ -1,0 +1,697 @@
+{% extends 'main_header.html' %}
+{% load staticfiles %}
+{% load widget_tweaks %}
+{% load arduino_tags %}
+{% load i18n %}
+
+{% block content_css %}
+
+<style>
+  #graphData{
+    font-size:20px;
+    display:block;
+  }
+
+  .bg-dark-green{
+    color: white;
+    background-color: #027c43 !important;
+  }
+
+  #graphdiv{
+    display:block;
+    background-color: #f0f0f0 !important;
+  }
+
+  canvas{
+    display:block;
+  }
+
+</style>
+
+{% endblock content_css %}
+
+
+{% block main_content_wrapper %}
+
+{% language 'es' %}
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <h1>
+        <b>DETALLE DE ALERTA </b>
+          <small>
+            Transmisor: <b>{{ arduinoalert.arduino.name }} </b>
+          </small>
+          <b>{{arduino.name}}</b>
+      </h1>
+    </section>
+
+  <!-- Main content -->
+  <section class="content">
+
+    <div class="row">
+      <div class="col-md-6">
+        <div class="box box-solid">
+          <div class="box-header with-border">
+            <i class="fa fa-adjust"></i>
+            <h3 class="box-title">Detalle de Alerta</h3>
+          </div><!-- /.box-header -->
+          <div class="box-body">
+            <dl class="dl-horizontal">
+              <dt>Fecha creación:</dt>
+              <dd id=""> {{arduinoalert.created_at }}</dd>
+              <dt>Última actualización:</dt>
+              <dd id=""> {{arduinoalert.updated_at }}</dd>
+              <dt>Finalización:</dt>
+              <dd id="">
+                {{arduinoalert.finished_at | default:" Alerta En progreso" }}
+              </dd>
+              <dt>Último correo enviado:</dt>
+              <dd id="">
+                {{arduinoalert.email_sends.last.sended_at | default:"Sin correos enviados" }}
+              </dd>
+              <dt>Correos enviados:</dt>
+              <dd id="">
+                <b>{{ arduinoalert.email_sends.count }}</b> email's
+              </dd>
+
+            </dl>
+          </div><!-- /.box-body -->
+        </div><!-- /.box -->
+      </div><!-- ./col -->
+
+    </div>
+
+    <div class="row">
+      <div class="col-xs-12" id="alert_main">
+      <div class="row">
+      {% for sensor_alert in arduinoalert.sensor_alerts %}
+
+          <div class="col-xs-3" id="block_info_{{ sensor_alert.id }}">
+            <div class="box box-info">
+              <div class="box-header with-border">
+                <h3 class="box-title">
+                  Detalle del Sensor <b> {{ sensor_alert.description }}</b>
+                </h3>
+              </div>
+              <div class="box-body">
+                <h4>Ultimo valor: <b>{{ sensor_alert.data.last.data|floatformat:2}}{{ sensor_alert.sensor_type.subfix}}</b></h4>
+                Sensor: <b>{{ sensor_alert.description }}</b><br/>
+                Valor mínimo: <b>{{ sensor_alert.min_value|floatformat:2}}{{ sensor_alert.sensor_type.subfix}}</b><br/>
+                Valor máximo: <b>{{ sensor_alert.max_value|floatformat:2}}{{ sensor_alert.sensor_type.subfix}}</b><br/>
+                Fecha: <b>{{ sensor_alert.data.last.epoch|epoch2Date }}</b><br/>
+                Datos en Alerta: <b>{{ sensor_alert.data.count }}</b><br/><br/>
+                <div class="btn-group center">
+                  <div id="detalle_{{ sensor_alert.id}}" class="btn btn-success">Ver Grafica</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+      {% endfor %}
+    </div>
+    <div class="row">
+      <div class="col-xs-12" id="block_alerts_{{ sensor_alert.id }}">
+        <div class="box box-danger">
+          <div class="box-header with-border">
+            <h3 class="box-title">
+              Sensor Seleccionado: <b><span id="sensor_name"></span></b> <br/>
+            </h3>
+            <div class="box-tools pull-right">
+              <button class="btn btn-box-tool" data-widget="collapse">
+                <i class="fa fa-minus"></i>
+              </button>
+            </div>
+          </div>
+          <div class="box-body">
+            <div>Información del punto de la gráfica: <span id="graphData"></span></div>
+            <div id="graphdiv"></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+  <div class="row">
+    <div class="col-xs-8" id="block_alerts_active">
+      <div class="box box-danger">
+        <div class="box-header with-border">
+          <h3 class="box-title">
+            ALERTAS ACTIVAS EN PROGRESO
+          </h3>
+          <div class="box-tools pull-right">
+            <button class="btn btn-box-tool" data-widget="collapse">
+              <i class="fa fa-minus"></i>
+            </button>
+          </div>
+        </div>
+        <div class="box-body">
+
+          <div class="table">
+            <table id="table_alerts_active" class="table table-bordered table-striped">
+              <thead>
+                <tr>
+                  <th>Nombre Sensor</th>
+                  <th>Fecha alerta generada</th>
+                  <th>Fecha alerta finalizada</th>
+                  <th>Último valor de alerta registrado</th>
+                  <th>Última fecha del valor registrado</th>
+                  <th># Registros fuera de rango</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+              {% if arduinoalert %}
+                {% for sensor_alert in arduinoalert.sensor_alerts %}
+
+                <tr id="alert_{{sensor_alert.id}}">
+                  <td>
+                    <b>{{ sensor_alert.description}}</b>
+                  </td>
+                  <td>
+                    {{ sensor_alert.data.first.epoch|epoch2Date }}
+                  </td>
+                  <td>
+                    {{ sensor_alert.finished_at|epoch2Date }}
+                  </td>
+                  <td align="center">
+                    Min. {{ sensor_alert.min_value|floatformat:2}}{{ sensor_alert.sensor_type.subfix}}
+                    <br/>
+                    <b>Valor:
+                      {{ sensor_alert.data.last.data|floatformat:2}}{{ sensor_alert.sensor_type.subfix}}
+                    </b>
+                    <br/>
+                    Max. {{ sensor_alert.max_value|floatformat:2}}{{ sensor_alert.sensor_type.subfix}}
+                    <div id="minmax_{{ sensor_alert.id}}" class="hidden">
+                      {{ sensor_alert.min_value|floatformat:2}}_
+                      {{ sensor_alert.max_value|floatformat:2}}
+                    </div>
+                  </td>
+                  <td align="center">
+                    <div class="epoch2Date_{{ sensor_alert.data.last.id}}">
+                    {{ sensor_alert.data.last.epoch}}
+                    </div>
+                  </td>
+                  <td align="center">
+                    {{ sensor_alert.data.count }}
+                    <div class="hidden" id="sensor_{{ sensor_alert.id}}" class="" align="center">
+                      api/arduinos/{{ arduinoalert.arduino.id}}/sensors/{{ sensor_alert.id}}/data/?min_time={{ sensor_alert.data.first.epoch| add:-600 }}&max_time={{ sensor_alert.data.last.epoch| add:600}}
+                    </div>
+                  </td>
+                  <td  align="center">
+                     {% comment %}
+                    <div class="btn-group">
+                      <div id="detalle_{{ sensor_alert.id}}" class="btn btn-success">Grafica</div>
+                    </div>
+                    {% endcomment %}
+                  </td>
+                </tr>
+                {% endfor %}
+              {% endif %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-xs-4" id="">
+      <div class="box box-danger">
+        <div class="box-header with-border">
+          <h3 class="box-title">
+            Registros Fuera de Rango
+          </h3>
+          <div class="box-tools pull-right">
+            <button class="btn btn-box-tool" data-widget="collapse">
+              <i class="fa fa-minus"></i>
+            </button>
+          </div>
+        </div>
+        <div class="box-body">
+          <table id="table_data" class="table table-bordered table-striped">
+            <thead>
+              <tr>
+                <th>Fecha</th>
+                <th>Valor</th>
+              </tr>
+            </thead>
+
+              {% for sensor_alert in arduinoalert.sensor_alerts %}
+                <tbody id="data_{{sensor_alert.id}}">
+                  {% for data_values in sensor_alert.data.all %}
+                  <tr>
+                    <td>
+                      {{ data_values.epoch|epoch2Date }}
+                    </td>
+                    <td>
+                      {{ data_values.data }}
+                    </td>
+                  </tr>
+                {% endfor %}
+                </tbody>
+              {% endfor %}
+
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-xs-8">
+      <div class="box box-info">
+        <div class="box-header with-border">
+          <h3 class="box-title">
+            <b>{{ arduinoalert.email_sends.count }}</b> Correos de alertas enviados
+          </h3>
+        </div>
+        <div class="box-body">
+
+          <table id="table_data_emails" class="table table-bordered table-striped">
+            <thead>
+              <tr>
+                <th>Fecha de Envio</th>
+                <th>Titulo</th>
+              </tr>
+            </thead>
+            <tbody>
+
+              {% for email_send in arduinoalert.email_sends.all %}
+              <tr>
+                <td>
+                    {{ email_send.sended_at }}
+                </td>
+                <td>
+                    {{ email_send.subject }}
+                </td>
+              </tr>
+            {% endfor %}
+            </tbody>
+
+          </table>
+            <br/>
+            Los correos fueron enviados a la siguientes direcciones:
+            <br/>
+            <b>
+              {{ arduinoalert.email_sends.last.to }}
+            </b>
+        </div>
+      </div>
+      </div>
+    </div>
+
+</section>
+
+</div>
+{% endlanguage %}
+{% endblock main_content_wrapper %}
+
+
+{% block content_js %}
+<script src="{% static 'plugins/dygraphs/dygraph-combined.js' %}"></script>
+<script src="{% static 'plugins/datatables/jquery.dataTables.min.js' %}"></script>
+<script src="{% static 'plugins/datatables/dataTables.bootstrap.min.js' %}"></script>
+  <script type="application/javascript">
+
+  $('#verDetalle').on('shown.bs.modal', function () {
+    $('#myInput').focus()
+  });
+
+  var graphs = []; //Todos los objetos de graficas
+  var g ; // variable de la grafica
+  var sensor_data_chart = [];
+  var sensor_date_chart = [];
+  var dygraphs_data = [];
+
+  var site_url = "{{ site_url }}";
+  var ws_url = 'ws://' + site_url;
+  var urlApi = 'http://' + site_url + '/';
+
+  console.log(site_url);
+  console.log(ws_url);
+  //ws_url = ws_url.replace("","");
+  var tokenCode = 'Token d7e7f378cdc67dcd7cec11b76e017927c3e73bc3';
+
+
+
+  $(function () {
+    $('#table_alerts_inactive').DataTable({
+      "paging": true,
+      "lengthChange": false,
+      "searching": false,
+      "ordering": true,
+      "info": false,
+      "autoWidth": false
+    });
+
+    $('#table_alerts_active').DataTable({
+      "paging": true,
+      "lengthChange": false,
+      "searching": false,
+      "ordering": true,
+      "info": false,
+      "autoWidth": false
+    });
+
+    $('#table_data').DataTable({
+      "paging": true,
+      "lengthChange": false,
+      "searching": false,
+      "ordering": false,
+      "info": false,
+      "autoWidth": false,
+      "pageLength": 3
+    });
+
+    $('#table_data_emails').DataTable({
+      "paging": true,
+      "lengthChange": false,
+      "searching": false,
+      "ordering": false,
+      "info": false,
+      "autoWidth": false,
+    });
+
+  });
+
+
+  var query_sensors   = [];
+  var sensors_ids     = [];
+  var sensors_names   = [];
+
+  $(document).ready(function(){
+
+    //console.log(site_url);
+
+    {% for sensor_alert in arduinoalert.sensor_alerts %}
+      var query = "api/arduinos/{{ sensor_alert.arduino.id}}/sensors/{{ sensor_alert.id}}/data/?min_time={{ sensor_alert.data.first.epoch| add:-2000 }}&max_time={{ sensor_alert.data.last.epoch| add:2000}}";
+
+      query_sensors["{{ sensor_alert.id}}"] = query;
+      $("#data_{{ sensor_alert.id}}").hide();
+
+      sensors_ids.push("{{ sensor_alert.id}}");
+      sensors_names["{{ sensor_alert.id}}"] = "{{ sensor_alert.description}}";
+
+      {% if forloop.counter0 == 0 %}
+        $("#data_{{ sensor_alert.id}}").show();
+        $("#sensor_name").html("{{ sensor_alert.description}}");
+        getDataFromAPI(query, "{{ sensor_alert.id}}");
+      {% endif %}
+
+    {% endfor %}
+
+    $("#form_0").hide();
+    $("#id_min_time").hide();
+    $("#form_1").hide();
+    $("#id_max_time").hide();
+
+    {% for sens in arduinoalert.sensor_alerts %}
+      {% if  sens.data_key == "field1" %}
+        var idEpoch = {{sens.id}};
+      {% endif %}
+    {% endfor %}
+    //$('#id_sensor option[value='+idEpoch+']').remove();
+
+    $( "[class^=epoch2Date_]" ).each(function() {
+      var div_ID = $(this).attr('class');
+      $('.'+div_ID).html(convertEpoch2Date( $( this ).text() ));
+    });
+
+  });
+
+  function convertEpoch2Date(epochData){
+
+    epochData = epochData.trim();
+
+    if(parseInt(epochData) > 10000 ){
+      var actualDate = new Date();
+
+      var d = new Date(parseInt(epochData)*1000);
+      var day     =  d.getDate() +'';
+      var month   =  d.getMonth() + 1 +'';
+      var hour    =  d.getHours() +'';
+      var minutes =  d.getMinutes()+'';
+      var seconds =  d.getSeconds()+'';
+
+      //NO me gusta... pero no se me ocurre otra forma...
+      if(day.length == 1)
+        day = '0'+day;
+      if(month.length == 1)
+        month = '0'+month;
+      if(hour.length == 1)
+        hour = '0'+hour;
+      if(minutes.length == 1)
+        minutes = '0'+minutes;
+      if(seconds.length == 1)
+        seconds = '0'+seconds;
+
+      var dateFormat = day +'/'+month+'/'+d.getFullYear();
+      var timeFormat = hour+':'+minutes+':'+seconds;
+
+      return dateFormat + '               <b>' + timeFormat + '</b>';
+    }else{
+      return "Formato de Fecha Invalido";
+    }
+  }
+
+  function countAlerts(){
+    var alert_active    = 0;
+    var alert_inactive  = 0;
+
+    {% for alert in arduino.alerts.all %}
+      {% if alert.active ==  True %}
+        alert_active++;
+      {% else %}
+        alert_inactive++;
+      {% endif %}
+    {% endfor %}
+
+    if(alert_active == 0 )
+      $('#block_alerts_active').hide();
+
+    if(alert_inactive == 0 )
+      $('#block_alerts_inactive').hide();
+  }
+
+  $("[id^=detalle_]").click(function(){
+
+    g = null;
+    $('#graphdiv').html('');
+
+    if(g != null ){
+      g.destroy();
+      g = null;
+      $('#graphdiv').html('');
+    }
+
+    var click_ID = $(this)[0].id;
+    click_ID = click_ID.split("_");
+    click_ID = click_ID[1];
+
+    for(var i=0; i<sensors_ids.length;i++)
+      $("#data_"+sensors_ids[i]).hide();
+
+    $("#data_"+click_ID).show();
+    $("#sensor_name").html(""+sensors_names[click_ID]);
+
+    getDataFromAPI(query_sensors[click_ID] ,click_ID );
+  });
+
+
+  function getDataFromAPI(query, sensor_ID){
+
+    //console.log(urlApi + query);
+    $.ajax({
+      url: urlApi + query ,
+      type: 'GET',
+      contentType: 'json/application',
+      dataType: 'json',
+      processData: false,
+      xhrFields: {
+        withCredentials: false
+      },
+      headers: {
+        'Authorization': tokenCode
+      },
+      success: function(data) {
+        if(data.length > 0){
+          dataCallBack(data,sensor_ID);
+        }
+        else{
+          if(g != null || typeof g == 'undefined'){
+            g.destroy();
+            g = null;
+          }
+
+          $('#graphdiv').html("Lo sentimos, no se encontraron registros con ese filtro aplicado, favor de especificar otro. ");
+        }
+      },
+      error: function() {
+        console.log('boo!');
+      }
+    });
+  }
+
+  function dataCallBack(data,sensor_ID){
+
+    sensor_data_chart = [];
+    sensor_date_chart = [];
+    dygraphs_data =  [];
+    _sensors_data = "";
+
+    //console.log(data);
+
+    createGraph(data,sensor_ID);
+  }
+
+
+  function createGraph(data, sensor_ID) {
+    _sensors_data = null;
+    sensor_data_chart = [];
+    sensor_date_chart = [];
+    dygraphs_data =  [];
+
+    _sensors_data = data;
+
+    for (var i = 0; i < _sensors_data.length; i++) {
+      if((_sensors_data[i]['data'] != "-127.00" || _sensors_data[i]['data'] != "-99.99") && parseInt(_sensors_data[i]['epoch']) > 100000) {
+        sensor_data_chart.push(_sensors_data[i]['data']);
+
+        var d = new Date(parseInt(_sensors_data[i]['epoch'])*1000);
+        var d_days = d.getDate() + "/" + d.getMonth() + "/" + d.getFullYear();
+        var d_time = completeTimeFormat(d.getHours(), d.getMinutes(), d.getSeconds());
+
+        sensor_date_chart.push(d_time);
+
+        var minMax = $('#minmax_'+sensor_ID).text();
+        minMax = minMax.trim();
+        minMax = minMax.replace(/\n|\r/g, "");
+        minMax = minMax.replace(" ","");
+        minMax = minMax.replace("                       ","");
+        minMax = minMax.split("_");
+        minMax[0] = Number(minMax[0]).toFixed(2)+"";
+        minMax[1] = Number(minMax[1]).toFixed(2)+"";
+
+        dygraphs_data.push([d, _sensors_data[i]['data'], minMax[0], minMax[1]]);
+      }
+    }
+
+    if(g != null ){
+      g.destroy();
+      g = null;
+      $('#graphdiv').html('');
+    }
+    //console.log(dygraphs_data);
+
+    if(dygraphs_data.length != 0 ){
+      g = new Dygraph(document.getElementById("graphdiv"), dygraphs_data, {
+        drawPoints: true,
+        showRoller: true,
+        height: 500,
+        width:800,
+        highlightSeriesBackgroundAlpha:1,
+        fillGraph: false,
+        includeZero: false,
+        connectSeparatedPoints:true,
+        drawGapEdgePoints:true,
+        drawPoints:true,
+        pointSize:3,
+        strokeWidth:3,
+        rightGap:20,
+        legend:"always",
+        highlightCircleSize:5,
+        showRoller:true,
+        hideOverlayOnMouseOut:false,
+        labelsDiv: document.getElementById('graphData'),
+        labels: ['Tiempo', 'Valor Registrado', 'Min.', 'Max.'],
+        colors:['#f7a508','#c22721','#929423']
+      });
+
+      canUseSocket = true;
+
+    }else{
+      $('#graphdiv').html(' No se encontraron registros validos.');
+    }
+  }
+
+
+
+  $('#daterange').daterangepicker({
+    locale: {
+     format: "MM/DD/YYYY h:mm A",
+     "separator": " - ",
+     applyLabel: "Aplicar",
+     cancelLabel: "Cancelar",
+     fromLabel: "Del",
+     toLabel: "Al",
+     daysOfWeek: [
+          "Dom",
+          "Lun",
+          "Mar",
+          "Mie",
+          "Jue",
+          "Vie",
+          "Sab"
+      ],
+      monthNames: [
+        "Enero",
+        "Febrero",
+        "Marzo",
+        "Abril",
+        "Mayo",
+        "Junio",
+        "Julio",
+        "Agosto",
+        "Septiembre",
+        "Octubre",
+        "Noviembre",
+        "Diciembre"
+      ],
+   },
+   opens: "center",
+   drops: "down",
+   showWeekNumbers:true,
+   timePicker: true,
+   timePickerIncrement: 10,
+   minDate: moment().subtract(40, 'days'), //moment(min_date,"YYYY-MM-DD"),
+   maxDate: moment().add(1,'days'),
+   startDate: moment(), //moment(min_date,"YYYY-MM-DD"),
+   endDate: moment() //moment(max_date,"YYYY-MM-DD")
+  },
+  function (start, end) {
+
+    filter_date_start = start.format('YYYY-MM-DD HH:mm');
+    filter_date_end   = end.format('YYYY-MM-DD HH:mm');
+
+    var epoch_start   = Date.parse(filter_date_start) + "";
+    var epoch_end     = Date.parse(filter_date_end)   + "";
+
+    epoch_start = epoch_start.substring(0,(epoch_start.length-3));
+    epoch_end   = epoch_end.substring(0,(epoch_end.length-3));
+
+    $("#dates").html("Fechas seleccionadas<b>" + filter_date_start+'</b> al <b>' +filter_date_end + '</b>' );
+
+    console.log(epoch_start);
+    console.log(epoch_end);
+
+    $("#id_min_time").val(epoch_start);
+    $("#id_max_time").val(epoch_end);
+  });
+
+  function completeTimeFormat(hours, minutes, seconds) {
+    if (hours < 10) {
+      hours = "0" + hours;
+    }
+    if (minutes < 10) {
+      minutes = "0" + minutes;
+    }
+    if (seconds < 10) {
+      seconds = "0" + seconds;
+    }
+    return hours + ':' + minutes + ':' + seconds;
+  }
+</script>
+{% endblock content_js %}

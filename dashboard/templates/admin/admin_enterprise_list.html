@@ -9,17 +9,9 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-        ADMIN - ADMINISTRACIÓN DE EMPRESAS
-        <small>Listado de Empresas</small>
+        ADMINISTRACIÓN DE EMPRESAS / CLIENTES
+        <small>Listado de Empresas dados de alta en el sistema</small>
       </h1>
-      <ol class="breadcrumb">
-        <li>
-          <a href="#">
-            <i class="fa fa-dashboard"></i>
-            Home</a>
-        </li>
-        <li class="active">Empresas</li>
-      </ol>
     </section>
 
 
@@ -29,16 +21,16 @@
       <div class="col-xs-12">
         <div class="box">
           <div class="box-header">
-            <h3 class="box-title">Lista de Empresas</h3>
-          </div><!-- /.box-header -->
+            <h3 class="box-title">Lista de Empresas registradas</h3>
+          </div>
           <div class="box-body">
             <table id="table_projects" class="table table-bordered table-striped">
               <thead>
                 <tr>
-                  <th>ID Empresa</th>
-                  <th>Nombre Empresa</th>
-                  <th>Fecha Creación</th>
-                  <th>Estatus</th>
+                  <th>Empresa ID</th>
+                  <th>Nombre</th>
+                  <th>Ciudad</th>
+                  <th>Estado</th>
                   <th>Accion</th>
                 </tr>
               </thead>
@@ -46,16 +38,10 @@
 
                 {% for enterprise in enterprise_list %}
                 <tr>
-                  <td> {{enterprise.id}} </td>
+                  <td> Empresa00{{enterprise.id}} </td>
                   <td> {{enterprise.name}} </td>
-                  <td> {{enterprise.created_at}} </td>
-
-                  {% if  enterprise.id|isEven == 0%}
-                    <td> <span class="label label-danger">{{enterprise.get_estatus_display }}</span> </td>
-                  {% else %}
-                    <td> <span class="label label-success">{{enterprise.get_estatus_display }}</span> </td>
-                  {% endif %}
-
+                  <td> {{enterprise.city }} </td>
+                  <td> {{enterprise.get_estatus_display }} </td>
                   <td>
                     <div class="btn-group">
                       <a href="/dash/admin/enterprises/detail/{{enterprise.id}}" target="_self">
@@ -72,20 +58,10 @@
                       </a>
                     </div>
                   </td>
-
                 </tr>
                 {% endfor %}
 
               </tbody>
-              <tfoot>
-                <tr>
-                  <th>ID Empresa</th>
-                  <th>Nombre Empresa</th>
-                  <th>Fecha Creación</th>
-                  <th>Estatus</th>
-                  <th>Accion</th>
-                </tr>
-              </tfoot>
             </table>
           </div><!-- /.box-body -->
         </div><!-- /.box -->
@@ -93,12 +69,11 @@
       </div>
     </div>
 
-
     <div class="row">
       <div class="col-xs-12">
         <div class="box">
           <a href="{% url 'enterprise-client:enterprise-add' %}">
-            <button class="btn btn-block btn-info btn-lg">Agregar Empresa</button>
+            <button class="btn btn-block btn-info btn-lg">Agregar Cliente</button>
           </a>
         </div>
       </div>
@@ -120,11 +95,11 @@
 
   $(function () {
     $('#table_projects').DataTable({
-      "paging": true,
+      "paging": false,
       "lengthChange": false,
-      "searching": true,
+      "searching": false,
       "ordering": true,
-      "info": true,
+      "info": false,
       "autoWidth": true
     });
   });

@@ -1,0 +1,106 @@
+{% extends 'main_header.html' %}
+{% load staticfiles %}
+{% load arduino_tags %}
+
+{% block main_content_wrapper %}
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <h1>
+        ADMINISTRACIÓN DE EQUIPOS ASIGNADOS EN LOS SENSORES
+        <small>Lista de equipos creados</small>
+
+      </h1>
+    </section>
+
+
+  <!-- Main content -->
+  <section class="content">
+    <div class="row">
+      <div class="col-xs-12">
+        {{equipment}}
+        <div class="box">
+          <div class="box-body">
+            <table id="table_sensor" class="table table-bordered table-striped">
+              <thead>
+                <tr>
+                  <th>Equipo ID</th>
+                  <th>Nombre Equipo</th>
+                  <th>Modelo</th>
+                  <th>Marca</th>
+                  <th>Accion</th>
+                </tr>
+              </thead>
+              <tbody>
+
+
+                {% for equipment in sensorequipment_list %}
+                <tr>
+                  <td>Equipo00{{equipment.id}}</td>
+                  <td>{{equipment.equipment_name}}</td>
+                  <td> {{equipment.equipment_model}} </td>
+                  <td> {{equipment.equipment_brand}} </td>
+
+                  <td>
+                    <div class="btn-group">
+                      <a href= "{% url 'sensorEquipmentDetail' pk=equipment.id %} " target="_self">
+                        <button  type="button" class="btn btn-success">Ver</button>
+                      </a>
+                      <a href= "{% url 'sensorEquipmentEdit' pk=equipment.id %} " target="_self">
+                        <button  type="button" class="btn btn-info">Editar</button>
+                      </a>
+                      <a href= "{% url 'sensorEquipmentDelete' pk=equipment.id %} " target="_self">
+                        <button type="button" class="btn btn-danger">Borrar</button>
+                      </a>
+                    </div>
+                  </td>
+                </tr>
+                {% endfor %}
+
+              </tbody>
+            </table>
+          </div><!-- /.box-body -->
+        </div><!-- /.box -->
+
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="box">
+          <a href= "{% url 'sensorEquipmentNew' %} " target="_self">
+            <button class="btn btn-block btn-info btn-lg">Crear nuevo Equipo</button>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    </section>
+      <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+
+{% endblock main_content_wrapper %}
+
+{% block content_js %}
+  <script src="{% static 'plugins/datatables/jquery.dataTables.min.js' %}"></script>
+  <script src="{% static 'plugins/datatables/dataTables.bootstrap.min.js' %}"></script>
+  <!-- page script -->
+<script type="application/javascript">
+
+  $(function () {
+    $('#table_sensor').DataTable({
+      "paging": false,
+      "lengthChange": false,
+      "searching": false,
+      "ordering": false,
+      "info": false,
+      "autoWidth": true
+    });
+  });
+
+</script>
+
+{% endblock content_js %}
