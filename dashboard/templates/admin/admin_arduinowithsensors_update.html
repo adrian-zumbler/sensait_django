@@ -110,8 +110,8 @@
 
             <div class="">
               <label for="">Borrado definitivo de información y alertas registradas.</label>
-              <a href="{% url 'projectsList' %}">
-                <button class="btn btn-block btn-danger btn-lg">Borrar Información del transmisor</button>
+              <a class="btn btn-block btn-danger btn-lg" href="{% url 'arduinoDeleteData' pk=arduino.id %}">
+                Borrar Información del transmisor
               </a>
             </div>
           </div>

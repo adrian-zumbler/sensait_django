@@ -102,7 +102,8 @@ urlpatterns = [
     url(r'^dash/admin/projects/(?P<project_pk>\d+)/iots/new/$', AdminArduinoCreateView.as_view(), name="newArduino"),
     url(r'^dash/admin/iots/edit/(?P<pk>\d+)/$',
         AdminArduinoWithSensorsUpdateView.as_view(), name="arduinoSensorsEdit"),
-    url(r'^dash/admin/iots/delete/(?P<pk>\d+)/$', AdminArduinoDeleteView.as_view(), name="arduinoDelete"),
+    url(r'^dash/admin/iots/delete/(?P<pk>\d+)$', AdminArduinoDeleteView.as_view(), name="arduinoDelete"),
+    url(r'^dash/admin/iots/delete/(?P<pk>\d+)/data/$', AdminArduinoDataDeleteView.as_view(), name="arduinoDeleteData"),
 
     #temporal
     url(r'^emailalerta/(?P<pk>\d+)/$', EmailView.as_view(), name="email"),

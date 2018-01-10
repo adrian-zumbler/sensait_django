@@ -1,0 +1,71 @@
+{% extends 'main_header.html' %}
+{% load staticfiles %}
+{% load arduino_tags %}
+
+{% block main_content_wrapper %}
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <h1>
+        Admin - Control de Sistemas
+        <small>VIEW para borrar un elemento</small>
+
+      </h1>
+      <ol class="breadcrumb">
+        <li>
+          <a href="#">
+            <i class="fa fa-dashboard"></i>
+            Home</a>
+        </li>
+        <li class="active">Dashboard</li>
+      </ol>
+    </section>
+
+    <!-- Main content -->
+<section class="content">
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="box box-primary">
+        <div class="box-header with-border">
+          <h1 class="box-title">Estas seguro?</h1>
+        </div><!-- /.box-header -->
+        <!-- form start -->
+
+        <h4><b> Nota: </b> Al borrar la informacion del dispositivo <b> {{arduino.name}}</b> no sera posible recuperarse. </h4>
+
+        <h1>Nombre del dispositivo: <b> {{arduino.name}}</b> </h1>
+        <form role="form" action="" method="post">
+          {% csrf_token %}
+
+          {{form}}
+
+          <div class="box-footer">
+            <a href="#">
+              <a href="{% url 'projectsList' %}" class="btn btn-default">Regresar</a>
+              <button type="submit" class="btn btn-danger">Borrar</button>
+            </a>
+          </div>
+        </form>
+      </div><!-- /.box -->
+    </div>
+  </div>
+
+
+
+  </section>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+
+{% endblock main_content_wrapper %}
+
+{% block content_js %}
+  <!-- page script -->
+<script type="application/javascript">
+
+
+</script>
+
+{% endblock content_js %}

@@ -8,6 +8,7 @@ from django.http import QueryDict
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import ListView, CreateView, UpdateView, DetailView, DeleteView
 from django.core.urlresolvers import reverse_lazy
+from django.http import HttpResponseRedirect
 
 from ws4redis.publisher import RedisPublisher
 from ws4redis.redis_store import RedisMessage
@@ -18,6 +19,7 @@ from rest_framework.response import Response
 from rest_framework.exceptions import APIException
 from rest_framework.request import Request
 from django.db.models.query import QuerySet
+from django.db import transaction
 from arduino.serializers import (ArduinoSerializer, SensorTypeSerializer,
                                  ArduinoSensorSerializer, SensorDataSerializer)
 from arduino.permissions import isArduinoPermission
@@ -347,3 +349,30 @@ class AdminArduinoDeleteView(LoginRequiredMixin, DeleteView):
     template_name = 'admin/admin_arduino_delete.html'
     success_url = reverse_lazy('projectsDetail')
     queryset = Arduino.objects.all()
+
+class AdminArduinoDataDeleteView(LoginRequiredMixin,DeleteView):
+    template_name = 'admin/admin_arduino_data_delete.html'
+    queryset = Arduino.objects.all()
+
+    def delete(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        success_url = self.get_success_url()
+
+        # initialize the transaction
+        with transaction.atomic():
+            # delete all alerts
+            self.object.alerts.all().delete()
+
+            # delete all data from sensors
+            for arduino_sensor in self.object.arduino_sensors.all():
+                arduino_sensor.sensor_data.all().delete()
+
+        return HttpResponseRedirect(success_url)
+
+    def get_success_url(self):
+        id = self.get_object().id
+        return reverse_lazy('arduinoSensorsEdit',
+                            kwargs={'pk':id}
+                            )
+
+
